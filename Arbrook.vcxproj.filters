@@ -21,6 +21,18 @@
     <ClCompile Include="include\ecs\registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\engine\program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\engine\services\service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\types\type_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\common\hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ecs\data\entity_data.hpp">
@@ -38,5 +50,43 @@
     <ClInclude Include="include\ecs\registry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine\program.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\services\serviceregistry.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\services\service.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\type_util.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\string_extra.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\meta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\hash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\common\string_literal.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\types\types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\containers\pointer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\engine\services\serviceregistry.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\common\hash.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
