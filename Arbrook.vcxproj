@@ -137,15 +137,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\common\hash.cpp" />
     <ClCompile Include="include\ecs\registry.cpp" />
+    <ClCompile Include="include\engine\services\service.cpp" />
+    <ClCompile Include="include\types\type_util.cpp" />
     <ClCompile Include="source\Arbrook.cpp" />
+    <ClCompile Include="include\engine\program.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\common\hash.hpp" />
+    <ClInclude Include="include\common\string_extra.hpp" />
+    <ClInclude Include="include\common\string_literal.hpp" />
+    <ClInclude Include="include\containers\pointer.hpp" />
     <ClInclude Include="include\ecs\handles\entity.hpp" />
     <ClInclude Include="include\ecs\data\entity_data.hpp" />
     <ClInclude Include="include\ecs\registry.hpp" />
+    <ClInclude Include="include\engine\program.hpp" />
+    <ClInclude Include="include\engine\services\service.hpp" />
+    <ClInclude Include="include\engine\services\serviceregistry.hpp" />
     <ClInclude Include="include\platform\platform.hpp" />
+    <ClInclude Include="include\types\meta.hpp" />
     <ClInclude Include="include\types\primitives.hpp" />
+    <ClInclude Include="include\types\types.hpp" />
+    <ClInclude Include="include\types\type_util.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\common\hash.inl" />
+    <None Include="include\engine\services\serviceregistry.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
