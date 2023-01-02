@@ -15,77 +15,92 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Arbrook.cpp">
+    <ClCompile Include="arbrook\Arbrook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ecs\registry.cpp">
+    <ClCompile Include="arbrook\ecs\registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\engine\program.cpp">
+    <ClCompile Include="arbrook\engine\program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\engine\services\service.cpp">
+    <ClCompile Include="arbrook\types\type_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\types\type_util.cpp">
+    <ClCompile Include="arbrook\common\hash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\common\hash.cpp">
+    <ClCompile Include="arbrook\logging\logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\engine\services\service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\logging\loggingservice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\ecs\data\entity_data.hpp">
+    <ClInclude Include="arbrook\ecs\data\entity_data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\handles\entity.hpp">
+    <ClInclude Include="arbrook\ecs\handles\entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types\primitives.hpp">
+    <ClInclude Include="arbrook\types\primitives.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\platform\platform.hpp">
+    <ClInclude Include="arbrook\platform\platform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ecs\registry.hpp">
+    <ClInclude Include="arbrook\ecs\registry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\program.hpp">
+    <ClInclude Include="arbrook\engine\program.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\services\serviceregistry.hpp">
+    <ClInclude Include="arbrook\engine\services\serviceregistry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\engine\services\service.hpp">
+    <ClInclude Include="arbrook\types\type_util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types\type_util.hpp">
+    <ClInclude Include="arbrook\common\string_extra.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\string_extra.hpp">
+    <ClInclude Include="arbrook\types\meta.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types\meta.hpp">
+    <ClInclude Include="arbrook\common\hash.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\hash.hpp">
+    <ClInclude Include="arbrook\common\string_literal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\common\string_literal.hpp">
+    <ClInclude Include="arbrook\types\types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\types\types.hpp">
+    <ClInclude Include="arbrook\containers\pointer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\containers\pointer.hpp">
+    <ClInclude Include="arbrook\logging\logging.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\math\math.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\logging\loggingservice.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\engine\services\service.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\engine\services\serviceregistry.inl">
+    <None Include="arbrook\engine\services\serviceregistry.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="include\common\hash.inl">
+    <None Include="arbrook\common\hash.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

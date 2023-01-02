@@ -107,7 +107,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,33 +137,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\common\hash.cpp" />
-    <ClCompile Include="include\ecs\registry.cpp" />
-    <ClCompile Include="include\engine\services\service.cpp" />
-    <ClCompile Include="include\types\type_util.cpp" />
-    <ClCompile Include="source\Arbrook.cpp" />
-    <ClCompile Include="include\engine\program.cpp" />
+    <ClCompile Include="arbrook\common\hash.cpp" />
+    <ClCompile Include="arbrook\ecs\registry.cpp" />
+    <ClCompile Include="arbrook\logging\loggingservice.cpp" />
+    <ClCompile Include="arbrook\engine\services\service.cpp" />
+    <ClCompile Include="arbrook\logging\logging.cpp" />
+    <ClCompile Include="arbrook\types\type_util.cpp" />
+    <ClCompile Include="arbrook\Arbrook.cpp" />
+    <ClCompile Include="arbrook\engine\program.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\common\hash.hpp" />
-    <ClInclude Include="include\common\string_extra.hpp" />
-    <ClInclude Include="include\common\string_literal.hpp" />
-    <ClInclude Include="include\containers\pointer.hpp" />
-    <ClInclude Include="include\ecs\handles\entity.hpp" />
-    <ClInclude Include="include\ecs\data\entity_data.hpp" />
-    <ClInclude Include="include\ecs\registry.hpp" />
-    <ClInclude Include="include\engine\program.hpp" />
-    <ClInclude Include="include\engine\services\service.hpp" />
-    <ClInclude Include="include\engine\services\serviceregistry.hpp" />
-    <ClInclude Include="include\platform\platform.hpp" />
-    <ClInclude Include="include\types\meta.hpp" />
-    <ClInclude Include="include\types\primitives.hpp" />
-    <ClInclude Include="include\types\types.hpp" />
-    <ClInclude Include="include\types\type_util.hpp" />
+    <ClInclude Include="arbrook\common\hash.hpp" />
+    <ClInclude Include="arbrook\common\string_extra.hpp" />
+    <ClInclude Include="arbrook\common\string_literal.hpp" />
+    <ClInclude Include="arbrook\containers\pointer.hpp" />
+    <ClInclude Include="arbrook\ecs\handles\entity.hpp" />
+    <ClInclude Include="arbrook\ecs\data\entity_data.hpp" />
+    <ClInclude Include="arbrook\ecs\registry.hpp" />
+    <ClInclude Include="arbrook\engine\program.hpp" />
+    <ClInclude Include="arbrook\logging\loggingservice.hpp" />
+    <ClInclude Include="arbrook\engine\services\service.hpp" />
+    <ClInclude Include="arbrook\engine\services\serviceregistry.hpp" />
+    <ClInclude Include="arbrook\logging\logging.hpp" />
+    <ClInclude Include="arbrook\math\math.hpp" />
+    <ClInclude Include="arbrook\platform\platform.hpp" />
+    <ClInclude Include="arbrook\types\meta.hpp" />
+    <ClInclude Include="arbrook\types\primitives.hpp" />
+    <ClInclude Include="arbrook\types\types.hpp" />
+    <ClInclude Include="arbrook\types\type_util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\common\hash.inl" />
-    <None Include="include\engine\services\serviceregistry.inl" />
+    <None Include="arbrook\common\hash.inl" />
+    <None Include="arbrook\engine\services\serviceregistry.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
