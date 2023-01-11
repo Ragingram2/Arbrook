@@ -142,6 +142,9 @@
     <ClCompile Include="arbrook\logging\loggingservice.cpp" />
     <ClCompile Include="arbrook\engine\services\service.cpp" />
     <ClCompile Include="arbrook\logging\logging.cpp" />
+    <ClCompile Include="arbrook\modules\rendermodule.cpp" />
+    <ClCompile Include="arbrook\modules\testmodule.cpp" />
+    <ClCompile Include="arbrook\scheduler\scheduler.cpp" />
     <ClCompile Include="arbrook\types\type_util.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
     <ClCompile Include="arbrook\engine\program.cpp" />
@@ -150,6 +153,8 @@
     <ClInclude Include="arbrook\common\hash.hpp" />
     <ClInclude Include="arbrook\common\string_extra.hpp" />
     <ClInclude Include="arbrook\common\string_literal.hpp" />
+    <ClInclude Include="arbrook\containers\delegate.hpp" />
+    <ClInclude Include="arbrook\containers\iterator_tricks.hpp" />
     <ClInclude Include="arbrook\containers\pointer.hpp" />
     <ClInclude Include="arbrook\ecs\handles\entity.hpp" />
     <ClInclude Include="arbrook\ecs\data\entity_data.hpp" />
@@ -160,7 +165,11 @@
     <ClInclude Include="arbrook\engine\services\serviceregistry.hpp" />
     <ClInclude Include="arbrook\logging\logging.hpp" />
     <ClInclude Include="arbrook\math\math.hpp" />
+    <ClInclude Include="arbrook\modules\module.hpp" />
+    <ClInclude Include="arbrook\modules\rendermodule.hpp" />
+    <ClInclude Include="arbrook\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\platform\platform.hpp" />
+    <ClInclude Include="arbrook\scheduler\scheduler.hpp" />
     <ClInclude Include="arbrook\types\meta.hpp" />
     <ClInclude Include="arbrook\types\primitives.hpp" />
     <ClInclude Include="arbrook\types\types.hpp" />
@@ -169,6 +178,7 @@
   <ItemGroup>
     <None Include="arbrook\common\hash.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
+    <None Include="arbrook\scheduler\scheduler.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

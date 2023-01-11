@@ -39,6 +39,15 @@
     <ClCompile Include="arbrook\logging\loggingservice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\scheduler\scheduler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\modules\testmodule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\modules\rendermodule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\data\entity_data.hpp">
@@ -95,12 +104,33 @@
     <ClInclude Include="arbrook\engine\services\service.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\scheduler\scheduler.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\modules\module.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\modules\testmodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\containers\delegate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\containers\iterator_tricks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\modules\rendermodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\engine\services\serviceregistry.inl">
       <Filter>Header Files</Filter>
     </None>
     <None Include="arbrook\common\hash.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\scheduler\scheduler.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

@@ -15,6 +15,8 @@ namespace rythe::core
 	private:
 		ServiceRegistry* m_registry;
 	public:
+		bool m_running = true;
+
 		Program(ServiceRegistry& registry)
 		{
 			m_registry = &registry;
