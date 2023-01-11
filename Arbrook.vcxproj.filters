@@ -48,6 +48,9 @@
     <ClCompile Include="arbrook\modules\rendermodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\events\eventbus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\data\entity_data.hpp">
@@ -120,6 +123,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\modules\rendermodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\events\eventbus.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\events\event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\events\defaults\exit_event.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
