@@ -1,10 +1,10 @@
 #include "engine/program.hpp"
+#include "logging/loggingservice.hpp"
 
 namespace rythe::core
 {
 	void Program::initialize()
 	{
-		std::cout << "Initializing Program" << std::endl;
 		for (auto& [id, service] : m_registry->m_services)
 		{
 			if (service)
@@ -12,6 +12,7 @@ namespace rythe::core
 				service->initialize();
 			}
 		}
+		log::info("Program initialized");
 	}
 
 	void Program::update()
@@ -27,7 +28,7 @@ namespace rythe::core
 
 	void Program::kill()
 	{
-		std::cout << "Killing Program" << std::endl;
+		log::info("Killing Program");
 		for (auto& [id, service] : m_registry->m_services)
 		{
 			if (service)
