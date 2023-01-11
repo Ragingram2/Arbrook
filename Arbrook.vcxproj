@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="arbrook\common\hash.cpp" />
     <ClCompile Include="arbrook\ecs\registry.cpp" />
+    <ClCompile Include="arbrook\events\eventbus.cpp" />
     <ClCompile Include="arbrook\logging\loggingservice.cpp" />
     <ClCompile Include="arbrook\engine\services\service.cpp" />
     <ClCompile Include="arbrook\logging\logging.cpp" />
@@ -160,6 +161,9 @@
     <ClInclude Include="arbrook\ecs\data\entity_data.hpp" />
     <ClInclude Include="arbrook\ecs\registry.hpp" />
     <ClInclude Include="arbrook\engine\program.hpp" />
+    <ClInclude Include="arbrook\events\defaults\exit_event.hpp" />
+    <ClInclude Include="arbrook\events\event.hpp" />
+    <ClInclude Include="arbrook\events\eventbus.hpp" />
     <ClInclude Include="arbrook\logging\loggingservice.hpp" />
     <ClInclude Include="arbrook\engine\services\service.hpp" />
     <ClInclude Include="arbrook\engine\services\serviceregistry.hpp" />

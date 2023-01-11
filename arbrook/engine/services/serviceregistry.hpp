@@ -25,7 +25,6 @@ namespace rythe::core
 		template<typename serviceType>
 		pointer<serviceType> get_service();
 	};
-
 }
 
 #include "engine/services/serviceregistry.inl"
