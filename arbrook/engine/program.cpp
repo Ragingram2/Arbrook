@@ -3,6 +3,8 @@
 
 namespace rythe::core
 {
+	ServiceRegistry* Program::m_registry;
+
 	void Program::initialize()
 	{
 		for (auto& [id, service] : m_registry->m_services)
@@ -40,6 +42,7 @@ namespace rythe::core
 
 	void Program::exit(events::exit& evt)
 	{
+		log::debug("STOP");
 		m_running = false;
 	}
 }

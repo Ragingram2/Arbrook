@@ -19,24 +19,17 @@ namespace rythe::core::events
 
 	void EventBus::raiseEvent(event_base& value)
 	{
+		log::debug("Raising Event");
 		if (m_callbacks.contains(value.get_id()))
 		{
-			m_callbacks.at(value.get_id()).invoke(value);
+			log::debug("Event Found");
+			for (auto& func : m_callbacks.at(value.get_id()))
+			{
+				log::debug("calling func");
+				func(value);
+			}
 		}
 	}
 
-	void EventBus::bindToEvent(id_type id, const delegate<void(event_base&)>& callback)
-	{
-		m_callbacks.try_emplace(id).first->second.push_back(callback);
-	}
 
-	void EventBus::bindToEvent(id_type id, delegate<void(event_base&)>&& callback)
-	{
-		m_callbacks.try_emplace(id).first->second.push_back(callback);
-	}
-
-	void EventBus::unbindFromEvent(id_type id, const delegate<void(event_base&)>& callback)
-	{
-		m_callbacks.at(id).erase(callback);
-	}
 }
