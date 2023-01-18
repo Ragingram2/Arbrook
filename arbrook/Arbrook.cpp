@@ -24,12 +24,13 @@ int main()
 	scheduler->reportModule<rendering::RenderModule>();
 
 	Program program(registry);
-	registry.get_service<events::EventBus>()->bindToEvent(events::exit::id, &Program::exit);
-	program.initialize();
+	std::function<void(events::exit&)> f = std::bind(&Program::exit, &Program::Instance(), std::placeholders::_1);
+	registry.get_service<events::EventBus>()->insert_back<events::exit>(*reinterpret_cast<std::function<void(events::event_base&)>*>(&f));
+	Program::Instance().initialize();
 
-	while (program.m_running)
+	while (Program::Instance().m_running)
 	{
-		program.update();
+		Program::Instance().update();
 	}
 
 	//sf::Event event;

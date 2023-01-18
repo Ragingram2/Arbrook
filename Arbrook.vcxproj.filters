@@ -145,5 +145,8 @@
     <None Include="arbrook\scheduler\scheduler.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="arbrook\events\eventbus.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

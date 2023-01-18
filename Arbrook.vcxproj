@@ -182,6 +182,7 @@
   <ItemGroup>
     <None Include="arbrook\common\hash.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
+    <None Include="arbrook\events\eventbus.inl" />
     <None Include="arbrook\scheduler\scheduler.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
