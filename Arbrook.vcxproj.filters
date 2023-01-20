@@ -45,10 +45,16 @@
     <ClCompile Include="arbrook\modules\testmodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\modules\rendermodule.cpp">
+    <ClCompile Include="arbrook\events\eventbus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\events\eventbus.cpp">
+    <ClCompile Include="arbrook\modules\windowmodule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\systems\system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\modules\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,9 +128,6 @@
     <ClInclude Include="arbrook\containers\iterator_tricks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\modules\rendermodule.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\events\eventbus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -132,6 +135,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\events\defaults\exit_event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\modules\windowmodule.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\systems\system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\systems\testsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -146,6 +158,12 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="arbrook\events\eventbus.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\systems\system.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\modules\module.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

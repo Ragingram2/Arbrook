@@ -15,7 +15,7 @@ namespace rythe::core::events
 	class EventBus : public Service
 	{
 	private:
-		std::unordered_map<id_type, std::vector<std::function<void(event_base&)>>> m_callbacks;
+		std::unordered_map<id_type, multicast_delegate<void(event_base&)>> m_callbacks;
 	public:
 		void initialize() override;
 		void update() override;
@@ -23,17 +23,17 @@ namespace rythe::core::events
 
 		void raiseEvent(event_base& value);
 
-		template <typename event_type>
-		inline void insert_back(const std::function<void(event_base&)>& func)
-		{
-			m_callbacks[event_type::id].push_back(func);
-		}
 
+		template <typename event_type,typename owner_type, void(owner_type::* func_type)(event_type&)>
+		R_ALWAYS_INLINE void bind();
 		template <typename event_type>
-		inline void insert_back(std::function<void(event_base&)>&& func)
-		{
-			m_callbacks[event_type::id].push_back(func);
-		}
+		R_ALWAYS_INLINE void bind(const delegate<void(event_type&)>& func);
+		template <typename event_type>
+		R_ALWAYS_INLINE void bind(delegate<void(event_type&)>&& func);
+		template<typename event_type>
+		R_ALWAYS_INLINE void unbind(const delegate<void(event_type&)>& func);
+		template<typename event_type>
+		R_ALWAYS_INLINE void unbind(delegate<void(event_type&)>&& func);
 	};
 }
 
