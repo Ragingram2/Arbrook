@@ -42,7 +42,7 @@ namespace rythe::core
 
 	void Program::exit(events::exit& evt)
 	{
-		log::debug("STOP");
 		m_running = false;
+		kill();
 	}
 }

@@ -7,44 +7,42 @@
 #include "events/defaults/exit_event.hpp"
 #include "scheduler/scheduler.hpp"
 #include "modules/testmodule.hpp"
-#include "modules/rendermodule.hpp"
+#include "modules/windowmodule.hpp"
 
 using namespace rythe::core;
-namespace rendering = rythe::rendering;
+//namespace rendering = rythe::rendering;
+namespace window = rythe::window;
 namespace events = rythe::core::events;
-
-
 
 int main()
 {
+	//Setting up service registry and program
 	ServiceRegistry registry;
+	Program program(registry);
+
+	//Register services
 	registry.register_service<LoggingService>();
 	registry.register_service<events::EventBus>();
-	scheduling::Scheduler* scheduler = registry.register_service<scheduling::Scheduler>();
-	scheduler->reportModule<rendering::RenderModule>();
+	registry.register_service<scheduling::Scheduler>();
 
-	Program program(registry);
-	std::function<void(events::exit&)> f = std::bind(&Program::exit, &Program::Instance(), std::placeholders::_1);
-	registry.get_service<events::EventBus>()->insert_back<events::exit>(*reinterpret_cast<std::function<void(events::event_base&)>*>(&f));
+	//Register events
+	registry.get_service<events::EventBus>()->bind<events::exit>([](events::exit& evnt)
+		{
+			Program::Instance().exit(evnt);
+		});
+
+	//Report modules
+	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
+	scheduler->reportModule<window::WindowModule>();
+
+	//Initialize engine
 	Program::Instance().initialize();
 
+	//Update loop
 	while (Program::Instance().m_running)
 	{
 		Program::Instance().update();
 	}
-
-	//sf::Event event;
-	//while (window.pollEvent(event))
-	//{
-	//	if (event.type == sf::Event::Closed)
-	//	{
-	//		program.kill();
-	//		window.close();
-	//	}
-	//}
-
-	//window.clear();
-	//window.display();
 
 	return 0;
 }

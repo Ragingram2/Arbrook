@@ -1,15 +1,14 @@
-#include "modules/rendermodule.hpp"
-#include "events/eventbus.hpp"
-#include "events/defaults/exit_event.hpp"
+#include "modules/windowmodule.hpp"
 
-namespace rythe::rendering
+
+namespace rythe::window
 {
-	void RenderModule::initialize()
+	void WindowModule::initialize()
 	{
 		window.create(sf::VideoMode(720, 640), "SFML works!");
 	}
 
-	void RenderModule::update()
+	void WindowModule::update()
 	{
 		window.clear();
 		window.display();
@@ -24,10 +23,5 @@ namespace rythe::rendering
 				rythe::core::Program::Instance().m_registry->get_service<rythe::core::events::EventBus>()->raiseEvent(evt);
 			}
 		}
-	}
-
-	void RenderModule::shutdown()
-	{
-
 	}
 }
