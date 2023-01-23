@@ -27,9 +27,6 @@
     <ClCompile Include="arbrook\types\type_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\common\hash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\logging\logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\types\meta.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\common\hash.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\common\string_literal.hpp">
@@ -170,9 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\engine\services\serviceregistry.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="arbrook\common\hash.inl">
       <Filter>Header Files</Filter>
     </None>
     <None Include="arbrook\scheduler\scheduler.inl">

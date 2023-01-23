@@ -14,35 +14,6 @@
 
 namespace rythe::core
 {
-    /**@brief Forcefully casts non pointer/reference type value from one to another.
-    */
-    template<typename T, typename U>
-    constexpr T force_value_cast(U value)
-    {
-        static_assert(alignof(T) == alignof(U), "Illegal cast of unaligned types.");
-        static_assert(sizeof(T) <= sizeof(U), "Illegal cast of non size similar types.");
-
-        return *reinterpret_cast<std::remove_reference_t<T>*>(&value);
-    }
-
-    template<typename T, typename U>
-    constexpr T* force_cast(const U& value)
-    {
-        return reinterpret_cast<T*>(&value);
-    }
-
-    template<typename T, typename U>
-    constexpr T* force_cast(U&& value)
-    {
-        return reinterpret_cast<T*>(&value);
-    }
-
-    template<typename T, typename U>
-    constexpr T* force_cast(U* value)
-    {
-        return reinterpret_cast<T*>(value);
-    }
-
 
     // Credits to Tristeon engine by Leon and Tristan: https://github.com/Tristeon/Tristeon2D/blob/master/src/Serialization/Type.h
 #if defined(RYTHE_MSVC) || defined(RYTHE_CLANG_MSVC)

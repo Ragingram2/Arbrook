@@ -26,10 +26,7 @@ int main()
 	registry.register_service<scheduling::Scheduler>();
 
 	//Register events
-	registry.get_service<events::EventBus>()->bind<events::exit>([](events::exit& evnt)
-		{
-			Program::Instance().exit(evnt);
-		});
+	registry.get_service<events::EventBus>()->bind<events::exit,Program,&Program::exit>();
 
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
