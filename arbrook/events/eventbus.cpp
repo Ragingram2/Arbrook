@@ -21,7 +21,7 @@ namespace rythe::core::events
 	{
 		if (m_callbacks.contains(value.get_id()))
 		{
-			m_callbacks.at(value.get_id()).invoke(value);
+			m_callbacks.at(value.get_id())(value);
 		}
 	}
 }

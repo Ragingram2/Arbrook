@@ -1,6 +1,6 @@
 #pragma once
 #include "platform/platform.hpp"
-#include "containers/delegate.hpp"
+//#include "containers/delegate.hpp"
 
 namespace rythe::core
 {
