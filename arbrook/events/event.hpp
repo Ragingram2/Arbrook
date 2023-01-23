@@ -1,11 +1,11 @@
 #pragma once
 #include <unordered_map>
-#include <rythe/delegate>
 
-#include "types/primitives.hpp"
-#include "types/type_util.hpp"
+#include <rythe/delegate>
+#include <rythe/primitives>
+#include <rythe/hash>
+
 #include "platform/platform.hpp"
-//#include "containers/delegate.hpp"
 
 /**
  * @file event.hpp
@@ -22,7 +22,7 @@ namespace rythe::core::events
 
         /**@brief Get's the type id of an event. (only available in event_base)
          */
-        virtual id_type get_id() RYTHE_PURE;
+        virtual rsl::id_type get_id() RYTHE_PURE;
     };
 
     /**@class event
@@ -33,11 +33,11 @@ namespace rythe::core::events
     {
         friend class EventBus;
 
-        inline static const id_type id = typeHash<Self>();
+        inline static const rsl::id_type id = rsl::hash<Self>();
 
         virtual ~event() = default;
     private:
-        virtual id_type get_id()
+        virtual rsl::id_type get_id()
         {
             return id;
         }

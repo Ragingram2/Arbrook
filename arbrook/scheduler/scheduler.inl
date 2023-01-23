@@ -10,5 +10,6 @@ namespace rythe::core::scheduling
 		moduleType& _module = *static_cast<moduleType*>(iter->second.get());
 		m_initFuncs.push_back<moduleType, &moduleType::initialize>(_module);
 		m_updateFuncs.push_back<moduleType, &moduleType::update>(_module);
+		m_shutdownFuncs.push_back<moduleType, &moduleType::shutdown>(_module);
 	}
 }

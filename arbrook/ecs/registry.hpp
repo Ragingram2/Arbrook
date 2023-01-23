@@ -1,36 +1,32 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
+#pragma once
 #include <queue>
 
-#include "data/entity_data.hpp"
+#include <rythe/primitives>
+
+#include "ecs/entity.hpp"
+#include "engine/services/service.hpp"
 
 namespace rythe::core::ecs
 {
-	static constexpr id_type world_entity_id = 1;
-
-	class Registry
+	class Registry : public Service
 	{
-	private:
-		std::unordered_map<id_type, entity_data> m_entities;
-		std::queue<id_type> m_recyclableEntities;
-
-		id_type m_nextEntityId = world_entity_id + 1;
-
-		R_NODISCARD static id_type getNextEntityId();
-
 	public:
-		R_NODISCARD static entity getWorld();
+		rsl::id_type m_lastId = 0;
+		static std::unordered_map<rsl::id_type, ecs::entity > m_entities;
 
-		R_NODISCARD static entity createEntity();
-		R_NODISCARD static entity createEntity(const std::string& name);
+		Registry() = default;
+		virtual ~Registry() = default;
 
-		static void destroyEntity(entity target, bool  recruse = true);
-		static void destroyEntity(id_type target, bool recurse = true);
+		void initialize() override {}
+		void update() override {}
+		void shutdown() override {}
 
-		R_NODISCARD static bool checkEntity(id_type target);
-		
-		R_NODISCARD static entity_data& entityData(id_type target);
-		R_NODISCARD static entity getEntity(id_type target);
+		ecs::entity& createEntity();
+		ecs::entity& createEntity(const std::string& name);
+		void destroyEntity(ecs::entity& ent);
+		void destroyEntity(rsl::id_type id);
 	};
 }

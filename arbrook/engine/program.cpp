@@ -28,21 +28,21 @@ namespace rythe::core
 		}
 	}
 
-	void Program::kill()
+	void Program::shutdown()
 	{
-		log::info("Killing Program");
 		for (auto& [id, service] : m_registry->m_services)
 		{
 			if (service)
 			{
-				service->kill();
+				service->shutdown();
 			}
 		}
+		log::info("Killing Program");
 	}
 
 	void Program::exit(events::exit& evt)
 	{
 		m_running = false;
-		kill();
+		shutdown();
 	}
 }

@@ -3,10 +3,11 @@
 #include <unordered_map>
 #include <iostream>
 
+#include <rythe/primitives>
+
+#include "platform/platform.hpp"
 #include "engine/services/service.hpp"
 #include "engine/services/serviceregistry.hpp"
-#include "platform/platform.hpp"
-#include "types/primitives.hpp"
 #include "events/eventbus.hpp"
 #include "events/defaults/exit_event.hpp"
 
@@ -27,7 +28,7 @@ namespace rythe::core
 
 		void initialize();
 		void update();
-		void kill();
+		void shutdown();
 
 		void exit(events::exit& evt);
 

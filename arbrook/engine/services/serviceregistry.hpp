@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include <string>
 
+#include <rythe/primitives>
+
 #include "engine/services/service.hpp"
-#include "types/types.hpp"
 #include "containers/pointer.hpp"
 
 namespace rythe::core
@@ -13,7 +14,7 @@ namespace rythe::core
 	class ServiceRegistry
 	{
 	public:
-		std::unordered_map<id_type, std::unique_ptr<Service>> m_services;
+		std::unordered_map<rsl::id_type, std::unique_ptr<Service>> m_services;
 		ServiceRegistry() {}
 		MOVE_FUNCS(ServiceRegistry)
 		~ServiceRegistry() = default;

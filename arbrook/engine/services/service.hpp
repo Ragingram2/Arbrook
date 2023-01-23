@@ -15,6 +15,6 @@ namespace rythe::core
 
 		virtual void initialize() RYTHE_PURE;
 		virtual void update() RYTHE_PURE;
-		virtual void kill() RYTHE_PURE;
+		virtual void shutdown() RYTHE_PURE;
 	};
 }

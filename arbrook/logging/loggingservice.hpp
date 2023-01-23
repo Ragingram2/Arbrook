@@ -13,6 +13,6 @@ namespace rythe::core
 
 		virtual void initialize() override;
 		virtual void update() override;
-		virtual void kill() override;
+		virtual void shutdown() override;
 	};
 }
