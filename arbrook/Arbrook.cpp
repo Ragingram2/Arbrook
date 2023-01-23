@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "engine/program.hpp"
+#include "ecs/registry.hpp"
 #include "logging/loggingservice.hpp"
 #include "events/eventbus.hpp"
 #include "events/defaults/exit_event.hpp"
@@ -24,6 +25,7 @@ int main()
 	registry.register_service<LoggingService>();
 	registry.register_service<events::EventBus>();
 	registry.register_service<scheduling::Scheduler>();
+	registry.register_service<ecs::Registry>();
 
 	//Register events
 	registry.get_service<events::EventBus>()->bind<events::exit,Program,&Program::exit>();
@@ -31,6 +33,7 @@ int main()
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
 	scheduler->reportModule<window::WindowModule>();
+	scheduler->reportModule<TestModule>();
 
 	//Initialize engine
 	Program::Instance().initialize();

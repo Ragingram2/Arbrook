@@ -4,8 +4,8 @@ namespace rythe::core
 {
 	void LoggingService::initialize()
 	{
-		//std::cout << "Initializing Logging" << std::endl;
 		rythe::core::log::setup();
+		log::debug("Logging Initialized");
 	}
 
 	void LoggingService::update()
@@ -13,8 +13,8 @@ namespace rythe::core
 		//std::cout << "Program service tick" << std::endl;
 	}
 
-	void LoggingService::kill()
+	void LoggingService::shutdown()
 	{
-		//std::cout << "Killing Program service " << std::endl;
+		log::debug("Logging Shutdown");
 	}
 }

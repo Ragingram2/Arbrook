@@ -1,6 +1,7 @@
 #pragma once
+#include <rythe/primitives>
+
 #include "platform/platform.hpp"
-#include "types/primitives.hpp"
 
 /**
  * @file pointer.hpp
@@ -50,10 +51,10 @@ namespace rythe::core
         R_ALWAYS_INLINE constexpr pointer& operator--() noexcept { ptr--; return *this; }
         R_ALWAYS_INLINE constexpr pointer operator++(int) noexcept { return { ++ptr }; }
         R_ALWAYS_INLINE constexpr pointer operator--(int) noexcept { return { --ptr }; }
-        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator+(diff_type n) const noexcept { return { ptr + n }; }
-        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator-(diff_type n) const noexcept { return { ptr - n }; }
-        R_ALWAYS_INLINE constexpr pointer& operator+=(diff_type n) noexcept { ptr += n; return *this; }
-        R_ALWAYS_INLINE constexpr pointer& operator-=(diff_type n) noexcept { ptr -= n; return *this; }
+        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator+(rsl::diff_type n) const noexcept { return { ptr + n }; }
+        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator-(rsl::diff_type n) const noexcept { return { ptr - n }; }
+        R_ALWAYS_INLINE constexpr pointer& operator+=(rsl::diff_type n) noexcept { ptr += n; return *this; }
+        R_ALWAYS_INLINE constexpr pointer& operator-=(rsl::diff_type n) noexcept { ptr -= n; return *this; }
     };
 
     template<typename T>
@@ -95,10 +96,10 @@ namespace rythe::core
         R_ALWAYS_INLINE constexpr pointer& operator--() noexcept { ptr--; return *this; }
         R_ALWAYS_INLINE constexpr pointer operator++(int) noexcept { return { ++ptr }; }
         R_ALWAYS_INLINE constexpr pointer operator--(int) noexcept { return { --ptr }; }
-        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator+(diff_type n) const noexcept { return { ptr + n }; }
-        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator-(diff_type n) const noexcept { return { ptr - n }; }
-        R_ALWAYS_INLINE constexpr pointer& operator+=(diff_type n) noexcept { ptr += n; return *this; }
-        R_ALWAYS_INLINE constexpr pointer& operator-=(diff_type n) noexcept { ptr -= n; return *this; }
+        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator+(rsl::diff_type n) const noexcept { return { ptr + n }; }
+        R_NODISCARD R_ALWAYS_INLINE constexpr pointer operator-(rsl::diff_type n) const noexcept { return { ptr - n }; }
+        R_ALWAYS_INLINE constexpr pointer& operator+=(rsl::diff_type n) noexcept { ptr += n; return *this; }
+        R_ALWAYS_INLINE constexpr pointer& operator-=(rsl::diff_type n) noexcept { ptr -= n; return *this; }
     };
 
     template<>

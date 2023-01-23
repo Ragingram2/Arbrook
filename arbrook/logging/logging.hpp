@@ -9,8 +9,9 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/pattern_formatter.h>
 
+#include <rythe/primitives>
+
 #include "platform/platform.hpp"
-#include "types/types.hpp"
 #include "math/math.hpp"
 //#include "common/exception.hpp"
 //#include "async/rw_spinlock.hpp"
@@ -304,7 +305,7 @@ namespace rythe::core::log
     /** @brief Holds the non const static data of logging. */
     struct impl
     {
-        cstring logFile = "logs/rythe-engine.log";
+        rsl::cstring logFile = "logs/rythe-engine.log";
         logger_ptr logger;
         logger_ptr fileLogger;
         logger_ptr consoleLogger = spdlog::stdout_color_mt("console-logger");

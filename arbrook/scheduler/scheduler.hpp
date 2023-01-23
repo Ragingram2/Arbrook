@@ -1,12 +1,13 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
+
 #include <rythe/delegate>
+#include <rythe/primitves>
 
 #include "engine/services/service.hpp"
-#include "types/types.hpp"
+#include "logging/logging.hpp"
 #include "modules/module.hpp"
-//#include "containers/delegate.hpp"
 
 namespace rythe::core::scheduling
 {
@@ -15,8 +16,9 @@ namespace rythe::core::scheduling
 	private:
 		rsl::multicast_delegate<void()> m_initFuncs;
 		rsl::multicast_delegate<void()> m_updateFuncs;
+		rsl::multicast_delegate<void()> m_shutdownFuncs;
 
-		std::unordered_map<id_type, std::unique_ptr<Module>> m_modules;
+		std::unordered_map<rsl::id_type, std::unique_ptr<Module>> m_modules;
 
 	public:
 		Scheduler() = default;
@@ -24,7 +26,7 @@ namespace rythe::core::scheduling
 
 		void initialize() override;
 		void update() override;
-		void kill() override;
+		void shutdown() override;
 
 		template<typename moduleType>
 		void reportModule();

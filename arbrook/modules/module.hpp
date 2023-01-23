@@ -1,4 +1,5 @@
 #pragma once
+#include <rythe/primitives>
 #include <rythe/delegate>
 
 #include "platform/platform.hpp"

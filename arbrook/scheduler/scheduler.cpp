@@ -12,8 +12,9 @@ namespace rythe::core::scheduling
 		m_updateFuncs();
 	}
 
-	void Scheduler::kill()
+	void Scheduler::shutdown()
 	{
-
+		log::debug("Scheduler shutting down");
+		m_shutdownFuncs();
 	}
 }

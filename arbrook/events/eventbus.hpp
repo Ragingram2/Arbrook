@@ -4,12 +4,11 @@
 #include <functional>
 
 #include <rythe/delegate>
+#include <rythe/primitives>
 
 #include "engine/services/service.hpp"
 #include "logging/logging.hpp"
 #include "platform/platform.hpp"
-//#include "containers/delegate.hpp"
-#include "types/types.hpp"
 #include "events/event.hpp"
 
 namespace rythe::core::events
@@ -20,11 +19,11 @@ namespace rythe::core::events
 		using listenerFunc = void(events::event_base&);
 		using listenerDelegate = rsl::delegate<listenerFunc>;
 	private:
-		std::unordered_map<id_type, rsl::multicast_delegate<listenerFunc>> m_callbacks;
+		std::unordered_map<rsl::id_type, rsl::multicast_delegate<listenerFunc>> m_callbacks;
 	public:
 		void initialize() override;
 		void update() override;
-		void kill() override;
+		void shutdown() override;
 
 		void raiseEvent(event_base& value);
 

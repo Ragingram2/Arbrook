@@ -2,8 +2,25 @@
 
 namespace rythe::core::ecs
 {
-	id_type Registry::getNextEntityId()
+	std::unordered_map<rsl::id_type, ecs::entity> Registry::m_entities;
+
+	ecs::entity& Registry::createEntity()
 	{
-		return 0;
+		m_entities.emplace(m_lastId++,ecs::entity(m_lastId));
+	}
+
+	ecs::entity& Registry::createEntity(const std::string& name)
+	{
+		m_entities.emplace(m_lastId++,ecs::entity(m_lastId, name));
+	}
+
+	void Registry::destroyEntity(ecs::entity& ent)
+	{
+		m_entities.erase(ent.m_id);
+	}
+
+	void Registry::destroyEntity(rsl::id_type id)
+	{
+		m_entities.erase(id);
 	}
 }

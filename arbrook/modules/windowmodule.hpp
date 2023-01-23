@@ -16,5 +16,6 @@ namespace rythe::window
 
 		void initialize() override;
 		void update() override;
+		void shutdown() override {}
 	};
 }

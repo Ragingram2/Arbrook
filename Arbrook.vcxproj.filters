@@ -24,9 +24,6 @@
     <ClCompile Include="arbrook\engine\program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\types\type_util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\logging\logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,15 +54,15 @@
     <ClCompile Include="external_include\rsl\src\rythe\delete_me.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\systems\testsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\common\hash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="arbrook\ecs\data\entity_data.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\ecs\handles\entity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\types\primitives.hpp">
+    <ClInclude Include="arbrook\ecs\entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\platform\platform.hpp">
@@ -80,9 +77,6 @@
     <ClInclude Include="arbrook\engine\services\serviceregistry.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\types\type_util.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\common\string_extra.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,9 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\common\string_literal.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\types\types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\containers\pointer.hpp">
@@ -161,6 +152,9 @@
     <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\common\hash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\engine\services\serviceregistry.inl">
@@ -184,5 +178,8 @@
     <None Include="external_include\rsl\src\rythe\primitives" />
     <None Include="external_include\rsl\src\rythe\type_util" />
     <None Include="external_include\rsl\src\rythe\utilities" />
+    <None Include="arbrook\common\hash.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
