@@ -1,6 +1,7 @@
 #pragma once
+#include <rythe/delegate>
+
 #include "platform/platform.hpp"
-#include "containers/delegate.hpp"
 #include "systems/system.hpp"
 
 namespace rythe::core
@@ -8,11 +9,11 @@ namespace rythe::core
 	class Module
 	{
 	private:
-		multicast_delegate<void()> m_initFuncs;
-		multicast_delegate<void()> m_updateFuncs;
-		multicast_delegate<void()> m_shutdownFuncs;
+		rsl::multicast_delegate<void()> m_initFuncs;
+		rsl::multicast_delegate<void()> m_updateFuncs;
+		rsl::multicast_delegate<void()> m_shutdownFuncs;
 
-		std::unordered_map<id_type, std::unique_ptr<System>> m_systems;
+		std::unordered_map<rsl::id_type, std::unique_ptr<System>> m_systems;
 
 	public:
 		Module() = default;

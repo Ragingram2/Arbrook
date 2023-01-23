@@ -57,6 +57,9 @@
     <ClCompile Include="arbrook\modules\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="external_include\rsl\src\rythe\delete_me.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\data\entity_data.hpp">
@@ -122,12 +125,6 @@
     <ClInclude Include="arbrook\modules\testmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\containers\delegate.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\containers\iterator_tricks.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\events\eventbus.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -144,6 +141,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\systems\testsystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\concepts.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\delegate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\delegate_base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\hash.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\multicast_delegate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\primitives.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\type_util.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -166,5 +187,11 @@
     <None Include="arbrook\modules\module.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="external_include\rsl\src\rythe\concepts" />
+    <None Include="external_include\rsl\src\rythe\delegate" />
+    <None Include="external_include\rsl\src\rythe\hash" />
+    <None Include="external_include\rsl\src\rythe\primitives" />
+    <None Include="external_include\rsl\src\rythe\type_util" />
+    <None Include="external_include\rsl\src\rythe\utilities" />
   </ItemGroup>
 </Project>

@@ -1,19 +1,20 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
+#include <rythe/delegate>
 
 #include "engine/services/service.hpp"
 #include "types/types.hpp"
 #include "modules/module.hpp"
-#include "containers/delegate.hpp"
+//#include "containers/delegate.hpp"
 
 namespace rythe::core::scheduling
 {
 	class Scheduler : public Service
 	{
 	private:
-		multicast_delegate<void()> m_initFuncs;
-		multicast_delegate<void()> m_updateFuncs;
+		rsl::multicast_delegate<void()> m_initFuncs;
+		rsl::multicast_delegate<void()> m_updateFuncs;
 
 		std::unordered_map<id_type, std::unique_ptr<Module>> m_modules;
 

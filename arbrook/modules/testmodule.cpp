@@ -7,13 +7,4 @@ namespace rythe::core
 		log::debug("Initialized Test System");
 	}
 
-	void TestModule::update()
-	{
-		//log::debug("Tick");
-	}
-
-	void TestModule::shutdown()
-	{
-
-	}
 }

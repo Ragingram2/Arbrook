@@ -1,10 +1,11 @@
 #pragma once
 #include <unordered_map>
+#include <rythe/delegate>
 
 #include "types/primitives.hpp"
 #include "types/type_util.hpp"
 #include "platform/platform.hpp"
-#include "containers/delegate.hpp"
+//#include "containers/delegate.hpp"
 
 /**
  * @file event.hpp
