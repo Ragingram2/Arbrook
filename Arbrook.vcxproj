@@ -137,7 +137,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="arbrook\common\hash.cpp" />
     <ClCompile Include="arbrook\ecs\registry.cpp" />
     <ClCompile Include="arbrook\events\eventbus.cpp" />
     <ClCompile Include="arbrook\logging\loggingservice.cpp" />
@@ -154,7 +153,6 @@
     <ClCompile Include="external_include\rsl\src\rythe\delete_me.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="arbrook\common\hash.hpp" />
     <ClInclude Include="arbrook\common\string_extra.hpp" />
     <ClInclude Include="arbrook\common\string_literal.hpp" />
     <ClInclude Include="arbrook\containers\pointer.hpp" />
@@ -191,7 +189,6 @@
     <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="arbrook\common\hash.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
     <None Include="arbrook\events\eventbus.inl" />
     <None Include="arbrook\modules\module.inl" />
