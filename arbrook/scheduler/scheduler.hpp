@@ -3,7 +3,8 @@
 #include <memory>
 
 #include <rythe/delegate>
-#include <rythe/primitves>
+#include <rythe/primitives>
+#include <rythe/hash>
 
 #include "engine/services/service.hpp"
 #include "logging/logging.hpp"

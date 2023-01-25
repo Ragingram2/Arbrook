@@ -5,6 +5,7 @@
 #include <string>
 
 #include <rythe/primitives>
+#include <rythe/hash>
 
 #include "engine/services/service.hpp"
 #include "containers/pointer.hpp"

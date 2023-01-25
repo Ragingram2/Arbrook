@@ -1,6 +1,7 @@
 #pragma once
 #include <rythe/primitives>
 #include <rythe/delegate>
+#include <rythe/hash>
 
 #include "platform/platform.hpp"
 #include "systems/system.hpp"

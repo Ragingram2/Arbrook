@@ -6,7 +6,7 @@ namespace rythe::core
 	template<typename serviceType>
 	pointer<serviceType> ServiceRegistry::register_service()
 	{
-		auto [iterator, emplace] = m_services.emplace(typeHash<serviceType>(), std::make_unique<serviceType>());
+		auto [iterator, emplace] = m_services.emplace(rsl::typeHash<serviceType>(), std::make_unique<serviceType>());
 		return { dynamic_cast<serviceType*>(iterator->second.get()) };
 	}
 
@@ -19,7 +19,7 @@ namespace rythe::core
 	template<typename serviceType>
 	pointer<serviceType> ServiceRegistry::get_service()
 	{
-		const id_type typeId = typeHash<serviceType>();
+		const rsl::id_type typeId = rsl::typeHash<serviceType>();
 		if (m_services.count(typeId))
 			return { dynamic_cast<serviceType*>(m_services.at(typeId).get()) };
 		return { nullptr };

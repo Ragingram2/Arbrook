@@ -9,18 +9,14 @@ namespace rythe::core
 
 		for (int i = 0; i < 100; i++)
 		{
-			createEntity();
-		}
-
-		for (auto& [id, ent] : ecs::Registry::m_entities)
-		{
-			log::debug("Entity: {}", ent.m_name);
+			auto& ent = createEntity();
+			log::debug(ent.m_name);
 		}
 	}
 
 	void TestSystem::update()
 	{
-		log::debug("Test System update");
+
 	}
 
 	void TestSystem::shutdown()

@@ -2,21 +2,16 @@
 
 namespace rythe::core
 {
-	ecs::Registry* System::registry = Program::Instance().m_registry->get_service<ecs::Registry>();
+	ecs::Registry* System::registry;
 
-	void System::setup()
+	ecs::entity& System::createEntity()
 	{
-
+		return System::registry->createEntity();
 	}
 
-	ecs::entity System::createEntity()
+	ecs::entity& System::createEntity(std::string name)
 	{
-		System::registry->createEntity();
-	}
-
-	ecs::entity System::createEntity(std::string name)
-	{
-		System::registry->createEntity(name);
+		return System::registry->createEntity(name);
 	}
 
 	void System::destroyEntity(ecs::entity& ent)
