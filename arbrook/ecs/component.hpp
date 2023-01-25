@@ -1,11 +1,16 @@
 #pragma once
 
 #include <rythe/primitives>
+#include <rythe/hash>
 
 #include "ecs/entity.hpp"
+#include "platform/platform.hpp"
+#include "containers/pointer.hpp"
 
 namespace rythe::core::ecs
 {
+    struct Registry;
+
 	struct component_base
 	{
 		rsl::id_type typeId;
@@ -14,7 +19,7 @@ namespace rythe::core::ecs
     template<typename componentType>
     struct component : public component_base
     {
-        static constexpr rsl::id_type typeId = typeid(componentType).hash_code();
+        static constexpr rsl::id_type typeId = typeHash<componentType>();
 
         entity owner;
 
@@ -30,8 +35,8 @@ namespace rythe::core::ecs
         R_NODISCARD componentType& operator*();
         R_NODISCARD const componentType& operator*() const;
 
-        R_NODISCARD componentType* operator->();
-        R_NODISCARD const componentType* operator->() const;
+        R_NODISCARD pointer<componentType> operator->();
+        R_NODISCARD const pointer<componentType> operator->() const;
 
         bool operator==(const component& other) const noexcept;
 

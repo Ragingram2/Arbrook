@@ -184,5 +184,8 @@
     <None Include="arbrook\ecs\component.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="arbrook\ecs\componentpool.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

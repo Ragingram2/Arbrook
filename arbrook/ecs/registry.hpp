@@ -5,9 +5,11 @@
 #include <queue>
 
 #include <rythe/primitives>
+#include <rythe/hash>
 
 #include "ecs/entity.hpp"
 #include "ecs/component.hpp"
+#include "ecs/componentpool.hpp"
 #include "engine/services/service.hpp"
 #include "containers/pointer.hpp"
 
@@ -18,7 +20,7 @@ namespace rythe::core::ecs
 	public:
 		rsl::id_type m_lastId = 0;
 		static std::unordered_map<rsl::id_type, ecs::entity > m_entities;
-		std::unordered_map<rsl::id_type, std::vector<std::unique_ptr<component_base>>> m_componentPools;
+		static std::unordered_map<rsl::id_type, std::unique_ptr<component_pool_base>> m_componentPools;
 
 		Registry() = default;
 		virtual ~Registry() = default;
@@ -33,15 +35,20 @@ namespace rythe::core::ecs
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 
-		//template<typename componentType>
-		//pointer<componentType>  addComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//pointer<componentType>  addComponent(rsl::id_type id);
+		template<typename componentType>
+		pointer<componentType>  getComponent(ecs::entity& ent);
+		template<typename componentType>
+		pointer<componentType>  getComponent(rsl::id_type id);
 
-		//template<typename componentType>
-		//void removeComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//void removeComponent(rsl::id_type id);
+		template<typename componentType>
+		bool  hasComponent(ecs::entity& ent);
+		template<typename componentType>
+		bool  hasComponent(rsl::id_type id);
+
+		template<typename componentType>
+		void destroyComponent(ecs::entity& ent);
+		template<typename componentType>
+		void  destroyComponent(rsl::id_type id);
 	};
 }
 

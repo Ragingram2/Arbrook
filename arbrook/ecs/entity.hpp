@@ -1,6 +1,10 @@
 #pragma once
 #include <format>
+
 #include <rythe/primitives>
+
+#include "ecs/component.hpp"
+#include "containers/pointer.hpp"
 
 namespace rythe::core::ecs
 {
@@ -15,5 +19,8 @@ namespace rythe::core::ecs
 		entity(rsl::id_type id) : m_id(id), m_name(std::format("Entity {}", m_id)) {}
 		entity(rsl::id_type id, std::string name) : m_id(id), m_name(name) {}
 		~entity() = default;
+
+		template<typename componentType>
+		pointer<component<componentType>> addComponent();
 	};
 }

@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\ecs\component.inl" />
+    <None Include="arbrook\ecs\componentpool.inl" />
     <None Include="arbrook\ecs\registry.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
     <None Include="arbrook\events\eventbus.inl" />

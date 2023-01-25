@@ -32,13 +32,13 @@ namespace rythe::core::ecs
 		R_NODISCARD virtual bool contains(entity target) const;
 
 		virtual pointer<component_base> create_component(entity target);
-		template<typename... Args>
-		componentType& create_component(entity target, Args&&... args);
 
 		R_NODISCARD virtual pointer<component_base> get_component(entity target);
 		R_NODISCARD virtual const pointer<component_base> get_component(entity target) const;
 
 		virtual void destroy_component(entity target);
 		virtual ~component_pool() = default;
-	}
+	};
 }
+
+#include "ecs/componentpool.inl"
