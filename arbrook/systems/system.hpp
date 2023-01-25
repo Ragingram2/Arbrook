@@ -9,15 +9,18 @@ namespace rythe::core
 	{
 	public:
 		static ecs::Registry* registry;
-		System() = default;
+		System()
+		{
+			registry = Program::Instance().m_registry->get_service<ecs::Registry>();
+		}
 		virtual ~System() = default;
 
-		virtual void setup();
-		virtual void update() {};
-		virtual void shutdown() {};
+		virtual void setup() RYTHE_PURE;
+		virtual void update() RYTHE_PURE;
+		virtual void shutdown() RYTHE_PURE;
 
-		ecs::entity createEntity();
-		ecs::entity createEntity(std::string name);
+		ecs::entity& createEntity();
+		ecs::entity& createEntity(std::string name);
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 	};

@@ -6,12 +6,16 @@ namespace rythe::core::ecs
 
 	ecs::entity& Registry::createEntity()
 	{
-		m_entities.emplace(m_lastId++,ecs::entity(m_lastId));
+		m_lastId++;
+		m_entities.try_emplace(m_lastId, ecs::entity{ m_lastId });
+		return m_entities.at(m_lastId);
 	}
 
 	ecs::entity& Registry::createEntity(const std::string& name)
 	{
-		m_entities.emplace(m_lastId++,ecs::entity(m_lastId, name));
+		m_lastId++;
+		m_entities.try_emplace(m_lastId, ecs::entity{ m_lastId, name });
+		return m_entities.at(m_lastId);
 	}
 
 	void Registry::destroyEntity(ecs::entity& ent)

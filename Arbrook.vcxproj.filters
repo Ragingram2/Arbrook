@@ -57,9 +57,6 @@
     <ClCompile Include="arbrook\systems\testsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\common\hash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\entity.hpp">
@@ -152,7 +149,10 @@
     <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\common\hash.hpp">
+    <ClInclude Include="arbrook\ecs\componentpool.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\ecs\component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -178,7 +178,10 @@
     <None Include="external_include\rsl\src\rythe\primitives" />
     <None Include="external_include\rsl\src\rythe\type_util" />
     <None Include="external_include\rsl\src\rythe\utilities" />
-    <None Include="arbrook\common\hash.inl">
+    <None Include="arbrook\ecs\registry.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\ecs\component.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
