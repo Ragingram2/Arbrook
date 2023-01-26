@@ -9,7 +9,7 @@
 
 #include "ecs/entity.hpp"
 #include "ecs/component.hpp"
-#include "ecs/componentpool.hpp"
+//#include "ecs/componentpool.hpp"
 #include "engine/services/service.hpp"
 #include "containers/pointer.hpp"
 
@@ -20,7 +20,6 @@ namespace rythe::core::ecs
 	public:
 		rsl::id_type m_lastId = 0;
 		static std::unordered_map<rsl::id_type, ecs::entity > m_entities;
-		static std::unordered_map<rsl::id_type, std::unique_ptr<component_pool_base>> m_componentPools;
 
 		Registry() = default;
 		virtual ~Registry() = default;

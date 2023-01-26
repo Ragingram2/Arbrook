@@ -3,7 +3,6 @@
 namespace rythe::core::ecs
 {
 	std::unordered_map<rsl::id_type, ecs::entity> Registry::m_entities;
-	std::unordered_map<rsl::id_type, std::unique_ptr<component_pool_base>>  Registry::m_componentPools;
 
 	ecs::entity& Registry::createEntity()
 	{
