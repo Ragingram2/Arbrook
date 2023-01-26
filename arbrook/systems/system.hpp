@@ -5,6 +5,11 @@
 
 namespace rythe::core
 {
+	struct exampleComp : public ecs::component<exampleComp>
+	{
+		int i = 10;
+	};
+
 	class System
 	{
 	public:
@@ -13,6 +18,7 @@ namespace rythe::core
 		{
 			registry = Program::Instance().m_registry->get_service<ecs::Registry>();
 		}
+
 		virtual ~System() = default;
 
 		virtual void setup() RYTHE_PURE;

@@ -149,10 +149,10 @@
     <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\ecs\componentpool.hpp">
+    <ClInclude Include="arbrook\ecs\component.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\ecs\component.hpp">
+    <ClInclude Include="arbrook\ecs\component_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -184,7 +184,7 @@
     <None Include="arbrook\ecs\component.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="arbrook\ecs\componentpool.inl">
+    <None Include="arbrook\ecs\entity.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

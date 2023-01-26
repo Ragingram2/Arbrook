@@ -157,7 +157,7 @@
     <ClInclude Include="arbrook\common\string_literal.hpp" />
     <ClInclude Include="arbrook\containers\pointer.hpp" />
     <ClInclude Include="arbrook\ecs\component.hpp" />
-    <ClInclude Include="arbrook\ecs\componentpool.hpp" />
+    <ClInclude Include="arbrook\ecs\component_base.hpp" />
     <ClInclude Include="arbrook\ecs\entity.hpp" />
     <ClInclude Include="arbrook\ecs\registry.hpp" />
     <ClInclude Include="arbrook\engine\program.hpp" />
@@ -188,7 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\ecs\component.inl" />
-    <None Include="arbrook\ecs\componentpool.inl" />
+    <None Include="arbrook\ecs\entity.inl" />
     <None Include="arbrook\ecs\registry.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
     <None Include="arbrook\events\eventbus.inl" />

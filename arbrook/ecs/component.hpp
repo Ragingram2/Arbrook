@@ -3,23 +3,17 @@
 #include <rythe/primitives>
 #include <rythe/hash>
 
-#include "ecs/entity.hpp"
 #include "platform/platform.hpp"
 #include "containers/pointer.hpp"
+#include "ecs/component_base.hpp"
+#include "ecs/entity.hpp"
 
 namespace rythe::core::ecs
 {
-    struct Registry;
-
-	struct component_base
-	{
-		rsl::id_type typeId;
-	};
-
     template<typename componentType>
     struct component : public component_base
     {
-        static constexpr rsl::id_type typeId = typeHash<componentType>();
+        static constexpr rsl::id_type typeId = rsl::typeHash<componentType>();
 
         entity owner;
 

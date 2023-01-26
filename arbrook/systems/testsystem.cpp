@@ -7,10 +7,16 @@ namespace rythe::core
 	{
 		log::debug("Test System setup");
 
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			auto& ent = createEntity();
+			ent.addComponent<exampleComp>();
+			log::debug("//");
 			log::debug(ent.m_name);
+			auto& comp = ent.getComponent<exampleComp>();
+			log::debug(comp.i);
+			comp.i = i;
+			log::debug(comp.i);
 		}
 	}
 
