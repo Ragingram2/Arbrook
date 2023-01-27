@@ -17,7 +17,7 @@ namespace rythe::core::ecs
 
         entity owner;
 
-        component& operator=(const componentType& src);
+       /* component& operator=(const componentType& src);
         component& operator=(componentType&& src);
 
         R_NODISCARD operator componentType& ();
@@ -37,7 +37,7 @@ namespace rythe::core::ecs
         R_NODISCARD componentType& get();
         R_NODISCARD const componentType& get() const;
 
-        void destroy();
+        void destroy();*/
     };
 }
 

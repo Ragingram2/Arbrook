@@ -15,11 +15,30 @@
 
 namespace rythe::core::ecs
 {
+	struct component_family_base
+	{
+		rsl::id_type m_typeId;
+	};
+
+	template<typename componentType>
+	struct component_family : public component_family_base
+	{
+		using entityId = rsl::id_type;
+		std::unordered_map<entityId, std::unique_ptr<component<componentType>>> m_components;
+
+		componentType
+	};
+
 	class Registry : public Service
 	{
 	public:
 		rsl::id_type m_lastId = 0;
-		static std::unordered_map<rsl::id_type, ecs::entity > m_entities;
+		using entityId = rsl::id_type;
+		using componentId = rsl::id_type;
+
+		static std::unordered_map<entityId, ecs::entity > m_entities;
+		static std::unordered_map<entityId, std::vector<rsl::id_type>> m_entityCompositions;
+		static std::unordered_map<componentId, std::unique_ptr<component_family_base>> m_componentFamilies;
 
 		Registry() = default;
 		virtual ~Registry() = default;
@@ -33,6 +52,11 @@ namespace rythe::core::ecs
 
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
+
+		template<typename componentType>
+		pointer<componentType>  createComponent(ecs::entity& ent);
+		template<typename componentType>
+		pointer<componentType>  createComponent(rsl::id_type id);
 
 		template<typename componentType>
 		pointer<componentType>  getComponent(ecs::entity& ent);
