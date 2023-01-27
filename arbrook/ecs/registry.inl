@@ -4,6 +4,23 @@
 namespace rythe::core::ecs
 {
 	template<typename componentType>
+	inline pointer<componentType> Registry::createComponent(ecs::entity& ent)
+	{
+		//Registry component with the entity
+		m_entityCompositions.at(ent.m_id).push_back(rsl::typeHash<componentType>());
+
+		return m_componentPools[typeHash<componentType>()].getComponent<componentType>(ent);
+	}
+	template<typename componentType>
+	inline pointer<componentType> Registry::createComponent(rsl::id_type id)
+	{
+		//Registry component with the entity
+		m_entityCompositions.at(ent.m_id).push_back(rsl::typeHash<componentType>());
+
+		return m_componentPools[].getComponent<componentType>(id);
+	}
+
+	template<typename componentType>
 	inline pointer<componentType> Registry::getComponent(ecs::entity& ent)
 	{
 		return m_componentPools[typeHash<componentType>()].getComponent<componentType>(ent);
@@ -13,6 +30,7 @@ namespace rythe::core::ecs
 	{
 		return m_componentPools[typeHash<componentType>()].getComponent<componentType>(id);
 	}
+
 	template<typename componentType>
 	inline bool Registry::hasComponent(ecs::entity& ent)
 	{

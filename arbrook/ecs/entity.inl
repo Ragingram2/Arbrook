@@ -7,8 +7,8 @@ namespace rythe::core::ecs
 	inline R_ALWAYS_INLINE componentType& entity::addComponent()
 	{
 		auto id = rsl::typeHash<componentType>();
-		auto ptr = std::make_unique<component<componentType>>();
-		component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components.emplace(id, ptr).first->second.get());
+		component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components.emplace(id, std::make_unique<component<componentType>>()).first->second.get());
+		comp->owner = *this;
 		return *reinterpret_cast<componentType*>(comp);
 	}
 
@@ -16,8 +16,8 @@ namespace rythe::core::ecs
 	inline R_ALWAYS_INLINE componentType& entity::addComponent(const componentType& val)
 	{
 		auto id = rsl::typeHash<componentType>();
-		auto ptr = std::make_unique<component<componentType>>(val);
-		component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components.emplace(id, ptr).first->second.get());
+		component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components.emplace(id, std::make_unique<component<componentType>>(val)).first->second.get());
+		comp->owner = *this;
 		return *reinterpret_cast<componentType*>(comp);
 	}
 
@@ -25,6 +25,7 @@ namespace rythe::core::ecs
 	inline R_ALWAYS_INLINE componentType& entity::getComponent()
 	{
 		auto id = rsl::typeHash<componentType>();
+		log::debug(m_components[rsl::typeHash<componentType>()].get()->typeId);
 		component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components[rsl::typeHash<componentType>()].get());
 		return *reinterpret_cast<componentType*>(comp);
 	}
