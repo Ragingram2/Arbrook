@@ -25,8 +25,10 @@ namespace rythe::core::ecs
 	{
 		using entityId = rsl::id_type;
 		std::unordered_map<entityId, std::unique_ptr<component<componentType>>> m_components;
-
-		componentType
+		component_family()
+		{
+			m_typeId = rsl::typeHash<componentType>();
+		}
 	};
 
 	class Registry : public Service
@@ -36,7 +38,7 @@ namespace rythe::core::ecs
 		using entityId = rsl::id_type;
 		using componentId = rsl::id_type;
 
-		static std::unordered_map<entityId, ecs::entity > m_entities;
+		static std::unordered_map<entityId, ecs::entity> m_entities;
 		static std::unordered_map<entityId, std::vector<rsl::id_type>> m_entityCompositions;
 		static std::unordered_map<componentId, std::unique_ptr<component_family_base>> m_componentFamilies;
 
@@ -54,24 +56,30 @@ namespace rythe::core::ecs
 		void destroyEntity(rsl::id_type id);
 
 		template<typename componentType>
-		pointer<componentType>  createComponent(ecs::entity& ent);
-		template<typename componentType>
-		pointer<componentType>  createComponent(rsl::id_type id);
+		static void registerComponent();
 
 		template<typename componentType>
-		pointer<componentType>  getComponent(ecs::entity& ent);
-		template<typename componentType>
-		pointer<componentType>  getComponent(rsl::id_type id);
+		static component_family<componentType>& getFamily();
 
-		template<typename componentType>
-		bool  hasComponent(ecs::entity& ent);
-		template<typename componentType>
-		bool  hasComponent(rsl::id_type id);
+		//template<typename componentType>
+		//pointer<componentType>  createComponent(ecs::entity& ent);
+		//template<typename componentType>
+		//pointer<componentType>  createComponent(rsl::id_type id);
 
-		template<typename componentType>
-		void destroyComponent(ecs::entity& ent);
-		template<typename componentType>
-		void  destroyComponent(rsl::id_type id);
+		//template<typename componentType>
+		//pointer<componentType>  getComponent(ecs::entity& ent);
+		//template<typename componentType>
+		//pointer<componentType>  getComponent(rsl::id_type id);
+
+		//template<typename componentType>
+		//bool  hasComponent(ecs::entity& ent);
+		//template<typename componentType>
+		//bool  hasComponent(rsl::id_type id);
+
+		//template<typename componentType>
+		//void destroyComponent(ecs::entity& ent);
+		//template<typename componentType>
+		//void  destroyComponent(rsl::id_type id);
 	};
 }
 

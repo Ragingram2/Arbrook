@@ -2,8 +2,12 @@
 
 namespace rythe::core::ecs
 {
-	std::unordered_map<rsl::id_type, ecs::entity> Registry::m_entities;
-	std::unordered_map<rsl::id_type, std::vector<rsl::id_type>> Registry::m_entityCompositions;
+	using entityId = rsl::id_type;
+	using componentId = rsl::id_type;
+
+	std::unordered_map<entityId, ecs::entity> Registry::m_entities;
+	std::unordered_map<entityId, std::vector<rsl::id_type>> Registry::m_entityCompositions;
+	std::unordered_map<componentId, std::unique_ptr<component_family_base>> Registry::m_componentFamilies;
 
 	ecs::entity& Registry::createEntity()
 	{
