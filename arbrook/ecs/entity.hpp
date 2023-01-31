@@ -24,8 +24,8 @@ namespace rythe::core::ecs
 		entity(rsl::id_type id, std::string name) : m_id(id), m_name(name) {}
 		~entity() = default;
 
-		//template<typename componentType>
-		//inline R_ALWAYS_INLINE componentType& addComponent();
+		template<typename componentType>
+		inline R_ALWAYS_INLINE componentType& addComponent();
 		//template<typename componentType>
 		//inline R_ALWAYS_INLINE componentType& addComponent(const componentType& val);
 

@@ -3,14 +3,11 @@
 
 namespace rythe::core::ecs
 {
-	//template<typename componentType>
-	//inline R_ALWAYS_INLINE componentType& entity::addComponent()
-	//{
-	//	auto id = rsl::typeHash<componentType>();
-	//	component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components.emplace(id, std::make_unique<component<componentType>>()).first->second.get());
-	//	comp->owner = *this;
-	//	return *reinterpret_cast<componentType*>(comp);
-	//}
+	template<typename componentType>
+	inline R_ALWAYS_INLINE componentType& entity::addComponent()
+	{
+		return *Registry::createComponent<componentType>(m_id);
+	}
 
 	//template<typename componentType>
 	//inline R_ALWAYS_INLINE componentType& entity::addComponent(const componentType& val)

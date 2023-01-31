@@ -24,11 +24,19 @@ namespace rythe::core::ecs
 	struct component_family : public component_family_base
 	{
 		using entityId = rsl::id_type;
-		std::unordered_map<entityId, std::unique_ptr<component<componentType>>> m_components;
+		std::unordered_map<entityId, componentType> m_components;
 		component_family()
 		{
 			m_typeId = rsl::typeHash<componentType>();
 		}
+
+		componentType* createComponent(entity& ent);
+
+		componentType* createComponent(entityId id);
+
+		componentType& getComponent(entity& ent);
+
+		componentType& getComponent(entityId id);
 	};
 
 	class Registry : public Service
@@ -61,15 +69,15 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		static component_family<componentType>& getFamily();
 
-		//template<typename componentType>
-		//pointer<componentType>  createComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//pointer<componentType>  createComponent(rsl::id_type id);
+		template<typename componentType>
+		static componentType* createComponent(ecs::entity& ent);
+		template<typename componentType>
+		static componentType* createComponent(rsl::id_type id);
 
-		//template<typename componentType>
-		//pointer<componentType>  getComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//pointer<componentType>  getComponent(rsl::id_type id);
+		template<typename componentType>
+		static componentType& getComponent(ecs::entity& ent);
+		template<typename componentType>
+		static componentType& getComponent(rsl::id_type id);
 
 		//template<typename componentType>
 		//bool  hasComponent(ecs::entity& ent);
