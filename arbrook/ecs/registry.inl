@@ -45,6 +45,11 @@ namespace rythe::core::ecs
 		//Registry component with the entity
 		//m_entityCompositions.at(ent.m_id).push_back(rsl::typeHash<componentType>());
 
+		if (!m_componentFamilies.contains(rsl::typeHash<componentType>()))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
+
 		auto& family = getFamily<componentType>();
 		return family.createComponent(ent);
 	}
@@ -53,6 +58,11 @@ namespace rythe::core::ecs
 	{
 		//Registry component with the entity
 		//m_entityCompositions.at(id).push_back(rsl::typeHash<componentType>());
+
+		if (!m_componentFamilies.contains(rsl::typeHash<componentType>()))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
 
 		auto& family = getFamily<componentType>();
 		return family.createComponent(id);

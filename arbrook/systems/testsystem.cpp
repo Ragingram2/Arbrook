@@ -6,7 +6,6 @@ namespace rythe::core
 	void TestSystem::setup()
 	{
 		log::debug("Test System setup");
-		ecs::Registry::registerComponent<exampleComp>();
 		for (int i = 0; i < 10; i++)
 		{
 			auto& ent = createEntity();
