@@ -10,6 +10,7 @@ namespace rythe::core
 		int i = 10;
 	};
 
+	template<typename... componentTypes>
 	class System
 	{
 	public:
