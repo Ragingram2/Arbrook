@@ -6,6 +6,7 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline componentType* component_family<componentType>::createComponent(entity& ent)
 	{
+
 		return (&m_components[ent.m_id]);
 	}
 
@@ -43,7 +44,7 @@ namespace rythe::core::ecs
 	inline componentType* Registry::createComponent(ecs::entity& ent)
 	{
 		//Registry component with the entity
-		//m_entityCompositions.at(ent.m_id).push_back(rsl::typeHash<componentType>());
+		m_entityCompositions.at(ent.m_id).push_back(rsl::typeHash<componentType>());
 
 		if (!m_componentFamilies.contains(rsl::typeHash<componentType>()))
 		{
@@ -57,7 +58,7 @@ namespace rythe::core::ecs
 	inline componentType* Registry::createComponent(rsl::id_type id)
 	{
 		//Registry component with the entity
-		//m_entityCompositions.at(id).push_back(rsl::typeHash<componentType>());
+		m_entityCompositions.at(id).push_back(rsl::typeHash<componentType>());
 
 		if (!m_componentFamilies.contains(rsl::typeHash<componentType>()))
 		{

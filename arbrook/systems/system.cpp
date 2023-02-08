@@ -2,25 +2,36 @@
 
 namespace rythe::core
 {
-	ecs::Registry* System::registry;
+	template<typename... componentTypes>
+	ecs::Registry* System<componentTypes...>::registry;
 
-	ecs::entity& System::createEntity()
+	template<typename... componentTypes>
+	ecs::entity& System<componentTypes...>::createEntity()
 	{
-		return System::registry->createEntity();
+		return System<componentTypes...>::registry->createEntity();
 	}
 
-	ecs::entity& System::createEntity(std::string name)
+	template<typename... componentTypes>
+	ecs::entity& System<componentTypes...>::createEntity(std::string name)
 	{
-		return System::registry->createEntity(name);
+		return System<componentTypes...>::registry->createEntity(name);
 	}
 
-	void System::destroyEntity(ecs::entity& ent)
+	template<typename... componentTypes>
+	void System<componentTypes...>::destroyEntity(ecs::entity& ent)
 	{
-		System::destroyEntity(ent);
+		System<componentTypes...>::destroyEntity(ent);
 	}
 
-	void System::destroyEntity(rsl::id_type id)
+	template<typename... componentTypes>
+	void System<componentTypes...>::destroyEntity(rsl::id_type id)
 	{
-		System::destroyEntity(id);
+		System<componentTypes...>::destroyEntity(id);
+	}
+
+	template<typename... componentTypes>
+	std::unordered_map<rsl::id_type, ecs::entity>& System<componentTypes...>::getFilter()
+	{
+		return std::unordered_map<rsl::id_type, ecs::entity>();
 	}
 }

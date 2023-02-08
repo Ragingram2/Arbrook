@@ -10,8 +10,13 @@ namespace rythe::core
 		int i = 10;
 	};
 
+	class SystemBase
+	{
+
+	};
+
 	template<typename... componentTypes>
-	class System
+	class System : public SystemBase
 	{
 	public:
 		static ecs::Registry* registry;
@@ -30,6 +35,8 @@ namespace rythe::core
 		ecs::entity& createEntity(std::string name);
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
+
+		std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
 	};
 }
 
