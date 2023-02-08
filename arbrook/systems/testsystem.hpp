@@ -3,7 +3,7 @@
 
 namespace rythe::core
 {
-	class TestSystem : public System
+	class TestSystem : public System<exampleComp>
 	{
 	public:
 		TestSystem() = default;

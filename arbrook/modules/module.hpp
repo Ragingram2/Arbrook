@@ -15,7 +15,7 @@ namespace rythe::core
 		rsl::multicast_delegate<void()> m_updateFuncs;
 		rsl::multicast_delegate<void()> m_shutdownFuncs;
 
-		std::unordered_map<rsl::id_type, std::unique_ptr<System>> m_systems;
+		std::unordered_map<rsl::id_type, std::unique_ptr<SystemBase>> m_systems;
 
 	public:
 		Module() = default;
