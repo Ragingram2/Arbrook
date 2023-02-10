@@ -17,22 +17,26 @@ namespace rythe::core::ecs
 	struct component_family : public component_family_base
 	{
 		using entityId = rsl::id_type;
-		//std::unordered_map<entityId, componentType> m_components;
+		std::unordered_map<entityId, componentType> m_components;
 		component_family() : component_family_base(rsl::typeHash<componentType>()) {}
 		component_family(std::nullptr_t t) : component_family_base(0) { }
 		~component_family() = default;
 
-		inline componentType& createComponent(entity& ent);
+		virtual void reserve(rsl::size_type amount);
 
-		inline componentType& createComponent(entityId id);
+		virtual void clear();
 
-		inline componentType& getComponent(entity& ent);
+		virtual pointer<void> createComponent(entity& ent);
 
-		inline componentType& getComponent(entityId id);
+		virtual pointer<void> createComponent(entityId id);
 
-		inline void destroyComponent(entity& ent);
+		virtual pointer<void> getComponent(entity& ent);
 
-		inline void destroyComponent(entityId id);
+		virtual pointer<void> getComponent(entityId id);
+
+		virtual void destroyComponent(entity& id);
+
+		virtual void destroyComponent(entityId id);
 	};
 }
 
