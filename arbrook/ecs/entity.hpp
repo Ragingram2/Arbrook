@@ -23,18 +23,16 @@ namespace rythe::core::ecs
 		~entity() = default;
 
 		template<typename componentType>
-		inline componentType& addComponent();
-		//template<typename componentType>
-		//inline R_ALWAYS_INLINE componentType& addComponent(const componentType& val);
+		componentType& addComponent();
 
-		//template<typename componentType>
-		//inline componentType& getComponent();
+		template<typename componentType>
+		componentType& getComponent();
 
-		//template<typename componentType>
-		//inline R_ALWAYS_INLINE bool hasComponent();
+		template<typename componentType>
+		bool hasComponent();
 
-		//template<typename componentType>
-		//inline R_ALWAYS_INLINE void destroyComponent();
+		template<typename componentType>
+		void destroyComponent();
 	};
 }
 

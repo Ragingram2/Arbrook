@@ -9,9 +9,10 @@ namespace rythe::core
 		for (int i = 0; i < 10; i++)
 		{
 			auto& ent = createEntity();
-			auto& comp = ent.addComponent<exampleComp>();
+			ent.addComponent<exampleComp>();
 			log::debug("//");
 			log::debug(ent.m_name);
+			auto& comp = ent.getComponent<exampleComp>();
 			log::debug(comp.i);
 			comp.i = i;
 			log::debug(comp.i);

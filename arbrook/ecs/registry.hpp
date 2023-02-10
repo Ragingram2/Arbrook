@@ -43,32 +43,30 @@ namespace rythe::core::ecs
 		void destroyComponent(rsl::id_type id, rsl::id_type componentId);
 
 		template<typename componentType>
-		static inline void registerComponent();
+		static void registerComponent();
 
 		template<typename componentType>
-		static inline component_family<componentType>& getFamily();
-
-		//static component_family_base* getFamily(rsl::id_type typeId);
+		static component_family<componentType>& getFamily();
 
 		template<typename componentType>
-		static inline componentType& createComponent(ecs::entity& ent);
+		static componentType& createComponent(ecs::entity& ent);
 		template<typename componentType>
-		static inline componentType& createComponent(rsl::id_type id);
+		static componentType& createComponent(rsl::id_type id);
 
 		template<typename componentType>
-		static inline componentType& getComponent(ecs::entity& ent);
+		static componentType& getComponent(ecs::entity& ent);
 		template<typename componentType>
-		static inline componentType& getComponent(rsl::id_type id);
+		static componentType& getComponent(rsl::id_type id);
 
 		template<typename componentType>
-		static inline bool hasComponent(ecs::entity& ent);
+		static bool hasComponent(ecs::entity& ent);
 		template<typename componentType>
-		static inline bool hasComponent(rsl::id_type id);
+		static bool hasComponent(rsl::id_type id);
 
 		template<typename componentType>
-		static inline void destroyComponent(ecs::entity& ent);
+		static void destroyComponent(ecs::entity& ent);
 		template<typename componentType>
-		static inline void destroyComponent(rsl::id_type id);
+		static void destroyComponent(rsl::id_type id);
 	};
 }
 

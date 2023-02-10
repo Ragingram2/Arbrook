@@ -10,6 +10,7 @@ namespace rythe::core::ecs
 		if (!m_componentFamilies.contains(typeId))
 		{
 			m_componentFamilies.emplace(typeId, std::make_unique<component_family<componentType>>());
+			getFamily<componentType>().reserve(100);
 		}
 	}
 
@@ -32,13 +33,12 @@ namespace rythe::core::ecs
 		}
 
 		//Register component with the entity
-		if (m_entityCompositions.contains(ent.m_id))
-		{
-			m_entityCompositions.at(ent.m_id).push_back(typeId);
-		}//otherwise maybe error?
+		if (!m_entityCompositions.contains(ent.m_id))
+			m_entityCompositions.emplace(ent.m_id, std::vector<rsl::id_type>());
 
-		auto& family = getFamily<componentType>();
-		return family.createComponent(ent);
+		m_entityCompositions.at(ent.m_id).push_back(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(ent).ptr);
 	}
 	template<typename componentType>
 	inline componentType& Registry::createComponent(rsl::id_type id)
@@ -51,24 +51,23 @@ namespace rythe::core::ecs
 		}
 
 		//Registry component with the entity
-		if (m_entityCompositions.contains(id))
-		{
-			m_entityCompositions.at(id).push_back(typeId);
-		}//otherwise maybe error?
+		if (!m_entityCompositions.contains(id))
+			m_entityCompositions.emplace(id, std::vector<rsl::id_type>());
 
-		auto& family = getFamily<componentType>();
-		return family.createComponent(id);
+		m_entityCompositions.at(id).push_back(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(id).ptr);
 	}
 
 	template<typename componentType>
 	inline componentType& Registry::getComponent(ecs::entity& ent)
 	{
-		return getFamily<componentType>().getComponent<componentType>(ent);
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().getComponent(ent).ptr);
 	}
 	template<typename componentType>
 	inline componentType& Registry::getComponent(rsl::id_type id)
 	{
-		return getFamily<componentType>().getComponent<componentType>(id);
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().getComponent(id).ptr);
 	}
 
 	template<typename componentType>
@@ -97,7 +96,7 @@ namespace rythe::core::ecs
 		}
 
 		auto& family = getFamily<componentType>();
-		family.destroyComponent<componentType>(ent.m_id);
+		family.destroyComponent(ent.m_id);
 	}
 	template<typename componentType>
 	inline void Registry::destroyComponent(rsl::id_type id)
@@ -112,6 +111,6 @@ namespace rythe::core::ecs
 		}
 
 		auto& family = getFamily<componentType>();
-		family.destroyComponent<componentType>(id);
+		family.destroyComponent(id);
 	}
 }
