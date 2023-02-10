@@ -137,7 +137,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="arbrook\ecs\component_family_base.cpp" />
     <ClCompile Include="arbrook\ecs\registry.cpp" />
     <ClCompile Include="arbrook\events\eventbus.cpp" />
     <ClCompile Include="arbrook\logging\loggingservice.cpp" />
@@ -156,11 +155,13 @@
   <ItemGroup>
     <ClInclude Include="arbrook\common\string_extra.hpp" />
     <ClInclude Include="arbrook\common\string_literal.hpp" />
+    <ClInclude Include="arbrook\ecs\component_container.hpp" />
     <ClInclude Include="arbrook\containers\pointer.hpp" />
     <ClInclude Include="arbrook\ecs\component_base.hpp" />
     <ClInclude Include="arbrook\ecs\component_family.hpp" />
     <ClInclude Include="arbrook\ecs\component_family_base.hpp" />
     <ClInclude Include="arbrook\ecs\entity.hpp" />
+    <ClInclude Include="arbrook\ecs\filter.hpp" />
     <ClInclude Include="arbrook\ecs\registry.hpp" />
     <ClInclude Include="arbrook\engine\program.hpp" />
     <ClInclude Include="arbrook\events\defaults\exit_event.hpp" />
@@ -191,6 +192,7 @@
   <ItemGroup>
     <None Include="arbrook\ecs\component_family.inl" />
     <None Include="arbrook\ecs\entity.inl" />
+    <None Include="arbrook\ecs\filter.inl" />
     <None Include="arbrook\ecs\registry.inl" />
     <None Include="arbrook\engine\services\serviceregistry.inl" />
     <None Include="arbrook\events\eventbus.inl" />

@@ -54,4 +54,13 @@ namespace rythe::core::ecs
 	{
 		m_components.erase(id);
 	}
+
+	template<typename componentType>
+	inline void component_family<componentType>::fillContainer(component_container<componentType>& container, std::vector<entity> entities)
+	{
+		container.reserve(entities.size());
+
+		for (auto ent : entities)
+			container.emplace_back(m_components.at(ent.m_id));
+	}
 }

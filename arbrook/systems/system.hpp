@@ -2,10 +2,12 @@
 #include "platform/platform.hpp"
 #include "ecs/registry.hpp"
 #include "engine/program.hpp"
+#include "ecs/component_container.hpp"
+#include "ecs/filter.hpp"
 
 namespace rythe::core
 {
-	struct exampleComp : public ecs::component<exampleComp>
+	struct exampleComp /*: public ecs::component<exampleComp>*/
 	{
 		int i = 10;
 	};
@@ -21,23 +23,26 @@ namespace rythe::core
 	{
 	public:
 		static ecs::Registry* registry;
+		
 		System()
 		{
 			registry = Program::Instance().m_registry->get_service<ecs::Registry>();
 		}
 
 		virtual ~System() = default;
-
+	private:
+		filter<componentTypes> m_filter;
+	public:
 		virtual void setup() RYTHE_PURE;
 		virtual void update() RYTHE_PURE;
 		virtual void shutdown() RYTHE_PURE;
 
-		inline ecs::entity& createEntity();
-		inline ecs::entity& createEntity(std::string name);
-		inline void destroyEntity(ecs::entity& ent);
-		inline void destroyEntity(rsl::id_type id);
+		ecs::entity& createEntity();
+		ecs::entity& createEntity(std::string name);
+		void destroyEntity(ecs::entity& ent);
+		void destroyEntity(rsl::id_type id);
 
-		inline std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
+		std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
 	};
 }
 
