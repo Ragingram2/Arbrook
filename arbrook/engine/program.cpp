@@ -7,6 +7,7 @@ namespace rythe::core
 
 	void Program::initialize()
 	{
+		std::cout << "Program initialized\n";
 		for (auto& [id, service] : m_registry->m_services)
 		{
 			if (service)
@@ -14,14 +15,16 @@ namespace rythe::core
 				service->initialize();
 			}
 		}
-		log::info("Program initialized");
 	}
 
 	void Program::update()
 	{
 		for (auto& [id, service] : m_registry->m_services)
 		{
-			if (service)
+			if (!m_running)
+				break;
+
+			if (service && service->m_running)
 			{
 				service->update();
 			}
@@ -32,8 +35,9 @@ namespace rythe::core
 	{
 		for (auto& [id, service] : m_registry->m_services)
 		{
-			if (service)
+			if (service && service->m_running)
 			{
+				service->m_running = false;
 				service->shutdown();
 			}
 		}

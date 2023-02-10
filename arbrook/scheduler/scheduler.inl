@@ -7,9 +7,9 @@ namespace rythe::core::scheduling
 	void Scheduler::reportModule()
 	{
 		auto [iter, elem] = m_modules.emplace(rsl::typeHash<moduleType>(), std::make_unique<moduleType>());
-		moduleType& _module = *static_cast<moduleType*>(iter->second.get());
-		m_initFuncs.push_back<moduleType, &moduleType::initialize>(_module);
-		m_updateFuncs.push_back<moduleType, &moduleType::update>(_module);
-		m_shutdownFuncs.push_back<moduleType, &moduleType::shutdown>(_module);
+		Module& _module = *static_cast<Module*>(iter->second.get());
+		m_initFuncs.push_back<Module, &Module::onInitialize>(_module);
+		m_updateFuncs.push_back<Module, &Module::onUpdate>(_module);
+		m_shutdownFuncs.push_back<Module, &Module::onShutdown>(_module);
 	}
 }

@@ -20,7 +20,7 @@ namespace rythe::core::scheduling
 		rsl::multicast_delegate<void()> m_shutdownFuncs;
 
 		std::unordered_map<rsl::id_type, std::unique_ptr<Module>> m_modules;
-
+		
 	public:
 		Scheduler() = default;
 		virtual ~Scheduler() = default;

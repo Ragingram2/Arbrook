@@ -7,8 +7,10 @@
 #include <queue>
 #include <type_traits>
 
+#include <rythe/primitives>
+
 #include "platform/platform.hpp"
-#include "types/primitives.hpp"
+//#include "types/primitives.hpp"
 
 namespace rythe::core
 {
@@ -131,7 +133,7 @@ namespace rythe::core
 
     HAS_FUNC(resize);
 
-    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(size_type)>, T);
+    COMBINE_SFINAE(is_resizable_container, has_begin_v<T L_COMMA typename T::iterator(void)>&& has_end_v<T L_COMMA typename T::iterator(void)>&& has_resize_v<T L_COMMA void(rsl::size_type)>, T);
 
     HAS_FUNC(setup);
     HAS_FUNC(shutdown);
@@ -161,7 +163,7 @@ namespace rythe::core
     {
     };
 
-    template<template<typename...>typename T, typename U, size_type I, typename... Args>
+    template<template<typename...>typename T, typename U, rsl::size_type I, typename... Args>
     struct make_sequence
 #if !defined(DOXY_EXCLUDE)
         : make_sequence<T, U, I - 1, Args..., U>{};
@@ -173,7 +175,7 @@ namespace rythe::core
         using type = T<Args...>;
     };
 
-    template<template<typename...>typename T, typename U, size_type I, typename... Args>
+    template<template<typename...>typename T, typename U, rsl::size_type I, typename... Args>
     using make_sequence_t = typename make_sequence<T, U, I, Args...>::type;
 
     template<template<typename>typename Compare, typename T, T A, T B>
@@ -186,7 +188,7 @@ namespace rythe::core
     template<template<typename>typename Compare, typename T, T A, T B>
     inline constexpr bool do_compare_v = do_compare<Compare, T, A, B>::value;
 
-    template<size_type I, typename Type, typename... Types>
+    template<rsl::size_type I, typename Type, typename... Types>
     struct element_at
 #if !defined(DOXY_EXCLUDE)
         : element_at<I - 1, Types...>
@@ -200,7 +202,7 @@ namespace rythe::core
         using type = Type;
     };
 
-    template<size_type I, typename Type, typename... Types>
+    template<rsl::size_type I, typename Type, typename... Types>
     using element_at_t = typename element_at<I, Type, Types...>::type;
 
     template<typename T, typename... Args>

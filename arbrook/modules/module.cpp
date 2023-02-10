@@ -3,18 +3,24 @@
 
 namespace rythe::core
 {
-	void Module::initialize()
+	void Module::onInitialize()
 	{
+		//Module Setup
+		setup();
 		m_initFuncs();
 	}
 
-	void Module::update()
+	void Module::onUpdate()
 	{
+		//Module Update
+		update();
 		m_updateFuncs();
 	}
 
-	void Module::shutdown()
+	void Module::onShutdown()
 	{
+		//Module Shutdown
+		shutdown();
 		m_shutdownFuncs();
 	}
 }

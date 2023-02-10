@@ -14,8 +14,8 @@ namespace rythe::window
 	public:
 		sf::RenderWindow window;
 
-		void initialize() override;
+		void setup() override;
 		void update() override;
-		void shutdown() override {}
+		void shutdown() override;
 	};
 }

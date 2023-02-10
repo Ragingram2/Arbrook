@@ -1,7 +1,6 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
-#pragma once
 #include <queue>
 
 #include <rythe/primitives>
@@ -9,36 +8,13 @@
 
 #include "ecs/entity.hpp"
 #include "ecs/component.hpp"
-//#include "ecs/componentpool.hpp"
+#include "ecs/component_family_base.hpp"
+#include "ecs/component_family.hpp"
 #include "engine/services/service.hpp"
 #include "containers/pointer.hpp"
 
 namespace rythe::core::ecs
 {
-	struct component_family_base
-	{
-		rsl::id_type m_typeId;
-	};
-
-	template<typename componentType>
-	struct component_family : public component_family_base
-	{
-		using entityId = rsl::id_type;
-		std::unordered_map<entityId, componentType> m_components;
-		component_family()
-		{
-			m_typeId = rsl::typeHash<componentType>();
-		}
-
-		componentType* createComponent(entity& ent);
-
-		componentType* createComponent(entityId id);
-
-		componentType& getComponent(entity& ent);
-
-		componentType& getComponent(entityId id);
-	};
-
 	class Registry : public Service
 	{
 	public:
@@ -63,31 +39,36 @@ namespace rythe::core::ecs
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 
-		template<typename componentType>
-		static void registerComponent();
+		void destroyComponent(ecs::entity& ent, rsl::id_type componentId);
+		void destroyComponent(rsl::id_type id, rsl::id_type componentId);
 
 		template<typename componentType>
-		static component_family<componentType>& getFamily();
+		static inline void registerComponent();
 
 		template<typename componentType>
-		static componentType* createComponent(ecs::entity& ent);
-		template<typename componentType>
-		static componentType* createComponent(rsl::id_type id);
+		static inline component_family<componentType>& getFamily();
+
+		//static component_family_base* getFamily(rsl::id_type typeId);
 
 		template<typename componentType>
-		static componentType& getComponent(ecs::entity& ent);
+		static inline componentType& createComponent(ecs::entity& ent);
 		template<typename componentType>
-		static componentType& getComponent(rsl::id_type id);
+		static inline componentType& createComponent(rsl::id_type id);
 
-		//template<typename componentType>
-		//bool  hasComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//bool  hasComponent(rsl::id_type id);
+		template<typename componentType>
+		static inline componentType& getComponent(ecs::entity& ent);
+		template<typename componentType>
+		static inline componentType& getComponent(rsl::id_type id);
 
-		//template<typename componentType>
-		//void destroyComponent(ecs::entity& ent);
-		//template<typename componentType>
-		//void  destroyComponent(rsl::id_type id);
+		template<typename componentType>
+		static inline bool hasComponent(ecs::entity& ent);
+		template<typename componentType>
+		static inline bool hasComponent(rsl::id_type id);
+
+		template<typename componentType>
+		static inline void destroyComponent(ecs::entity& ent);
+		template<typename componentType>
+		static inline void destroyComponent(rsl::id_type id);
 	};
 }
 

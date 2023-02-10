@@ -21,9 +21,13 @@ namespace rythe::core
 		Module() = default;
 		virtual ~Module() = default;
 
-		virtual void initialize();
-		virtual void update();
-		virtual void shutdown();
+		void onInitialize();
+		void onUpdate();
+		void onShutdown();
+
+		virtual void setup() {};
+		virtual void update() {};
+		virtual void shutdown() {};
 
 		template<typename systemType>
 		void reportSystem();

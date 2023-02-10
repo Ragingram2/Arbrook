@@ -25,11 +25,40 @@ namespace rythe::core::ecs
 
 	void Registry::destroyEntity(ecs::entity& ent)
 	{
+		for (auto typeId : m_entityCompositions[ent.m_id])
+		{
+			destroyComponent(ent, typeId);
+		}
+
+		m_entityCompositions.erase(ent.m_id);
 		m_entities.erase(ent.m_id);
 	}
 
 	void Registry::destroyEntity(rsl::id_type id)
 	{
+		for (auto typeId : m_entityCompositions[id])
+		{
+			destroyComponent(id, typeId);
+		}
+
+		m_entityCompositions.erase(id);
 		m_entities.erase(id);
 	}
+
+	void Registry::destroyComponent(ecs::entity& ent, rsl::id_type componentId)
+	{
+		auto family = m_componentFamilies[componentId].get();
+		family->destroyComponent(ent.m_id);
+	}
+
+	void Registry::destroyComponent(rsl::id_type id, rsl::id_type componentId)
+	{
+		auto family = m_componentFamilies[componentId].get();
+		family->destroyComponent(id);
+	}
+
+	//component_family_base* Registry::getFamily(rsl::id_type typeId)
+	//{
+	//	return reinterpret_cast<component_family_base*>(m_componentFamilies[typeId].get());
+	//}
 }
