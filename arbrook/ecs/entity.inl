@@ -4,9 +4,9 @@
 namespace rythe::core::ecs
 {
 	template<typename componentType>
-	inline R_ALWAYS_INLINE componentType& entity::addComponent()
+	inline componentType& entity::addComponent()
 	{
-		return *Registry::createComponent<componentType>(m_id);
+		return Registry::createComponent<componentType>(m_id);
 	}
 
 	//template<typename componentType>
@@ -21,9 +21,6 @@ namespace rythe::core::ecs
 	//template<typename componentType>
 	//inline R_ALWAYS_INLINE componentType& entity::getComponent()
 	//{
-	//	auto id = rsl::typeHash<componentType>();
-	//	log::debug(m_components[rsl::typeHash<componentType>()].get()->typeId);
-	//	component<componentType>* comp = reinterpret_cast<component<componentType>*>(m_components[rsl::typeHash<componentType>()].get());
 	//	return *reinterpret_cast<componentType*>(comp);
 	//}
 

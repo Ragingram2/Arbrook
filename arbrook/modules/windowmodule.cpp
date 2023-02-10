@@ -3,13 +3,16 @@
 
 namespace rythe::window
 {
-	void WindowModule::initialize()
+	void WindowModule::setup()
 	{
 		window.create(sf::VideoMode(720, 640), "SFML works!");
 	}
 
 	void WindowModule::update()
 	{
+		if (!window.isOpen())
+			return;
+
 		window.clear();
 		window.display();
 
@@ -18,10 +21,15 @@ namespace rythe::window
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				window.close();
 				rythe::core::events::exit evt(0);
 				rythe::core::Program::Instance().m_registry->get_service<rythe::core::events::EventBus>()->raiseEvent(evt);
+				break;
 			}
 		}
+	}
+
+	void WindowModule::shutdown()
+	{
+		window.close();
 	}
 }

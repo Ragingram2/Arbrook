@@ -9,6 +9,8 @@ namespace rythe::core
 	class Service
 	{
 	public:
+		bool m_running = true;
+	public:
 		Service() = default;
 		MOVE_FUNCS(Service)
 		virtual ~Service() = default;

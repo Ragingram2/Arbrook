@@ -13,11 +13,11 @@ namespace rythe::core::ecs
     template<typename componentType>
     struct component : public component_base
     {
-        static constexpr rsl::id_type typeId = rsl::typeHash<componentType>();
+      /*  static constexpr rsl::id_type typeId = rsl::typeHash<componentType>();*/
 
         entity owner;
 
-       /* component& operator=(const componentType& src);
+      /*  component& operator=(const componentType& src);
         component& operator=(componentType&& src);
 
         R_NODISCARD operator componentType& ();

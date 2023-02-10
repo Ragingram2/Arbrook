@@ -12,7 +12,8 @@ namespace rythe::core
 
 	class SystemBase
 	{
-
+	public:
+		virtual ~SystemBase() = default;
 	};
 
 	template<typename... componentTypes>
@@ -31,12 +32,12 @@ namespace rythe::core
 		virtual void update() RYTHE_PURE;
 		virtual void shutdown() RYTHE_PURE;
 
-		ecs::entity& createEntity();
-		ecs::entity& createEntity(std::string name);
-		void destroyEntity(ecs::entity& ent);
-		void destroyEntity(rsl::id_type id);
+		inline ecs::entity& createEntity();
+		inline ecs::entity& createEntity(std::string name);
+		inline void destroyEntity(ecs::entity& ent);
+		inline void destroyEntity(rsl::id_type id);
 
-		std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
+		inline std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
 	};
 }
 

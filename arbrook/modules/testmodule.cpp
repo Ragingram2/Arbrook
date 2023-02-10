@@ -1,13 +1,22 @@
 #include "modules/testmodule.hpp"
-#include "systems/testsystem.hpp"
 
 namespace rythe::core
 {
-	void TestModule::initialize()
+	void TestModule::setup()
 	{
 		log::debug("Initialized Test Module");
 		reportSystem<TestSystem>();
-
-		Module::initialize();
 	}
+
+	//void TestModule::update()
+	//{
+	//	Module::update();
+	//}
+
+	//void TestModule::shutdown()
+	//{
+	//	log::debug("Shutdown Test Module");
+
+	//	Module::shutdown();
+	//}
 }

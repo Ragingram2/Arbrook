@@ -25,6 +25,16 @@ namespace rythe::core
 
 	void TestSystem::shutdown()
 	{
+		log::debug(ecs::Registry::m_entities.size());
+		for (int i = 1; i <= 10; i++)
+		{
+			auto& ent = ecs::Registry::m_entities[i];
+			log::debug("//");
+			log::debug(ent.m_name);
+			log::debug(ent.m_id);
+			destroyEntity(ent);
+		}
+		log::debug(ecs::Registry::m_entities.size());
 		log::debug("Test System shutdown");
 	}
 }

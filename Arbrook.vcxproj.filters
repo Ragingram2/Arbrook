@@ -57,6 +57,9 @@
     <ClCompile Include="arbrook\systems\testsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\ecs\component_family_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\entity.hpp">
@@ -149,10 +152,13 @@
     <ClInclude Include="external_include\rsl\src\rythe\impl\utilities.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\ecs\component.hpp">
+    <ClInclude Include="arbrook\ecs\component_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\ecs\component_base.hpp">
+    <ClInclude Include="arbrook\ecs\component_family_base.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\ecs\component_family.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -181,10 +187,10 @@
     <None Include="arbrook\ecs\registry.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="arbrook\ecs\component.inl">
+    <None Include="arbrook\ecs\entity.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="arbrook\ecs\entity.inl">
+    <None Include="arbrook\ecs\component_family.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

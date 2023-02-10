@@ -13,7 +13,11 @@ namespace rythe::core
 	template<typename serviceType>
 	void ServiceRegistry::remove_service()
 	{
-
+		rsl::id_type typeId = rs::typeHash<serviceType>();
+		if (m_services.contains(typeId))
+		{
+			m_services.erase(typeId);
+		}
 	}
 
 	template<typename serviceType>
