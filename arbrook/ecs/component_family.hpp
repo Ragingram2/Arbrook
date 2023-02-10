@@ -7,6 +7,7 @@
 #include <rythe/primitives>
 #include <rythe/hash>
 
+#include "ecs/component_container.hpp"
 #include "ecs/component_family_base.hpp"
 #include "ecs/entity.hpp"
 #include "containers/pointer.hpp"
@@ -17,6 +18,7 @@ namespace rythe::core::ecs
 	struct component_family : public component_family_base
 	{
 		using entityId = rsl::id_type;
+
 		std::unordered_map<entityId, componentType> m_components;
 		component_family() : component_family_base(rsl::typeHash<componentType>()) {}
 		component_family(std::nullptr_t t) : component_family_base(0) { }
@@ -37,6 +39,8 @@ namespace rythe::core::ecs
 		virtual void destroyComponent(entity& id);
 
 		virtual void destroyComponent(entityId id);
+
+		virtual void fillContainer(component_container<componentType>& container, std::vector<entity> entities);
 	};
 }
 

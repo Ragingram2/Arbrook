@@ -7,7 +7,6 @@
 
 #include "containers/pointer.hpp"
 #include "ecs/entity.hpp"
-//#include "ecs/component_base.hpp"
 
 namespace rythe::core::ecs
 {
@@ -29,6 +28,7 @@ namespace rythe::core::ecs
 		virtual pointer<void> getComponent(entityId id) RYTHE_PURE;
 
 		virtual void destroyComponent(entityId id) RYTHE_PURE;
+
 		virtual ~component_family_base() = default;
 	};
 }

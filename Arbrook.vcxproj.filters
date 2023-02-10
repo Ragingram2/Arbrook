@@ -57,9 +57,6 @@
     <ClCompile Include="arbrook\systems\testsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\ecs\component_family_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\ecs\entity.hpp">
@@ -161,6 +158,12 @@
     <ClInclude Include="arbrook\ecs\component_family.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\ecs\component_container.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\ecs\filter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\engine\services\serviceregistry.inl">
@@ -191,6 +194,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="arbrook\ecs\component_family.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\ecs\filter.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
