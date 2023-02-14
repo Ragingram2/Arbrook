@@ -10,6 +10,7 @@ namespace rythe::core
 		{
 			auto& ent = createEntity();
 			ent.addComponent<exampleComp>();
+			ent.addComponent<exampleComp2>();
 			log::debug("//");
 			log::debug(ent.m_name);
 			auto& comp = ent.getComponent<exampleComp>();

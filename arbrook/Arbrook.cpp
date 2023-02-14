@@ -28,7 +28,7 @@ int main()
 	registry.register_service<ecs::Registry>();
 
 	//Register events
-	registry.get_service<events::EventBus>()->bind<events::exit,Program,&Program::exit>();
+	registry.get_service<events::EventBus>()->bind<events::exit,Program,&Program::exit>(Program::Instance());
 
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
