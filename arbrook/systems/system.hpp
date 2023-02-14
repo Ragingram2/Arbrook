@@ -12,6 +12,11 @@ namespace rythe::core
 		int i = 10;
 	};
 
+	struct exampleComp2 /*: public ecs::component<exampleComp>*/
+	{
+		int b = 69;
+	};
+
 	class SystemBase
 	{
 	public:
@@ -23,16 +28,15 @@ namespace rythe::core
 	{
 	public:
 		static ecs::Registry* registry;
-		
+		ecs::filter<componentTypes...> m_filter;
 		System()
 		{
 			registry = Program::Instance().m_registry->get_service<ecs::Registry>();
 		}
 
 		virtual ~System() = default;
-	private:
-		filter<componentTypes> m_filter;
 	public:
+
 		virtual void setup() RYTHE_PURE;
 		virtual void update() RYTHE_PURE;
 		virtual void shutdown() RYTHE_PURE;
@@ -42,7 +46,7 @@ namespace rythe::core
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 
-		std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
+		//std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
 	};
 }
 

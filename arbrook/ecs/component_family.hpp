@@ -11,6 +11,8 @@
 #include "ecs/component_family_base.hpp"
 #include "ecs/entity.hpp"
 #include "containers/pointer.hpp"
+#include "events/eventbus.hpp"
+#include "events/defaults/component_event.hpp"
 
 namespace rythe::core::ecs
 {
@@ -40,7 +42,7 @@ namespace rythe::core::ecs
 
 		virtual void destroyComponent(entityId id);
 
-		virtual void fillContainer(component_container<componentType>& container, std::vector<entity> entities);
+		//virtual void fillContainer(component_container<componentType>& container, std::vector<entity> entities);
 	};
 }
 

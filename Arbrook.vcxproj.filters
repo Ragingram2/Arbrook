@@ -164,6 +164,9 @@
     <ClInclude Include="arbrook\ecs\filter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\events\defaults\component_event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\engine\services\serviceregistry.inl">

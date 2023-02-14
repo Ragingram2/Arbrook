@@ -7,7 +7,7 @@ namespace rythe::core::events
     {
         const int exitcode;
 
-        exit(int exitcode = 0) : exitcode(exitcode) {};
+        exit(int exitcode = -1) : exitcode(exitcode) {};
     };
 
 }

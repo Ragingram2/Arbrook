@@ -5,9 +5,9 @@ namespace rythe::core::events
 {
 
 	template <typename event_type, typename owner_type, void(owner_type::* func_type)(event_type&)>
-	R_ALWAYS_INLINE void EventBus::bind()
+	R_ALWAYS_INLINE void EventBus::bind(owner_type& instance)
 	{
-		auto temp = rsl::delegate<void(event_type&)>::template create<owner_type, func_type>(owner_type::Instance());
+		auto temp = rsl::delegate<void(event_type&)>::template create<owner_type, func_type>(instance);
 		m_callbacks[event_type::id].push_back(rsl::force_cast<listenerDelegate>(temp));
 	}
 

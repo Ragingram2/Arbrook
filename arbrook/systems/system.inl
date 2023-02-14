@@ -30,9 +30,9 @@ namespace rythe::core
 		registry->destroyEntity(id);
 	}
 
-	template<typename... componentTypes>
-	inline std::unordered_map<rsl::id_type, ecs::entity>& System<componentTypes...>::getFilter()
-	{
-		return std::unordered_map<rsl::id_type, ecs::entity>();
-	}
+	//template<typename... componentTypes>
+	//inline std::unordered_map<rsl::id_type, ecs::entity>& System<componentTypes...>::getFilter()
+	//{
+	//	return std::unordered_map<rsl::id_type, ecs::entity>();
+	//}
 }

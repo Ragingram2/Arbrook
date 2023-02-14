@@ -27,18 +27,18 @@ namespace rythe::core::events
 		void update() override;
 		void shutdown() override;
 
-		void raiseEvent(event_base& value);
+		void raiseEvent(event_base& value, bool immediate = false);
 
 		template <typename event_type, typename owner_type, void(owner_type::* func_type)(event_type&)>
-		R_ALWAYS_INLINE void bind();
+		void bind(owner_type& instance);
 		template <typename event_type>
-		R_ALWAYS_INLINE void bind(const rsl::delegate<void(event_type&)>& func);
+		void bind(const rsl::delegate<void(event_type&)>& func);
 		template <typename event_type>
-		R_ALWAYS_INLINE void bind(rsl::delegate<void(event_type&)>&& func);
+		void bind(rsl::delegate<void(event_type&)>&& func);
 		template<typename event_type>
-		R_ALWAYS_INLINE void unbind(const rsl::delegate<void(event_type&)>& func);
+		void unbind(const rsl::delegate<void(event_type&)>& func);
 		template<typename event_type>
-		R_ALWAYS_INLINE void unbind(rsl::delegate<void(event_type&)>&& func);
+		void unbind(rsl::delegate<void(event_type&)>&& func);
 	};
 }
 

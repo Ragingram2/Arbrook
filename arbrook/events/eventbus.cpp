@@ -9,7 +9,7 @@ namespace rythe::core::events
 
 	void EventBus::update()
 	{
-		while(m_eventQueue.size() > 0)
+		while (m_eventQueue.size() > 0)
 		{
 			auto& pair = m_eventQueue.top();
 			pair.first(*pair.second);
@@ -23,11 +23,14 @@ namespace rythe::core::events
 		log::debug("Eventbus Shutdown");
 	}
 
-	void EventBus::raiseEvent(event_base& value)
+	void EventBus::raiseEvent(event_base& value, bool immediate)
 	{
 		if (m_callbacks.contains(value.get_id()))
 		{
-			m_eventQueue.push(std::make_pair(m_callbacks.at(value.get_id()), &value));
+			if (immediate)
+				m_callbacks.at(value.get_id())(value);
+			else
+				m_eventQueue.push(std::make_pair(m_callbacks.at(value.get_id()), &value));
 		}
 	}
 }
