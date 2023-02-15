@@ -21,7 +21,7 @@ namespace rythe::core::ecs
 	inline pointer<void> component_family<componentType>::createComponent(entityId id)
 	{
 		events::component_creation<componentType> compCreate{ id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(compCreate, true);
+		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
 
 		m_components.try_emplace(id);
 		return { &m_components.at(id) };
@@ -31,7 +31,7 @@ namespace rythe::core::ecs
 	inline pointer<void> component_family<componentType>::createComponent(entity& ent)
 	{
 		events::component_creation<componentType> compCreate{ ent.m_id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(compCreate, true);
+		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
 
 		m_components.try_emplace(ent.m_id);
 		return { &m_components.at(ent.m_id) };
@@ -52,9 +52,8 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline void component_family<componentType>::destroyComponent(entity& ent)
 	{
-		log::debug(typeid(componentType).name());
 		events::component_destruction<componentType> compDestruct{ ent.m_id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(compDestruct, true);
+		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
 		m_components.erase(ent.m_id);
 	}
@@ -62,9 +61,8 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline void component_family<componentType>::destroyComponent(entityId id)
 	{
-		log::debug(typeid(componentType).name());
 		events::component_destruction<componentType> compDestruct{ id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(compDestruct, true);
+		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
 		m_components.erase(id);
 	}

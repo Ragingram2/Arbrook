@@ -74,13 +74,21 @@ namespace rythe::core::ecs
 	inline bool Registry::hasComponent(ecs::entity& ent)
 	{
 		rsl::id_type typeId = rsl::typeHash<componentType>();
-		return m_entityCompositions.at(ent.m_id).contains(typeId);
+		auto& vec = m_entityCompositions.at(ent.m_id);
+		auto& position = std::find(vec.begin(), vec.end(), typeId);
+		if (position)
+			return true;
+		return false;
 	}
 	template<typename componentType>
 	inline bool Registry::hasComponent(rsl::id_type id)
 	{
 		rsl::id_type typeId = rsl::typeHash<componentType>();
-		return m_entityCompositions.at(id).contains(typeId);
+		auto& vec = m_entityCompositions.at(id);
+		auto position = std::find(vec.begin(), vec.end(), typeId);
+		if (position != vec.end())
+			return true;
+		return false;
 	}
 
 	template<typename componentType>
@@ -88,11 +96,11 @@ namespace rythe::core::ecs
 	{
 		if (m_entityCompositions.contains(ent.m_id))
 		{
-			if (m_entityCompositions.at(ent.m_id))
-			{
-				rsl::id_type typeId = rsl::typeHash<componentType>();
-				m_entityCompositions.at(ent.m_id).erase(typeId);
-			}
+			rsl::id_type typeId = rsl::typeHash<componentType>();
+			auto& vec = m_entityCompositions.at(ent.m_id);
+			auto position = std::find(vec.begin(), vec.end(), typeId);
+			if (position != vec.end())
+				vec.erase(position);
 		}
 
 		auto& family = getFamily<componentType>();
@@ -103,11 +111,11 @@ namespace rythe::core::ecs
 	{
 		if (m_entityCompositions.contains(id))
 		{
-			if (m_entityCompositions.at(ent.m_id))
-			{
-				rsl::id_type typeId = rsl::typeHash<componentType>();
-				m_entityCompositions.at(ent.m_id).erase(typeId);
-			}
+			rsl::id_type typeId = rsl::typeHash<componentType>();
+			auto& vec = m_entityCompositions.at(id);
+			auto position = std::find(vec.begin(), vec.end(), typeId);
+			if (position != vec.end())
+				vec.erase(position);
 		}
 
 		auto& family = getFamily<componentType>();

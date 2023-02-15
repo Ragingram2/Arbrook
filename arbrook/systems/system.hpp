@@ -1,4 +1,6 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+
 #include "platform/platform.hpp"
 #include "ecs/registry.hpp"
 #include "engine/program.hpp"
@@ -15,6 +17,21 @@ namespace rythe::core
 	struct exampleComp2 /*: public ecs::component<exampleComp>*/
 	{
 		int b = 69;
+	};
+
+	struct transform
+	{
+		math::vec2 position = math::vec2(0.0f, 0.0f);
+		math::vec2 scale = math::vec2(1.0f, 1.0f);
+		float rotation = 0;
+	};
+
+	struct renderComp
+	{
+		bool draw = true;
+		sf::Color color = sf::Color(100, 250, 50);
+		float radius = 10;
+		sf::CircleShape sprite = sf::CircleShape();
 	};
 
 	class SystemBase

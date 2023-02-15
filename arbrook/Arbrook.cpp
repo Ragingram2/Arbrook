@@ -8,11 +8,11 @@
 #include "events/defaults/exit_event.hpp"
 #include "scheduler/scheduler.hpp"
 #include "modules/testmodule.hpp"
-#include "modules/windowmodule.hpp"
+#include "modules/rendermodule.hpp"
 
 using namespace rythe::core;
-//namespace rendering = rythe::rendering;
-namespace window = rythe::window;
+
+namespace gfx = rythe::rendering;
 namespace events = rythe::core::events;
 
 int main()
@@ -32,7 +32,7 @@ int main()
 
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
-	scheduler->reportModule<window::WindowModule>();
+	scheduler->reportModule<gfx::RenderModule>();
 	scheduler->reportModule<TestModule>();
 
 	//Initialize engine

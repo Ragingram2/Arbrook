@@ -39,6 +39,9 @@ namespace rythe::core::events
 		void unbind(const rsl::delegate<void(event_type&)>& func);
 		template<typename event_type>
 		void unbind(rsl::delegate<void(event_type&)>&& func);
+
+		template<typename event_type, typename... Args>
+		void raiseEvent(Args&&... args);
 	};
 }
 
