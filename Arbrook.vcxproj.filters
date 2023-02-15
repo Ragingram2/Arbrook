@@ -42,7 +42,7 @@
     <ClCompile Include="arbrook\events\eventbus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\modules\windowmodule.cpp">
+    <ClCompile Include="arbrook\modules\rendermodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arbrook\systems\system.cpp">
@@ -55,6 +55,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arbrook\systems\testsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\systems\rendersystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,7 +119,7 @@
     <ClInclude Include="arbrook\events\defaults\exit_event.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\modules\windowmodule.hpp">
+    <ClInclude Include="arbrook\modules\rendermodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\systems\system.hpp">
@@ -165,6 +168,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\events\defaults\component_event.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\systems\rendersystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,3 @@
-#pragma once
 #include "modules/module.hpp"
 
 namespace rythe::core
@@ -7,11 +6,19 @@ namespace rythe::core
 	{
 		//Module Setup
 		setup();
-		m_initFuncs();
+		m_initialize = true;
+		//m_initFuncs();
 	}
 
 	void Module::onUpdate()
 	{
+		if (m_initialize)
+		{
+			m_initFuncs();
+			m_initialize = false;
+			return;
+		}
+
 		//Module Update
 		update();
 		m_updateFuncs();

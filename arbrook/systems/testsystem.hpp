@@ -1,9 +1,10 @@
 #pragma once
 #include "systems/system.hpp"
+#include "logging/logging.hpp"
 
 namespace rythe::core
 {
-	class TestSystem : public System<exampleComp, exampleComp2>
+	class TestSystem : public System<transform, renderComp, exampleComp>
 	{
 	public:
 		TestSystem() = default;

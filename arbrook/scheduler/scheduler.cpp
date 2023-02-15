@@ -4,13 +4,23 @@ namespace rythe::core::scheduling
 {
 	void Scheduler::initialize()
 	{
-		m_initFuncs();
+		/*m_initFuncs();*/
+		m_initialize = true;
 	}
 
 	void Scheduler::update()
 	{
-		if (m_running)
-			m_updateFuncs();
+		if (!m_running)
+			return;
+
+		if (m_initialize)
+		{
+			m_initFuncs();
+			m_initialize = false;
+			return;
+		}
+
+		m_updateFuncs();
 	}
 
 	void Scheduler::shutdown()

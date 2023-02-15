@@ -17,6 +17,8 @@ namespace rythe::core
 
 		std::unordered_map<rsl::id_type, std::unique_ptr<SystemBase>> m_systems;
 
+		bool m_initialize = false;
+
 	public:
 		Module() = default;
 		virtual ~Module() = default;

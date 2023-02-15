@@ -8,7 +8,7 @@ namespace rythe::core::ecs
 	inline void filter<componentTypes...>::addEntity(events::component_creation<componentType>& evnt)
 	{
 		//log::debug(typeid(componentType).name());
-		m_entities.emplace_back(evnt.entity.m_id, evnt.entity);
+		m_entities.emplace(evnt.entity.m_id,evnt.entity);
 	}
 
 	template<typename... componentTypes>

@@ -144,8 +144,9 @@
     <ClCompile Include="arbrook\logging\logging.cpp" />
     <ClCompile Include="arbrook\modules\module.cpp" />
     <ClCompile Include="arbrook\modules\testmodule.cpp" />
-    <ClCompile Include="arbrook\modules\windowmodule.cpp" />
+    <ClCompile Include="arbrook\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\scheduler\scheduler.cpp" />
+    <ClCompile Include="arbrook\systems\rendersystem.cpp" />
     <ClCompile Include="arbrook\systems\system.cpp" />
     <ClCompile Include="arbrook\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
@@ -175,9 +176,10 @@
     <ClInclude Include="arbrook\math\math.hpp" />
     <ClInclude Include="arbrook\modules\module.hpp" />
     <ClInclude Include="arbrook\modules\testmodule.hpp" />
-    <ClInclude Include="arbrook\modules\windowmodule.hpp" />
+    <ClInclude Include="arbrook\modules\rendermodule.hpp" />
     <ClInclude Include="arbrook\platform\platform.hpp" />
     <ClInclude Include="arbrook\scheduler\scheduler.hpp" />
+    <ClInclude Include="arbrook\systems\rendersystem.hpp" />
     <ClInclude Include="arbrook\systems\system.hpp" />
     <ClInclude Include="arbrook\systems\testsystem.hpp" />
     <ClInclude Include="arbrook\types\meta.hpp" />
