@@ -29,10 +29,17 @@ namespace rythe::core
 	{
 		registry->destroyEntity(id);
 	}
+	template<typename... componentTypes>
+	template<typename event_type>
+	inline void System<componentTypes...>::raiseEvent(event_type& evnt)
+	{
+		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(evnt);
+	}
 
-	//template<typename... componentTypes>
-	//inline std::unordered_map<rsl::id_type, ecs::entity>& System<componentTypes...>::getFilter()
-	//{
-	//	return std::unordered_map<rsl::id_type, ecs::entity>();
-	//}
+	template<typename... componentTypes>
+	template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
+	inline void System<componentTypes...>::bindEvent()
+	{
+		Program::Instance().m_registry->get_service<events::EventBus>()->bind<event_type, System<componentTypes...>, void(System<componentTypes...>::*)(event_type&)>(*this);
+	}
 }

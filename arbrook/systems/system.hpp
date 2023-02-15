@@ -9,12 +9,12 @@
 
 namespace rythe::core
 {
-	struct exampleComp /*: public ecs::component<exampleComp>*/
+	struct exampleComp
 	{
 		int i = 10;
 	};
 
-	struct exampleComp2 /*: public ecs::component<exampleComp>*/
+	struct exampleComp2
 	{
 		int b = 69;
 	};
@@ -31,7 +31,7 @@ namespace rythe::core
 		bool draw = true;
 		sf::Color color = sf::Color(100, 250, 50);
 		float radius = 10;
-		sf::CircleShape sprite = sf::CircleShape();
+		sf::CircleShape sprite;
 	};
 
 	class SystemBase
@@ -46,6 +46,7 @@ namespace rythe::core
 	public:
 		static ecs::Registry* registry;
 		ecs::filter<componentTypes...> m_filter;
+
 		System()
 		{
 			registry = Program::Instance().m_registry->get_service<ecs::Registry>();
@@ -63,7 +64,11 @@ namespace rythe::core
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 
-		//std::unordered_map<rsl::id_type, ecs::entity>& getFilter();
+		template<typename event_type>
+		void raiseEvent(event_type& evnt);
+
+		template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
+		void bindEvent();
 	};
 }
 

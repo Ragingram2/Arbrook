@@ -23,17 +23,17 @@ int main()
 
 	//Register services
 	registry.register_service<LoggingService>();
-	registry.register_service<events::EventBus>();
+	pointer<events::EventBus> eventBus = registry.register_service<events::EventBus>();
 	registry.register_service<scheduling::Scheduler>();
 	registry.register_service<ecs::Registry>();
 
 	//Register events
-	registry.get_service<events::EventBus>()->bind<events::exit,Program,&Program::exit>(Program::Instance());
+	eventBus->bind<events::exit,Program,&Program::exit>(Program::Instance());
 
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
-	scheduler->reportModule<gfx::RenderModule>();
 	scheduler->reportModule<TestModule>();
+	scheduler->reportModule<gfx::RenderModule>();
 
 	//Initialize engine
 	Program::Instance().initialize();
