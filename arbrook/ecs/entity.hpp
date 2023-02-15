@@ -33,6 +33,10 @@ namespace rythe::core::ecs
 
 		template<typename componentType>
 		void destroyComponent();
+
+		bool operator==(const entity& other) {
+			return m_id == other.m_id;
+		}
 	};
 }
 

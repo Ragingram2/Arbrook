@@ -14,18 +14,18 @@ namespace rythe::rendering
 			return;
 
 		sf::Event event;
-		while (window.pollEvent(event))
+		if (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
 				rythe::core::events::exit evt(0);
-				rythe::core::Program::Instance().m_registry->get_service<rythe::core::events::EventBus>()->raiseEvent(evt);
-				break;
+				raiseEvent(evt);
+				return;
 			}
 		}
 
 		window.clear(sf::Color::Black);
-		for (auto& [id, ent] : m_filter.m_entities)
+		for (auto& ent : m_filter)
 		{
 			auto& renderComp = ent.getComponent<core::renderComp>();
 			auto& transform = ent.getComponent<core::transform>();
