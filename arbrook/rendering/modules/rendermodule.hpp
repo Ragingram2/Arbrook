@@ -1,6 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-
 #include "core/modules/module.hpp"
 #include "core/logging/logging.hpp"
 
@@ -13,8 +11,6 @@ namespace rythe::rendering
 	class RenderModule : public core::Module
 	{
 	public:
-		sf::RenderWindow window;
-
 		void setup() override;
 	};
 }
