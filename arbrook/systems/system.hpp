@@ -26,6 +26,12 @@ namespace rythe::core
 		float rotation = 0;
 	};
 
+	struct rigidbody
+	{
+		math::vec2 prevVelocity = math::vec2(0.f, 0.f);
+		math::vec2 velocity = math::vec2(0.f, 0.f);
+	};
+
 	struct renderComp
 	{
 		bool draw = true;

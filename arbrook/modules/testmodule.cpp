@@ -6,5 +6,6 @@ namespace rythe::core
 	{
 		log::debug("Initialized Test Module");
 		reportSystem<TestSystem>();
+		//reportSystem<FlipSystem>();
 	}
 }

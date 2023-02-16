@@ -146,6 +146,7 @@
     <ClCompile Include="arbrook\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\scheduler\scheduler.cpp" />
+    <ClCompile Include="arbrook\systems\flipsystem.cpp" />
     <ClCompile Include="arbrook\systems\rendersystem.cpp" />
     <ClCompile Include="arbrook\systems\system.cpp" />
     <ClCompile Include="arbrook\systems\testsystem.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="arbrook\modules\rendermodule.hpp" />
     <ClInclude Include="arbrook\platform\platform.hpp" />
     <ClInclude Include="arbrook\scheduler\scheduler.hpp" />
+    <ClInclude Include="arbrook\systems\flipsystem.hpp" />
     <ClInclude Include="arbrook\systems\rendersystem.hpp" />
     <ClInclude Include="arbrook\systems\system.hpp" />
     <ClInclude Include="arbrook\systems\testsystem.hpp" />
