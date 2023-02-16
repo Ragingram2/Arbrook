@@ -1,14 +1,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "engine/program.hpp"
-#include "ecs/registry.hpp"
-#include "logging/loggingservice.hpp"
-#include "events/eventbus.hpp"
-#include "events/defaults/exit_event.hpp"
-#include "scheduler/scheduler.hpp"
-#include "modules/testmodule.hpp"
-#include "modules/rendermodule.hpp"
+#include "core/core.hpp"
+#include "sandbox/modules/testmodule.hpp"
+#include "rendering/modules/rendermodule.hpp"
 
 using namespace rythe::core;
 
