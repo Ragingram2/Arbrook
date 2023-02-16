@@ -2,6 +2,7 @@
 #include "logging/logging.hpp"
 #include "modules/module.hpp"
 #include "systems/testsystem.hpp"
+#include "systems/flipsystem.hpp"
 
 namespace rythe::core
 {

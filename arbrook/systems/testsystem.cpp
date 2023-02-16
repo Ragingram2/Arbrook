@@ -18,8 +18,6 @@ namespace rythe::core
 			float randX = std::rand() % 720;
 			float randY = std::rand() % 640;
 			transf.position = math::vec2(randX, randY);
-
-			ent.addComponent<float>() = i;
 		}
 	}
 
