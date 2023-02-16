@@ -10,7 +10,5 @@ namespace rythe::core
 	{
 	public:
 		void setup() override;
-		//void update() override;
-		//void shutdown() override;
 	};
 }

@@ -4,7 +4,6 @@ namespace rythe::core::scheduling
 {
 	void Scheduler::initialize()
 	{
-		/*m_initFuncs();*/
 		m_initialize = true;
 	}
 

@@ -11,7 +11,7 @@
 #include "core/events/eventbus.hpp"
 #include "core/events/defaults/exit_event.hpp"
 
-
+//I should probably change these to work with delegates as well, avoid more pointer indirections
 namespace rythe::core
 {
 	class Program

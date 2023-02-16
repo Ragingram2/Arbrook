@@ -213,32 +213,32 @@ namespace fmt
         }
     };
 
-    //template <>
-    //struct formatter<rythe::core::math::vec4> {
-    //    char presentation = 'f';
+    template <>
+    struct formatter<rythe::core::math::vec4> {
+        char presentation = 'f';
 
-    //    constexpr const char* parse(format_parse_context& ctx) {
-    //        auto it = ctx.begin(), end = ctx.end();
+        constexpr const char* parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
 
-    //        if (!it)
-    //            return nullptr;
+            if (!it)
+                return nullptr;
 
-    //        if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
-    //        if (it != end && *it != '}')
-    //            throw format_error("invalid format");
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
 
-    //        return it;
-    //    }
+            return it;
+        }
 
-    //    template <typename FormatContext>
-    //    auto format(const rythe::core::math::vec4& p, FormatContext& ctx) {
-    //        return format_to(
-    //            ctx.out(),
-    //            presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
-    //            p.x, p.y, p.z, p.w);
-    //    }
-    //};
+        template <typename FormatContext>
+        auto format(const rythe::core::math::vec4& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "({:.1f}, {:.1f}, {:.1f}, {:.1f})" : "({:.1e}, {:.1e}, {:.1e}, {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
 
     //template <>
     //struct formatter<rythe::core::math::color> {
@@ -267,32 +267,32 @@ namespace fmt
     //    }
     //};
 
-    //template <>
-    //struct formatter<rythe::core::math::quat> {
-    //    char presentation = 'f';
+    template <>
+    struct formatter<rythe::core::math::quat> {
+        char presentation = 'f';
 
-    //    constexpr const char* parse(format_parse_context& ctx) {
-    //        auto it = ctx.begin(), end = ctx.end();
+        constexpr const char* parse(format_parse_context& ctx) {
+            auto it = ctx.begin(), end = ctx.end();
 
-    //        if (!it)
-    //            return nullptr;
+            if (!it)
+                return nullptr;
 
-    //        if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
+            if (it != end && (*it == 'f' || *it == 'e')) presentation = *it++;
 
-    //        if (it != end && *it != '}')
-    //            throw format_error("invalid format");
+            if (it != end && *it != '}')
+                throw format_error("invalid format");
 
-    //        return it;
-    //    }
+            return it;
+        }
 
-    //    template <typename FormatContext>
-    //    auto format(const rythe::core::math::quat& p, FormatContext& ctx) {
-    //        return format_to(
-    //            ctx.out(),
-    //            presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
-    //            p.x, p.y, p.z, p.w);
-    //    }
-    //};
+        template <typename FormatContext>
+        auto format(const rythe::core::math::quat& p, FormatContext& ctx) {
+            return format_to(
+                ctx.out(),
+                presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
+                p.x, p.y, p.z, p.w);
+        }
+    };
 
 }
 #endif
