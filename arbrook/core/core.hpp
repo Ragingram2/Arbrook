@@ -9,8 +9,3 @@
 #include "core/containers/pointer.hpp"
 #include "core/events/events.hpp"
 #include "core/platform/platform.hpp"
-
-namespace rythe::core
-{
-	namespace log = rythe::core::log;
-}
