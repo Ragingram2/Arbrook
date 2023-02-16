@@ -33,8 +33,8 @@ namespace rythe::rendering
 			if (renderComp.draw)
 			{
 				auto& sprite = renderComp.sprite;
-				sprite.setPosition(transform.position);
-				sprite.setScale(transform.scale);
+				sprite.setPosition(transform.position.x, transform.position.y);
+				sprite.setScale(transform.scale.x, transform.scale.y);
 				sprite.setRotation(transform.rotation);
 				sprite.setFillColor(renderComp.color);
 				sprite.setRadius(renderComp.radius);
