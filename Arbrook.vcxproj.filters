@@ -226,5 +226,6 @@
     <None Include="arbrook\core\ecs\filter.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="resources\shaders\default.shader" />
   </ItemGroup>
 </Project>
