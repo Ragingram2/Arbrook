@@ -2,16 +2,16 @@
 
 namespace rythe::rendering
 {
-	void RenderSystem::setup()
+	void Renderer::setup()
 	{
 		core::log::debug("Render System setup");
 		window.create(sf::VideoMode(720, 640), "SFML works!");
 	}
 
-	void RenderSystem::update()
+	void Renderer::update()
 	{
 		if (!window.isOpen())
-			return;
+			return; 
 
 		sf::Event event;
 		if (window.pollEvent(event))
@@ -24,27 +24,29 @@ namespace rythe::rendering
 			}
 		}
 
-		window.clear(sf::Color::Black);
-		for (auto& ent : m_filter)
-		{
-			auto& renderComp = ent.getComponent<core::renderComp>();
-			auto& transform = ent.getComponent<core::transform>();
+		//window.clear(sf::Color::Black);
+		//for (auto& ent : m_filter)
+		//{
+		//	auto& renderComp = ent.getComponent<core::renderComp>();
+		//	auto& transform = ent.getComponent<core::transform>();
 
-			if (renderComp.draw)
-			{
-				auto& sprite = renderComp.sprite;
-				sprite.setPosition(transform.position.x, transform.position.y);
-				sprite.setScale(transform.scale.x, transform.scale.y);
-				sprite.setRotation(transform.rotation);
-				sprite.setFillColor(renderComp.color);
-				sprite.setRadius(renderComp.radius);
-				window.draw(sprite);
-			}
-		}
-		window.display();
+		//	if (renderComp.draw)
+		//	{
+		//		auto& sprite = renderComp.sprite;
+		//		sprite.setPosition(transform.position.x, transform.position.y);
+		//		sprite.setScale(transform.scale.x, transform.scale.y);
+		//		sprite.setRotation(transform.rotation);
+		//		sprite.setFillColor(renderComp.color);
+		//		sprite.setRadius(renderComp.radius);
+		//		window.draw(sprite);
+		//	}
+		//}
+		//window.display();
 	}
 
-	void RenderSystem::shutdown()
+
+
+	void Renderer::shutdown()
 	{
 		window.close();
 	}

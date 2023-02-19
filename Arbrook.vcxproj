@@ -179,6 +179,7 @@
     <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\rendering\modules\rendermodule.hpp" />
     <ClInclude Include="arbrook\core\platform\platform.hpp" />
