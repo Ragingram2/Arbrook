@@ -1,6 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-
 #include "core/platform/platform.hpp"
 #include "core/ecs/registry.hpp"
 #include "core/engine/program.hpp"
@@ -35,9 +33,6 @@ namespace rythe::core
 	struct renderComp
 	{
 		bool draw = true;
-		sf::Color color = sf::Color(100, 250, 50);
-		float radius = 10;
-		sf::CircleShape sprite;
 	};
 
 	class SystemBase

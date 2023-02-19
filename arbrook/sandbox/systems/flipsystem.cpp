@@ -10,8 +10,6 @@ namespace rythe::core
 		{
 			auto& ent = createEntity();
 			auto& render = ent.addComponent<renderComp>();
-			render.color = sf::Color::Blue;
-			render.radius = 1.0f;
 
 			auto& transf = ent.addComponent<transform>();
 			float x = std::rand() % 720;
