@@ -1,6 +1,10 @@
 #pragma once
+#include <fstream>
+#include <string>
+#include <sstream>
+
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <GL/GL.h>
 
 #include "core/systems/system.hpp"
 #include "core/engine/program.hpp"
@@ -11,7 +15,13 @@ namespace rythe::rendering
 {
 	namespace log = core::log;
 
-	class Renderer : public core::System<core::transform,core::renderComp>
+	struct shader_source
+	{
+		std::string vertexSource;
+		std::string fragSource;
+	};
+
+	class Renderer : public core::System<core::transform, core::renderComp>
 	{
 	public:
 		GLFWwindow* window;
@@ -22,6 +32,14 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		void render();
+		unsigned int compileShader(unsigned int type, const std::string& source);
+
+		unsigned int createShader(const std::string& vertexShader, const std::string& fragmentShader);
+
+		shader_source parseShader(const std::string& file);
+
+		void clearErrors();
+
+		bool logCall();
 	};
 }
