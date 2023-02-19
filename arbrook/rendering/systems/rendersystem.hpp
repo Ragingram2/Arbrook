@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <GLFW/glfw3.h>
+#include <GL/GL.h>
 
 #include "core/systems/system.hpp"
 #include "core/engine/program.hpp"
@@ -13,8 +14,7 @@ namespace rythe::rendering
 	class Renderer : public core::System<core::transform,core::renderComp>
 	{
 	public:
-		sf::RenderWindow window;
-
+		GLFWwindow* window;
 		Renderer() = default;
 		virtual ~Renderer() = default;
 

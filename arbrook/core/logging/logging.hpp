@@ -267,7 +267,7 @@ namespace fmt
     //    }
     //};
 
-    template <>
+    /*template <>
     struct formatter<rythe::core::math::quat> {
         char presentation = 'f';
 
@@ -292,7 +292,7 @@ namespace fmt
                 presentation == 'f' ? "(({:.1f}, {:.1f}, {:.1f}),r: {:.1f})" : "(({:.1e}, {:.1e}, {:.1e}),r: {:.1e})",
                 p.x, p.y, p.z, p.w);
         }
-    };
+    };*/
 
 }
 #endif

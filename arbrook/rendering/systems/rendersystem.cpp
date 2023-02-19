@@ -5,49 +5,44 @@ namespace rythe::rendering
 	void Renderer::setup()
 	{
 		core::log::debug("Render System setup");
-		window.create(sf::VideoMode(720, 640), "SFML works!");
+		if (!glfwInit())
+			return;
+
+		window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+		if (!window)
+		{
+			glfwTerminate();
+			core::log::error("Window Failed Initialization");
+			return;
+		}
 	}
 
 	void Renderer::update()
 	{
-		if (!window.isOpen())
-			return; 
+		glfwMakeContextCurrent(window);
 
-		sf::Event event;
-		if (window.pollEvent(event))
+		if (glfwWindowShouldClose(window))
 		{
-			if (event.type == sf::Event::Closed)
-			{
-				rythe::core::events::exit evt(0);
-				raiseEvent(evt);
-				return;
-			}
+			rythe::core::events::exit evnt(0);
+			raiseEvent(evnt);
+			return;
 		}
 
-		//window.clear(sf::Color::Black);
-		//for (auto& ent : m_filter)
-		//{
-		//	auto& renderComp = ent.getComponent<core::renderComp>();
-		//	auto& transform = ent.getComponent<core::transform>();
+		glClear(GL_COLOR_BUFFER_BIT);
 
-		//	if (renderComp.draw)
-		//	{
-		//		auto& sprite = renderComp.sprite;
-		//		sprite.setPosition(transform.position.x, transform.position.y);
-		//		sprite.setScale(transform.scale.x, transform.scale.y);
-		//		sprite.setRotation(transform.rotation);
-		//		sprite.setFillColor(renderComp.color);
-		//		sprite.setRadius(renderComp.radius);
-		//		window.draw(sprite);
-		//	}
-		//}
-		//window.display();
+		glBegin(GL_TRIANGLES);
+		glVertex2f(-0.5f, -0.5f);
+		glVertex2f(0.0f, 0.5f);
+		glVertex2f(0.5f, -0.5f);
+		glEnd();
+
+		glfwSwapBuffers(window);
+
+		glfwPollEvents();
 	}
-
-
 
 	void Renderer::shutdown()
 	{
-		window.close();
+		glfwTerminate();
 	}
 }
