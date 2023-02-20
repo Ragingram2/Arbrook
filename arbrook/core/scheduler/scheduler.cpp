@@ -5,6 +5,7 @@ namespace rythe::core::scheduling
 	void Scheduler::initialize()
 	{
 		m_initialize = true;
+		log::info("Initializing Scheduler");
 	}
 
 	void Scheduler::update()
@@ -24,7 +25,7 @@ namespace rythe::core::scheduling
 
 	void Scheduler::shutdown()
 	{
-		log::debug("Scheduler shutting down");
+		log::info("Shutting Down Scheduler");
 		m_shutdownFuncs();
 
 		m_initFuncs.clear();

@@ -17,7 +17,7 @@ namespace rythe::rendering
 
 	void Renderer::setup()
 	{
-		log::debug("Render System setup");
+		log::info("Initializing Render System");
 		if (!glfwInit())
 			return;
 
@@ -87,7 +87,7 @@ namespace rythe::rendering
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		auto& shader = getShader("default");
-		shader.setUniform("u_color", math::vec4(r, .3f, .8f, 1.f));
+		shader.setUniform("u_color", math::vec4(r, .5f-(r/2.0f), 1.f-r, 1.f));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		if (r > 1.0f)
