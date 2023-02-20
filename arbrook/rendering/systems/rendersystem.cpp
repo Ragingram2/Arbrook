@@ -32,6 +32,14 @@ namespace rythe::rendering
 			-0.5f, 0.5f //3
 		};
 
+		float colors[] =
+		{
+			1.0f, 0.0f,0.0f,1.0f,//0
+			0.0f, 1.0f,0.0f,1.0f,//1
+			0.0f, 0.0f,1.0f,1.0f,//2
+			1.0f, 1.0f,0.0f,1.0f//3
+		};
+
 		unsigned int indicies[] =
 		{
 			0,1,2,
@@ -40,13 +48,23 @@ namespace rythe::rendering
 
 		//Vertex  buffer
 		{
-			unsigned int buffer;
-			glGenBuffers(1, &buffer);
-			glBindBuffer(GL_ARRAY_BUFFER, buffer);
-			glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
+			unsigned int positionBuffer;
+			glGenBuffers(1, &positionBuffer);
+			glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 		}
+
+		////Color buffer
+		//{
+		//	unsigned int colorBuffer;
+		//	glGenBuffers(1, &colorBuffer);
+		//	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+		//	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+		//	glEnableVertexAttribArray(0);
+		//	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+		//}
 
 		//index  buffer
 		{
@@ -59,11 +77,16 @@ namespace rythe::rendering
 		shader_source source = parseShader("resources/shaders/default.shader");
 		unsigned int shader = createShader(source.vertexSource, source.fragSource);
 		glUseProgram(shader);
+
+		loc = glGetUniformLocation(shader, "u_color");
+
 	}
 
 	void Renderer::update()
 	{
 		glfwMakeContextCurrent(window);
+
+		glfwSwapInterval(1);
 
 		if (glfwWindowShouldClose(window))
 		{
@@ -73,9 +96,22 @@ namespace rythe::rendering
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
-
+		//clearErrors();
+		glUniform4f(loc, r, 0.3f, .8f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+		if (r > 1.0f)
+		{
+			inc = -0.05f;
+		}
+		else if (r < 0.0f)
+		{
+			inc = 0.05f;
+		}
+
+		r += inc;
+
+		logCall();
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
