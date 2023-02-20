@@ -146,6 +146,7 @@
     <ClCompile Include="arbrook\core\engine\services\service.cpp" />
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
+    <ClCompile Include="arbrook\rendering\data\shader.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\core\scheduler\scheduler.cpp" />
@@ -182,6 +183,8 @@
     <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
+    <ClInclude Include="arbrook\rendering\data\buffer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\shader.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\rendering\modules\rendermodule.hpp" />
@@ -211,6 +214,8 @@
     <None Include="arbrook\core\modules\module.inl" />
     <None Include="arbrook\core\scheduler\scheduler.inl" />
     <None Include="arbrook\core\systems\system.inl" />
+    <None Include="arbrook\rendering\data\buffer.inl" />
+    <None Include="arbrook\rendering\data\shader.inl" />
     <None Include="external_include\rsl\src\rythe\concepts" />
     <None Include="external_include\rsl\src\rythe\delegate" />
     <None Include="external_include\rsl\src\rythe\hash" />
