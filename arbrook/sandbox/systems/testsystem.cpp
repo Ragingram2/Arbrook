@@ -4,7 +4,7 @@ namespace rythe::core
 {
 	void TestSystem::setup()
 	{
-		log::debug("Test System setup");
+		log::info("Initializing Test System");
 		float spawnCount = 1000.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -34,6 +34,6 @@ namespace rythe::core
 
 	void TestSystem::shutdown()
 	{
-		log::debug("Test System shutdown");
+		log::info("Shutting down Test System ");
 	}
 }

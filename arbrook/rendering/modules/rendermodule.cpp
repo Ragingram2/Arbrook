@@ -4,7 +4,7 @@ namespace rythe::rendering
 {
 	void RenderModule::setup()
 	{
-		log::debug("Initializing Rendering Module");
+		log::info("Initializing Rendering Module");
 		reportSystem<Renderer>();
 	}
 }

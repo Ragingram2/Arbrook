@@ -601,6 +601,7 @@ namespace rythe::core::log
     inline void setup()
     {
         static auto v = detail::_setup_impl();
+        (void)v;
     }
 }
 #undef logger

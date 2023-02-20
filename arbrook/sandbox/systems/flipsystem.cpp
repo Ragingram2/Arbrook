@@ -9,7 +9,7 @@ namespace rythe::core
 		for (int i = 0; i < spawnCount; i++)
 		{
 			auto& ent = createEntity();
-			auto& render = ent.addComponent<renderComp>();
+			//auto& render = ent.addComponent<renderComp>();
 
 			auto& transf = ent.addComponent<transform>();
 			float x = std::rand() % 720;

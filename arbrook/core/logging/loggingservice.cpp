@@ -5,7 +5,7 @@ namespace rythe::core
 	void LoggingService::initialize()
 	{
 		log::setup();
-		log::debug("Logging Initialized");
+		log::info("Logging Initialized");
 	}
 
 	void LoggingService::update()
@@ -15,6 +15,6 @@ namespace rythe::core
 
 	void LoggingService::shutdown()
 	{
-		log::debug("Logging Shutdown");
+		log::info("Shutting Down Logging");
 	}
 }

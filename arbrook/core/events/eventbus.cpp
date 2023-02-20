@@ -4,7 +4,7 @@ namespace rythe::core::events
 {
 	void EventBus::initialize()
 	{
-		log::debug("Eventbus Initialized");
+		log::info("Initializing Eventbus");
 	}
 
 	void EventBus::update()
@@ -20,7 +20,7 @@ namespace rythe::core::events
 	void EventBus::shutdown()
 	{
 		m_callbacks.clear();
-		log::debug("Eventbus Shutdown");
+		log::info("Shutting Down Eventbus");
 	}
 
 	void EventBus::raiseEvent(event_base& value, bool immediate)

@@ -4,7 +4,7 @@
 namespace rythe::rendering
 {
 	template<typename T>
-	void buffer<T>::initialize(GLenum type, GLsizei n = 1)
+	void buffer<T>::initialize(GLenum type, GLsizei n)
 	{
 		m_type = type;
 		glGenBuffers(n, &m_id);
@@ -33,7 +33,7 @@ namespace rythe::rendering
 	}
 
 	template<typename T>
-	void buffer<T>::setAttributePtr(int index, int components, GLenum type, bool normalize, const void* pointer = 0)
+	void buffer<T>::setAttributePtr(int index, int components, GLenum type, bool normalize, const void* pointer)
 	{
 		glEnableVertexAttribArray(index);
 		glVertexAttribPointer(index, components, type, normalize, components * sizeof(T), pointer);
