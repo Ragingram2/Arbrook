@@ -63,6 +63,9 @@
     <ClCompile Include="arbrook\sandbox\systems\flipsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\rendering\data\shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\ecs\entity.hpp">
@@ -191,6 +194,12 @@
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">
@@ -227,5 +236,11 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="resources\shaders\default.shader" />
+    <None Include="arbrook\rendering\data\buffer.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="arbrook\rendering\data\shader.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -2,6 +2,19 @@
 
 namespace rythe::rendering
 {
+	void GLAPIENTRY MessageCallback(GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam)
+	{
+		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+			type, severity, message);
+	}
+
 	void Renderer::setup()
 	{
 		log::debug("Render System setup");
@@ -24,6 +37,9 @@ namespace rythe::rendering
 			return;
 		}
 
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(MessageCallback, 0);
+
 		float positions[] =
 		{
 			-0.5f, -0.5f,//0
@@ -32,54 +48,27 @@ namespace rythe::rendering
 			-0.5f, 0.5f //3
 		};
 
-		float colors[] =
-		{
-			1.0f, 0.0f,0.0f,1.0f,//0
-			0.0f, 1.0f,0.0f,1.0f,//1
-			0.0f, 0.0f,1.0f,1.0f,//2
-			1.0f, 1.0f,0.0f,1.0f//3
-		};
-
 		unsigned int indicies[] =
 		{
 			0,1,2,
 			2,3,0
 		};
 
-		//Vertex  buffer
+		//vertex  buffer
 		{
-			unsigned int positionBuffer;
-			glGenBuffers(1, &positionBuffer);
-			glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+			buffer<float> posBuffer(GL_ARRAY_BUFFER);
+			posBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
+			posBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
 		}
-
-		////Color buffer
-		//{
-		//	unsigned int colorBuffer;
-		//	glGenBuffers(1, &colorBuffer);
-		//	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-		//	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-		//	glEnableVertexAttribArray(0);
-		//	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-		//}
 
 		//index  buffer
 		{
-			unsigned int ibo;
-			glGenBuffers(1, &ibo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+			buffer<unsigned int> indexBuffer(GL_ELEMENT_ARRAY_BUFFER);
+			indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 		}
 
-		shader_source source = parseShader("resources/shaders/default.shader");
-		unsigned int shader = createShader(source.vertexSource, source.fragSource);
-		glUseProgram(shader);
-
-		loc = glGetUniformLocation(shader, "u_color");
-
+		auto& defaultShader = createShader("default", "resources/shaders/default.shader");
+		defaultShader.initialize();
 	}
 
 	void Renderer::update()
@@ -96,22 +85,18 @@ namespace rythe::rendering
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		//clearErrors();
-		glUniform4f(loc, r, 0.3f, .8f, 1.0f);
+
+		auto& shader = getShader("default");
+		shader.setUniform("u_color", math::vec4(r, .3f, .8f, 1.f));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		if (r > 1.0f)
-		{
 			inc = -0.05f;
-		}
 		else if (r < 0.0f)
-		{
 			inc = 0.05f;
-		}
 
 		r += inc;
 
-		logCall();
 		glfwSwapBuffers(window);
 
 		glfwPollEvents();
@@ -122,98 +107,38 @@ namespace rythe::rendering
 		glfwTerminate();
 	}
 
-	unsigned int Renderer::createShader(const std::string& vertexShader, const std::string& fragmentShader)
+	shader& Renderer::createShader(const std::string& name, const std::string& filePath)
 	{
-		unsigned int program = glCreateProgram();
-		unsigned int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
-		unsigned int fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-		glAttachShader(program, vs);
-		glAttachShader(program, fs);
-		glLinkProgram(program);
-		glValidateProgram(program);
-
-		glDeleteShader(vs);
-		glDeleteShader(fs);
-
-		return program;
-	}
-
-	unsigned int Renderer::compileShader(unsigned int type, const std::string& source)
-	{
-		unsigned int id = glCreateShader(type);
-		const char* src = source.c_str();
-		glShaderSource(id, 1, &src, nullptr);
-		glCompileShader(id);
-
-		int result;
-		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*)__builtin_alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-
-		if (result == GL_FALSE)
+		if (m_shaders.contains(name))
 		{
-			log::error(message);
-			glDeleteShader(id);
-			return 0;
+			log::warn("Shader \"" + std::string(name) + "\" already exists, returning a reference to that one");
+			return m_shaders[name];
 		}
 
-		return id;
+		shader defaultShader(filePath);
+		m_shaders.emplace(name, defaultShader);
+		return m_shaders[name];
 	}
 
-	shader_source Renderer::parseShader(const std::string& filepath)
+	shader& Renderer::getShader(const std::string& name)
 	{
-		std::ifstream stream(filepath);
-
-		enum class ShaderType
-		{
-			NONE = -1,
-			VERTEX = 0,
-			FRAG = 1
-		};
-
-
-		std::string line;
-		std::stringstream ss[2];
-		ShaderType type = ShaderType::NONE;
-		while (getline(stream, line))
-		{
-			if (line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-				{
-					type = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos)
-				{
-					type = ShaderType::FRAG;
-				}
-			}
-			else
-			{
-				ss[(int)type] << line << "\n";
-			}
-		}
-
-		return { ss[0].str(),ss[1].str() };
+		return m_shaders[name];
 	}
 
-	void Renderer::clearErrors()
+	void Renderer::clearLog()
 	{
 		while (glGetError() != GL_NO_ERROR);
-
 	}
 
 	bool Renderer::logCall()
 	{
+		bool success = true;
 		while (GLenum error = glGetError())
 		{
 			log::error(error);
-			return false;
+			__debugbreak();
+			success = false;
 		}
-		return true;
+		return success;
 	}
 }
