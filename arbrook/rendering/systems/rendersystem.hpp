@@ -25,6 +25,9 @@ namespace rythe::rendering
 	{
 	public:
 		GLFWwindow* window;
+		int loc = 0;
+		float r = 0;
+		float inc = 0.05f;
 		Renderer() = default;
 		virtual ~Renderer() = default;
 
