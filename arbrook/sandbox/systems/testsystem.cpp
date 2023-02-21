@@ -19,14 +19,16 @@ namespace rythe::core
 			2,3,0
 		};
 
-		float spawnCount = 1.f;
+		gfx::window::makeCurrent();
+
+		float spawnCount = 5.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
 			auto& ent = createEntity();
 			auto& render = ent.addComponent<gfx::shape_renderer>();
 			gfx::buffer<float> posBuffer(GL_ARRAY_BUFFER);
 			render.vertexBuffer = posBuffer;
-			render.vertexBuffer.bufferData(positions, sizeof(positions),GL_STATIC_DRAW);
+			render.vertexBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
 			render.vertexBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
 			render.vertexBuffer.unbind();
 
@@ -36,8 +38,8 @@ namespace rythe::core
 			render.indexBuffer.unbind();
 
 			auto& transf = ent.addComponent<transform>();
-			float randX = std::rand() % 720;
-			float randY = std::rand() % 640;
+			float randX = ((std::rand() % 200) / 100.f) - 1.f;
+			float randY = ((std::rand() % 200) / 100.f) - 1.f;
 			transf.position = math::vec2(randX, randY);
 		}
 	}
@@ -47,11 +49,10 @@ namespace rythe::core
 		for (auto& ent : m_filter)
 		{
 			auto& transf = ent.getComponent<transform>();
-			transf.position += math::vec2(.08f, 0);
-
-			if (transf.position.x > 730)
+			transf.position += math::vec2(.02f, 0);
+			if (transf.position.x > 1)
 			{
-				transf.position.x = -10.0f;
+				transf.position.x = -1.0f;
 			}
 		}
 	}

@@ -2,34 +2,34 @@
 
 namespace rythe::rendering
 {
-	void GLAPIENTRY MessageCallback(GLenum source,
-		GLenum type,
-		GLuint id,
-		GLenum severity,
-		GLsizei length,
-		const GLchar* message,
-		const void* userParam)
-	{
-		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-			type, severity, message);
-	}
+	//void GLAPIENTRY MessageCallback(GLenum source,
+	//	GLenum type,
+	//	GLuint id,
+	//	GLenum severity,
+	//	GLsizei length,
+	//	const GLchar* message,
+	//	const void* userParam)
+	//{
+	//	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+	//		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+	//		type, severity, message);
+	//}
 
 	void Renderer::setup()
 	{
 		log::info("Initializing Render System");
 		if (!glfwInit())
 			return;
+		m_window.initialize(math::ivec2(600, 600), "Arbrook");
 
-		window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-		if (!window)
+		if (!m_window)
 		{
 			glfwTerminate();
 			log::error("Window initialization failed");
 			return;
 		}
 
-		glfwMakeContextCurrent(window);
+		window::makeCurrent();
 
 		if (glewInit() != GLEW_OK)
 		{
@@ -37,35 +37,8 @@ namespace rythe::rendering
 			return;
 		}
 
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(MessageCallback, 0);
-
-		//float positions[] =
-		//{
-		//	-0.5f, -0.5f,//0
-		//	 0.5f, -0.5f,//1
-		//	 0.5f,  0.5f,//2
-		//	-0.5f, 0.5f //3
-		//};
-
-		//unsigned int indicies[] =
-		//{
-		//	0,1,2,
-		//	2,3,0
-		//};
-
-		////vertex  buffer
-		//{
-		//	buffer<float> posBuffer(GL_ARRAY_BUFFER);
-		//	posBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
-		//	posBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
-		//}
-
-		////index  buffer
-		//{
-		//	buffer<unsigned int> indexBuffer(GL_ELEMENT_ARRAY_BUFFER);
-		//	indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-		//}
+		//glEnable(GL_DEBUG_OUTPUT);
+		//glDebugMessageCallback(MessageCallback, 0);
 
 		auto& defaultShader = createShader("default", "resources/shaders/default.shader");
 		defaultShader.initialize();
@@ -73,11 +46,11 @@ namespace rythe::rendering
 
 	void Renderer::update()
 	{
-		glfwMakeContextCurrent(window);
+		window::makeCurrent();
 
-		glfwSwapInterval(1);
+		m_window.setSwapInterval(1);
 
-		if (glfwWindowShouldClose(window))
+		if (m_window.shouldClose())
 		{
 			rythe::core::events::exit evnt(0);
 			raiseEvent(evnt);
@@ -110,9 +83,9 @@ namespace rythe::rendering
 
 		r += inc;
 
-		glfwSwapBuffers(window);
+		m_window.swapBuffers();
 
-		glfwPollEvents();
+		m_window.pollEvents();
 	}
 
 	void Renderer::shutdown()

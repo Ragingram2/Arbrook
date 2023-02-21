@@ -6,13 +6,15 @@
 #include "core/logging/logging.hpp"
 #include "rendering/data/buffer.hpp"
 #include "rendering/components/shaperenderer.hpp"
+#include "rendering/data/window.hpp"
 
 namespace rythe::core
 {
 	namespace gfx = rythe::rendering;
-	class TestSystem : public System<transform, gfx::shape_renderer>
+	class TestSystem : public System<transform>
 	{
 	public:
+		float count = 0.0f;
 		TestSystem() = default;
 		virtual ~TestSystem() = default;
 
