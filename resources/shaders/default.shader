@@ -3,11 +3,11 @@
 
 layout(location = 0) in vec4 position;
 
-uniform vec3 u_position;
+uniform vec2 u_position;
 
 void main()
 {
-	gl_Position = position + vec4(u_position, 0);
+	gl_Position = position + vec4(u_position,0, 0);
 }
 
 #shader fragment

@@ -27,8 +27,9 @@ int main()
 
 	//Report modules
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
-	scheduler->reportModule<TestModule>();
 	scheduler->reportModule<gfx::RenderModule>();
+	scheduler->reportModule<TestModule>();
+
 
 	//Initialize engine
 	Program::Instance().initialize();

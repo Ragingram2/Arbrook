@@ -2,12 +2,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "core/systems/system.hpp"
-#include "core/engine/program.hpp"
-#include "core/events/eventbus.hpp"
+#include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
 #include "rendering/data/buffer.hpp"
 #include "rendering/data/shader.hpp"
+#include "rendering/data/window.hpp"
 #include "rendering/components/shaperenderer.hpp"
 
 namespace rythe::rendering
@@ -18,7 +17,7 @@ namespace rythe::rendering
 	class Renderer : public core::System<core::transform, shape_renderer>
 	{
 	public:
-		GLFWwindow* window;
+		window m_window;
 		std::unordered_map<std::string, shader> m_shaders;
 
 		float r = 0;
