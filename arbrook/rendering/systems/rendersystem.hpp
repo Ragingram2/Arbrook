@@ -8,18 +8,19 @@
 #include "core/events/defaults/exit_event.hpp"
 #include "rendering/data/buffer.hpp"
 #include "rendering/data/shader.hpp"
+#include "rendering/components/shaperenderer.hpp"
 
 namespace rythe::rendering
 {
 	namespace log = core::log;
 	namespace math = core::math;
 
-	class Renderer : public core::System<core::transform, core::renderComp>
+	class Renderer : public core::System<core::transform, shape_renderer>
 	{
 	public:
 		GLFWwindow* window;
-
 		std::unordered_map<std::string, shader> m_shaders;
+
 		float r = 0;
 		float inc = 0.05f;
 		Renderer() = default;

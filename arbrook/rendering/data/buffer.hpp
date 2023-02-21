@@ -8,7 +8,7 @@ namespace rythe::rendering
 	template<typename T>
 	struct buffer
 	{
-		unsigned int m_id;
+		unsigned int m_id = 0;
 		GLenum m_type;
 		GLenum m_usage;
 		GLsizei m_num = 1;

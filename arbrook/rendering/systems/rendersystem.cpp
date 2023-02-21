@@ -40,32 +40,32 @@ namespace rythe::rendering
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(MessageCallback, 0);
 
-		float positions[] =
-		{
-			-0.5f, -0.5f,//0
-			 0.5f, -0.5f,//1
-			 0.5f,  0.5f,//2
-			-0.5f, 0.5f //3
-		};
+		//float positions[] =
+		//{
+		//	-0.5f, -0.5f,//0
+		//	 0.5f, -0.5f,//1
+		//	 0.5f,  0.5f,//2
+		//	-0.5f, 0.5f //3
+		//};
 
-		unsigned int indicies[] =
-		{
-			0,1,2,
-			2,3,0
-		};
+		//unsigned int indicies[] =
+		//{
+		//	0,1,2,
+		//	2,3,0
+		//};
 
-		//vertex  buffer
-		{
-			buffer<float> posBuffer(GL_ARRAY_BUFFER);
-			posBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
-			posBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
-		}
+		////vertex  buffer
+		//{
+		//	buffer<float> posBuffer(GL_ARRAY_BUFFER);
+		//	posBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
+		//	posBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
+		//}
 
-		//index  buffer
-		{
-			buffer<unsigned int> indexBuffer(GL_ELEMENT_ARRAY_BUFFER);
-			indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-		}
+		////index  buffer
+		//{
+		//	buffer<unsigned int> indexBuffer(GL_ELEMENT_ARRAY_BUFFER);
+		//	indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
+		//}
 
 		auto& defaultShader = createShader("default", "resources/shaders/default.shader");
 		defaultShader.initialize();
@@ -86,9 +86,22 @@ namespace rythe::rendering
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		auto& shader = getShader("default");
-		shader.setUniform("u_color", math::vec4(r, .5f-(r/2.0f), 1.f-r, 1.f));
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		for (auto& ent : m_filter)
+		{
+			auto& renderComp = ent.getComponent<shape_renderer>();
+			renderComp.indexBuffer.bind();
+			renderComp.vertexBuffer.bind();
+
+			auto& transf = ent.getComponent<core::transform>();
+
+			auto& shader = getShader("default");
+			shader.setUniform("u_position", transf.position);
+			shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+			renderComp.indexBuffer.unbind();
+			renderComp.vertexBuffer.unbind();
+		}
 
 		if (r > 1.0f)
 			inc = -0.05f;
