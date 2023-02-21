@@ -30,11 +30,6 @@ namespace rythe::core
 		math::vec2 velocity = math::vec2(0.f, 0.f);
 	};
 
-	struct renderComp
-	{
-		bool draw = true;
-	};
-
 	class SystemBase
 	{
 	public:

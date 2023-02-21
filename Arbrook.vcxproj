@@ -183,6 +183,7 @@
     <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
+    <ClInclude Include="arbrook\rendering\components\shaperenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\shader.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />

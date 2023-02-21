@@ -1,10 +1,16 @@
 #pragma once
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include "core/systems/system.hpp"
 #include "core/logging/logging.hpp"
+#include "rendering/data/buffer.hpp"
+#include "rendering/components/shaperenderer.hpp"
 
 namespace rythe::core
 {
-	class TestSystem : public System<transform, renderComp, exampleComp>
+	namespace gfx = rythe::rendering;
+	class TestSystem : public System<transform, gfx::shape_renderer>
 	{
 	public:
 		TestSystem() = default;

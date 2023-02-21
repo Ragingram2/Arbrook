@@ -4,7 +4,7 @@
 
 namespace rythe::core
 {
-	class FlipSystem : public System<transform, rigidbody, renderComp>
+	class FlipSystem : public System<transform, rigidbody>
 	{
 	public:
 		FlipSystem() = default;
