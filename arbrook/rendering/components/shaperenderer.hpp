@@ -5,7 +5,7 @@ namespace rythe::rendering
 {
 	struct shape_renderer
 	{
-		buffer<float> vertexBuffer;
-		buffer<unsigned int> indexBuffer;
+		buffer<vertex, float> vertexBuffer;
+		buffer<index, unsigned int> indexBuffer;
 	};
 }

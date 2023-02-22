@@ -26,13 +26,13 @@ namespace rythe::core
 		{
 			auto& ent = createEntity();
 			auto& render = ent.addComponent<gfx::shape_renderer>();
-			gfx::buffer<float> posBuffer(GL_ARRAY_BUFFER);
+			gfx::buffer<gfx::vertex, float> posBuffer;
 			render.vertexBuffer = posBuffer;
 			render.vertexBuffer.bufferData(positions, sizeof(positions), GL_STATIC_DRAW);
 			render.vertexBuffer.setAttributePtr(0, 2, GL_FLOAT, false);
 			render.vertexBuffer.unbind();
 
-			gfx::buffer<unsigned int> indBuffer(GL_ELEMENT_ARRAY_BUFFER);
+			gfx::buffer<gfx::index, unsigned int> indBuffer;
 			render.indexBuffer = indBuffer;
 			render.indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 			render.indexBuffer.unbind();

@@ -19,7 +19,7 @@ namespace rythe::rendering
 	public:
 		window m_window;
 		std::unordered_map<std::string, shader> m_shaders;
-
+		unsigned int vao;
 		float r = 0;
 		float inc = 0.05f;
 		Renderer() = default;
