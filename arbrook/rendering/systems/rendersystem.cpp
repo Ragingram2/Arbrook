@@ -2,24 +2,30 @@
 
 namespace rythe::rendering
 {
-	//void GLAPIENTRY MessageCallback(GLenum source,
-	//	GLenum type,
-	//	GLuint id,
-	//	GLenum severity,
-	//	GLsizei length,
-	//	const GLchar* message,
-	//	const void* userParam)
-	//{
-	//	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-	//		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-	//		type, severity, message);
-	//}
+	void GLAPIENTRY MessageCallback(GLenum source,
+		GLenum type,
+		GLuint id,
+		GLenum severity,
+		GLsizei length,
+		const GLchar* message,
+		const void* userParam)
+	{
+		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+			type, severity, message);
+		__debugbreak();
+	}
 
 	void Renderer::setup()
 	{
 		log::info("Initializing Render System");
 		if (!glfwInit())
 			return;
+
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 		m_window.initialize(math::ivec2(600, 600), "Arbrook");
 
 		if (!m_window)
@@ -33,15 +39,19 @@ namespace rythe::rendering
 
 		if (glewInit() != GLEW_OK)
 		{
-			log::error("Something whent wrong when initializing GLEW");
+			log::error("Something went wrong when initializing GLEW");
 			return;
 		}
 
-		//glEnable(GL_DEBUG_OUTPUT);
-		//glDebugMessageCallback(MessageCallback, 0);
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(MessageCallback, 0);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		//glGenVertexArrays(1, &vao);
+		//glBindVertexArray(vao);
 
 		auto& defaultShader = createShader("default", "resources/shaders/default.shader");
 		defaultShader.initialize();
+
 	}
 
 	void Renderer::update()
