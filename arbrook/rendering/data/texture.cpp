@@ -18,17 +18,21 @@ namespace rythe::rendering
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	void texture::writeTexture(math::ivec2 resolution, unsigned int internalFormat, unsigned int format, unsigned int compType, unsigned char* data)
+	void texture::loadTexture(const std::string& filepath, int wrapModeS, int wrapModeT, int minFilterMode, int magFilterMode)
 	{
-		m_resolution = resolution;
-		m_data = data;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapModeS);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapModeT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterMode);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterMode);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, resolution.x, resolution.y, 0, format, compType, data);
+		m_data = stbi_load(filepath.c_str(), &m_resolution.x, &m_resolution.y, &m_channels, 0);
+		if (!m_data)
+		{
+			log::error("Image failed to load");
+			return;
+		}
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_resolution.x, m_resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, m_data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
-	void texture::setParameter(unsigned int param, unsigned int mode)
-	{
-		glTexParameteri(GL_TEXTURE_2D, param, mode);
-	}
 }

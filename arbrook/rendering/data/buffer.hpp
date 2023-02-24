@@ -7,18 +7,11 @@
 
 #include <rythe/primitives>
 
-#include "core/math/math.hpp"
+#include "core/core.hpp"
 
 namespace rythe::rendering
 {
 	namespace math = core::math;
-
-	//enum BUFFER_TYPES
-	//{
-	//	VERTEX = GL_ARRAY_BUFFER,
-	//	INDEX = GL_ELEMENT_ARRAY_BUFFER,
-	//	CONSTANT = 1
-	//};
 
 	struct buffer_element_type { };
 	struct vertex : public buffer_element_type { };

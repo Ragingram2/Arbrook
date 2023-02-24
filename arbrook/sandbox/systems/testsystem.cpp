@@ -7,10 +7,10 @@ namespace rythe::core
 		log::info("Initializing Test System");
 		float verticies[] =
 		{		//positions		//colors					//tex coors
-				 -0.1f,   0.1f,		1.0f,  0.0f, 0.0f,		//0.0f, 1.0f,//0
-				 -0.1f, -0.1f,		0.0f, 1.0f, 0.0f,		//0.0f, 0.0f,//1
-				  0.1f, -0.1f,		0.0f, 0.0f, 1.0f,		//1.0f,0.0f,//2
-				  0.1f, 0.1f ,		1.0f, 1.0f, 0.0f			//1.0f, 1.0f//3
+				 -0.1f,   0.1f,		1.0f,  0.0f, 0.0f,		0.0f, 1.0f,//0
+				 -0.1f, -0.1f,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f,//1
+				  0.1f, -0.1f,		0.0f, 0.0f, 1.0f,		1.0f,0.0f,//2
+				  0.1f, 0.1f ,		1.0f, 1.0f, 0.0f,			1.0f, 1.0f//3
 		};
 
 		unsigned int indicies[] =
@@ -29,14 +29,14 @@ namespace rythe::core
 			auto& vao = render.vao;
 			vao.initialize();
 			vao.m_vertexBuffer.bufferData(verticies, sizeof(verticies), GL_STATIC_DRAW);
-			vao.m_vertexBuffer.setAttributePtr(0, 2, GL_FLOAT, false, 5 * sizeof(float));
-			vao.m_vertexBuffer.setAttributePtr(1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-			//vao.m_vertexBuffer.setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
+			vao.m_vertexBuffer.setAttributePtr(0, 2, GL_FLOAT, false, 7 * sizeof(float));
+			vao.m_vertexBuffer.setAttributePtr(1, 3, GL_FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+			vao.m_vertexBuffer.setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
 			vao.m_indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-			//auto& m_texture = render.m_texture;
-			//m_texture.initialize();
-
+			auto& m_texture = render.m_texture;
+			m_texture.initialize();
+			m_texture.loadTexture("resources/texture/Rythe.png");
 			vao.unbind();
 
 			auto& transf = ent.addComponent<transform>();

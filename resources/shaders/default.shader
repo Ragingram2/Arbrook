@@ -14,7 +14,7 @@ void main()
 {
 	gl_Position = vPosition + vec4(u_position, 0, 0);
 	aColor = vColor;
-	//TexCoord = vTexCoord;
+	TexCoord = vTexCoord;
 }
 
 #shader fragment
@@ -29,7 +29,7 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-	FragColor = u_color;
+	//FragColor = u_color;
 	//FragColor = vec4(aColor, 1.0);
-	//FragColor = texture(ourTexture, TexCoord);
+	FragColor = texture(ourTexture, TexCoord);
 }
