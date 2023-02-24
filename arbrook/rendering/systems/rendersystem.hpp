@@ -7,14 +7,14 @@
 #include "rendering/data/buffer.hpp"
 #include "rendering/data/shader.hpp"
 #include "rendering/data/window.hpp"
-#include "rendering/components/shaperenderer.hpp"
+#include "rendering/components/spriterenderer.hpp"
 
 namespace rythe::rendering
 {
 	namespace log = core::log;
 	namespace math = core::math;
 
-	class Renderer : public core::System<core::transform, shape_renderer>
+	class Renderer : public core::System<core::transform, sprite_renderer>
 	{
 	public:
 		window m_window;
@@ -31,8 +31,6 @@ namespace rythe::rendering
 
 		shader& createShader(const std::string& name, const std::string& filepath);
 		shader& getShader(const std::string& name);
-		//void clearLog();
-		//bool logCall();
 
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
