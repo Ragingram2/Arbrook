@@ -148,6 +148,7 @@
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\data\buffer.cpp" />
     <ClCompile Include="arbrook\rendering\data\shader.cpp" />
+    <ClCompile Include="arbrook\rendering\data\texture.cpp" />
     <ClCompile Include="arbrook\rendering\data\vertexarray.cpp" />
     <ClCompile Include="arbrook\rendering\data\window.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
@@ -186,9 +187,10 @@
     <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
-    <ClInclude Include="arbrook\rendering\components\shaperenderer.hpp" />
+    <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\shader.hpp" />
+    <ClInclude Include="arbrook\rendering\data\texture.hpp" />
     <ClInclude Include="arbrook\rendering\data\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\window.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />

@@ -5,7 +5,7 @@
 #include "core/systems/system.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/buffer.hpp"
-#include "rendering/components/shaperenderer.hpp"
+#include "rendering/components/spriterenderer.hpp"
 #include "rendering/data/window.hpp"
 
 namespace rythe::core

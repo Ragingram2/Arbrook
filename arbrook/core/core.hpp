@@ -9,3 +9,9 @@
 #include "core/containers/pointer.hpp"
 #include "core/events/events.hpp"
 #include "core/platform/platform.hpp"
+
+namespace rythe::rendering
+{
+	namespace math = core::math;
+	namespace log = core::log;
+}

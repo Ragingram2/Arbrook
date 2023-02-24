@@ -66,7 +66,7 @@ namespace rythe::rendering
 
 		for (auto& ent : m_filter)
 		{
-			auto& renderComp = ent.getComponent<shape_renderer>();
+			auto& renderComp = ent.getComponent<sprite_renderer>();
 			renderComp.vao.bind();
 
 			auto& transf = ent.getComponent<core::transform>();
@@ -74,7 +74,7 @@ namespace rythe::rendering
 			auto& shader = getShader("default");
 			shader.setUniform("u_position", transf.position);
 			shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 			renderComp.vao.unbind();
 		}
@@ -321,21 +321,4 @@ namespace rythe::rendering
 			break;
 		}
 	}
-
-	//void Renderer::clearLog()
-	//{
-	//	while (glGetError() != GL_NO_ERROR);
-	//}
-
-	//bool Renderer::logCall()
-	//{
-	//	bool success = true;
-	//	while (GLenum error = glGetError())
-	//	{
-	//		log::error(error);
-	//		__debugbreak();
-	//		success = false;
-	//	}
-	//	return success;
-	//}
 }
