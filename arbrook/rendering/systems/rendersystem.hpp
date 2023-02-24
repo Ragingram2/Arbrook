@@ -18,7 +18,7 @@ namespace rythe::rendering
 	{
 	public:
 		window m_window;
-		std::unordered_map<std::string, shader> m_shaders;
+		//std::unordered_map<std::string, shader> m_shaders;
 		unsigned int vao;
 		float r = 0;
 		float inc = 0.05f;
@@ -29,8 +29,8 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		shader& createShader(const std::string& name, const std::string& filepath);
-		shader& getShader(const std::string& name);
+		//shader& createShader(const std::string& name, const std::string& filepath);
+		//shader& getShader(const std::string& name);
 
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);

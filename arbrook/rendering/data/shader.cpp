@@ -5,6 +5,38 @@ namespace rythe::rendering
 	namespace log = core::log;
 	shader::shader(const std::string& filepath) 
 	{
+		loadShader(filepath);
+	}
+
+	void shader::initialize()
+	{
+		m_programId = glCreateProgram();
+		unsigned int vs = compileShader(GL_VERTEX_SHADER, m_vertexSource);
+		unsigned int fs = compileShader(GL_FRAGMENT_SHADER, m_fragSource);
+
+		glAttachShader(m_programId, vs);
+		glAttachShader(m_programId, fs);
+		glLinkProgram(m_programId);
+		glValidateProgram(m_programId);
+
+		glDeleteShader(vs);
+		glDeleteShader(fs);
+
+		glUseProgram(m_programId);
+	}
+
+	void shader::bind()
+	{
+		glUseProgram(m_programId);
+	}
+
+	void shader::deleteShader()
+	{
+		glDeleteProgram(m_programId);
+	}
+
+	shader& shader::loadShader(const std::string& filepath)
+	{
 		std::ifstream stream(filepath);
 
 		enum class ShaderType
@@ -37,23 +69,9 @@ namespace rythe::rendering
 		}
 		m_vertexSource = ss[0].str();
 		m_fragSource = ss[1].str();
-	}
 
-	void shader::initialize()
-	{
-		m_programId = glCreateProgram();
-		unsigned int vs = compileShader(GL_VERTEX_SHADER, m_vertexSource);
-		unsigned int fs = compileShader(GL_FRAGMENT_SHADER, m_fragSource);
-
-		glAttachShader(m_programId, vs);
-		glAttachShader(m_programId, fs);
-		glLinkProgram(m_programId);
-		glValidateProgram(m_programId);
-
-		glDeleteShader(vs);
-		glDeleteShader(fs);
-
-		glUseProgram(m_programId);
+		initialize();
+		return *this;
 	}
 
 	unsigned int shader::compileShader(unsigned int type, const std::string& source)

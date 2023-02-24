@@ -34,9 +34,13 @@ namespace rythe::core
 			vao.m_vertexBuffer.setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
 			vao.m_indexBuffer.bufferData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-			auto& m_texture = render.m_texture;
-			m_texture.initialize();
-			m_texture.loadTexture("resources/texture/Rythe.png");
+
+			auto& texture = render.m_texture;
+			texture.initialize();
+			texture.loadTexture("resources/textures/Rythe.png");
+
+			auto& shader = render.m_shader;
+			shader.loadShader("resources/shaders/default.shader");
 			vao.unbind();
 
 			auto& transf = ent.addComponent<transform>();

@@ -1,9 +1,6 @@
 #pragma once
 #include <string>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -14,6 +11,7 @@ namespace rythe::rendering
 	namespace math = core::math;
 	struct texture
 	{
+		bool m_initialized = false;
 		unsigned int m_id;
 		int m_channels;
 
@@ -29,8 +27,5 @@ namespace rythe::rendering
 		void unbind();
 
 		void loadTexture(const std::string& filepath, int wrapModeS = GL_REPEAT, int wrapModeT = GL_REPEAT, int minFilterMode = GL_LINEAR_MIPMAP_LINEAR, int magFilterMode = GL_LINEAR);
-		//void writeTexture(math::ivec2 resolution, unsigned int internalFormat, unsigned int format, unsigned int compType, unsigned char* data);
-
-		//void setParameter(unsigned int param, unsigned int mode);
 	};
 }

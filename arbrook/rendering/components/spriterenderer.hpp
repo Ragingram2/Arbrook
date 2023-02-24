@@ -8,7 +8,7 @@ namespace rythe::rendering
 	struct sprite_renderer
 	{
 		texture m_texture;
-		//shader m_shader;
+		shader m_shader;
 		vertexarray vao;
 	};
 }
