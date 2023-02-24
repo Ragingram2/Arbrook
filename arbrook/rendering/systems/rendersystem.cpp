@@ -67,6 +67,7 @@ namespace rythe::rendering
 		for (auto& ent : m_filter)
 		{
 			auto& renderComp = ent.getComponent<sprite_renderer>();
+			renderComp.m_texture.bind();
 			renderComp.vao.bind();
 
 			auto& transf = ent.getComponent<core::transform>();
