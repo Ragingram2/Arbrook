@@ -31,7 +31,11 @@ namespace rythe::rendering
 
 		shader& createShader(const std::string& name, const std::string& filepath);
 		shader& getShader(const std::string& name);
-		void clearLog();
-		bool logCall();
+		//void clearLog();
+		//bool logCall();
+
+		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
+		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
+		static void debugCallbackAMD(unsigned int id , unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
 	};
 }

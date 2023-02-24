@@ -13,12 +13,12 @@ namespace rythe::rendering
 {
 	namespace math = core::math;
 
-	enum BUFFER_TYPES
-	{
-		VERTEX = GL_ARRAY_BUFFER,
-		INDEX = GL_ELEMENT_ARRAY_BUFFER,
-		CONSTANT = 1
-	};
+	//enum BUFFER_TYPES
+	//{
+	//	VERTEX = GL_ARRAY_BUFFER,
+	//	INDEX = GL_ELEMENT_ARRAY_BUFFER,
+	//	CONSTANT = 1
+	//};
 
 	struct buffer_element_type { };
 	struct vertex : public buffer_element_type { };
@@ -32,22 +32,20 @@ namespace rythe::rendering
 		requires validType<T>
 	struct buffer
 	{
-		unsigned int m_id = 0;
+		unsigned int m_id;
 		GLenum m_type;//enum
 		GLenum m_usage;//enum
 		int m_numBuffers = 1;
 		std::vector<dataType> m_data;
 
-		buffer() = default;
-		buffer(unsigned int type, int n = 1) : m_type(type), m_numBuffers(n) { initialize(type, n); }
+		buffer(int n = 1) : m_numBuffers(n) { /*initialize(n);*/ }
 
-		void initialize(int n = 1);
+		void initialize();
 		void bind();
 		void unbind();
 
 		void bufferData(dataType data[], int size, unsigned int usage);
-
-		void setAttributePtr(int index, int components, unsigned int type, bool normalize, const void* pointer = 0);
+		void setAttributePtr(int index, int components, unsigned int type, bool normalize, int stride, const void* pointer = 0);
 	};
 
 }
