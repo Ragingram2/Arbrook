@@ -29,6 +29,10 @@ namespace rythe::rendering
 		operator unsigned int() const { return m_programId; }
 
 		void initialize();
+		void bind();
+		void deleteShader();
+		
+		shader& loadShader(const std::string& filepath);
 
 		template<typename uniformType>
 		void setUniform(const std::string& name, uniformType value);

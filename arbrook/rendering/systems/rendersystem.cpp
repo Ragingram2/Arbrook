@@ -44,9 +44,6 @@ namespace rythe::rendering
 		{
 			glDebugMessageCallbackARB(&Renderer::debugCallbackARB, nullptr);
 		}
-
-		auto& defaultShader = createShader("default", "resources/shaders/default.shader");
-		defaultShader.initialize();
 	}
 
 	void Renderer::update()
@@ -68,11 +65,12 @@ namespace rythe::rendering
 		{
 			auto& renderComp = ent.getComponent<sprite_renderer>();
 			renderComp.m_texture.bind();
+			renderComp.m_shader.bind();
 			renderComp.vao.bind();
 
 			auto& transf = ent.getComponent<core::transform>();
 
-			auto& shader = getShader("default");
+			auto& shader = renderComp.m_shader;
 			shader.setUniform("u_position", transf.position);
 			shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -95,24 +93,6 @@ namespace rythe::rendering
 	void Renderer::shutdown()
 	{
 		glfwTerminate();
-	}
-
-	shader& Renderer::createShader(const std::string& name, const std::string& filePath)
-	{
-		if (m_shaders.contains(name))
-		{
-			log::warn("Shader \"" + std::string(name) + "\" already exists, returning a reference to that one");
-			return m_shaders[name];
-		}
-
-		shader defaultShader(filePath);
-		m_shaders.emplace(name, defaultShader);
-		return m_shaders[name];
-	}
-
-	shader& Renderer::getShader(const std::string& name)
-	{
-		return m_shaders[name];
 	}
 
 	void Renderer::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
