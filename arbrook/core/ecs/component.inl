@@ -3,7 +3,7 @@
 
 namespace rythe::core::ecs
 {
-   /* template<typename componentType>
+    template<typename componentType>
     inline component<componentType>& component<componentType>::operator=(const componentType& src)
     {
         owner.getComponent<componentType>() = src;
@@ -87,5 +87,5 @@ namespace rythe::core::ecs
     inline void component<componentType>::destroy()
     {
         owner.destroyComponent<componentType>();
-    }*/
+    }
 }

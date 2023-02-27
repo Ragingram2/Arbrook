@@ -156,7 +156,6 @@
     <ClCompile Include="arbrook\core\scheduler\scheduler.cpp" />
     <ClCompile Include="arbrook\sandbox\systems\flipsystem.cpp" />
     <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp" />
-    <ClCompile Include="arbrook\core\systems\system.cpp" />
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
     <ClCompile Include="arbrook\core\engine\program.cpp" />

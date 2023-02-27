@@ -22,6 +22,11 @@ namespace rythe::rendering
 		math::ivec2 m_resolution;
 		unsigned char* m_data;
 
+		texture()
+		{
+			initialize();
+		}
+
 		void initialize();
 		void bind();
 		void unbind();
