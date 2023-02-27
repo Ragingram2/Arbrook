@@ -45,9 +45,6 @@
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\core\systems\system.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\core\modules\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

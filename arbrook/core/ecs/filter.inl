@@ -34,7 +34,7 @@ namespace rythe::core::ecs
 	}
 
 	template<typename... ComponentTypes>
-	inline  bool filter<ComponentTypes...>::empty() noexcept
+	inline bool filter<ComponentTypes...>::empty() noexcept
 	{
 		return m_entities.empty();
 	}
