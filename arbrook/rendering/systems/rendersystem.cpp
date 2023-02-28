@@ -69,21 +69,22 @@ namespace rythe::rendering
 			renderComp.vao.bind();
 
 			auto& transf = ent.getComponent<core::transform>();
-
+			auto& example = ent.getComponent<core::exampleComp>();
 			auto& shader = renderComp.m_shader;
 			shader.setUniform("u_position", transf.position);
+			shader.setUniform("u_time", example.time);
 			shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 			renderComp.vao.unbind();
 		}
 
-		if (r > 1.0f)
-			inc = -0.05f;
-		else if (r < 0.0f)
-			inc = 0.05f;
+		//if (r > 1.0f)
+		//	inc = -0.05f;
+		//else if (r < 0.0f)
+		//	inc = 0.05f;
 
-		r += inc;
+		//r += inc;
 
 		m_window.swapBuffers();
 

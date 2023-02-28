@@ -49,6 +49,10 @@ namespace rythe::core
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;
 			float randY = ((std::rand() % 200) / 100.f) - 1.f;
 			transf.position = math::vec2(randX, randY);
+
+			auto& example = ent.addComponent<exampleComp>();
+			example.time = (std::rand() % 10) / 10.f;
+			example.inc = (((std::rand() % 10) / 10.f) - 1.f) / 100.f;
 		}
 	}
 
@@ -62,6 +66,12 @@ namespace rythe::core
 			{
 				transf.position.x = -1.0f;
 			}
+
+			auto& example = ent.getComponent<exampleComp>();
+
+			if (example.time > 1.0f || example.time < 0.0f)
+				example.inc = -example.inc;
+			example.time += example.inc;
 		}
 	}
 

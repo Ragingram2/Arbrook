@@ -14,7 +14,7 @@ namespace rythe::rendering
 	namespace log = core::log;
 	namespace math = core::math;
 
-	class Renderer : public core::System<core::transform, sprite_renderer>
+	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
 		window m_window;
@@ -31,6 +31,6 @@ namespace rythe::rendering
 
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
-		static void debugCallbackAMD(unsigned int id , unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
+		static void debugCallbackAMD(unsigned int id, unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
 	};
 }
