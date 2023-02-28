@@ -1,71 +1,93 @@
-#include "rendering/systems/rendersystem.hpp"
+#pragma once
+#include <memory>
+#include <string>
 
-namespace rythe::rendering
+//#define GLFW_EXPOSE_NATIVE_WIN32
+//#define GLFW_EXPOSE_NATIVE_WGL
+//#define GLFW_NATIVE_INCLUDE_NONE
+//#include <GLFW/glfw3native.h>
+
+#include <GL/glew.h>
+
+#include "rendering/data/window.hpp"
+
+#include "rendering/data/OpenGL/shader.hpp"
+//#include "rendering/data/texture.hpp"
+//#include "rendering/data/buffer.hpp"
+
+
+namespace rythe::rendering::internal
 {
-	void Renderer::setup()
+	class RenderInterface
 	{
-		log::info("Initializing Render System");
-		if (!glfwInit())
-			return;
-
-		m_window.initialize(math::ivec2(600, 600), "Arbrook");
-
-		if (!m_window)
+	public:
+		void initialize(window& hwnd)
 		{
-			glfwTerminate();
-			log::error("Window initialization failed");
-			return;
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+			if (glewInit() != GLEW_OK)
+			{
+				log::error("Something went wrong when initializing GLEW");
+				return;
+			}
+
+			glEnable(GL_DEBUG_OUTPUT);
+			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+
+			if (GLEW_AMD_debug_output)
+				glDebugMessageCallbackAMD(&RenderInterface::debugCallbackAMD, nullptr);
+			else if (GLEW_KHR_debug)
+				glDebugMessageCallback(&RenderInterface::debugCallback, nullptr);
+			else if (GLEW_ARB_debug_output)
+				glDebugMessageCallbackARB(&RenderInterface::debugCallbackARB, nullptr);
 		}
 
-		window::makeCurrent();
 
-		m_renderApi.initialize(m_window);
-	}
-
-	void Renderer::update()
-	{
-		window::makeCurrent();
-
-		m_window.setSwapInterval(1);
-
-		if (m_window.shouldClose())
+		void drawArray()
 		{
-			rythe::core::events::exit evnt(0);
-			raiseEvent(evnt);
-			return;
+
 		}
 
-		m_renderApi.clear(GL_COLOR_BUFFER_BIT);
-
-		for (auto& ent : m_filter)
+		void drawArrayInstanced()
 		{
-			auto& renderComp = ent.getComponent<sprite_renderer>();
-			renderComp.m_texture.bind();
-			//renderComp.m_shader.bind();
-			renderComp.vao.bind();
 
-			auto& transf = ent.getComponent<core::transform>();
-			auto& example = ent.getComponent<core::exampleComp>();
-			auto& shader = renderComp.m_shader;
-			//shader.setUniform("u_position", transf.position);
-			//shader.setUniform("u_time", example.time);
-			//shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
-
-			m_renderApi.drawIndexed(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-			renderComp.vao.unbind();
 		}
 
-		m_window.swapBuffers();
-		m_window.pollEvents();
-	}
 
-	void Renderer::shutdown()
-	{
-		glfwTerminate();
-	}
+		void drawIndexed(unsigned int mode, int count, unsigned int type, const void* indecies)
+		{
+			glDrawElements(mode, count, type, indecies);
+		}
 
-	void Renderer::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
+		void drawIndexdInstanced()
+		{
+
+		}
+
+		//void bind();//render targets
+		void clear(int flags)
+		{
+			glClear(flags);
+		}
+
+		std::unique_ptr<shader> createShader(const std::string& filepath)
+		{
+			
+		}
+		//std::unique_ptr<texture> createTexture(const std::string& filepath);
+		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
+		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
+		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
+
+	private:
+		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
+		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
+		static void debugCallbackAMD(unsigned int id, unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
+	};
+
+	inline void RenderInterface::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
 		if (id == 131185) // Filter out annoying Nvidia message of: Buffer you made will use VRAM because you told us that you want it to allocate VRAM.
 			return;
@@ -150,7 +172,7 @@ namespace rythe::rendering
 		}
 	}
 
-	void Renderer::debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
+	inline void RenderInterface::debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
 		rsl::cstring s;
 		switch (source)
@@ -222,7 +244,7 @@ namespace rythe::rendering
 		}
 	}
 
-	void Renderer::debugCallbackAMD(unsigned int id, unsigned int category, unsigned int severity, int length, const char* message, void* userparam)
+	inline void RenderInterface::debugCallbackAMD(unsigned int id, unsigned int category, unsigned int severity, int length, const char* message, void* userparam)
 	{
 		rsl::cstring c;
 		switch (category)

@@ -187,6 +187,10 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\config.hpp" />
+    <ClInclude Include="arbrook\rendering\data\definitions.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\renderinterface.hpp" />
+    <ClInclude Include="arbrook\rendering\data\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\shader.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />
     <ClInclude Include="arbrook\rendering\data\vertexarray.hpp" />
