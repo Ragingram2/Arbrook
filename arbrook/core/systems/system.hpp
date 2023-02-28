@@ -9,7 +9,8 @@ namespace rythe::core
 {
 	struct exampleComp
 	{
-		int i = 10;
+		float time = 10;
+		float inc = 0.001;
 	};
 
 	struct exampleComp2

@@ -14,7 +14,6 @@ namespace rythe::core
 	class TestSystem : public System<transform>
 	{
 	public:
-		float count = 0.0f;
 		TestSystem() = default;
 		virtual ~TestSystem() = default;
 
