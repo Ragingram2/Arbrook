@@ -4,9 +4,8 @@
 
 #include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
-#include "rendering/data/buffer.hpp"
-#include "rendering/data/shader.hpp"
 #include "rendering/data/window.hpp"
+#include "rendering/data/definitions.hpp"
 #include "rendering/components/spriterenderer.hpp"
 
 namespace rythe::rendering
@@ -18,10 +17,8 @@ namespace rythe::rendering
 	{
 	public:
 		window m_window;
+		RenderInterface m_renderApi;
 
-		unsigned int vao;
-		float r = 0;
-		float inc = 0.05f;
 		Renderer() = default;
 		virtual ~Renderer() = default;
 
