@@ -57,9 +57,6 @@
     <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\sandbox\systems\flipsystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\rendering\data\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -188,9 +185,6 @@
     <ClInclude Include="arbrook\rendering\systems\rendersystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\sandbox\systems\flipsystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\core\core.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -219,6 +213,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\rendering.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

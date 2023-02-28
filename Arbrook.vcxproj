@@ -154,7 +154,6 @@
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\core\scheduler\scheduler.cpp" />
-    <ClCompile Include="arbrook\sandbox\systems\flipsystem.cpp" />
     <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp" />
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
@@ -193,11 +192,11 @@
     <ClInclude Include="arbrook\rendering\data\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\window.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
+    <ClInclude Include="arbrook\rendering\rendering.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\rendering\modules\rendermodule.hpp" />
     <ClInclude Include="arbrook\core\platform\platform.hpp" />
     <ClInclude Include="arbrook\core\scheduler\scheduler.hpp" />
-    <ClInclude Include="arbrook\sandbox\systems\flipsystem.hpp" />
     <ClInclude Include="arbrook\rendering\systems\rendersystem.hpp" />
     <ClInclude Include="arbrook\core\systems\system.hpp" />
     <ClInclude Include="arbrook\sandbox\systems\testsystem.hpp" />
