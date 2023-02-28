@@ -2,15 +2,12 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "core/systems/system.hpp"
-#include "core/logging/logging.hpp"
-#include "rendering/data/buffer.hpp"
-#include "rendering/components/spriterenderer.hpp"
-#include "rendering/data/window.hpp"
+#include "core/core.hpp"
+#include "rendering/rendering.hpp"
 
 namespace rythe::core
 {
-	namespace gfx = rythe::rendering;
+
 	class TestSystem : public System<transform>
 	{
 	public:

@@ -15,3 +15,8 @@ namespace rythe::rendering
 	namespace math = core::math;
 	namespace log = core::log;
 }
+
+namespace rythe::core
+{
+	namespace gfx = rythe::rendering;
+}

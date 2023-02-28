@@ -33,17 +33,11 @@ namespace rythe::rendering
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
 		if (GLEW_AMD_debug_output)
-		{
 			glDebugMessageCallbackAMD(&Renderer::debugCallbackAMD, nullptr);
-		}
 		else if (GLEW_KHR_debug)
-		{
 			glDebugMessageCallback(&Renderer::debugCallback, nullptr);
-		}
 		else if (GLEW_ARB_debug_output)
-		{
 			glDebugMessageCallbackARB(&Renderer::debugCallbackARB, nullptr);
-		}
 	}
 
 	void Renderer::update()
@@ -78,13 +72,6 @@ namespace rythe::rendering
 
 			renderComp.vao.unbind();
 		}
-
-		//if (r > 1.0f)
-		//	inc = -0.05f;
-		//else if (r < 0.0f)
-		//	inc = 0.05f;
-
-		//r += inc;
 
 		m_window.swapBuffers();
 
