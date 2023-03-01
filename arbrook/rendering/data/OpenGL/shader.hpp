@@ -17,29 +17,25 @@ namespace rythe::rendering::internal
 	
 	struct shader
 	{
-	private:
+	public:
 		unsigned int m_programId;
-		std::string m_vertexSource;
-		std::string m_fragSource;
 		std::unordered_map<std::string, unsigned int> m_uniforms;
 
-	public:
 		shader() = default;
-		shader(const std::string& filepath);
 
 		operator unsigned int() const { return m_programId; }
 
-		void initialize();
+		//void initialize();
 		void bind();
-		void deleteShader();
+		//void deleteShader();
 		
-		shader& loadShader(const std::string& filepath);
+		//shader& loadShader(const std::string& filepath);
 
 		template<typename uniformType>
 		void setUniform(const std::string& name, uniformType value);
 
 	private:
 		bool registerUniform(const std::string& name);
-		unsigned int compileShader(unsigned int type, const std::string& source);
+		//unsigned int compileShader(unsigned int type, const std::string& source);
 	};
 }

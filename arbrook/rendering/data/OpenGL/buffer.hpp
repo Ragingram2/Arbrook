@@ -9,7 +9,7 @@
 
 #include "core/core.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	namespace math = core::math;
 
@@ -43,4 +43,4 @@ namespace rythe::rendering
 
 }
 
-#include "rendering/data/buffer.inl"
+#include "rendering/data/OpenGL/buffer.inl"
