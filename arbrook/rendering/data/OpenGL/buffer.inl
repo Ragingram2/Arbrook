@@ -1,7 +1,7 @@
-#include "rendering/data/buffer.hpp"
+#include "rendering/data/OpenGL/buffer.hpp"
 #pragma once
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	template<typename T, typename dataType>
 		requires validType<T>

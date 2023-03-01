@@ -2,11 +2,10 @@
 #include <string>
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include "core/core.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	namespace math = core::math;
 	struct texture

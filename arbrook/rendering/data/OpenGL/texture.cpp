@@ -1,7 +1,7 @@
-#include "rendering/data/texture.hpp"
+#include "rendering/data/OpenGL/texture.hpp"
 #include <stb/stb_image.h>
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	void texture::initialize()
 	{

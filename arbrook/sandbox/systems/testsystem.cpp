@@ -29,21 +29,20 @@ namespace rythe::core
 
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
-			vao.initialize();
-			vao.bufferVertexData(verticies, sizeof(verticies), gfx::UsageType::StaticDraw);
-			vao.setAttributePtr(0, 2, GL_FLOAT, false, 7 * sizeof(float));
-			vao.setAttributePtr(1, 3, GL_FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-			vao.setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
+			vao->initialize();
+			vao->bufferVertexData(verticies, sizeof(verticies), GL_STATIC_DRAW);
+			vao->setAttributePtr(0, 2, GL_FLOAT, false, 7 * sizeof(float));
+			vao->setAttributePtr(1, 3, GL_FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+			vao->setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
-			vao.bufferIndexData(indicies, sizeof(indicies), gfx::UsageType::StaticDraw);
+			vao->bufferIndexData(indicies, sizeof(indicies), GL_STATIC_DRAW);
 
-			auto& texture = render.m_texture;
-			texture.loadTexture("resources/textures/Rythe.png");
+			//auto& texture = render.m_texture;
+			//texture.loadTexture("resources/textures/Rythe.png");
 
-			auto& shader = render.m_shader;
-			shader.loadShader("resources/shaders/default.shader");
+			render.m_shader = m_renderAPI.createShader("default", "resources/shaders/default.shader");
 
-			vao.unbind();
+			vao->unbind();
 
 			auto& transf = ent.addComponent<transform>();
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;

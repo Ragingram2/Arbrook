@@ -3,11 +3,11 @@
 namespace rythe::rendering
 {
 	template<typename APIType>
-	struct Itexture
+	struct Ivertexarray
 	{
 	private:
 		APIType m_impl;
 	public:
-		APIType* operator->() { return m_imp; }
+		APIType* operator->() { return &m_impl; }
 	};
 }

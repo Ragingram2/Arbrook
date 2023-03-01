@@ -1,14 +1,14 @@
-#include "rendering/data/shader.hpp"
+#include "rendering/data/OpenGL/shader.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	namespace log = core::log;
-	shader::shader(const std::string& filepath) 
-	{
-		loadShader(filepath);
-	}
+	//shader::shader(const std::string& filepath) 
+	//{
+	//	loadShader(filepath);
+	//}
 
-	void shader::initialize()
+	/*void shader::initialize()
 	{
 		m_programId = glCreateProgram();
 		unsigned int vs = compileShader(GL_VERTEX_SHADER, m_vertexSource);
@@ -24,12 +24,13 @@ namespace rythe::rendering
 
 		glUseProgram(m_programId);
 	}
+	*/
+	//void shader::bind()
+	//{
+	//	glUseProgram(m_programId);
+	//}
 
-	void shader::bind()
-	{
-		glUseProgram(m_programId);
-	}
-
+	/*
 	void shader::deleteShader()
 	{
 		glDeleteProgram(m_programId);
@@ -98,76 +99,77 @@ namespace rythe::rendering
 
 		return id;
 	}
+	*/
 
-	bool shader::registerUniform(const std::string& name)
-	{
-		glUseProgram(m_programId);
-		if (!m_uniforms.contains(name))
-		{
-			auto loc = glGetUniformLocation(m_programId, name.c_str());
-			if (loc != -1)
-			{
-				m_uniforms.emplace(name, loc);
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
+	//bool shader::registerUniform(const std::string& name)
+	//{
+	//	glUseProgram(m_programId);
+	//	if (!m_uniforms.contains(name))
+	//	{
+	//		auto loc = glGetUniformLocation(m_programId, name.c_str());
+	//		if (loc != -1)
+	//		{
+	//			m_uniforms.emplace(name, loc);
+	//			return true;
+	//		}
+	//		return false;
+	//	}
+	//	return true;
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, int value)
-	{
-		if (registerUniform(name))
-			glUniform1i(m_uniforms[name], value);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, int value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform1i(m_uniforms[name], value);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::ivec2 value)
-	{
-		if (registerUniform(name))
-			glUniform2i(m_uniforms[name], value.x, value.y);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::ivec2 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform2i(m_uniforms[name], value.x, value.y);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::ivec3 value)
-	{
-		if (registerUniform(name))
-			glUniform3i(m_uniforms[name], value.x, value.y, value.z);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::ivec3 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform3i(m_uniforms[name], value.x, value.y, value.z);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::ivec4 value)
-	{
-		if (registerUniform(name))
-			glUniform4i(m_uniforms[name], value.x, value.y, value.z, value.w);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::ivec4 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform4i(m_uniforms[name], value.x, value.y, value.z, value.w);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, float value)
-	{
-		if (registerUniform(name))
-			glUniform1f(m_uniforms[name], value);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, float value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform1f(m_uniforms[name], value);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::vec2 value)
-	{
-		if (registerUniform(name))
-			glUniform2f(m_uniforms[name], value.x, value.y);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::vec2 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform2f(m_uniforms[name], value.x, value.y);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::vec3 value)
-	{
-		if (registerUniform(name))
-			glUniform3f(m_uniforms[name], value.x, value.y, value.z);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::vec3 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform3f(m_uniforms[name], value.x, value.y, value.z);
+	//}
 
-	template<>
-	void shader::setUniform(const std::string& name, math::vec4 value)
-	{
-		if (registerUniform(name))
-			glUniform4f(m_uniforms[name], value.x, value.y, value.z, value.w);
-	}
+	//template<>
+	//void shader::setUniform(const std::string& name, math::vec4 value)
+	//{
+	//	if (registerUniform(name))
+	//		glUniform4f(m_uniforms[name], value.x, value.y, value.z, value.w);
+	//}
 }

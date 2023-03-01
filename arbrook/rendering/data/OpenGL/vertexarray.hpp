@@ -6,9 +6,9 @@
 
 #include <rythe/primitives>
 
-#include "rendering/data/buffer.hpp"
+#include "rendering/data/OpenGL/buffer.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	enum UsageType
 	{

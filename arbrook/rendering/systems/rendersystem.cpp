@@ -40,20 +40,20 @@ namespace rythe::rendering
 		for (auto& ent : m_filter)
 		{
 			auto& renderComp = ent.getComponent<sprite_renderer>();
-			renderComp.m_texture.bind();
-			//renderComp.m_shader.bind();
-			renderComp.vao.bind();
+			//renderComp.m_texture.bind();
+			//renderComp.m_shader->bind();
+			//renderComp.vao.bind();
 
 			auto& transf = ent.getComponent<core::transform>();
 			auto& example = ent.getComponent<core::exampleComp>();
 			auto& shader = renderComp.m_shader;
-			//shader.setUniform("u_position", transf.position);
-			//shader.setUniform("u_time", example.time);
-			//shader.setUniform("u_color", math::vec4(r, .5f - (r / 2.0f), 1.f - r, 1.f));
+	/*		shader->setUniform("u_position", transf.position);
+			shader->setUniform("u_time", example.time);*/
+			//shader->setUniform("u_color", math::vec4(example.time, .5f - (r / 2.0f), 1.f - r, 1.f));
 
 			m_renderApi.drawIndexed(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-			renderComp.vao.unbind();
+			renderComp.vao->unbind();
 		}
 
 		m_window.swapBuffers();

@@ -1,6 +1,6 @@
-#include "rendering/data/vertexarray.hpp"
+#include "rendering/data/OpenGL/vertexarray.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	void vertexarray::initialize(int num)
 	{
