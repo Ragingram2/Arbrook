@@ -36,6 +36,7 @@ namespace rythe::rendering
 		}
 
 		m_renderApi.clear(GL_COLOR_BUFFER_BIT);
+		m_renderApi.setClearColor(math::vec4(0.0));
 
 		for (auto& ent : m_filter)
 		{
@@ -49,9 +50,9 @@ namespace rythe::rendering
 			m_renderApi.bind(texture);
 			renderComp.vao->bind();
 
-	/*		shader->setUniform("u_position", transf.position);
-			shader->setUniform("u_time", example.time);*/
-			//shader->setUniform("u_color", math::vec4(example.time, .5f - (r / 2.0f), 1.f - r, 1.f));
+			/*		shader->setUniform("u_position", transf.position);
+					shader->setUniform("u_time", example.time);*/
+					//shader->setUniform("u_color", math::vec4(example.time, .5f - (r / 2.0f), 1.f - r, 1.f));
 
 			m_renderApi.drawIndexed(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

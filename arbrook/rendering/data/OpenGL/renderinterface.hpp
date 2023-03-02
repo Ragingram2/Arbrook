@@ -47,25 +47,24 @@ namespace rythe::rendering::internal
 		}
 
 
-		void drawArray()
+		void drawArrays(unsigned int mode, int first, int count)
 		{
-
+			glDrawArrays(mode, first, count);
 		}
 
-		void drawArrayInstanced()
+		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount)
 		{
-
+			glDrawArraysInstanced(mode, first, count, instanceCount);
 		}
-
 
 		void drawIndexed(unsigned int mode, int count, unsigned int type, const void* indecies)
 		{
 			glDrawElements(mode, count, type, indecies);
 		}
 
-		void drawIndexdInstanced()
+		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount)
 		{
-
+			glDrawElementsInstanced(mode, count, type, indecies, instanceCount);
 		}
 
 		//void bind();//render targets
@@ -92,6 +91,36 @@ namespace rythe::rendering::internal
 		void clear(int flags)
 		{
 			glClear(flags);
+		}
+
+		void setClearColor(math::vec4 color)
+		{
+			glClearColor(color.r, color.g, color.b, color.a);
+		}
+
+		void enableStencil()
+		{
+			glEnable(GL_STENCIL_TEST);
+		}
+
+		void disableStencil()
+		{
+			glDisable(GL_STENCIL_TEST);
+		}
+
+		void setClearStencil()
+		{
+
+		}
+
+		void setStencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass)
+		{
+			glStencilOp(fail, zfail, zpass);
+		}
+
+		void setStencilFunc(unsigned int func, int ref, unsigned int mask)
+		{
+			glStencilFunc(func, ref, mask);
 		}
 
 		shader_handle createShader(shader* shader, const std::string& name, const std::string& filepath)

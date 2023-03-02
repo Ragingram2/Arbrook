@@ -146,7 +146,6 @@
     <ClCompile Include="arbrook\core\engine\services\service.cpp" />
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
-    <ClCompile Include="arbrook\rendering\data\interface\irenderinterface.cpp" />
     <ClCompile Include="arbrook\rendering\data\OpenGL\buffer.cpp" />
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\OpenGL\vertexarray.cpp" />

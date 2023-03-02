@@ -72,9 +72,6 @@
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\interface\irenderinterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\ecs\entity.hpp">
