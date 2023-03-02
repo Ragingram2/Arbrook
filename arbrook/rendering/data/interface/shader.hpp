@@ -16,7 +16,6 @@ namespace rythe::rendering
 			m_name = other->m_name;
 		}
 		operator unsigned int() const { return m_programId; }
-	private:
 	};
 
 }

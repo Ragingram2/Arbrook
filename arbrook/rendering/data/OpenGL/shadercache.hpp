@@ -18,9 +18,9 @@ namespace rythe::rendering::internal
 	private:
 		static std::unordered_map<std::string, std::unique_ptr<shader>> m_shaders;
 	public:
-		static shader* loadShader(const std::string& shaderName,const std::string& filepath);
+		static shader* loadShader(const std::string& name,const std::string& filepath);
 		static shader* getShader(const std::string& name);
-		static void deleteShader(const std::string& shaderName);
+		static void deleteShader(const std::string& name);
 
 	private:
 		static unsigned int compileShader(unsigned int type, const std::string& source);

@@ -44,8 +44,9 @@ namespace rythe::rendering
 			auto& example = ent.getComponent<core::exampleComp>();
 
 			auto& shader = renderComp.m_shader;
+			auto& texture = renderComp.m_texture;
 			m_renderApi.getShader(shader.m_name);
-			//renderComp.m_texture.bind();
+			m_renderApi.getTexture(texture.m_name);
 			renderComp.vao->bind();
 
 

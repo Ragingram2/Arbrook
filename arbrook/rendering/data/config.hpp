@@ -8,8 +8,7 @@
 #if RenderingAPI == RenderingAPI_OpenGL
 #include "rendering/data/OpenGL/renderinterface.hpp"
 #include "rendering/data/OpenGL/shadercache.hpp"
-//#include "rendering/data/OpenGL/shader.hpp"
-#include "rendering/data/OpenGL/texture.hpp"
+#include "rendering/data/OpenGL/texturecache.hpp"
 #include "rendering/data/OpenGL/vertexarray.hpp"
 #include "rendering/data/OpenGL/buffer.hpp"
 #endif
