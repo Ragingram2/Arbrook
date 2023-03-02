@@ -45,10 +45,9 @@ namespace rythe::rendering
 
 			auto& shader = renderComp.m_shader;
 			auto& texture = renderComp.m_texture;
-			m_renderApi.getShader(shader.m_name);
-			m_renderApi.getTexture(texture.m_name);
+			m_renderApi.bind(shader);
+			m_renderApi.bind(texture);
 			renderComp.vao->bind();
-
 
 	/*		shader->setUniform("u_position", transf.position);
 			shader->setUniform("u_time", example.time);*/
