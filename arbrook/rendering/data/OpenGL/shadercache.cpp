@@ -2,6 +2,8 @@
 
 namespace rythe::rendering::internal
 {
+	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
+
 	shader* ShaderCache::loadShader(const std::string& shaderName, const std::string& filepath)
 	{
 		if (m_shaders.contains(shaderName))
@@ -14,8 +16,8 @@ namespace rythe::rendering::internal
 
 		auto shdrptr = m_shaders.emplace(shaderName, std::make_unique<shader>()).first->second.get();
 
-		auto& programId = shdrptr->m_programId;
-		programId = glCreateProgram();
+		shdrptr->m_name = shaderName;
+		auto& programId = shdrptr->m_programId = glCreateProgram();
 
 		unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
 		unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
@@ -36,8 +38,10 @@ namespace rythe::rendering::internal
 	shader* ShaderCache::getShader(const std::string& shaderName)
 	{
 		if (m_shaders.contains(shaderName))
+		{
+			glUseProgram(m_shaders[shaderName]->m_programId);
 			return m_shaders[shaderName].get();
-
+		}
 		log::warn("Shader {} does not exist", shaderName);
 		return nullptr;
 	}

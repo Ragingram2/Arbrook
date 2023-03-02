@@ -30,10 +30,8 @@ namespace rythe::rendering
 		//void bind();//render targets
 		void clear(int flags) { m_impl.clear(flags); }
 
-		template<typename ShaderType>
-		std::unique_ptr<shader> createShader(const std::string& filepath) { return m_impl.createShader(filePath); };
-		template<typename ShaderType>
-		std::unique_ptr<shader> getShader(const std::string& name) { return m_impl.getShader(name); }
+		shader* createShader(const std::string& name, const std::string& filepath) { return m_impl.createShader(name, filepath); };
+		shader* getShader(const std::string& name) { return m_impl.getShader(name); }
 		//std::unique_ptr<texture> createTexture(const std::string& filepath);
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
