@@ -147,7 +147,7 @@
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\data\OpenGL\buffer.cpp" />
-    <ClCompile Include="arbrook\rendering\data\OpenGL\texture.cpp" />
+    <ClCompile Include="arbrook\rendering\data\OpenGL\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\OpenGL\vertexarray.cpp" />
     <ClCompile Include="arbrook\rendering\data\OpenGL\shadercache.cpp" />
     <ClCompile Include="arbrook\rendering\data\window.cpp" />
@@ -187,7 +187,8 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishadercache.hpp" />
-    <ClInclude Include="arbrook\rendering\data\interface\itexture.hpp" />
+    <ClInclude Include="arbrook\rendering\data\interface\texture.hpp" />
+    <ClInclude Include="arbrook\rendering\data\interface\itexturecache.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ivertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\shadersource.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\buffer.hpp" />
@@ -196,7 +197,7 @@
     <ClInclude Include="arbrook\rendering\data\interface\shader.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\irenderinterface.hpp" />
-    <ClInclude Include="arbrook\rendering\data\OpenGL\texture.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\texturecache.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\shadercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\window.hpp" />

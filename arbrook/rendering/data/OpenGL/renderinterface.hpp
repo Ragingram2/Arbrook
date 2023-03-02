@@ -11,9 +11,9 @@
 
 #include "rendering/data/window.hpp"
 
-#include "rendering/data/interface/shader.hpp"
+#include "rendering/data/OpenGL/texturecache.hpp"
 #include "rendering/data/OpenGL/shadercache.hpp"
-//#include "rendering/data/texture.hpp"
+
 //#include "rendering/data/buffer.hpp"
 
 
@@ -68,7 +68,7 @@ namespace rythe::rendering::internal
 		}
 
 		//void bind();//render targets
-		
+
 		void clear(int flags)
 		{
 			glClear(flags);
@@ -83,7 +83,16 @@ namespace rythe::rendering::internal
 		{
 			return ShaderCache::getShader(name);
 		}
-		//std::unique_ptr<texture> createTexture(const std::string& filepath);
+
+		texture* createTexture(const std::string& name, const std::string& filepath)
+		{
+			return TextureCache::createTexture2D(name, filepath);
+		}
+
+		texture* getTexture(const std::string& name)
+		{
+			return TextureCache::getTexture2D(name);
+		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();

@@ -21,7 +21,8 @@ namespace rythe::core
 
 		gfx::window::makeCurrent();
 
-
+		auto texture = m_renderAPI.createTexture("Rythe", "resources/textures/Rythe.png");
+		auto shader = m_renderAPI.createShader("default", "resources/shaders/default.shader");
 		float spawnCount = 5.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -36,11 +37,7 @@ namespace rythe::core
 			vao->setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
 			vao->bufferIndexData(indicies, sizeof(indicies), GL_STATIC_DRAW);
-
-			//auto& texture = render.m_texture;
-			//texture.loadTexture("resources/textures/Rythe.png");
-
-			auto shader = m_renderAPI.createShader("default", "resources/shaders/default.shader");
+			render.m_texture = texture;
 			render.m_shader = shader;
 
 			vao->unbind();

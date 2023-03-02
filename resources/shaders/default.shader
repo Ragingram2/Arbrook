@@ -31,9 +31,9 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-	//vec4 tColor = texture(ourTexture, TexCoord);
+	vec4 tColor = texture(ourTexture, TexCoord);
 	//float a = 0.0f;
 	//vec3 oColor = tColor.xyz + u_color.xyz;
 	//float len = dot(oColor , oColor);
-	FragColor = vec4(aColor, 1.0);
+	FragColor = tColor;
 }

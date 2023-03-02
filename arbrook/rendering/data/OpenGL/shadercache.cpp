@@ -4,19 +4,19 @@ namespace rythe::rendering::internal
 {
 	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
 
-	shader* ShaderCache::loadShader(const std::string& shaderName, const std::string& filepath)
+	shader* ShaderCache::loadShader(const std::string& name, const std::string& filepath)
 	{
-		if (m_shaders.contains(shaderName))
+		if (m_shaders.contains(name))
 		{
-			log::warn("Shader {} already exists, ignoring new shader, and returning existing one", shaderName);
-			return m_shaders[shaderName].get();
+			log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
+			return m_shaders[name].get();
 		}
 
 		auto source = loadSource(filepath);
 
-		auto shdrptr = m_shaders.emplace(shaderName, std::make_unique<shader>()).first->second.get();
+		auto shdrptr = m_shaders.emplace(name, std::make_unique<shader>()).first->second.get();
 
-		shdrptr->m_name = shaderName;
+		shdrptr->m_name = name;
 		auto& programId = shdrptr->m_programId = glCreateProgram();
 
 		unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
@@ -35,18 +35,18 @@ namespace rythe::rendering::internal
 		return shdrptr;
 	}
 
-	shader* ShaderCache::getShader(const std::string& shaderName)
+	shader* ShaderCache::getShader(const std::string& name)
 	{
-		if (m_shaders.contains(shaderName))
+		if (m_shaders.contains(name))
 		{
-			glUseProgram(m_shaders[shaderName]->m_programId);
-			return m_shaders[shaderName].get();
+			glUseProgram(m_shaders[name]->m_programId);
+			return m_shaders[name].get();
 		}
-		log::warn("Shader {} does not exist", shaderName);
+		log::warn("Shader {} does not exist", name);
 		return nullptr;
 	}
 
-	void ShaderCache::deleteShader(const std::string& shaderName)
+	void ShaderCache::deleteShader(const std::string& name)
 	{
 
 	}
