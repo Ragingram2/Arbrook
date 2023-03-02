@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <memory>
 #include <unordered_map>
 
@@ -15,14 +16,14 @@ namespace rythe::rendering::internal
 	class ShaderCache
 	{
 	private:
-		std::unordered_map<std::string, std::unique_ptr<shader>> m_shaders;
+		static std::unordered_map<std::string, std::unique_ptr<shader>> m_shaders;
 	public:
-		shader* loadShader(const std::string& shaderName,const std::string& filepath);
-		shader* getShader(const std::string& name);
-		void deleteShader(const std::string& shaderName);
+		static shader* loadShader(const std::string& shaderName,const std::string& filepath);
+		static shader* getShader(const std::string& name);
+		static void deleteShader(const std::string& shaderName);
 
 	private:
-		unsigned int compileShader(unsigned int type, const std::string& source);
-		shader_source loadSource(const std::string& filepath);
+		static unsigned int compileShader(unsigned int type, const std::string& source);
+		static shader_source loadSource(const std::string& filepath);
 	};
 }

@@ -14,7 +14,7 @@ uniform float u_time;
 void main()
 {
 	vec2 offset = vec2(0, sin(u_time));
-	gl_Position = vPosition + vec4(u_position + offset , 0, 0);
+	gl_Position = vPosition + vec4(u_position + offset, 0, 0);
 	aColor = vColor;
 	TexCoord = vTexCoord;
 }
@@ -31,9 +31,9 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-	vec4 tColor = texture(ourTexture, TexCoord);
+	//vec4 tColor = texture(ourTexture, TexCoord);
 	//float a = 0.0f;
 	//vec3 oColor = tColor.xyz + u_color.xyz;
 	//float len = dot(oColor , oColor);
-	FragColor = tColor;
+	FragColor = vec4(aColor, 1.0);
 }

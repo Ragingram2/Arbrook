@@ -40,7 +40,8 @@ namespace rythe::core
 			//auto& texture = render.m_texture;
 			//texture.loadTexture("resources/textures/Rythe.png");
 
-			render.m_shader = m_renderAPI.createShader("default", "resources/shaders/default.shader");
+			auto shader = m_renderAPI.createShader("default", "resources/shaders/default.shader");
+			render.m_shader = shader;
 
 			vao->unbind();
 

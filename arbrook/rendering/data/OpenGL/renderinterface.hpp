@@ -11,7 +11,7 @@
 
 #include "rendering/data/window.hpp"
 
-#include "rendering/data/OpenGL/shader.hpp"
+#include "rendering/data/interface/shader.hpp"
 #include "rendering/data/OpenGL/shadercache.hpp"
 //#include "rendering/data/texture.hpp"
 //#include "rendering/data/buffer.hpp"
@@ -21,8 +21,6 @@ namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
-	private:
-		ShaderCache m_shaderCache;
 	public:
 		void initialize(window& hwnd)
 		{
@@ -78,12 +76,12 @@ namespace rythe::rendering::internal
 
 		shader* createShader(const std::string& name, const std::string& filepath)
 		{
-			return m_shaderCache.loadShader(name, filepath);
+			return ShaderCache::loadShader(name, filepath);
 		}
 
 		shader* getShader(const std::string& name)
 		{
-			return m_shaderCache.getShader(name);
+			return ShaderCache::getShader(name);
 		}
 		//std::unique_ptr<texture> createTexture(const std::string& filepath);
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
