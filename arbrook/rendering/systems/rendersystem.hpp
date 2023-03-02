@@ -6,6 +6,8 @@
 #include "core/events/defaults/exit_event.hpp"
 #include "rendering/data/window.hpp"
 #include "rendering/data/definitions.hpp"
+#include "rendering/data/shadercache.hpp"
+#include "rendering/data/texturecache.hpp"
 #include "rendering/components/spriterenderer.hpp"
 
 namespace rythe::rendering

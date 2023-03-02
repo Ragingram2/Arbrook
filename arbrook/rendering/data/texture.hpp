@@ -5,6 +5,8 @@
 
 namespace rythe::rendering
 {
+	namespace math = core::math;
+
 	struct texture_parameters
 	{
 		int m_channels;
@@ -27,6 +29,7 @@ namespace rythe::rendering
 		unsigned char* m_data;
 		texture_parameters m_params;
 		texture() = default;
+		texture(unsigned int id, std::string name) : m_id(id), m_name(name) { }
 		texture(texture* other)
 		{
 			m_name = other->m_name;
@@ -35,6 +38,5 @@ namespace rythe::rendering
 			m_params = other->m_params;
 		}
 
-		operator unsigned int() const { return m_id; }
 	};
 }

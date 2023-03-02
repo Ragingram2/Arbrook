@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <fstream>
 
 //#define GLFW_EXPOSE_NATIVE_WIN32
 //#define GLFW_EXPOSE_NATIVE_WGL
@@ -9,13 +10,13 @@
 
 #include <GL/glew.h>
 
+#include "rendering/data/shadersource.hpp"
+#include "rendering/data/texturehandle.hpp"
+#include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/window.hpp"
 
-#include "rendering/data/OpenGL/texturecache.hpp"
-#include "rendering/data/OpenGL/shadercache.hpp"
-
-//#include "rendering/data/buffer.hpp"
-
+#include <stb/stb_image.h>
+#define STB_IMAGE_IMPLEMENTATION
 
 namespace rythe::rendering::internal
 {
@@ -68,41 +69,161 @@ namespace rythe::rendering::internal
 		}
 
 		//void bind();//render targets
+		void bind(shader_handle handle)
+		{
+			glUseProgram(handle);
+		}
+
+		void bind(texture_handle handle)
+		{
+			glBindTexture(GL_TEXTURE_2D, handle);
+		}
+
+		void unbind(shader_handle handle)
+		{
+			glDeleteProgram(handle);
+		}
+
+		void unbind(texture_handle handle)
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 
 		void clear(int flags)
 		{
 			glClear(flags);
 		}
 
-		shader* createShader(const std::string& name, const std::string& filepath)
+		shader_handle createShader(shader* shader, const std::string& name, const std::string& filepath)
 		{
-			return ShaderCache::loadShader(name, filepath);
+			auto source = loadSource(filepath);
+
+			shader->m_name = name;
+			auto& programId = shader->m_programId = glCreateProgram();
+
+			unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
+			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
+
+			glAttachShader(programId, vs);
+			glAttachShader(programId, fs);
+			glLinkProgram(programId);
+			glValidateProgram(programId);
+
+			glDeleteShader(vs);
+			glDeleteShader(fs);
+
+			glUseProgram(programId);
+
+			return shader;
 		}
 
-		shader* getShader(const std::string& name)
+		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { GL_REPEAT ,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
 		{
-			return ShaderCache::getShader(name);
-		}
+			texture->m_name = name;
+			auto& resolution = texture->m_params.m_resolution;
+			auto& channels = texture->m_params.m_channels;
+			unsigned int& id = texture->m_id;
+			glGenTextures(1, &id);
+			glBindTexture(GL_TEXTURE_2D, id);
 
-		texture* createTexture(const std::string& name, const std::string& filepath)
-		{
-			return TextureCache::createTexture2D(name, filepath);
-		}
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.m_wrapModeS);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.m_wrapModeT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.m_minFilterMode);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.m_magFilterMode);
+			stbi_set_flip_vertically_on_load(true);
 
-		texture* getTexture(const std::string& name)
-		{
-			return TextureCache::getTexture2D(name);
+			texture->m_data = stbi_load(filepath.c_str(), &resolution.x, &resolution.y, &channels, 0);
+			if (!texture->m_data)
+			{
+				log::error("Image failed to load");
+				return nullptr;
+			}
+
+			switch (channels)
+			{
+			case 4:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
+				break;
+			case 3:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, texture->m_data);
+				break;
+			}
+			glGenerateMipmap(GL_TEXTURE_2D);
+
+			return texture;
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
 
 	private:
+		shader_source loadSource(const std::string& filepath);
+		unsigned int compileShader(unsigned int type, const std::string& source);
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackAMD(unsigned int id, unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
 	};
 
+	inline shader_source RenderInterface::loadSource(const std::string& filepath)
+	{
+		std::ifstream stream(filepath);
+
+		enum class ShaderType
+		{
+			NONE = -1,
+			VERTEX = 0,
+			FRAG = 1
+		};
+
+		std::string line;
+		std::stringstream ss[2];
+		ShaderType type = ShaderType::NONE;
+
+		while (getline(stream, line))
+		{
+			if (line.find("#shader") != std::string::npos)
+			{
+				if (line.find("vertex") != std::string::npos)
+				{
+					type = ShaderType::VERTEX;
+				}
+				else if (line.find("fragment") != std::string::npos)
+				{
+					type = ShaderType::FRAG;
+				}
+			}
+			else
+			{
+				ss[(int)type] << line << "\n";
+			}
+		}
+
+		return { ss[0].str(),ss[1].str() };
+	}
+	inline unsigned int RenderInterface::compileShader(unsigned int type, const std::string& source)
+	{
+		unsigned int id = glCreateShader(type);
+		const char* src = source.c_str();
+		glShaderSource(id, 1, &src, nullptr);
+		glCompileShader(id);
+
+		int result;
+		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+
+		int length;
+		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*)__builtin_alloca(length * sizeof(char));
+		glGetShaderInfoLog(id, length, &length, message);
+
+		if (result == GL_FALSE)
+		{
+			log::error(message);
+			glDeleteShader(id);
+			return 0;
+		}
+
+		return id;
+	}
 	inline void RenderInterface::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
 		if (id == 131185) // Filter out annoying Nvidia message of: Buffer you made will use VRAM because you told us that you want it to allocate VRAM.
@@ -187,7 +308,6 @@ namespace rythe::rendering::internal
 			break;
 		}
 	}
-
 	inline void RenderInterface::debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
 		rsl::cstring s;
@@ -259,7 +379,6 @@ namespace rythe::rendering::internal
 			break;
 		}
 	}
-
 	inline void RenderInterface::debugCallbackAMD(unsigned int id, unsigned int category, unsigned int severity, int length, const char* message, void* userparam)
 	{
 		rsl::cstring c;
