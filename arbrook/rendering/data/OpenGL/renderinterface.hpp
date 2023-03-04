@@ -93,6 +93,62 @@ namespace rythe::rendering::internal
 			glClear(flags);
 		}
 
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec4 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform4f(uniformPos, value.x, value.y, value.z, value.w);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec3 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform3f(uniformPos, value.x, value.y, value.z);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec2 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform2f(uniformPos, value.x, value.y);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, float value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform1f(uniformPos, value);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec4 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform4i(uniformPos, value.x, value.y, value.z, value.w);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec3 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform3i(uniformPos, value.x, value.y, value.z);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec2 value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform2i(uniformPos, value.x, value.y);
+		}
+
+		void setUniform(shader_handle shader, const std::string& uniformName, int value)
+		{
+			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
+			bind(shader);
+			glUniform1i(uniformPos, value);
+		}
+
 		void setClearColor(math::vec4 color)
 		{
 			glClearColor(color.r, color.g, color.b, color.a);
