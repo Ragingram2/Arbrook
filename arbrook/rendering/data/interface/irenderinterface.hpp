@@ -30,6 +30,15 @@ namespace rythe::rendering
 		void unbind(texture_handle handle) { m_impl.unbind(handle); }
 		void clear(int flags) { m_impl.clear(flags); }
 
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec4 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec3 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, math::vec2 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, float value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec4 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec3 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec2 value) { m_impl.setUniform(shader, uniformName, value); }
+		void setUniform(shader_handle shader, const std::string& uniformName, int value) { m_impl.setUniform(shader, uniformName, value); }
+
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }
 		void setClearColor(float r, float g, float b, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(r, g, b, alpha)); }
