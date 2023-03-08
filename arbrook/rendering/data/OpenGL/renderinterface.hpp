@@ -93,6 +93,7 @@ namespace rythe::rendering::internal
 			glClear(flags);
 		}
 
+		//Put these on the shader
 		void setUniform(shader_handle shader, const std::string& uniformName, math::vec4 value)
 		{
 			int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
@@ -179,6 +180,8 @@ namespace rythe::rendering::internal
 			glStencilFunc(func, ref, mask);
 		}
 
+		//createVAO();
+
 		shader_handle createShader(shader* shader, const std::string& name, const std::string& filepath)
 		{
 			auto source = loadSource(filepath);
@@ -197,7 +200,7 @@ namespace rythe::rendering::internal
 			glDeleteShader(vs);
 			glDeleteShader(fs);
 
-			glUseProgram(programId);
+			//glUseProgram(programId);
 
 			return shader;
 		}
@@ -227,10 +230,10 @@ namespace rythe::rendering::internal
 			switch (channels)
 			{
 			case 4:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
 				break;
 			case 3:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, texture->m_data);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, texture->m_data);
 				break;
 			}
 			glGenerateMipmap(GL_TEXTURE_2D);
