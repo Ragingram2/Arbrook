@@ -2,6 +2,7 @@
 
 namespace rythe::rendering
 {
+	//makes this more like Irenderinterface
 	template<typename APIType>
 	struct Ivertexarray
 	{

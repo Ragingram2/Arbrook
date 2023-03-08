@@ -36,7 +36,7 @@ namespace rythe::rendering
 		}
 
 		m_renderApi.clear(GL_COLOR_BUFFER_BIT);
-		m_renderApi.setClearColor(math::vec4(0.0));
+		m_renderApi.setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
 		for (auto& ent : m_filter)
 		{
