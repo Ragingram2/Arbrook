@@ -3,17 +3,12 @@
 #include <string>
 #include <fstream>
 
-//#define GLFW_EXPOSE_NATIVE_WIN32
-//#define GLFW_EXPOSE_NATIVE_WGL
-//#define GLFW_NATIVE_INCLUDE_NONE
-//#include <GLFW/glfw3native.h>
-
 #include <GL/glew.h>
 
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
-#include "rendering/data/window.hpp"
+#include "rendering/data/OpenGL/window.hpp"
 
 #include <stb/stb_image.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -23,8 +18,11 @@ namespace rythe::rendering::internal
 	class RenderInterface
 	{
 	public:
-		void initialize(window& hwnd)
+		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
+			hwnd.initialize(res, name);
+			glfwMakeContextCurrent(hwnd);
+
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

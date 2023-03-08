@@ -4,7 +4,6 @@
 
 #include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
-#include "rendering/data/window.hpp"
 #include "rendering/data/definitions.hpp"
 #include "rendering/data/shadercache.hpp"
 #include "rendering/data/texturecache.hpp"
@@ -28,8 +27,5 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
-		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
-		static void debugCallbackAMD(unsigned int id, unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
 	};
 }

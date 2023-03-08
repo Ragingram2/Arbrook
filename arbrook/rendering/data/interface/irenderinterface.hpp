@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "rendering/data/window.hpp"
+#include "rendering/data/config.hpp"
 #include "rendering/data/shader.hpp"
 #include "rendering/data/texture.hpp"
 #include "rendering/data/texturehandle.hpp"
@@ -16,7 +16,7 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
-		void initialize(window& hwnd) { m_impl.initialize(hwnd); }
+		void initialize(internal::window& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(hwnd, res, name); }
 
 		void drawArrays(unsigned int mode, int first, int count) { m_impl.drawArrays(mode, first, count); }
 		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(mode, first, count, instanceCount); }
