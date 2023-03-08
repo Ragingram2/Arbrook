@@ -1,6 +1,6 @@
-#include "rendering/data/window.hpp"
+#include "rendering/data/OpenGL/window.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	GLFWwindow* window::m_window;
 

@@ -5,7 +5,7 @@
 
 #include "core/math/math.hpp"
 
-namespace rythe::rendering
+namespace rythe::rendering::internal
 {
 	namespace math = core::math;
 	struct window
@@ -23,7 +23,10 @@ namespace rythe::rendering
 			m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
 		}
 
-		operator GLFWwindow* () { return m_window; }
+		GLFWwindow* getGLFWWindow()
+		{
+			return m_window;
+		}
 
 		void initialize(math::ivec2 res, const std::string& name);
 		void swapBuffers();
