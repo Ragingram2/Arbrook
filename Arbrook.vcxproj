@@ -187,6 +187,7 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\iwindow.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />

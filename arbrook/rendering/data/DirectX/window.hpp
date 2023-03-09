@@ -2,16 +2,18 @@
 #include <string>
 
 #include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 #include "core/math/math.hpp"
-
 namespace rythe::rendering::internal
 {
 	namespace math = core::math;
 	struct window
 	{
 	private:
-		static GLFWwindow* m_window;
+		GLFWwindow* m_window;
+		HWND m_hwnd;
 	public:
 		math::ivec2 m_resolution;
 		std::string m_windowName;
@@ -20,7 +22,7 @@ namespace rythe::rendering::internal
 		window() = default;
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name)
 		{
-			auto winName = name + "(OpenGL)";
+			auto winName = name + "(DX11)";
 			m_window = glfwCreateWindow(res.x, res.y, winName.c_str(), NULL, NULL);
 		}
 
@@ -36,5 +38,4 @@ namespace rythe::rendering::internal
 		bool shouldClose();
 
 		static void makeCurrent();
-	};
-}
+	}
