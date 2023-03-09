@@ -21,7 +21,7 @@ namespace rythe::rendering::internal
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
 			hwnd.initialize(res, name);
-			glfwMakeContextCurrent(hwnd);
+			window::makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
