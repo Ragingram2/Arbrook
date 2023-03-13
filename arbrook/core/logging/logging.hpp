@@ -607,3 +607,5 @@ namespace rythe::core::log
     }
 }
 #undef logger
+
+namespace log = rythe::core::log;

@@ -10,7 +10,7 @@
 #include "rendering/data/OpenGL/renderinterface.hpp"
 #include "rendering/data/OpenGL/vertexarray.hpp"
 #include "rendering/data/OpenGL/buffer.hpp"
-#include "rendering/data/OpenGL/window.hpp"
+#include "rendering/data/OpenGL/shader.hpp"
 #endif
 
 #if RenderingAPI == RenderingAPI_DX11
