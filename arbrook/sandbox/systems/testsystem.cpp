@@ -30,19 +30,19 @@ namespace rythe::core
 
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
-			vao->initialize();
-			vao->bufferVertexData(verticies, sizeof(verticies), GL_STATIC_DRAW);
-			vao->setAttributePtr(0, 2, GL_FLOAT, false, 7 * sizeof(float));
-			vao->setAttributePtr(1, 3, GL_FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-			vao->setAttributePtr(2, 2, GL_FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
+			vao.initialize();
+			vao.bufferVertexData(verticies, sizeof(verticies), gfx::UsageType::StaticDraw);
+			vao.setAttributePtr(0, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float));
+			vao.setAttributePtr(1, 3, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+			vao.setAttributePtr(2, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
-			vao->bufferIndexData(indicies, sizeof(indicies), GL_STATIC_DRAW);
+			vao.bufferIndexData(indicies, sizeof(indicies), gfx::UsageType::StaticDraw);
 			m_renderAPI.bind(texture);
 			m_renderAPI.bind(shader);
 			render.m_texture = texture;
 			render.m_shader = shader;
 
-			vao->unbind();
+			vao.unbind();
 
 			auto& transf = ent.addComponent<transform>();
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;

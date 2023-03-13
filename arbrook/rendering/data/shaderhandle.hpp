@@ -1,16 +1,20 @@
 #pragma once
-#include "rendering/data/definitions.hpp"//causing a circular dependency
+#include <string>
+
+#include "core/math/math.hpp"
+#include "rendering/data/config.hpp"
 
 namespace rythe::rendering
 {
 	struct shader_handle
 	{
-		shader* m_shader;
+		internal::shader* m_shader;
 		shader_handle() = default;
-		shader_handle(shader* shad) : m_shader(shad) { }
+		shader_handle(internal::shader* shad) : m_shader(shad) { }
 
-		shader* operator->() { return m_shader; }
-		operator shader& () const { return *m_shader; }
-		operator unsigned int() const { return m_shader->getId(); }
+		internal::shader* operator->() { return m_shader; }
+		operator internal::shader& () const { return *m_shader; }
+		operator unsigned int() const { return m_shader->m_programId; }
 	};
+
 }

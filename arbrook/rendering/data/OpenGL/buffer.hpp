@@ -16,8 +16,8 @@ namespace rythe::rendering::internal
 	struct buffer
 	{
 		unsigned int m_id;
-		GLenum m_type;//enum
-		GLenum m_usage;//enum
+		unsigned int m_type;//enum
+		unsigned int m_usage;//enum
 		int m_numBuffers = 1;
 		std::vector<dataType> m_data;
 

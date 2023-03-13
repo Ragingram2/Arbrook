@@ -8,8 +8,9 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/data/OpenGL/shader.hpp"
+
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/interface/window.hpp"
 
 #include <stb/stb_image.h>
@@ -46,6 +47,15 @@ namespace rythe::rendering::internal
 				glDebugMessageCallbackARB(&RenderInterface::debugCallbackARB, nullptr);
 		}
 
+		void close()
+		{
+
+		}
+		void swapBuffers(window& hwnd) 
+		{ 
+			glfwSwapBuffers(hwnd.getWindow());
+		}
+
 
 		void drawArrays(unsigned int mode, int first, int count)
 		{
@@ -67,9 +77,9 @@ namespace rythe::rendering::internal
 			glDrawElementsInstanced(mode, count, type, indecies, instanceCount);
 		}
 
-		void bind(shader_handle handle)
+		void bind(shader* shader)
 		{
-			glUseProgram(handle);
+			glUseProgram(shader->m_programId);
 		}
 
 		void bind(texture_handle handle)
@@ -77,9 +87,9 @@ namespace rythe::rendering::internal
 			glBindTexture(GL_TEXTURE_2D, handle);
 		}
 
-		void unbind(shader_handle handle)
+		void unbind(shader* shader)
 		{
-			glDeleteProgram(handle);
+			glDeleteProgram(shader->m_programId);
 		}
 
 		void unbind(texture_handle handle)
@@ -91,63 +101,6 @@ namespace rythe::rendering::internal
 		{
 			glClear(flags);
 		}
-
-		////Put these on the shader
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::vec4 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform4f(uniformPos, value.x, value.y, value.z, value.w);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::vec3 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform3f(uniformPos, value.x, value.y, value.z);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::vec2 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform2f(uniformPos, value.x, value.y);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, float value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform1f(uniformPos, value);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::ivec4 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform4i(uniformPos, value.x, value.y, value.z, value.w);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::ivec3 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform3i(uniformPos, value.x, value.y, value.z);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, math::ivec2 value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform2i(uniformPos, value.x, value.y);
-		//}
-
-		//void setUniform(shader_handle shader, const std::string& uniformName, int value)
-		//{
-		//	int uniformPos = glGetUniformLocation(shader, uniformName.c_str());
-		//	bind(shader);
-		//	glUniform1i(uniformPos, value);
-		//}
 
 		void setClearColor(math::vec4 color)
 		{
@@ -181,7 +134,7 @@ namespace rythe::rendering::internal
 
 		//createVAO();
 
-		shader_handle createShader(internal::shader* shader, const std::string& name, const std::string& filepath)
+		void createShader(shader* shader, const std::string& name, const std::string& filepath)
 		{
 			auto source = loadSource(filepath);
 
@@ -198,10 +151,6 @@ namespace rythe::rendering::internal
 
 			glDeleteShader(vs);
 			glDeleteShader(fs);
-
-			//glUseProgram(programId);
-
-			return shader;
 		}
 
 		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { GL_REPEAT ,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })

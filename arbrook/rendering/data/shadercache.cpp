@@ -10,19 +10,19 @@ namespace rythe::rendering
 		if (m_shaders.contains(name))
 		{
 			log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
-			return m_shaders[name].get();
+			return m_shaders[name].get()->operator->();
 		}
 
-		auto& shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second;
+		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second->operator->();
 
-		return m_api.createShader(shad.get(), name, filepath);
+		return m_api.createShader(shad, name, filepath);
 	}
 
 	shader_handle ShaderCache::getShader(const std::string& name)
 	{
 		if (m_shaders.contains(name))
 		{
-			return m_shaders[name].get();
+			return m_shaders[name].get()->operator->();
 		}
 		log::warn("Shader {} does not exist", name);
 		return nullptr;
