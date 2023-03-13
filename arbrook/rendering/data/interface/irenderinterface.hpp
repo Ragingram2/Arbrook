@@ -59,7 +59,7 @@ namespace rythe::rendering
 		//texture_handle createCubeTexture();
 		//buffer_handle createConstantBuffer();
 		//buffer_handle createIndexBuffer();
-		//buffer_handle createVertexBuffer();
+		void createVertexBuffer() { m_impl.createVertexBuffer(); }
 		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
 	};

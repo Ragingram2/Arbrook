@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(LLVMInstallDir)\lib\clang\$(LLVMToolsVersion)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(LLVMInstallDir)\lib\clang\$(LLVMToolsVersion)\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -107,13 +113,13 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -127,7 +133,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -136,7 +142,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -241,7 +247,8 @@
     <None Include="external_include\rsl\src\rythe\primitives" />
     <None Include="external_include\rsl\src\rythe\type_util" />
     <None Include="external_include\rsl\src\rythe\utilities" />
-    <None Include="resources\shaders\default.shader" />
+    <None Include="resources\shaders\glsl\default.shader" />
+    <None Include="resources\shaders\hlsl\default.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
