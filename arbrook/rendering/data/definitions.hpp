@@ -15,6 +15,11 @@ namespace rythe::rendering
 	using buffer = Ibuffer<internal::buffer<T, dataType>, T, dataType>;
 	typedef Ishader<internal::shader> shader;
 
+	enum UsageType
+	{
+		StaticDraw = RenderingAPI ? 0 : GL_STATIC_DRAW
+	};
+
 	enum DrawMode
 	{
 		TRIANGLES = RenderingAPI ? 0 : GL_TRIANGLES

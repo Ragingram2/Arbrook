@@ -44,22 +44,23 @@ namespace rythe::rendering
 			auto& texture = renderComp.m_texture;
 			m_renderApi.bind(shader);
 			m_renderApi.bind(texture);
-			renderComp.vao->bind();
+			renderComp.vao.bind();
 
-			m_renderApi.setUniform(shader, "u_position", transf.position);
-			m_renderApi.setUniform(shader, "u_time", example.time);
+			shader->setUniform("u_position", transf.position);
+			shader->setUniform("u_time", example.time);
 
 			m_renderApi.drawIndexed(DrawMode::TRIANGLES, 6, DataType::UINT, nullptr);
 
-			renderComp.vao->unbind();
+			renderComp.vao.unbind();
 		}
 
-		m_window.swapBuffers();
+		m_renderApi.swapBuffers(m_window);
 		m_window.pollEvents();
 	}
 
 	void Renderer::shutdown()
 	{
 		glfwTerminate();
+		m_renderApi.close();
 	}
 }

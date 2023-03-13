@@ -254,6 +254,15 @@
     <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">

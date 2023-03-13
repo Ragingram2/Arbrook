@@ -13,7 +13,7 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 		const APIType* operator->() const { return m_impl; }
-		APIType* operator->() { return m_impl; }
+		APIType* operator->() { return &m_impl; }
 
 		void setUniform(const std::string& name, math::vec4 value) { m_impl.setUniform(name, value); }
 		void setUniform(const std::string& name, math::vec3 value) { m_impl.setUniform(name, value); }
@@ -25,6 +25,7 @@ namespace rythe::rendering
 		void setUniform(const std::string& name, math::ivec2 value) { m_impl.setUniform(name, value); }
 		void setUniform(const std::string& name, int value) { m_impl.setUniform(name, value); }
 
-		unsigned int getId() { m_impl.m_programId; }
+		std::string getName() { return m_impl.m_name; }
+		unsigned int getId() { return m_impl.m_programId; }
 	};
 }

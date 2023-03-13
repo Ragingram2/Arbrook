@@ -7,7 +7,6 @@
 
 namespace rythe::rendering
 {
-	namespace math = core::math;
 	struct window
 	{
 	private:

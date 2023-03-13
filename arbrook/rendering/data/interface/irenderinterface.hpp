@@ -4,9 +4,9 @@
 
 #include "rendering/data/texture.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/interface/window.hpp"
 #include "rendering/data/config.hpp"
+#include "rendering/data/shaderhandle.hpp"
 
 namespace rythe::rendering
 {
@@ -17,6 +17,8 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(hwnd, res, name); }
+		void close() { m_impl.close(); }
+		void swapBuffers(window& hwnd) { m_impl.swapBuffers(hwnd); }
 
 		void drawArrays(unsigned int mode, int first, int count) { m_impl.drawArrays(mode, first, count); }
 		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(mode, first, count, instanceCount); }
@@ -24,20 +26,11 @@ namespace rythe::rendering
 		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount) { m_impl.drawIndexedInstanced(mode, count, type, indecies, instanceCount); }
 
 		//void bind();//render targets
-		void bind(shader_handle handle) { m_impl.bind(handle); }
+		void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }
 		void bind(texture_handle handle) { m_impl.bind(handle); }
-		void unbind(shader_handle handle) { m_impl.unbind(handle); }
+		void unbind(shader_handle handle) { m_impl.unbind(handle.m_shader); }
 		void unbind(texture_handle handle) { m_impl.unbind(handle); }
 		void clear(int flags) { m_impl.clear(flags); }
-
-		void setUniform(shader_handle shader, const std::string& uniformName, math::vec4 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, math::vec3 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, math::vec2 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, float value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec4 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec3 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, math::ivec2 value) { m_impl.setUniform(shader, uniformName, value); }
-		void setUniform(shader_handle shader, const std::string& uniformName, int value) { m_impl.setUniform(shader, uniformName, value); }
 
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }
@@ -59,7 +52,7 @@ namespace rythe::rendering
 
 		//void setLineWidth();
 
-		shader_handle createShader(internal::shader* shader, const std::string& name, const std::string& filepath) { return m_impl.createShader(shader, name, filepath); };
+		shader_handle createShader(internal::shader* shader, const std::string& name, const std::string& filepath) { m_impl.createShader(shader, name, filepath); return shader; };
 		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath) { return m_impl.createTexture2D(texture, name, filepath); }
 		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
 		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);

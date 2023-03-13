@@ -184,7 +184,10 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
