@@ -2,11 +2,10 @@
 #include <memory>
 #include <string>
 
-#include "rendering/data/shader.hpp"
 #include "rendering/data/texture.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
-#include "rendering/data/interface/iwindow.hpp"
+#include "rendering/data/interface/window.hpp"
 #include "rendering/data/config.hpp"
 
 namespace rythe::rendering
@@ -17,7 +16,7 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
-		void initialize(Iwindow<internal::window>& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(*hwnd, res, name); }
+		void initialize(window& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(hwnd, res, name); }
 
 		void drawArrays(unsigned int mode, int first, int count) { m_impl.drawArrays(mode, first, count); }
 		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(mode, first, count, instanceCount); }
@@ -60,7 +59,7 @@ namespace rythe::rendering
 
 		//void setLineWidth();
 
-		shader_handle createShader(shader* shader, const std::string& name, const std::string& filepath) { return m_impl.createShader(shader, name, filepath); };
+		shader_handle createShader(internal::shader* shader, const std::string& name, const std::string& filepath) { return m_impl.createShader(shader, name, filepath); };
 		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath) { return m_impl.createTexture2D(texture, name, filepath); }
 		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
 		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);

@@ -57,19 +57,10 @@
     <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\OpenGL\buffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\OpenGL\vertexarray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\OpenGL\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,7 +212,7 @@
     <ClInclude Include="arbrook\rendering\data\definitions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\shader.hpp">
+    <ClInclude Include="arbrook\rendering\data\OpenGL\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\texture.hpp">
@@ -248,13 +239,19 @@
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\iwindow.hpp">
+    <ClInclude Include="arbrook\rendering\data\interface\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp">
+    <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp">
+    <ClInclude Include="arbrook\rendering\data\textureparameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -293,8 +290,5 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="resources\shaders\default.shader" />
-    <None Include="arbrook\rendering\data\OpenGL\buffer.inl">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

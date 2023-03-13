@@ -1,14 +1,19 @@
 #pragma once
 #include "rendering/data/interface/irenderinterface.hpp"
 #include "rendering/data/interface/ivertexarray.hpp"
-#include "rendering/data/interface/iwindow.hpp"
+#include "rendering/data/interface/ishader.hpp"
+#include "rendering/data/interface/ibuffer.hpp"
 #include "rendering/data/config.hpp"
 
 namespace rythe::rendering
 {
 	typedef IRenderInterface<internal::RenderInterface> RenderInterface;
 	typedef Ivertexarray<internal::vertexarray> vertexarray;
-	typedef Iwindow<internal::window> window;
+	typedef Ibuffer<internal::buffer<index, int>, index, int> indexBuffer;
+	typedef Ibuffer<internal::buffer<vertex, float>, vertex, float> vertexBuffer;
+	template<typename T, typename dataType>
+	using buffer = Ibuffer<internal::buffer<T, dataType>, T, dataType>;
+	typedef Ishader<internal::shader> shader;
 
 	enum DrawMode
 	{

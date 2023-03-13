@@ -5,3 +5,5 @@ namespace rythe::core
 {
 	namespace math = glm;
 } 
+
+namespace math = rythe::core::math;

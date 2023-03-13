@@ -10,7 +10,7 @@ namespace rythe::rendering
 
 		m_renderApi.initialize(m_window, math::ivec2(600, 600), "Arbrook");
 
-		if (!m_window)
+		if (!m_window.getWindow())
 		{
 			glfwTerminate();
 			log::error("Window initialization failed");

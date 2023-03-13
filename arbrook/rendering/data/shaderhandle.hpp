@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/data/shader.hpp"
+#include "rendering/data/definitions.hpp"//causing a circular dependency
 
 namespace rythe::rendering
 {
@@ -11,6 +11,6 @@ namespace rythe::rendering
 
 		shader* operator->() { return m_shader; }
 		operator shader& () const { return *m_shader; }
-		operator unsigned int() const { return m_shader->m_programId; }
+		operator unsigned int() const { return m_shader->getId(); }
 	};
 }
