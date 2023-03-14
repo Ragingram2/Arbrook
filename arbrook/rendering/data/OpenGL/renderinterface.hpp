@@ -51,8 +51,8 @@ namespace rythe::rendering::internal
 		{
 
 		}
-		void swapBuffers(window& hwnd) 
-		{ 
+		void swapBuffers(window& hwnd)
+		{
 			glfwSwapBuffers(hwnd.getWindow());
 		}
 
@@ -84,12 +84,16 @@ namespace rythe::rendering::internal
 
 		void bind(texture_handle handle)
 		{
+			//glActiveTexture
+			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindTexture(GL_TEXTURE_2D, handle);
 		}
 
 		void unbind(shader* shader)
 		{
-			glDeleteProgram(shader->m_programId);
+			//Destructor for shader?
+			glUseProgram(0);
+			//glDeleteProgram(shader->m_programId);
 		}
 
 		void unbind(texture_handle handle)
@@ -134,6 +138,7 @@ namespace rythe::rendering::internal
 
 		//createVAO();
 
+		//move file handling elsewhere
 		void createShader(shader* shader, const std::string& name, const std::string& filepath)
 		{
 			auto source = loadSource(filepath);
@@ -153,7 +158,8 @@ namespace rythe::rendering::internal
 			glDeleteShader(fs);
 		}
 
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { GL_REPEAT ,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
+		//move file handling elsewhere, specify default Texture params
+		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
 		{
 			texture->m_name = name;
 			auto& resolution = texture->m_params.m_resolution;
@@ -162,8 +168,8 @@ namespace rythe::rendering::internal
 			glGenTextures(1, &id);
 			glBindTexture(GL_TEXTURE_2D, id);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.m_wrapModeS);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.m_wrapModeT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, static_cast<GLint>(params.m_wrapModeS));
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, static_cast<GLint>(params.m_wrapModeT));
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.m_minFilterMode);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.m_magFilterMode);
 			stbi_set_flip_vertically_on_load(true);
@@ -175,6 +181,7 @@ namespace rythe::rendering::internal
 				return nullptr;
 			}
 
+			//make some enums for the data formats
 			switch (channels)
 			{
 			case 4:
@@ -184,6 +191,7 @@ namespace rythe::rendering::internal
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, texture->m_data);
 				break;
 			}
+			//make this optional
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			return texture;
