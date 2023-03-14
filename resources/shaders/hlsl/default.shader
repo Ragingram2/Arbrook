@@ -1,4 +1,21 @@
-float4 PShader() : SV_TARGET
+struct VOut
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float4 position : SV_POSITION;
+    float4 color : COLOR;
+};
+
+VOut VShader(float4 position : POSITION, float4 color : COLOR)
+{
+    VOut output;
+
+    output.position = position;
+    output.color = color;
+
+    return output;
+}
+
+
+float4 PShader(float4 position : SV_POSITION, float4 color : COLOR) : SV_TARGET
+{
+    return color;
 }

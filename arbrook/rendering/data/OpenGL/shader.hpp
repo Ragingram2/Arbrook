@@ -6,6 +6,7 @@
 
 namespace rythe::rendering::internal
 {
+	//Put shader create stuff here
 	struct shader
 	{
 		unsigned int m_programId;

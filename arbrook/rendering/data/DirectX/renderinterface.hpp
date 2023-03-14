@@ -25,23 +25,33 @@ namespace rythe::rendering::internal
 	class RenderInterface
 	{
 	private:
+		//get rid of these
 		// global declarations
-		IDXGISwapChain* swapchain;             // the pointer to the swap chain interface
-		ID3D11Device* dev;                     // the pointer to our Direct3D device interface
-		ID3D11DeviceContext* devcon;           // the pointer to our Direct3D device context
-		ID3D11RenderTargetView* backbuffer;    // global declaration
-		ID3D11Buffer* pVBuffer;    // global
+		static IDXGISwapChain* swapchain;             // the pointer to the swap chain interface
+		static ID3D11Device* dev;                     // the pointer to our Direct3D device interface
+		static ID3D11DeviceContext* devcon;           // the pointer to our Direct3D device context
+		static ID3D11RenderTargetView* backbuffer;    // global declaration
+		static ID3D11Buffer* pVBuffer;    // global
 
 		// global
-		ID3D11VertexShader* pVS;    // the vertex shader
-		ID3D11PixelShader* pPS;     // the pixel shader
+		static ID3D11VertexShader* pVS;    // the vertex shader
+		static ID3D11PixelShader* pPS;     // the pixel shader
 
-		ID3D11InputLayout* pLayout;    // global
+		static ID3D11InputLayout* pLayout;    // global
+
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
+			log::debug("Initializing DX11");
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 			hwnd.initialize(res, name);
+
+			VERTEX OurVertices[] =
+			{
+				{0.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
+				{0.45f, -0.5, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
+				{-0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
+			};
 
 			// create a struct to hold information about the swap chain
 			DXGI_SWAP_CHAIN_DESC scd;
@@ -95,6 +105,8 @@ namespace rythe::rendering::internal
 			viewport.Height = res.y;
 
 			devcon->RSSetViewports(1, &viewport);
+
+			createVertexBuffer(OurVertices, sizeof(OurVertices));
 		}
 
 		void close()
@@ -233,7 +245,7 @@ namespace rythe::rendering::internal
 			return texture;
 		}
 
-		void createVertexBuffer()
+		void createVertexBuffer(VERTEX* data, int size)
 		{
 			D3D11_BUFFER_DESC bd;
 			ZeroMemory(&bd, sizeof(bd));
@@ -248,8 +260,21 @@ namespace rythe::rendering::internal
 			// copy the vertices into the buffer
 			D3D11_MAPPED_SUBRESOURCE ms;
 			devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
-			memcpy(ms.pData, OurVertices, sizeof(OurVertices));                 // copy the data
+			memcpy(ms.pData, data, size);                 // copy the data
 			devcon->Unmap(pVBuffer, NULL);                                      // unmap the buffer
 		}
 	};
+
+	// global declarations
+	inline IDXGISwapChain* RenderInterface::swapchain;             // the pointer to the swap chain interface
+	inline ID3D11Device* RenderInterface::dev;                     // the pointer to our Direct3D device interface
+	inline ID3D11DeviceContext* RenderInterface::devcon;           // the pointer to our Direct3D device context
+	inline ID3D11RenderTargetView* RenderInterface::backbuffer;    // global declaration
+	inline ID3D11Buffer* RenderInterface::pVBuffer;    // global
+
+	// global
+	inline ID3D11VertexShader* RenderInterface::pVS;    // the vertex shader
+	inline ID3D11PixelShader* RenderInterface::pPS;     // the pixel shader
+
+	inline ID3D11InputLayout* RenderInterface::pLayout;    // global
 }

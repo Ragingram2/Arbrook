@@ -196,6 +196,7 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\textureparameters.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ivertexarray.hpp" />
