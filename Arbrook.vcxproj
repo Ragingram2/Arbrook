@@ -191,14 +191,16 @@
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\textureparameters.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp" />
+    <ClInclude Include="arbrook\rendering\data\interface\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
-    <ClInclude Include="arbrook\rendering\data\OpenGL\textureparameters.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />
