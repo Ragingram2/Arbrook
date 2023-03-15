@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 
 #include "core/math/math.hpp"
+#include "core/logging/logging.hpp"
+#include "rendering/data/shadersource.hpp"
 
 namespace rythe::rendering::internal
 {
@@ -19,6 +21,23 @@ namespace rythe::rendering::internal
 			m_name = other->m_name;
 		}
 		operator unsigned int() const { return m_programId; }
+
+		void initialize(const std::string& name, const shader_source& source)
+		{
+			m_name = name;
+			auto& programId = m_programId = glCreateProgram();
+
+			unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
+			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
+
+			glAttachShader(programId, vs);
+			glAttachShader(programId, fs);
+			glLinkProgram(programId);
+			glValidateProgram(programId);
+
+			glDeleteShader(vs);
+			glDeleteShader(fs);
+		}
 
 		void setUniform(const std::string& uniformName, math::vec4 value)
 		{
@@ -66,6 +85,32 @@ namespace rythe::rendering::internal
 		{
 			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
 			glUniform1i(uniformPos, value);
+		}
+
+	private:
+		unsigned int compileShader(unsigned int type, const std::string& source)
+		{
+			unsigned int id = glCreateShader(type);
+			const char* src = source.c_str();
+			glShaderSource(id, 1, &src, nullptr);
+			glCompileShader(id);
+
+			int result;
+			glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+
+			int length;
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+			char* message = (char*)__builtin_alloca(length * sizeof(char));
+			glGetShaderInfoLog(id, length, &length, message);
+
+			if (result == GL_FALSE)
+			{
+				log::error(message);
+				glDeleteShader(id);
+				return 0;
+			}
+
+			return id;
 		}
 	};
 

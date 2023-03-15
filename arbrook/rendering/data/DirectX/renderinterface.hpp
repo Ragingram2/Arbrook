@@ -1,22 +1,24 @@
 #pragma once
 #include <string>
-#include <d3d11.h>
-#include <d3dx11.h>
-#include <d3dx10.h>
+#include <fstream>
+#include <D3D11.h>
+#include <D3Dx11.h>
+#include <D3Dx10.h>
+#include <d3dcompiler.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-// include the Direct3D Library file
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")
 #pragma comment (lib, "d3dx10.lib")
+#pragma comment(lib, "D3DCompiler.lib")
 
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/interface/window.hpp"
+#include "rendering/data/DirectX/window.hpp"
 #include "rendering/data/DirectX/buffer.hpp"
 #include "rendering/data/DirectX/shader.hpp"
 
@@ -24,21 +26,6 @@ namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
-	private:
-		//get rid of these
-		// global declarations
-		static IDXGISwapChain* swapchain;             // the pointer to the swap chain interface
-		static ID3D11Device* dev;                     // the pointer to our Direct3D device interface
-		static ID3D11DeviceContext* devcon;           // the pointer to our Direct3D device context
-		static ID3D11RenderTargetView* backbuffer;    // global declaration
-		static ID3D11Buffer* pVBuffer;    // global
-
-		// global
-		static ID3D11VertexShader* pVS;    // the vertex shader
-		static ID3D11PixelShader* pPS;     // the pixel shader
-
-		static ID3D11InputLayout* pLayout;    // global
-
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
@@ -79,21 +66,21 @@ namespace rythe::rendering::internal
 				NULL,
 				D3D11_SDK_VERSION,
 				&scd,
-				&swapchain,
-				&dev,
+				&hwnd.swapchain,
+				&hwnd.dev,
 				NULL,
-				&devcon);
+				&hwnd.devcon);
 
 			// get the address of the back buffer
 			ID3D11Texture2D* pBackBuffer;
-			swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			hwnd.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
 			// use the back buffer address to create the render target
-			dev->CreateRenderTargetView(pBackBuffer, NULL, &backbuffer);
+			hwnd.dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.backbuffer);
 			pBackBuffer->Release();
 
 			// set the render target as the back buffer
-			devcon->OMSetRenderTargets(1, &backbuffer, NULL);
+			hwnd.devcon->OMSetRenderTargets(1, &hwnd.backbuffer, NULL);
 
 			// Set the viewport
 			D3D11_VIEWPORT viewport;
@@ -104,27 +91,24 @@ namespace rythe::rendering::internal
 			viewport.Width = res.x;
 			viewport.Height = res.y;
 
-			devcon->RSSetViewports(1, &viewport);
+			hwnd.devcon->RSSetViewports(1, &viewport);
 
 			createVertexBuffer(OurVertices, sizeof(OurVertices));
 		}
 
 		void close()
 		{
-			swapchain->SetFullscreenState(FALSE, NULL);    // switch to windowed mode
+			window::swapchain->SetFullscreenState(FALSE, NULL);    // switch to windowed mode
 
-			// close and release all existing COM objects
-			pVS->Release();
-			pPS->Release();
-			swapchain->Release();
-			backbuffer->Release();
-			dev->Release();
-			devcon->Release();
+			window::swapchain->Release();
+			window::backbuffer->Release();
+			window::dev->Release();
+			window::devcon->Release();
 		}
 
 		void swapBuffers(window& hwnd)
 		{
-			swapchain->Present(0, 0);
+			hwnd.swapchain->Present(0, 0);
 		}
 
 		void drawArrays(unsigned int mode, int first, int count)
@@ -142,13 +126,13 @@ namespace rythe::rendering::internal
 			// select which vertex buffer to display
 			unsigned int stride = sizeof(VERTEX);
 			unsigned int offset = 0;
-			devcon->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
+			window::devcon->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
 
 			// select which primtive type we are using
-			devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			window::devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			// draw the vertex buffer to the back buffer
-			devcon->Draw(3, 0);
+			window::devcon->Draw(3, 0);
 		}
 
 		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount)
@@ -183,7 +167,7 @@ namespace rythe::rendering::internal
 		void setClearColor(math::vec4 color)
 		{
 			float colorData[] = { color.r, color.g, color.b, color.a };
-			devcon->ClearRenderTargetView(backbuffer, colorData);
+			window::devcon->ClearRenderTargetView(window::backbuffer, colorData);
 		}
 
 		void enableStencil()
@@ -213,34 +197,12 @@ namespace rythe::rendering::internal
 
 		//createVAO();
 
-		void createShader(shader* shader, const std::string& name, const std::string& filepath)
+		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			// load and compile the two shaders
-			ID3D10Blob* VS, * PS;
-			auto fileName = std::wstring(filepath.begin(), filepath.end());
-			D3DX11CompileFromFile(fileName.c_str(), 0, 0, "VShader", "vs_4_0", 0, 0, 0, &VS, 0, 0);
-			D3DX11CompileFromFile(fileName.c_str(), 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, 0, 0);
-
-			// encapsulate both shaders into shader objects
-			dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &pVS);
-			dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &pPS);
-
-			// set the shader objects
-			devcon->VSSetShader(pVS, 0, 0);
-			devcon->PSSetShader(pPS, 0, 0);
-
-			// create the input layout object
-			D3D11_INPUT_ELEMENT_DESC ied[] =
-			{
-				{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-				{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-			};
-
-			dev->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &pLayout);
-			devcon->IASetInputLayout(pLayout);
+			shader->initialize(name, source);
 		}
 
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { GL_REPEAT ,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
+		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
 		{
 			return texture;
 		}
@@ -255,26 +217,14 @@ namespace rythe::rendering::internal
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
-			dev->CreateBuffer(&bd, NULL, &pVBuffer);       // create the buffer
+			window::dev->CreateBuffer(&bd, NULL, &pVBuffer);       // create the buffer
 
 			// copy the vertices into the buffer
 			D3D11_MAPPED_SUBRESOURCE ms;
-			devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
+			window::devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
 			memcpy(ms.pData, data, size);                 // copy the data
-			devcon->Unmap(pVBuffer, NULL);                                      // unmap the buffer
+			window::devcon->Unmap(pVBuffer, NULL);                                      // unmap the buffer
 		}
 	};
-
-	// global declarations
-	inline IDXGISwapChain* RenderInterface::swapchain;             // the pointer to the swap chain interface
-	inline ID3D11Device* RenderInterface::dev;                     // the pointer to our Direct3D device interface
-	inline ID3D11DeviceContext* RenderInterface::devcon;           // the pointer to our Direct3D device context
-	inline ID3D11RenderTargetView* RenderInterface::backbuffer;    // global declaration
-	inline ID3D11Buffer* RenderInterface::pVBuffer;    // global
-
-	// global
-	inline ID3D11VertexShader* RenderInterface::pVS;    // the vertex shader
-	inline ID3D11PixelShader* RenderInterface::pPS;     // the pixel shader
-
-	inline ID3D11InputLayout* RenderInterface::pLayout;    // global
+	inline ID3D11Buffer* RenderInterface::pVBuffer; 
 }

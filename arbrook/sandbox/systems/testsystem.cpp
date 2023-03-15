@@ -19,10 +19,10 @@ namespace rythe::core
 			2,3,0
 		};
 
-		gfx::window::makeCurrent();
+		gfx::internal::window::makeCurrent();
 
 		auto texture = gfx::TextureCache::createTexture2D("Rythe", "resources/textures/Rythe.png");
-		auto shader = gfx::ShaderCache::createShader("default", "resources/shaders/glsl/default.shader");
+		auto shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
 		float spawnCount = 5.f;
 		for (int i = 0; i < spawnCount; i++)
 		{

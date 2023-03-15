@@ -1,0 +1,44 @@
+#pragma once
+#include <GL/glew.h>
+
+namespace rythe::rendering::internal
+{
+	enum class UsageType
+	{
+		StaticDraw = GL_STATIC_DRAW
+	};
+
+	enum class PrimitiveType
+	{
+		TRIANGLES = GL_TRIANGLES
+	};
+
+	enum class DataType
+	{
+		INT = GL_INT,
+		UINT = GL_UNSIGNED_INT,
+		BYTE =  GL_BYTE,
+		UBYTE = GL_UNSIGNED_BYTE,
+		SHORT = GL_SHORT,
+		USHORT = GL_UNSIGNED_SHORT,
+		FLOAT = GL_FLOAT
+	};
+
+	enum class WrapMode
+	{
+		CLAMP = GL_CLAMP,
+		CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+		CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
+		REPEAT = GL_REPEAT
+	};
+
+	enum class FilterMode
+	{
+		NEAREST = GL_NEAREST,
+		LINEAR = GL_LINEAR,
+		NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+		NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+		LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+		LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+	};
+}

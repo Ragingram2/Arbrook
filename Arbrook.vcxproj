@@ -193,10 +193,13 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\textureparameters.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\textureparameters.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ivertexarray.hpp" />
@@ -248,8 +251,7 @@
     <None Include="external_include\rsl\src\rythe\primitives" />
     <None Include="external_include\rsl\src\rythe\type_util" />
     <None Include="external_include\rsl\src\rythe\utilities" />
-    <None Include="resources\shaders\glsl\default.shader" />
-    <None Include="resources\shaders\hlsl\default.shader" />
+    <None Include="resources\shaders\default.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

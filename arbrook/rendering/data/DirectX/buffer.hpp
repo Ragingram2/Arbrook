@@ -17,6 +17,6 @@ namespace rythe::rendering::internal
 		requires rendering::validType<T>
 	struct buffer
 	{
-
+		ID3D11Buffer* pVBuffer; 
 	};
 }

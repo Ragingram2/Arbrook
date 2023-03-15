@@ -23,5 +23,4 @@ namespace rythe::rendering
 		void bufferData(dataType data[], int size, unsigned int usage) { m_impl.bufferData(data, size, usage); }
 		void setAttributePtr(int index, int components, unsigned int type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, type, normalize, stride, pointer); }
 	};
-
 }

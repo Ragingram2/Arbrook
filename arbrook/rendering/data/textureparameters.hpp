@@ -2,18 +2,10 @@
 #include <string>
 
 #include "core/math/math.hpp"
-#include "rendering/data/config.hpp"
-#include TextureParams_HPP_PATH
+#include "rendering/data/interface/enumtypes.hpp"
 
 namespace rythe::rendering
 {
-	enum class WrapMode
-	{
-		CLAMP = static_cast<WrapMode>(internal::WrapMode::CLAMP),
-		REPEAT = static_cast<WrapMode>(internal::WrapMode::REPEAT)
-	};
-
-	//change the paremeters to enums
 	struct texture_parameters
 	{
 		int m_channels;

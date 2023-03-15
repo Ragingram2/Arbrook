@@ -266,6 +266,15 @@
     <ClInclude Include="arbrook\rendering\data\OpenGL\textureparameters.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\textureparameters.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">
@@ -301,7 +310,6 @@
     <None Include="arbrook\core\ecs\filter.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="resources\shaders\glsl\default.shader" />
-    <None Include="resources\shaders\hlsl\default.shader" />
+    <None Include="resources\shaders\default.shader" />
   </ItemGroup>
 </Project>

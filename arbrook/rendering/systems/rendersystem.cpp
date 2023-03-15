@@ -20,7 +20,7 @@ namespace rythe::rendering
 
 	void Renderer::update()
 	{
-		window::makeCurrent();
+		internal::window::makeCurrent();
 
 		m_window.setSwapInterval(1);
 
@@ -49,7 +49,7 @@ namespace rythe::rendering
 			shader->setUniform("u_position", transf.position);
 			shader->setUniform("u_time", example.time);
 
-			m_renderApi.drawIndexed(DrawMode::TRIANGLES, 6, DataType::UINT, nullptr);
+			m_renderApi.drawIndexed(PrimitiveType::TRIANGLES, 6, DataType::UINT, nullptr);
 
 			renderComp.vao.unbind();
 		}

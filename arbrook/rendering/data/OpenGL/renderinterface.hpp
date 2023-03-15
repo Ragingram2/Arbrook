@@ -8,10 +8,11 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/OpenGL/shader.hpp"
-
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/interface/window.hpp"
+#include "rendering/data/config.hpp"
+
+#include Window_HPP_PATH
+#include Shader_HPP_PATH
 
 #include <stb/stb_image.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -23,6 +24,7 @@ namespace rythe::rendering::internal
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
+			log::debug("Initializing OpenGL");
 			hwnd.initialize(res, name);
 			window::makeCurrent();
 
@@ -138,24 +140,9 @@ namespace rythe::rendering::internal
 
 		//createVAO();
 
-		//move file handling elsewhere
-		void createShader(shader* shader, const std::string& name, const std::string& filepath)
+		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			auto source = loadSource(filepath);
-
-			shader->m_name = name;
-			auto& programId = shader->m_programId = glCreateProgram();
-
-			unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
-			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
-
-			glAttachShader(programId, vs);
-			glAttachShader(programId, fs);
-			glLinkProgram(programId);
-			glValidateProgram(programId);
-
-			glDeleteShader(vs);
-			glDeleteShader(fs);
+			shader->initialize(name, source);
 		}
 
 		//move file handling elsewhere, specify default Texture params
@@ -201,73 +188,11 @@ namespace rythe::rendering::internal
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
 
 	private:
-		shader_source loadSource(const std::string& filepath);
-		unsigned int compileShader(unsigned int type, const std::string& source);
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);
 		static void debugCallbackAMD(unsigned int id, unsigned int category, unsigned int  severity, int length, const char* message, void* userparam);
 	};
 
-	inline shader_source RenderInterface::loadSource(const std::string& filepath)
-	{
-		std::ifstream stream(filepath);
-
-		enum class ShaderType
-		{
-			NONE = -1,
-			VERTEX = 0,
-			FRAG = 1
-		};
-
-		std::string line;
-		std::stringstream ss[2];
-		ShaderType type = ShaderType::NONE;
-
-		while (getline(stream, line))
-		{
-			if (line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-				{
-					type = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos)
-				{
-					type = ShaderType::FRAG;
-				}
-			}
-			else
-			{
-				ss[(int)type] << line << "\n";
-			}
-		}
-
-		return { ss[0].str(),ss[1].str() };
-	}
-	inline unsigned int RenderInterface::compileShader(unsigned int type, const std::string& source)
-	{
-		unsigned int id = glCreateShader(type);
-		const char* src = source.c_str();
-		glShaderSource(id, 1, &src, nullptr);
-		glCompileShader(id);
-
-		int result;
-		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*)__builtin_alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-
-		if (result == GL_FALSE)
-		{
-			log::error(message);
-			glDeleteShader(id);
-			return 0;
-		}
-
-		return id;
-	}
 	inline void RenderInterface::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
 		if (id == 131185) // Filter out annoying Nvidia message of: Buffer you made will use VRAM because you told us that you want it to allocate VRAM.

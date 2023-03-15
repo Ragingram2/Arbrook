@@ -8,6 +8,7 @@
 #include "rendering/data/shadercache.hpp"
 #include "rendering/data/texturecache.hpp"
 #include "rendering/components/spriterenderer.hpp"
+#include Window_HPP_PATH
 
 namespace rythe::rendering
 {
@@ -17,7 +18,7 @@ namespace rythe::rendering
 	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
-		window m_window;
+		internal::window m_window;
 		RenderInterface m_renderApi;
 
 		Renderer() = default;

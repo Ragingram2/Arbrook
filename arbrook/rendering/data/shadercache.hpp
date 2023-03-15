@@ -23,5 +23,7 @@ namespace rythe::rendering
 		static shader_handle createShader(const std::string& name,const std::string& filepath);
 		static shader_handle getShader(const std::string& name);
 		static void deleteShader(const std::string& name);
+	private:
+		static shader_source loadShader(const std::string& filepath);
 	};
 }

@@ -3,6 +3,7 @@
 
 #include "core/math/math.hpp"
 #include "rendering/data/config.hpp"
+#include Shader_HPP_PATH
 
 namespace rythe::rendering
 {

@@ -7,53 +7,22 @@
 
 namespace rythe::rendering
 {
-	struct window
+	template<typename APIType>
+	struct Iwindow
 	{
 	private:
-		static GLFWwindow* m_window;
+		APIType m_impl;
 	public:
-		math::ivec2 m_resolution;
-		std::string m_windowName;
+		GLFWwindow* getWindow() { return m_impl.getWindow(); }
 
-	public:
-		window() = default;
-		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
+		void initialize(math::ivec2 res, const std::string& name) { m_imple.initialize(res, name); }
 
-		GLFWwindow* getWindow()
-		{
-			return m_window;
-		}
+		void swapBuffers() { m_impl.swapBuffers(); }
 
-		void initialize(math::ivec2 res, const std::string& name)
-		{
-			m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
-		}
+		void setSwapInterval(int interval) { m_impl.setSwapInterval(interval); }
 
-		void swapBuffers()
-		{
-			glfwSwapBuffers(m_window);
-		}
+		void pollEvents() { m_impl.pollEvents(); }
 
-		void setSwapInterval(int interval)
-		{
-			glfwSwapInterval(interval);
-		}
-
-		void pollEvents()
-		{
-			glfwPollEvents();
-		}
-
-		bool shouldClose()
-		{
-			return glfwWindowShouldClose(m_window);
-		}
-
-		static void makeCurrent()
-		{
-			glfwMakeContextCurrent(m_window);
-		}
+		bool shouldClose() { return m_impl.shouldClose(); }
 	};
-
-	inline GLFWwindow* window::m_window;
 }
