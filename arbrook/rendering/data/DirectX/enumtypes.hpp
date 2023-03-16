@@ -1,26 +1,36 @@
 #pragma once
+#include <D3D11.h>
+#include <D3Dcommon.h>
 
 namespace rythe::rendering::internal
 {
+	enum class TargetType
+	{
+		ARRAY_BUFFER = 0,
+		ELEMENT_ARRAY_BUFFER = 0,
+		TEXTURE2D = 0
+	};
+
 	enum class UsageType
 	{
-		StaticDraw = 0
+		StaticDraw = D3D11_USAGE_DYNAMIC
 	};
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = 0
+		TRIANGLES = D3D10_PRIMITIVE_TRIANGLE,
+		TRIANGLESLIST = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 	};
 
 	enum class DataType
 	{
-		INT = 0,
-		UINT = 0,
+		INT = D3D_SVT_INT,
+		UINT = D3D_SVT_UINT,
 		BYTE = 0,
 		UBYTE = 0,
-		SHORT = 0,
-		USHORT = 0,
-		FLOAT = 0
+		SHORT = D3D_SVT_INT,
+		USHORT = D3D_SVT_UINT8,
+		FLOAT = D3D_SVT_FLOAT
 	};
 
 	enum class WrapMode

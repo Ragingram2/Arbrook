@@ -3,6 +3,13 @@
 
 namespace rythe::rendering::internal
 {
+	enum class TargetType : GLenum
+	{
+		ARRAY_BUFFER = GL_ARRAY_BUFFER,
+		ELEMENT_ARRAY_BUFFER = GL_ELEMENT_ARRAY_BUFFER,
+		TEXTURE2D = GL_TEXTURE_2D
+	};
+
 	enum class UsageType
 	{
 		StaticDraw = GL_STATIC_DRAW
@@ -10,7 +17,8 @@ namespace rythe::rendering::internal
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = GL_TRIANGLES
+		TRIANGLES = GL_TRIANGLES,
+		TRIANGLESLIST = GL_TRIANGLE_STRIP
 	};
 
 	enum class DataType

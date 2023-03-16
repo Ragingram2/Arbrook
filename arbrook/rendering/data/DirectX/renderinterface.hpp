@@ -26,6 +26,8 @@ namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
+	private:
+		static buffer<vertex, float> vBuffer;
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
@@ -93,7 +95,7 @@ namespace rythe::rendering::internal
 
 			hwnd.devcon->RSSetViewports(1, &viewport);
 
-			createVertexBuffer(OurVertices, sizeof(OurVertices));
+			createVertexBuffer(UsageType::StaticDraw, sizeof(OurVertices), OurVertices);
 		}
 
 		void close()
@@ -111,31 +113,32 @@ namespace rythe::rendering::internal
 			hwnd.swapchain->Present(0, 0);
 		}
 
-		void drawArrays(unsigned int mode, int first, int count)
+		void drawArrays(PrimitiveType mode, int first, int count)
 		{
 
 		}
 
-		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount)
+		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount)
 		{
 
 		}
 
-		void drawIndexed(unsigned int mode, int count, unsigned int type, const void* indecies)
+		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
 		{
 			// select which vertex buffer to display
 			unsigned int stride = sizeof(VERTEX);
 			unsigned int offset = 0;
-			window::devcon->IASetVertexBuffers(0, 1, &pVBuffer, &stride, &offset);
+			window::devcon->IASetVertexBuffers(0, 1, &vBuffer.pVBuffer, &stride, &offset);
 
 			// select which primtive type we are using
-			window::devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			//window::devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			window::devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
 
 			// draw the vertex buffer to the back buffer
-			window::devcon->Draw(3, 0);
+			window::devcon->Draw(count, 0);
 		}
 
-		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount)
+		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
 		{
 
 		}
@@ -202,29 +205,30 @@ namespace rythe::rendering::internal
 			shader->initialize(name, source);
 		}
 
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
+		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR_MIPMAP_LINEAR, rendering::FilterMode::LINEAR })
 		{
 			return texture;
 		}
 
-		void createVertexBuffer(VERTEX* data, int size)
+		void createVertexBuffer(UsageType usage, int size, VERTEX* data)
 		{
 			D3D11_BUFFER_DESC bd;
 			ZeroMemory(&bd, sizeof(bd));
 
-			bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+			//bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
+			bd.Usage = static_cast<D3D11_USAGE>(usage);
 			bd.ByteWidth = sizeof(VERTEX) * 3;             // size is the VERTEX struct * 3
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
 
-			window::dev->CreateBuffer(&bd, NULL, &pVBuffer);       // create the buffer
+			window::dev->CreateBuffer(&bd, NULL, &vBuffer.pVBuffer);       // create the buffer
 
 			// copy the vertices into the buffer
 			D3D11_MAPPED_SUBRESOURCE ms;
-			window::devcon->Map(pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
+			window::devcon->Map(vBuffer.pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
 			memcpy(ms.pData, data, size);                 // copy the data
-			window::devcon->Unmap(pVBuffer, NULL);                                      // unmap the buffer
+			window::devcon->Unmap(vBuffer.pVBuffer, NULL);                                      // unmap the buffer
 		}
 	};
-	inline ID3D11Buffer* RenderInterface::pVBuffer; 
+	inline buffer<vertex, float> RenderInterface::vBuffer;
 }

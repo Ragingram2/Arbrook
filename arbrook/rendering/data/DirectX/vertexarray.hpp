@@ -3,7 +3,9 @@
 
 #include <rythe/primitives>
 
-#include "rendering/data/DirectX/buffer.hpp"
+#include "rendering/data/config.hpp"
+#include Buffer_HPP_PATH
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering::internal
 {
@@ -28,17 +30,17 @@ namespace rythe::rendering::internal
 	
 		}
 
-		void bufferVertexData(float data[], int size, unsigned int usage)
+		void bufferVertexData(float data[], int size, UsageType usage)
 		{
 
 		}
 
-		void bufferIndexData(unsigned int data[], int size, unsigned int usage)
+		void bufferIndexData(unsigned int data[], int size, UsageType usage)
 		{
 
 		}
 
-		void setAttributePtr(int index, int components, unsigned int type, bool normalize, int stride, const void* pointer = 0)
+		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
 		{
 
 		}

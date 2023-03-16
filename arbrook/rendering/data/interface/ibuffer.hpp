@@ -6,6 +6,8 @@
 
 #include "core/core.hpp"
 #include "rendering/data/bufferconcepts.hpp"
+#include "rendering/data/config.hpp"
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering
 {
@@ -20,7 +22,7 @@ namespace rythe::rendering
 		void bind() { m_impl.bind(); }
 		void unbind() { m_impl.unbind(); }
 
-		void bufferData(dataType data[], int size, unsigned int usage) { m_impl.bufferData(data, size, usage); }
-		void setAttributePtr(int index, int components, unsigned int type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, type, normalize, stride, pointer); }
+		void bufferData(dataType data[], int size, UsageType usage) { m_impl.bufferData(data, size, usage); }
+		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, type, normalize, stride, pointer); }
 	};
 }

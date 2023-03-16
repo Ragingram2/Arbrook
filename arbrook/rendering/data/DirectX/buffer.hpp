@@ -4,6 +4,8 @@
 #include <d3dx10.h>
 
 #include "rendering/data/bufferconcepts.hpp"
+#include "rendering/data/config.hpp"
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering::internal
 {

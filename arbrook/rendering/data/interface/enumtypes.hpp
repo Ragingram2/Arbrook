@@ -4,6 +4,13 @@
 
 namespace rythe::rendering
 {
+	enum class TargetType
+	{
+		ARRAY_BUFFER = static_cast<int>(internal::TargetType::ARRAY_BUFFER),
+		ELEMENT_ARRAY_BUFFER = static_cast<int>(internal::TargetType::ELEMENT_ARRAY_BUFFER),
+		TEXTURE2D = static_cast<int>(internal::TargetType::TEXTURE2D)
+	};
+
 	enum class UsageType
 	{
 		StaticDraw = static_cast<int>(internal::UsageType::StaticDraw)
@@ -11,7 +18,8 @@ namespace rythe::rendering
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = static_cast<int>(internal::PrimitiveType::TRIANGLES)
+		TRIANGLES = static_cast<int>(internal::PrimitiveType::TRIANGLES),
+		TRIANGLESLIST = static_cast<int>(internal::PrimitiveType::TRIANGLESLIST)
 	};
 
 	enum class DataType

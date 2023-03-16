@@ -263,9 +263,6 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\textureparameters.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

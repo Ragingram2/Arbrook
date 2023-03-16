@@ -194,7 +194,6 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp" />
-    <ClInclude Include="arbrook\rendering\data\DirectX\textureparameters.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\enumtypes.hpp" />

@@ -6,9 +6,11 @@
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/data/config.hpp"
 #include Shader_HPP_PATH
 #include Window_HPP_PATH
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering
 {
@@ -22,10 +24,10 @@ namespace rythe::rendering
 		void close() { m_impl.close(); }
 		void swapBuffers(internal::window & hwnd) { m_impl.swapBuffers(hwnd); }
 
-		void drawArrays(unsigned int mode, int first, int count) { m_impl.drawArrays(mode, first, count); }
-		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(mode, first, count, instanceCount); }
-		void drawIndexed(unsigned int mode, int count, unsigned int type, const void* indecies) { m_impl.drawIndexed(mode, count, type, indecies); }
-		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount) { m_impl.drawIndexedInstanced(mode, count, type, indecies, instanceCount); }
+		void drawArrays(PrimitiveType mode, int first, int count) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), first, count); }
+		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), first, count, instanceCount); }
+		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies) { m_impl.drawIndexed(static_cast<internal::PrimitiveType>(mode), count, static_cast<internal::DataType>(type), indecies); }
+		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), count, static_cast<internal::DataType>(type), indecies, instanceCount); }
 
 		//void bind();//render targets
 		void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }

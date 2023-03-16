@@ -13,10 +13,10 @@ namespace rythe::rendering
 
 		WrapMode m_wrapModeS;
 		WrapMode m_wrapModeT;
-		int m_minFilterMode;
-		int m_magFilterMode;
+		FilterMode m_minFilterMode;
+		FilterMode m_magFilterMode;
 
 		texture_parameters() = default;
-		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, int minFilterMode, int magFilterMode) : m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_minFilterMode(minFilterMode), m_magFilterMode(magFilterMode) { }
+		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode minFilterMode, FilterMode magFilterMode) : m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_minFilterMode(minFilterMode), m_magFilterMode(magFilterMode) { }
 	};
 }

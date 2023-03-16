@@ -59,24 +59,24 @@ namespace rythe::rendering::internal
 		}
 
 
-		void drawArrays(unsigned int mode, int first, int count)
+		void drawArrays(PrimitiveType mode, int first, int count)
 		{
-			glDrawArrays(mode, first, count);
+			glDrawArrays(static_cast<GLenum>(mode), first, count);
 		}
 
-		void drawArraysInstanced(unsigned int mode, int first, int count, int instanceCount)
+		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount)
 		{
-			glDrawArraysInstanced(mode, first, count, instanceCount);
+			glDrawArraysInstanced(static_cast<GLenum>(mode), first, count, instanceCount);
 		}
 
-		void drawIndexed(unsigned int mode, int count, unsigned int type, const void* indecies)
+		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
 		{
-			glDrawElements(mode, count, type, indecies);
+			glDrawElements(static_cast<GLenum>(mode), count, static_cast<GLenum>(type), indecies);
 		}
 
-		void drawIndexdInstanced(unsigned int mode, int count, unsigned int type, const void* indecies, int instanceCount)
+		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
 		{
-			glDrawElementsInstanced(mode, count, type, indecies, instanceCount);
+			glDrawElementsInstanced(static_cast<GLenum>(mode), count, static_cast<GLenum>(type), indecies, instanceCount);
 		}
 
 		void bind(shader* shader)
@@ -146,19 +146,19 @@ namespace rythe::rendering::internal
 		}
 
 		//move file handling elsewhere, specify default Texture params
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR })
+		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,rendering::FilterMode::LINEAR_MIPMAP_LINEAR, rendering::FilterMode::LINEAR })
 		{
 			texture->m_name = name;
 			auto& resolution = texture->m_params.m_resolution;
 			auto& channels = texture->m_params.m_channels;
 			unsigned int& id = texture->m_id;
 			glGenTextures(1, &id);
-			glBindTexture(GL_TEXTURE_2D, id);
+			glBindTexture(static_cast<GLenum>(TargetType::TEXTURE2D), id);
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, static_cast<GLint>(params.m_wrapModeS));
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, static_cast<GLint>(params.m_wrapModeT));
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.m_minFilterMode);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.m_magFilterMode);
+			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_WRAP_S, static_cast<GLint>(params.m_wrapModeS));
+			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_WRAP_T, static_cast<GLint>(params.m_wrapModeT));
+			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_MIN_FILTER, static_cast<GLint>(params.m_minFilterMode));
+			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_MAG_FILTER, static_cast<GLint>(params.m_magFilterMode));
 			stbi_set_flip_vertically_on_load(true);
 
 			texture->m_data = stbi_load(filepath.c_str(), &resolution.x, &resolution.y, &channels, 0);
@@ -172,14 +172,14 @@ namespace rythe::rendering::internal
 			switch (channels)
 			{
 			case 4:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
+				glTexImage2D(static_cast<GLenum>(TargetType::TEXTURE2D), 0, GL_RGBA, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
 				break;
 			case 3:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, resolution.x, resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, texture->m_data);
+				glTexImage2D(static_cast<GLenum>(TargetType::TEXTURE2D), 0, GL_RGB, resolution.x, resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, texture->m_data);
 				break;
 			}
 			//make this optional
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glGenerateMipmap(static_cast<GLenum>(TargetType::TEXTURE2D));
 
 			return texture;
 		}
