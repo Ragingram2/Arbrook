@@ -5,24 +5,25 @@
 #include <rythe/primitives>
 
 #include "core/core.hpp"
-#include "rendering/data/bufferconcepts.hpp"
+#include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering
 {
-	template<typename APIType, typename T, typename dataType>
-		requires validType<T>
+	template<typename APIType>
 	struct Ibuffer
 	{
 	private:
 		APIType m_impl;
 	public:
-		void initialize() { m_impl.initialize(); }
-		void bind() { m_impl.bind(); }
-		void unbind() { m_impl.unbind(); }
+		const APIType* operator->() const { return m_impl; }
+		APIType* operator->() { return &m_impl; }
 
-		void bufferData(dataType data[], int size, UsageType usage) { m_impl.bufferData(data, size, usage); }
-		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, type, normalize, stride, pointer); }
+		void initialize(TargetType target, UsageType usage) { m_impl.initialize(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage)); }
+
+		template<typename dataType>
+		void bufferData(dataType data[], int size) { m_impl.bufferData(data, size); }
+		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, static_cast<internal::DataType>(type), normalize, stride, pointer); }
 	};
 }

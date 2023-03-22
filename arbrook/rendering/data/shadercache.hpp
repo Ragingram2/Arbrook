@@ -5,8 +5,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <GL/glew.h>
-
 #include "core/core.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/shaderhandle.hpp"

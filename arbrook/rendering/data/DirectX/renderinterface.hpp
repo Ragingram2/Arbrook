@@ -2,9 +2,9 @@
 #include <string>
 #include <fstream>
 #include <D3D11.h>
-#include <D3Dx11.h>
-#include <D3Dx10.h>
-#include <d3dcompiler.h>
+#include <D3DX11.h>
+#include <D3DX10.h>
+#include <D3Dcompiler.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -18,16 +18,16 @@
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/DirectX/window.hpp"
-#include "rendering/data/DirectX/buffer.hpp"
-#include "rendering/data/DirectX/shader.hpp"
+#include "rendering/data/config.hpp"
+
+#include Window_HPP_PATH
+#include Shader_HPP_PATH
+#include Buffer_HPP_PATH
 
 namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
-	private:
-		static buffer<vertex, float> vBuffer;
 	public:
 		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
 		{
@@ -35,20 +35,10 @@ namespace rythe::rendering::internal
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 			hwnd.initialize(res, name);
 
-			VERTEX OurVertices[] =
-			{
-				{0.0f, 0.5f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)},
-				{0.45f, -0.5, 0.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f)},
-				{-0.45f, -0.5f, 0.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f)}
-			};
-
-			// create a struct to hold information about the swap chain
 			DXGI_SWAP_CHAIN_DESC scd;
 
-			// clear out the struct for use
 			ZeroMemory(&scd, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-			// fill the swap chain description struct
 			scd.BufferCount = 1;                                    // one back buffer
 			scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // use 32-bit color
 			scd.BufferDesc.Width = res.x;                    // set the back buffer width
@@ -59,7 +49,6 @@ namespace rythe::rendering::internal
 			scd.Windowed = TRUE;                                    // windowed/full-screen mode
 			scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;     // allow full-screen switching
 
-			// create a device, device context and swap chain using the information in the scd struct
 			D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
@@ -68,23 +57,19 @@ namespace rythe::rendering::internal
 				NULL,
 				D3D11_SDK_VERSION,
 				&scd,
-				&hwnd.swapchain,
-				&hwnd.dev,
+				&window::swapchain,
+				&window::dev,
 				NULL,
-				&hwnd.devcon);
+				&window::devcon);
 
-			// get the address of the back buffer
 			ID3D11Texture2D* pBackBuffer;
-			hwnd.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			window::swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
-			// use the back buffer address to create the render target
-			hwnd.dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.backbuffer);
+			window::dev->CreateRenderTargetView(pBackBuffer, NULL, &window::backbuffer);
 			pBackBuffer->Release();
 
-			// set the render target as the back buffer
-			hwnd.devcon->OMSetRenderTargets(1, &hwnd.backbuffer, NULL);
+			window::devcon->OMSetRenderTargets(1, &window::backbuffer, NULL);
 
-			// Set the viewport
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
 
@@ -93,9 +78,7 @@ namespace rythe::rendering::internal
 			viewport.Width = res.x;
 			viewport.Height = res.y;
 
-			hwnd.devcon->RSSetViewports(1, &viewport);
-
-			createVertexBuffer(UsageType::StaticDraw, sizeof(OurVertices), OurVertices);
+			window::devcon->RSSetViewports(1, &viewport);
 		}
 
 		void close()
@@ -110,7 +93,7 @@ namespace rythe::rendering::internal
 
 		void swapBuffers(window& hwnd)
 		{
-			hwnd.swapchain->Present(0, 0);
+			window::swapchain->Present(0, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, int first, int count)
@@ -125,17 +108,17 @@ namespace rythe::rendering::internal
 
 		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
 		{
-			// select which vertex buffer to display
-			unsigned int stride = sizeof(VERTEX);
-			unsigned int offset = 0;
-			window::devcon->IASetVertexBuffers(0, 1, &vBuffer.pVBuffer, &stride, &offset);
+			////// select which vertex buffer to display
+			//unsigned int stride = sizeof(VERTEX);
+			//unsigned int offset = 0;
+			//window::devcon->IASetVertexBuffers(0, 1, &vBuffer.pVBuffer, &stride, &offset);
 
-			// select which primtive type we are using
-			//window::devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			window::devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			//// select which primtive type we are using
+			////window::devcon->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			//window::devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
 
-			// draw the vertex buffer to the back buffer
-			window::devcon->Draw(count, 0);
+			//// draw the vertex buffer to the back buffer
+			//window::devcon->Draw(count, 0);
 		}
 
 		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
@@ -210,25 +193,14 @@ namespace rythe::rendering::internal
 			return texture;
 		}
 
-		void createVertexBuffer(UsageType usage, int size, VERTEX* data)
+		template<typename dataType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0)
 		{
-			D3D11_BUFFER_DESC bd;
-			ZeroMemory(&bd, sizeof(bd));
-
-			//bd.Usage = D3D11_USAGE_DYNAMIC;                // write access access by CPU and GPU
-			bd.Usage = static_cast<D3D11_USAGE>(usage);
-			bd.ByteWidth = sizeof(VERTEX) * 3;             // size is the VERTEX struct * 3
-			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
-			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;    // allow CPU to write in buffer
-
-			window::dev->CreateBuffer(&bd, NULL, &vBuffer.pVBuffer);       // create the buffer
-
-			// copy the vertices into the buffer
-			D3D11_MAPPED_SUBRESOURCE ms;
-			window::devcon->Map(vBuffer.pVBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);    // map the buffer
-			memcpy(ms.pData, data, size);                 // copy the data
-			window::devcon->Unmap(vBuffer.pVBuffer, NULL);                                      // unmap the buffer
+			buffer->initialize(target, usage);
+			if (data)
+			{
+				buffer->bufferData(data, size);
+			}
 		}
 	};
-	inline buffer<vertex, float> RenderInterface::vBuffer;
 }

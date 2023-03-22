@@ -63,6 +63,9 @@
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\rendering\data\buffercache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\ecs\entity.hpp">
@@ -276,6 +279,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\buffercache.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

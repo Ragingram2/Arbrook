@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-
-#include "core/math/math.hpp"
 #include "rendering/data/config.hpp"
 #include Shader_HPP_PATH
 
@@ -17,5 +14,4 @@ namespace rythe::rendering
 		operator internal::shader& () const { return *m_shader; }
 		operator unsigned int() const { return m_shader->m_programId; }
 	};
-
 }

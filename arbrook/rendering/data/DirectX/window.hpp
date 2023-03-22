@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <D3D11.h>
-#include <D3Dx11.h>
-#include <D3Dx10.h>
+#include <D3DX11.h>
+#include <D3DX10.h>
 #include <GLFW/glfw3.h>
 
 #pragma comment (lib, "d3d11.lib")

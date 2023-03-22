@@ -14,15 +14,15 @@ namespace rythe::rendering::internal
 	struct vertexarray
 	{
 		unsigned int m_id;
-		buffer<index, unsigned int> m_indexBuffer;
-		buffer<vertex, float> m_vertexBuffer;
+		buffer m_indexBuffer;
+		buffer m_vertexBuffer;
 
 		void initialize(int num = 1)
 		{
 			glGenVertexArrays(num, &m_id);
 			bind();
-			m_vertexBuffer.initialize();
-			m_indexBuffer.initialize();
+			m_vertexBuffer.initialize(TargetType::ARRAY_BUFFER, UsageType::StaticDraw);
+			m_indexBuffer.initialize(TargetType::ELEMENT_ARRAY_BUFFER, UsageType::StaticDraw);
 		}
 
 		void bind()
@@ -35,14 +35,14 @@ namespace rythe::rendering::internal
 			glBindVertexArray(0);
 		}
 
-		void bufferVertexData(float data[], int size, UsageType usage)
+		void bufferVertexData(float data[], int size)
 		{
-			m_vertexBuffer.bufferData(data, size, usage);
+			m_vertexBuffer.bufferData(data, size);
 		}
 
-		void bufferIndexData(unsigned int data[], int size, UsageType usage)
+		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(data, size, usage);
+			m_indexBuffer.bufferData(data, size);
 		}
 
 		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)

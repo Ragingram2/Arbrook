@@ -13,6 +13,7 @@
 
 #include Window_HPP_PATH
 #include Shader_HPP_PATH
+#include Buffer_HPP_PATH
 
 #include <stb/stb_image.h>
 #define STB_IMAGE_IMPLEMENTATION
@@ -185,6 +186,15 @@ namespace rythe::rendering::internal
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
+		template<typename dataType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0)
+		{
+			buffer->initialize(target, usage);
+			if (data)
+			{
+				buffer->bufferData(data, size);
+			}
+		}
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
 
 	private:

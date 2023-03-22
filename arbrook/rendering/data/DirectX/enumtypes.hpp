@@ -6,8 +6,8 @@ namespace rythe::rendering::internal
 {
 	enum class TargetType
 	{
-		ARRAY_BUFFER = 0,
-		ELEMENT_ARRAY_BUFFER = 0,
+		ARRAY_BUFFER = D3D11_BIND_VERTEX_BUFFER,
+		ELEMENT_ARRAY_BUFFER = D3D11_BIND_INDEX_BUFFER,
 		TEXTURE2D = 0
 	};
 

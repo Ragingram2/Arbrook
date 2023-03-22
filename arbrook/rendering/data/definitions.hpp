@@ -6,6 +6,7 @@
 #include "rendering/data/interface/window.hpp"
 #include "rendering/data/config.hpp"
 #include RenderInterface_HPP_PATH
+#include EnumTypes_HPP_PATH
 #include VertexArray_HPP_PATH
 #include Buffer_HPP_PATH
 #include Shader_HPP_PATH
@@ -15,9 +16,6 @@ namespace rythe::rendering
 {
 	typedef IRenderInterface<internal::RenderInterface> RenderInterface;
 	typedef Ivertexarray<internal::vertexarray> vertexarray;
-	typedef Ibuffer<internal::buffer<index, int>, index, int> indexBuffer;
-	typedef Ibuffer<internal::buffer<vertex, float>, vertex, float> vertexBuffer;
-	template<typename T, typename dataType>
-	using buffer = Ibuffer<internal::buffer<T, dataType>, T, dataType>;
+	typedef Ibuffer<internal::buffer> buffer;
 	typedef Ishader<internal::shader> shader;
 }

@@ -31,12 +31,12 @@ namespace rythe::core
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
 			vao.initialize();
-			vao.bufferVertexData(verticies, sizeof(verticies), gfx::UsageType::StaticDraw);
+			vao.bufferVertexData(verticies, sizeof(verticies));
 			vao.setAttributePtr(0, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float));
 			vao.setAttributePtr(1, 3, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
 			vao.setAttributePtr(2, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
-			vao.bufferIndexData(indicies, sizeof(indicies), gfx::UsageType::StaticDraw);
+			vao.bufferIndexData(indicies, sizeof(indicies));
 			m_renderAPI.bind(texture);
 			m_renderAPI.bind(shader);
 			render.m_texture = texture;

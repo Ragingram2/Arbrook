@@ -152,6 +152,7 @@
     <ClCompile Include="arbrook\core\engine\services\service.cpp" />
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
+    <ClCompile Include="arbrook\rendering\data\buffercache.cpp" />
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
@@ -189,7 +190,9 @@
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\buffercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp" />
+    <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />

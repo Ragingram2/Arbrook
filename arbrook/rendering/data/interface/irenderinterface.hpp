@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 
+#include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/texture.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
@@ -9,6 +10,7 @@
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/data/config.hpp"
 #include Shader_HPP_PATH
+#include Buffer_HPP_PATH
 #include Window_HPP_PATH
 #include EnumTypes_HPP_PATH
 
@@ -22,7 +24,7 @@ namespace rythe::rendering
 	public:
 		void initialize(internal::window& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(hwnd, res, name); }
 		void close() { m_impl.close(); }
-		void swapBuffers(internal::window & hwnd) { m_impl.swapBuffers(hwnd); }
+		void swapBuffers(internal::window& hwnd) { m_impl.swapBuffers(hwnd); }
 
 		void drawArrays(PrimitiveType mode, int first, int count) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), first, count); }
 		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), first, count, instanceCount); }
@@ -61,9 +63,8 @@ namespace rythe::rendering
 		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
 		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);
 		//texture_handle createCubeTexture();
-		//buffer_handle createConstantBuffer();
-		//buffer_handle createIndexBuffer();
-		void createVertexBuffer() { m_impl.createVertexBuffer(); }
+		template<typename dataType>
+		buffer_handle createBuffer(internal::buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0) { m_impl.createBuffer(buffer, target, usage, data, size); return buffer; }
 		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
 	};
