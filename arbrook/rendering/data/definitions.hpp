@@ -18,6 +18,4 @@ namespace rythe::rendering
 	typedef Ivertexarray<internal::vertexarray> vertexarray;
 	typedef Ibuffer<internal::buffer> buffer;
 	typedef Ishader<internal::shader> shader;
-
-	static RenderInterface api;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "rendering/data/vertex.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
@@ -18,7 +19,7 @@ namespace rythe::rendering
 
 		void unbind() { m_impl.unbind(); }
 
-		void bufferVertexData(float data[], int size) { m_impl.bufferVertexData(data, size); }
+		void bufferVertexData(vertex data[], int size) { m_impl.bufferVertexData(data, size); }
 
 		void bufferIndexData(unsigned int data[], int size) { m_impl.bufferIndexData(data, size); }
 

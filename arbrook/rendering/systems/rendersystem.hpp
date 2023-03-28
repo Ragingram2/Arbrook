@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +18,8 @@ namespace rythe::rendering
 	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
+		RenderInterface* m_api;
+
 		Renderer() = default;
 		virtual ~Renderer() = default;
 

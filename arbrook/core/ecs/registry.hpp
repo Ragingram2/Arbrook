@@ -19,6 +19,7 @@ namespace rythe::core::ecs
 	{
 	public:
 		rsl::id_type m_lastId = 0;
+		const static rsl::id_type m_worldId = 0;
 		using entityId = rsl::id_type;
 		using componentId = rsl::id_type;
 
@@ -29,7 +30,7 @@ namespace rythe::core::ecs
 		Registry() = default;
 		virtual ~Registry() = default;
 
-		void initialize() override {}
+		void initialize() override { m_entities.try_emplace(m_worldId, ecs::entity{ m_worldId }); }
 		void update() override {}
 		void shutdown() override {}
 

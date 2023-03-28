@@ -223,6 +223,7 @@
     <ClInclude Include="arbrook\rendering\data\shadercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\textureparameters.hpp" />
+    <ClInclude Include="arbrook\rendering\data\vertex.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
     <ClInclude Include="arbrook\rendering\rendering.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />

@@ -24,13 +24,13 @@ namespace rythe::rendering::internal
 
 	enum class DataType
 	{
-		INT = D3D_SVT_INT,
-		UINT = D3D_SVT_UINT,
-		BYTE = 0,
-		UBYTE = 0,
-		SHORT = D3D_SVT_INT,
-		USHORT = D3D_SVT_UINT8,
-		FLOAT = D3D_SVT_FLOAT
+		INT = sizeof(int),
+		UINT = sizeof(unsigned int),
+		BYTE = sizeof(char),
+		UBYTE = sizeof(unsigned char),
+		SHORT = sizeof(short int),
+		USHORT = sizeof(unsigned short int),
+		FLOAT = sizeof(float)
 	};
 
 	enum class WrapMode

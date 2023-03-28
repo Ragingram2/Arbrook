@@ -36,6 +36,8 @@ namespace rythe::rendering::internal
 
 		void initialize(math::ivec2 res, const std::string& name)
 		{
+			m_resolution = res;
+			m_windowName = name;
 			m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
 		}
 

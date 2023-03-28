@@ -21,6 +21,8 @@ namespace rythe::core::ecs
 		entity(rsl::id_type id, std::string name) : m_id(id), m_name(name) {}
 		~entity() = default;
 
+		operator rsl::id_type& () { return m_id; }
+
 		template<typename componentType>
 		componentType& addComponent();
 
@@ -35,6 +37,13 @@ namespace rythe::core::ecs
 
 		bool operator==(const entity& other) {
 			return m_id == other.m_id;
+		}
+
+
+		entity& operator=(const entity & other) {
+			m_id = other.m_id;
+			m_name = other.m_name;
+			return *this;
 		}
 	};
 }

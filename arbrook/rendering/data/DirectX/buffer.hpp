@@ -19,8 +19,6 @@ namespace rythe::rendering::internal
 		UsageType m_usage;
 		int m_numBuffers = 1;
 
-		unsigned int stride = 0;
-
 	public:
 
 		void initialize(TargetType target, UsageType usage)
@@ -40,8 +38,8 @@ namespace rythe::rendering::internal
 
 		}
 
-		template<typename dataType>
-		void bufferData(window& hwnd,dataType data[], int size)
+		template<typename elementType, typename dataType>
+		void bufferData(window& hwnd, elementType data[], int size)
 		{
 			bd.ByteWidth = sizeof(dataType) * size;
 
@@ -52,6 +50,7 @@ namespace rythe::rendering::internal
 			memcpy(ms.pData, data, size);
 			hwnd.m_devcon->Unmap(m_internalBuffer, NULL);
 		}
+
 
 		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
 		{

@@ -2,11 +2,13 @@
 #include <string>
 #include <fstream>
 #include <memory>
+#include <stdio.h>
 
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <D3DX10.h>
 #include <D3Dcompiler.h>
+#include <DxErr.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
@@ -14,7 +16,9 @@
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")
 #pragma comment (lib, "d3dx10.lib")
-#pragma comment(lib, "D3DCompiler.lib")
+#pragma comment (lib, "DxErr.lib")
+#pragma comment (lib, "D3DCompiler.lib")
+#pragma comment(lib, "legacy_stdio_definitions.lib")
 
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
@@ -26,19 +30,33 @@
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH
 
+//#ifndef HR
+//#define HR(x) \
+//{ \
+//	HRESULT hr = x;\
+//	if(FAILED(hr)) \
+//	{	\
+//		log::error("Error Code: {}",L#x);\
+//	}\
+//}
+//#endif
+//#ifndef HR
+//#define HR(x) x;
+//#endif
+
 namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
 	private:
-		std::unique_ptr<window> hwnd;
+		ID3D11InfoQueue* m_infoQueue;
+		window hwnd;
 	public:
 		void initialize(math::ivec2 res, const std::string& name)
 		{
 			log::debug("Initializing DX11");
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-			hwnd = std::make_unique<window>(res, name);
-			hwnd->initialize(res, name);
+			hwnd.initialize(res, name);
 
 			DXGI_SWAP_CHAIN_DESC scd;
 
@@ -49,31 +67,33 @@ namespace rythe::rendering::internal
 			scd.BufferDesc.Width = res.x;                    // set the back buffer width
 			scd.BufferDesc.Height = res.y;                  // set the back buffer height
 			scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
-			scd.OutputWindow = glfwGetWin32Window(hwnd->getWindow());                                // the window to be used
+			scd.OutputWindow = glfwGetWin32Window(hwnd.getWindow());                                // the window to be used
 			scd.SampleDesc.Count = 4;                               // how many multisamples
 			scd.Windowed = TRUE;                                    // windowed/full-screen mode
-			scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;     // allow full-screen switching
+			scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+			UINT creationFlags = D3D11_CREATE_DEVICE_DEBUG;
 
 			D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
-				NULL,
+				creationFlags,
 				NULL,
 				NULL,
 				D3D11_SDK_VERSION,
 				&scd,
-				&hwnd->m_swapchain,
-				&hwnd->m_dev,
+				&hwnd.m_swapchain,
+				&hwnd.m_dev,
 				NULL,
-				&hwnd->m_devcon);
+				&hwnd.m_devcon);
 
 			ID3D11Texture2D* pBackBuffer;
-			hwnd->m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
-			hwnd->m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd->m_backbuffer);
+			hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
 			pBackBuffer->Release();
 
-			hwnd->m_devcon->OMSetRenderTargets(1, &hwnd->m_backbuffer, NULL);
+			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
 
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
@@ -83,52 +103,54 @@ namespace rythe::rendering::internal
 			viewport.Width = res.x;
 			viewport.Height = res.y;
 
-			hwnd->m_devcon->RSSetViewports(1, &viewport);
+			hwnd.m_devcon->RSSetViewports(1, &viewport);
+
+			hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
 		}
 
 		void close()
 		{
-			hwnd->m_swapchain->SetFullscreenState(FALSE, NULL);
+			hwnd.m_swapchain->SetFullscreenState(FALSE, NULL);
 
-			hwnd->m_swapchain->Release();
-			hwnd->m_backbuffer->Release();
-			hwnd->m_dev->Release();
-			hwnd->m_devcon->Release();
+			hwnd.m_swapchain->Release();
+			hwnd.m_backbuffer->Release();
+			hwnd.m_dev->Release();
+			hwnd.m_devcon->Release();
 		}
 
 		GLFWwindow* getWindow()
 		{
-			return hwnd->getWindow();
+			return hwnd.getWindow();
 		}
 
 		window& getHwnd()
 		{
-			return *hwnd;
+			return hwnd;
 		}
 
 		void makeCurrent()
 		{
-			hwnd->makeCurrent();
+			hwnd.makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
 		{
-			hwnd->setSwapInterval(interval);
+			hwnd.setSwapInterval(interval);
 		}
 
 		bool shouldWindowClose()
 		{
-			return hwnd->shouldClose();
+			return hwnd.shouldClose();
 		}
 
 		void pollEvents()
 		{
-			hwnd->pollEvents();
+			hwnd.pollEvents();
 		}
 
 		void swapBuffers()
 		{
-			hwnd->m_swapchain->Present(0, 0);
+			hwnd.m_swapchain->Present(0, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, int first, int count)
@@ -143,8 +165,8 @@ namespace rythe::rendering::internal
 
 		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
 		{
-			hwnd->m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd->m_devcon->Draw(count, 0);
+			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.m_devcon->DrawIndexed(count, 4, 0);
 		}
 
 		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
@@ -179,7 +201,7 @@ namespace rythe::rendering::internal
 		void setClearColor(math::vec4 color)
 		{
 			float colorData[] = { color.r, color.g, color.b, color.a };
-			hwnd->m_devcon->ClearRenderTargetView(hwnd->m_backbuffer, colorData);
+			hwnd.m_devcon->ClearRenderTargetView(hwnd.m_backbuffer, colorData);
 		}
 
 		void enableStencil()
@@ -211,7 +233,7 @@ namespace rythe::rendering::internal
 
 		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			shader->initialize(*hwnd, name, source);
+			shader->initialize(hwnd, name, source);
 		}
 
 		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR_MIPMAP_LINEAR, rendering::FilterMode::LINEAR })
@@ -231,20 +253,30 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-			ID3D11InfoQueue* m_infoQueue;
-			hwnd->m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
 
 			UINT64 message_count = m_infoQueue->GetNumStoredMessages();
 
 			for (UINT64 i = 0; i < message_count; i++) {
 				SIZE_T message_size = 0;
-				m_infoQueue->GetMessage(i, nullptr, &message_size); //get the size of the message
+				m_infoQueue->GetMessage(i, nullptr, &message_size);
 
-				D3D11_MESSAGE* message = (D3D11_MESSAGE*)malloc(message_size); //allocate enough space
-				m_infoQueue->GetMessage(i, message, &message_size); //get the actual message
-
-				//do whatever you want to do with it
-				log::debug("Directx11: %.*s", message->DescriptionByteLength, message->pDescription);
+				D3D11_MESSAGE* message = (D3D11_MESSAGE*)malloc(message_size);
+				m_infoQueue->GetMessage(i, message, &message_size);
+				switch (message->Severity)
+				{
+				case D3D11_MESSAGE_SEVERITY_CORRUPTION:
+					log::fatal("DX11: {}", message->pDescription);
+					break;
+				case D3D11_MESSAGE_SEVERITY_ERROR:
+					log::error("DX11: {}", message->pDescription);
+					break;
+				case D3D11_MESSAGE_SEVERITY_INFO:
+					log::info("DX11: {}", message->pDescription);
+					break;
+				case D3D11_MESSAGE_SEVERITY_WARNING:
+					log::warn("DX11: {}", message->pDescription);
+					break;
+				}
 
 				free(message);
 			}

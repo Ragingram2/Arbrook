@@ -2,15 +2,20 @@
 
 namespace rythe::core
 {
+
 	void TestSystem::setup()
 	{
 		log::info("Initializing Test System");
-		float verticies[] =
-		{		//positions		//colors					//tex coors
-				 -0.1f,   0.1f,	0.0f, 	1.0f,  0.0f, 0.0f,1.0f,		/*0.0f, 1.0f,//0*/
-				 -0.1f, -0.1f,0.0f,		0.0f, 1.0f, 0.0f,1.0f,		/*0.0f, 0.0f,//1*/
-				  0.1f, -0.1f,0.0f,		0.0f, 0.0f, 1.0f,1.0f,		/*1.0f,0.0f,//2*/
-				  0.1f, 0.1f ,0.0f,		1.0f, 1.0f, 0.0f,1.0f		/*1.0f, 1.0f//3*/
+
+		auto wId = registry->m_worldId;
+		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
+
+		vertex verticies[] =
+		{	//positions					//colors							//tex coors
+			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f } },		/*0.0f, 1.0f,//0*/
+			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f } },		/*0.0f, 0.0f,//1*/
+			{ {  0.1f,-0.1f, 0.0f },	{ 0.0f, 0.0f, 1.0f, 1.0f } },		/*1.0f,0.0f,//2*/
+			{ {  0.1f, 0.1f, 0.0f },	{ 1.0f, 1.0f, 0.0f, 1.0f } }		/*1.0f, 1.0f//3*/
 		};
 
 		unsigned int indicies[] =
@@ -19,10 +24,10 @@ namespace rythe::core
 			2,3,0
 		};
 
-		gfx::api.makeCurrent();
+		m_api->makeCurrent();
 
-		auto texture = gfx::TextureCache::createTexture2D(gfx::api, "Rythe", "resources/textures/Rythe.png");
-		auto shader = gfx::ShaderCache::createShader(gfx::api, "default", "resources/shaders/default.shader");
+		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
+		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		float spawnCount = 5.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -31,16 +36,17 @@ namespace rythe::core
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
 			vao.initialize();
+			vao.bind(m_api->getHwnd());
 			vao.bufferVertexData(verticies, sizeof(verticies));
-			vao.setAttributePtr(0, 3, gfx::DataType::FLOAT, false, 6 * sizeof(float));
-			vao.setAttributePtr(1, 3, gfx::DataType::FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+			vao.setAttributePtr(0, 3, gfx::DataType::FLOAT, false, 7 * sizeof(float));
+			vao.setAttributePtr(1, 4, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
 			//vao.setAttributePtr(2, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
 
 			vao.bufferIndexData(indicies, sizeof(indicies));
-			gfx::api.bind(texture);
-			//m_renderAPI.bind(shader);
+			m_api->bind(texture);
+			m_api->bind(shader);
 			render.m_texture = texture;
-			//render.m_shader = shader;
+			render.m_shader = shader;
 
 			vao.unbind();
 

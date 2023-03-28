@@ -5,6 +5,7 @@
 #include "rendering/data/texturecache.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/components/spriterenderer.hpp"
+#include "rendering/data/vertex.hpp"
 
 namespace rythe
 {
