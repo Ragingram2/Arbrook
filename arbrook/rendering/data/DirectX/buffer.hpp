@@ -12,12 +12,14 @@ namespace rythe::rendering::internal
 	struct buffer
 	{
 		unsigned int m_id = 0;
-	private:
 		ID3D11Buffer* m_internalBuffer;
+	private:
 		D3D11_BUFFER_DESC bd;
 		TargetType m_target;
 		UsageType m_usage;
 		int m_numBuffers = 1;
+
+		unsigned int stride = 0;
 
 	public:
 
@@ -33,17 +35,22 @@ namespace rythe::rendering::internal
 			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		}
 
+		void bind()
+		{
+
+		}
+
 		template<typename dataType>
-		void bufferData(dataType data[], int size)
+		void bufferData(window& hwnd,dataType data[], int size)
 		{
 			bd.ByteWidth = sizeof(dataType) * size;
 
-			window::dev->CreateBuffer(&bd, NULL, &m_internalBuffer);
+			hwnd.m_dev->CreateBuffer(&bd, NULL, &m_internalBuffer);
 
 			D3D11_MAPPED_SUBRESOURCE ms;
-			window::devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
+			hwnd.m_devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
 			memcpy(ms.pData, data, size);
-			window::devcon->Unmap(m_internalBuffer, NULL);
+			hwnd.m_devcon->Unmap(m_internalBuffer, NULL);
 		}
 
 		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)

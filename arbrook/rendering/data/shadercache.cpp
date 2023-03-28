@@ -3,9 +3,8 @@
 namespace rythe::rendering
 {
 	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
-	RenderInterface ShaderCache::m_api;
 
-	shader_handle ShaderCache::createShader(const std::string& name, const std::string& filepath)
+	shader_handle ShaderCache::createShader(RenderInterface& api, const std::string& name, const std::string& filepath)
 	{
 		if (m_shaders.contains(name))
 		{
@@ -15,7 +14,7 @@ namespace rythe::rendering
 
 		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second->operator->();
 
-		return m_api.createShader(shad, name, loadShader(filepath));
+		return api.createShader(shad, name, loadShader(filepath));
 	}
 
 	shader_handle ShaderCache::getShader(const std::string& name)

@@ -5,3 +5,8 @@
 #include "rendering/data/texturecache.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/components/spriterenderer.hpp"
+
+namespace rythe
+{
+	namespace gfx = rendering;
+}

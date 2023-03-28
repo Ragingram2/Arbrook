@@ -30,6 +30,11 @@ namespace rythe::rendering::internal
 
 			glGenBuffers(m_numBuffers, &m_id);
 
+			bind();
+		}
+
+		void bind()
+		{
 			glBindBuffer(static_cast<GLenum>(m_target), 0);
 			glBindBuffer(static_cast<GLenum>(m_target), m_id);
 		}
@@ -37,8 +42,7 @@ namespace rythe::rendering::internal
 		template<typename dataType>
 		void bufferData(dataType data[], int size)
 		{
-			glBindBuffer(static_cast<GLenum>(m_target), 0);
-			glBindBuffer(static_cast<GLenum>(m_target), m_id);
+			bind();
 
 			std::vector<dataType> m_data;
 			m_data.insert(m_data.end(), &data[0], &data[size]);
@@ -47,8 +51,7 @@ namespace rythe::rendering::internal
 
 		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
 		{
-			glBindBuffer(static_cast<GLenum>(m_target), 0);
-			glBindBuffer(static_cast<GLenum>(m_target), m_id);
+			bind();
 
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);

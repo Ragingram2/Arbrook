@@ -10,7 +10,7 @@ namespace rythe::rendering::internal
 	struct window
 	{
 	private:
-		static GLFWwindow* m_window;
+		GLFWwindow* m_window;
 	public:
 		math::ivec2 m_resolution;
 		std::string m_windowName;
@@ -49,11 +49,10 @@ namespace rythe::rendering::internal
 			return glfwWindowShouldClose(m_window);
 		}
 
-		static void makeCurrent()
+		void makeCurrent()
 		{
 			glfwMakeContextCurrent(m_window);
 		}
 	};
 
-	inline GLFWwindow* window::m_window;
 }

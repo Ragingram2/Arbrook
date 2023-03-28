@@ -3,10 +3,9 @@
 namespace rythe::rendering
 {
 	std::unordered_map<std::string, std::unique_ptr<buffer>> BufferCache::m_buffers;
-	RenderInterface BufferCache::m_api;
 
 	template<typename dataType>
-	buffer_handle BufferCache::createBuffer(const std::string& name, TargetType target, UsageType usage, dataType* data, int size)
+	buffer_handle BufferCache::createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, dataType* data, int size)
 	{
 		if (m_buffers.contains(name))
 		{
@@ -16,7 +15,7 @@ namespace rythe::rendering
 
 		auto buff = m_buffers.emplace(name, std::make_unique<buffer>()).first->second->operator->();
 
-		return m_api.createBuffer(buff, target, usage, data, size);
+		return api.createBuffer(buff, target, usage, data, size);
 	}
 
 	buffer_handle BufferCache::getBuffer(const std::string& name)

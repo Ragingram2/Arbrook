@@ -22,9 +22,15 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
-		void initialize(internal::window& hwnd, math::ivec2 res, const std::string& name) { m_impl.initialize(hwnd, res, name); }
+		void initialize(math::ivec2 res, const std::string& name) { m_impl.initialize(res, name); }
 		void close() { m_impl.close(); }
-		void swapBuffers(internal::window& hwnd) { m_impl.swapBuffers(hwnd); }
+		GLFWwindow* getWindow() { return m_impl.getWindow(); }
+		internal::window& getHwnd() { return m_impl.getHwnd(); }
+		void makeCurrent() { m_impl.makeCurrent(); }
+		void setSwapInterval(int interval) { m_impl.setSwapInterval(interval); }
+		bool shouldWindowClose() { return m_impl.shouldWindowClose(); }
+		void pollEvents() { m_impl.pollEvents(); }
+		void swapBuffers() { m_impl.swapBuffers(); }
 
 		void drawArrays(PrimitiveType mode, int first, int count) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), first, count); }
 		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), first, count, instanceCount); }
@@ -48,13 +54,13 @@ namespace rythe::rendering
 		void setStencilOp() { m_impl.setStencilOp(); }
 		void setStencilFunc() { m_impl.setStencilFunc(); }
 
-		void setViewport();
-		void setScissorTest();
-		void setBlend(bool blend);
-		void setBlendParam();
-		void setDepthTest();
-		void setDepthWrite();
-		void setDepthFunction();
+		//void setViewport();
+		//void setScissorTest();
+		//void setBlend(bool blend);
+		//void setBlendParam();
+		//void setDepthTest();
+		//void setDepthWrite();
+		//void setDepthFunction();
 
 		//void setLineWidth();
 
@@ -67,5 +73,7 @@ namespace rythe::rendering
 		buffer_handle createBuffer(internal::buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0) { m_impl.createBuffer(buffer, target, usage, data, size); return buffer; }
 		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
+
+		void checkError() { m_impl.checkError(); }
 	};
 }

@@ -22,12 +22,14 @@ namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
+	private:
+		window hwnd;
 	public:
-		void initialize(window& hwnd, math::ivec2 res, const std::string& name)
+		void initialize(math::ivec2 res, const std::string& name)
 		{
 			log::debug("Initializing OpenGL");
 			hwnd.initialize(res, name);
-			window::makeCurrent();
+			hwnd.makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -54,11 +56,36 @@ namespace rythe::rendering::internal
 		{
 
 		}
-		void swapBuffers(window& hwnd)
+
+		window& getHwnd()
+		{
+			return hwnd;
+		}
+
+		void makeCurrent()
+		{
+			hwnd.makeCurrent();
+		}
+
+		void setSwapInterval(int interval)
+		{
+			hwnd.setSwapInterval(interval);
+		}
+
+		bool shouldWindowClose()
+		{
+			return hwnd.shouldClose();
+		}
+
+		void pollEvents()
+		{
+			hwnd.pollEvents();
+		}
+
+		void swapBuffers()
 		{
 			glfwSwapBuffers(hwnd.getWindow());
 		}
-
 
 		void drawArrays(PrimitiveType mode, int first, int count)
 		{
@@ -143,7 +170,7 @@ namespace rythe::rendering::internal
 
 		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			shader->initialize(name, source);
+			shader->initialize(hwnd,name, source);
 		}
 
 		//move file handling elsewhere, specify default Texture params
@@ -196,6 +223,11 @@ namespace rythe::rendering::internal
 			}
 		}
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
+
+		void checkError()
+		{
+
+		}
 
 	private:
 		static void debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int  severity, int length, const char* message, const void* userparam);

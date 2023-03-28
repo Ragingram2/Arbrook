@@ -39,28 +39,28 @@ namespace rythe::rendering::internal
 		}
 		operator unsigned int() const { return m_programId; }
 
-		void initialize(const std::string& name, const shader_source& source)
+		void initialize(window& hwnd, const std::string& name, const shader_source& source)
 		{
 			compileShader(0, source.vertexSource);
 			compileShader(1, source.fragSource);
 
 			// encapsulate both shaders into shader objects
-			window::dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &pVS);
-			window::dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &pPS);
+			hwnd.m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &pVS);
+			hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &pPS);
 
 			// set the shader objects
-			window::devcon->VSSetShader(pVS, 0, 0);
-			window::devcon->PSSetShader(pPS, 0, 0);
+			hwnd.m_devcon->VSSetShader(pVS, 0, 0);
+			hwnd.m_devcon->PSSetShader(pPS, 0, 0);
 
 			// create the input layout object
 			D3D11_INPUT_ELEMENT_DESC ied[] =
 			{
-				{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-				{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+				{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0},
+				{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_VERTEX_DATA, 0},
 			};
 
-			window::dev->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &pLayout);
-			window::devcon->IASetInputLayout(pLayout);
+			hwnd.m_dev->CreateInputLayout(ied, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &pLayout);
+			hwnd.m_devcon->IASetInputLayout(pLayout);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec4 value)

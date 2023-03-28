@@ -16,15 +16,15 @@ namespace rythe::rendering::internal
 	struct window
 	{
 	private:
-		static GLFWwindow* m_window;
+		GLFWwindow* m_window;
 	public:
-		static IDXGISwapChain* swapchain;             // the pointer to the swap chain interface
-		static ID3D11Device* dev;                     // the pointer to our Direct3D device interface
-		static ID3D11DeviceContext* devcon;           // the pointer to our Direct3D device context
-		static ID3D11RenderTargetView* backbuffer;    // global declaration
 		math::ivec2 m_resolution;
 		std::string m_windowName;
 
+		IDXGISwapChain* m_swapchain;             // the pointer to the swap chain interface
+		ID3D11Device* m_dev;                     // the pointer to our Direct3D device interface
+		ID3D11DeviceContext* m_devcon;           // the pointer to our Direct3D device context
+		ID3D11RenderTargetView* m_backbuffer;    // global declaration
 	public:
 		window() = default;
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
@@ -59,17 +59,9 @@ namespace rythe::rendering::internal
 			return glfwWindowShouldClose(m_window);
 		}
 
-		static void makeCurrent()
+		void makeCurrent()
 		{
 			glfwMakeContextCurrent(m_window);
 		}
 	};
-
-	inline GLFWwindow* window::m_window;
-	// global declarations
-	inline IDXGISwapChain* window::swapchain;             // the pointer to the swap chain interface
-	inline ID3D11Device* window::dev;                     // the pointer to our Direct3D device interface
-	inline ID3D11DeviceContext* window::devcon;           // the pointer to our Direct3D device context
-	inline ID3D11RenderTargetView* window::backbuffer;    // global declaration
-
 }

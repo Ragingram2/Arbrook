@@ -2,6 +2,7 @@
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
+#include Window_HPP_PATH
 
 namespace rythe::rendering
 {
@@ -13,7 +14,7 @@ namespace rythe::rendering
 	public:
 		void initialize(int num = 1) { m_impl.initialize(num); }
 
-		void bind() { m_impl.bind(); }
+		void bind(internal::window& hwnd) { m_impl.bind(hwnd); }
 
 		void unbind() { m_impl.unbind(); }
 

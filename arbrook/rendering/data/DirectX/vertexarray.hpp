@@ -15,15 +15,20 @@ namespace rythe::rendering::internal
 		buffer m_indexBuffer;
 		buffer m_vertexBuffer;
 
+		window m_hwnd;
+
 		void initialize(int num = 1)
 		{
 			m_vertexBuffer.initialize(TargetType::ARRAY_BUFFER, UsageType::StaticDraw);
 			m_indexBuffer.initialize(TargetType::ELEMENT_ARRAY_BUFFER, UsageType::StaticDraw);
 		}
 
-		void bind()
+		void bind(window& hwnd)
 		{
-
+			m_hwnd = hwnd;
+			unsigned int stride = sizeof(float) * 3;
+			unsigned int offset = 0;
+			m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_vertexBuffer.m_internalBuffer, &stride, &offset);
 		}
 
 		void unbind()
@@ -33,12 +38,12 @@ namespace rythe::rendering::internal
 
 		void bufferVertexData(float data[], int size)
 		{
-			m_vertexBuffer.bufferData(data, size);
+			m_vertexBuffer.bufferData(m_hwnd,data, size);
 		}
 
 		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(data, size);
+			m_indexBuffer.bufferData(m_hwnd,data, size);
 		}
 
 		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)

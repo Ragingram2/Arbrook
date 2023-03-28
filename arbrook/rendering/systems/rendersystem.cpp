@@ -8,9 +8,9 @@ namespace rythe::rendering
 		if (!glfwInit())
 			return;
 
-		m_renderApi.initialize(m_window, math::ivec2(600, 600), "Arbrook");
+		api.initialize(math::ivec2(600, 600), "Arbrook");
 
-		if (!m_window.getWindow())
+		if (!api.getWindow())
 		{
 			glfwTerminate();
 			log::error("Window initialization failed");
@@ -20,19 +20,19 @@ namespace rythe::rendering
 
 	void Renderer::update()
 	{
-		internal::window::makeCurrent();
+		api.makeCurrent();
 
-		m_window.setSwapInterval(1);
+		api.setSwapInterval(1);
 
-		if (m_window.shouldClose())
+		if (api.shouldWindowClose())
 		{
 			rythe::core::events::exit evnt(0);
 			raiseEvent(evnt);
 			return;
 		}
 
-		m_renderApi.clear(GL_COLOR_BUFFER_BIT);
-		m_renderApi.setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
+		api.clear(GL_COLOR_BUFFER_BIT);
+		api.setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
 		for (auto& ent : m_filter)
 		{
@@ -42,25 +42,27 @@ namespace rythe::rendering
 
 			auto& shader = renderComp.m_shader;
 			auto& texture = renderComp.m_texture;
-			m_renderApi.bind(shader);
-			m_renderApi.bind(texture);
-			renderComp.vao.bind();
+			api.bind(shader);
+			api.bind(texture);
+			renderComp.vao.bind(api.getHwnd());
 
 			shader->setUniform("u_position", transf.position);
 			shader->setUniform("u_time", example.time);
 
-			m_renderApi.drawIndexed(PrimitiveType::TRIANGLESLIST, 6, DataType::UINT, nullptr);
+			api.drawIndexed(PrimitiveType::TRIANGLESLIST, 6, DataType::UINT, nullptr);
 
 			renderComp.vao.unbind();
 		}
 
-		m_renderApi.swapBuffers(m_window);
-		m_window.pollEvents();
+		api.swapBuffers();
+		api.pollEvents();
+
+		api.checkError();
 	}
 
 	void Renderer::shutdown()
 	{
 		glfwTerminate();
-		m_renderApi.close();
+		api.close();
 	}
 }
