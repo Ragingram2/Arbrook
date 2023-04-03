@@ -18,8 +18,11 @@ namespace rythe::rendering
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = static_cast<int>(internal::PrimitiveType::TRIANGLES),
-		TRIANGLESLIST = static_cast<int>(internal::PrimitiveType::TRIANGLESLIST)
+		TRIANGLESLIST = static_cast<int>(internal::PrimitiveType::TRIANGLESLIST),
+		TRIANGLESTRIP = static_cast<int>(internal::PrimitiveType::TRIANGLESTRIP),
+		LINELIST = static_cast<int>(internal::PrimitiveType::LINELIST),
+		LINESTRIP = static_cast<int>(internal::PrimitiveType::LINESTRIP),
+		POINTLIST = static_cast<int>(internal::PrimitiveType::POINTLIST)
 	};
 
 	enum class DataType

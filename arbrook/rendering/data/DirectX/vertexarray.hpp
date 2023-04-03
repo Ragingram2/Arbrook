@@ -27,9 +27,9 @@ namespace rythe::rendering::internal
 		void bind(window& hwnd)
 		{
 			m_hwnd = hwnd;
-			unsigned int stride = 4 * sizeof(float);
+			unsigned int stride[1] = { sizeof(vertex) };
 			unsigned int offset = 0;
-			m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_vertexBuffer.m_internalBuffer, &stride, &offset);
+			m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_vertexBuffer.m_internalBuffer, stride, &offset);
 			m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.m_internalBuffer, DXGI_FORMAT_R32_UINT, offset);
 		}
 
@@ -40,13 +40,13 @@ namespace rythe::rendering::internal
 
 		void bufferVertexData(vertex data[], int size)
 		{
-			m_vertexBuffer.bufferData(m_hwnd, data, size);
+			m_vertexBuffer.bufferData<vertex, float>(m_hwnd, data, size);
 
 		}
 
 		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(m_hwnd, data, size);
+			m_indexBuffer.bufferData<unsigned int, unsigned int>(m_hwnd, data, size);
 
 		}
 

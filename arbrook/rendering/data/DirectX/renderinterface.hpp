@@ -153,23 +153,23 @@ namespace rythe::rendering::internal
 			hwnd.m_swapchain->Present(0, 0);
 		}
 
-		void drawArrays(PrimitiveType mode, int first, int count)
+		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
 		{
 
 		}
 
-		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount)
+		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance)
 		{
 
 		}
 
-		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
+		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
 			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd.m_devcon->DrawIndexed(count, 4, 0);
+			hwnd.m_devcon->DrawIndexed(indexCount, startIndex, baseVertex);
 		}
 
-		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
+		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
 
 		}

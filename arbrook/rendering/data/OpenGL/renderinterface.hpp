@@ -87,24 +87,24 @@ namespace rythe::rendering::internal
 			glfwSwapBuffers(hwnd.getWindow());
 		}
 
-		void drawArrays(PrimitiveType mode, int first, int count)
+		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
 		{
-			glDrawArrays(static_cast<GLenum>(mode), first, count);
+			glDrawArrays(static_cast<GLenum>(mode), startVertex, vertexCount);
 		}
 
-		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount)
+		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance)
 		{
-			glDrawArraysInstanced(static_cast<GLenum>(mode), first, count, instanceCount);
+			glDrawArraysInstanced(static_cast<GLenum>(mode), startVertex, vertexCount, instanceCount);
 		}
 
-		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
+		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
-			glDrawElements(static_cast<GLenum>(mode), count, static_cast<GLenum>(type), indecies);
+			glDrawElements(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex));
 		}
 
-		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)
+		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
-			glDrawElementsInstanced(static_cast<GLenum>(mode), count, static_cast<GLenum>(type), indecies, instanceCount);
+			glDrawElementsInstanced(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex), instanceCount);
 		}
 
 		void bind(shader* shader)

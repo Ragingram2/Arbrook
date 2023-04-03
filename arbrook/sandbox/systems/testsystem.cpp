@@ -10,7 +10,7 @@ namespace rythe::core
 		auto wId = registry->m_worldId;
 		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
 
-		vertex verticies[] =
+		gfx::vertex verticies[] =
 		{	//positions					//colors							//tex coors
 			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f } },		/*0.0f, 1.0f,//0*/
 			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f } },		/*0.0f, 0.0f,//1*/
@@ -28,7 +28,7 @@ namespace rythe::core
 
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
-		float spawnCount = 5.f;
+		float spawnCount = 1.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
 			auto& ent = createEntity();

@@ -17,8 +17,11 @@ namespace rythe::rendering::internal
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = GL_TRIANGLES,
-		TRIANGLESLIST = GL_TRIANGLE_STRIP
+		TRIANGLESLIST = GL_TRIANGLES,
+		TRIANGLESTRIP = GL_TRIANGLE_STRIP,
+		LINELIST = GL_LINES,
+		LINESTRIP = GL_LINE_STRIP,
+		POINTLIST = GL_POINTS
 	};
 
 	enum class DataType

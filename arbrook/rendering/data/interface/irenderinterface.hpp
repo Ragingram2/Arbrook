@@ -32,10 +32,10 @@ namespace rythe::rendering
 		void pollEvents() { m_impl.pollEvents(); }
 		void swapBuffers() { m_impl.swapBuffers(); }
 
-		void drawArrays(PrimitiveType mode, int first, int count) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), first, count); }
-		void drawArraysInstanced(PrimitiveType mode, int first, int count, int instanceCount) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), first, count, instanceCount); }
-		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies) { m_impl.drawIndexed(static_cast<internal::PrimitiveType>(mode), count, static_cast<internal::DataType>(type), indecies); }
-		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), count, static_cast<internal::DataType>(type), indecies, instanceCount); }
+		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), startVertex, vertexCount); }
+		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), vertexCount, instanceCount, startVertex, instanceCount, startInstance); }
+		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex) { m_impl.drawIndexed(static_cast<internal::PrimitiveType>(mode), indexCount, startIndex, baseVertex); }
+		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), indexCount, instanceCount, startIndex, baseVertex, startInstance); }
 
 		//void bind();//render targets
 		void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }
