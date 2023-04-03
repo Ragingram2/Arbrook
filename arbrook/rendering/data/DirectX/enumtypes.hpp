@@ -36,6 +36,14 @@ namespace rythe::rendering::internal
 		FLOAT = sizeof(float)
 	};
 
+	enum class FormatType
+	{
+		RG32F = DXGI_FORMAT_R32G32_FLOAT,
+		RGB32F = DXGI_FORMAT_R32G32B32_FLOAT,
+		RGBA32F = DXGI_FORMAT_R32G32B32A32_FLOAT,
+		R32U = DXGI_FORMAT_R32_UINT
+	};
+
 	enum class WrapMode
 	{
 		CLAMP = 0,

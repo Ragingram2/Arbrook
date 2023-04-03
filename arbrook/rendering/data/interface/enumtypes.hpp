@@ -36,6 +36,14 @@ namespace rythe::rendering
 		FLOAT = static_cast<int>(internal::DataType::FLOAT)
 	};
 
+	enum class FormatType
+	{
+		RG32F = static_cast<int>(internal::FormatType::RG32F),
+		RGB32F = static_cast<int>(internal::FormatType::RGB32F),
+		RGBA32F = static_cast<int>(internal::FormatType::RGBA32F),
+		R32U = static_cast<int>(internal::FormatType::R32U)
+	};
+
 	enum class WrapMode
 	{
 		CLAMP = static_cast<int>(internal::WrapMode::CLAMP),

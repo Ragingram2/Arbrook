@@ -176,7 +176,9 @@ namespace rythe::rendering::internal
 
 		void bind(shader* shader)
 		{
-
+			hwnd.m_devcon->VSSetShader(shader->m_VS, 0, 0);
+			hwnd.m_devcon->PSSetShader(shader->m_PS, 0, 0);
+			activeShader = shader;
 		}
 
 		void bind(texture_handle handle)

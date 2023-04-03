@@ -7,5 +7,6 @@ namespace rythe::rendering
 	{
 		math::vec3 position;
 		math::vec4 color;
+		math::vec2 uv;
 	};
 }

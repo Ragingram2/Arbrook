@@ -23,6 +23,6 @@ namespace rythe::rendering
 
 		void bufferIndexData(unsigned int data[], int size) { m_impl.bufferIndexData(data, size); }
 
-		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, static_cast<internal::DataType>(type), normalize, stride, pointer); }
+		void setAttributePtr(std::string attribName, unsigned int index, FormatType components, int stride, unsigned int offset) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset); }
 	};
 }

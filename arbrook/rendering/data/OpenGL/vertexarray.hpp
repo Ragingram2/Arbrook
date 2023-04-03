@@ -39,18 +39,30 @@ namespace rythe::rendering::internal
 
 		void bufferVertexData(float data[], int size)
 		{
-			m_vertexBuffer.bufferData(m_hwnd, data, size);
+			m_vertexBuffer.bufferData<float, float>(m_hwnd, data, size);
 		}
 
 		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(m_hwnd, data, size);
+			m_indexBuffer.bufferData<unsigned int, unsigned int>(m_hwnd, data, size);
 		}
 
-		void setAttributePtr(int index, DataType type, int stride, int components = 0, bool normalize=false, const void* pointer = 0)
+		void setAttributePtr(std::string attribName, unsigned int index, FormatType components, int stride, unsigned int offset = 0)
 		{
 			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);
+			glBindAttribLocation(0, index, attribName.c_str());
+			switch (components)
+			{
+			case FormatType::RGB32F:
+				glVertexAttribPointer(index, 3, static_cast<GLenum>(DataType::FLOAT), false, stride, &offset);
+				break;
+			case FormatType::RGBA32F:
+				glVertexAttribPointer(index, 4, static_cast<GLenum>(DataType::FLOAT), false, stride, &offset);
+				break;
+			case FormatType::R32U:
+				glVertexAttribPointer(index, 1, static_cast<GLenum>(DataType::UINT), false, stride, &offset);
+				break;
+			}
 		}
 	};
 }

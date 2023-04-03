@@ -8,6 +8,7 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/config.hpp"
 
@@ -110,6 +111,7 @@ namespace rythe::rendering::internal
 		void bind(shader* shader)
 		{
 			glUseProgram(shader->m_programId);
+			activeShader = shader;
 		}
 
 		void bind(texture_handle handle)

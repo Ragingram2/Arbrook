@@ -12,10 +12,10 @@ namespace rythe::core
 
 		gfx::vertex verticies[] =
 		{	//positions					//colors							//tex coors
-			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f } },		/*0.0f, 1.0f,//0*/
-			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f } },		/*0.0f, 0.0f,//1*/
-			{ {  0.1f,-0.1f, 0.0f },	{ 0.0f, 0.0f, 1.0f, 1.0f } },		/*1.0f,0.0f,//2*/
-			{ {  0.1f, 0.1f, 0.0f },	{ 1.0f, 1.0f, 0.0f, 1.0f } }		/*1.0f, 1.0f//3*/
+			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0*/
+			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1*/
+			{ {  0.1f,-0.1f, 0.0f },	{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2*/
+			{ {  0.1f, 0.1f, 0.0f },	{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3*/
 		};
 
 		unsigned int indicies[] =
@@ -28,6 +28,7 @@ namespace rythe::core
 
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
+
 		float spawnCount = 1.f;
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -35,16 +36,20 @@ namespace rythe::core
 
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
+
+
 			vao.initialize();
+
 			vao.bind(m_api->getHwnd());
 			vao.bufferVertexData(verticies, sizeof(verticies));
-			vao.setAttributePtr(0, 3, gfx::DataType::FLOAT, false, 7 * sizeof(float));
-			vao.setAttributePtr(1, 4, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-			//vao.setAttributePtr(2, 2, gfx::DataType::FLOAT, false, 7 * sizeof(float), (void*)(5 * sizeof(float)));
-
 			vao.bufferIndexData(indicies, sizeof(indicies));
 			m_api->bind(texture);
 			m_api->bind(shader);
+
+			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
+			vao.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), (3 * sizeof(float)));
+			vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
+
 			render.m_texture = texture;
 			render.m_shader = shader;
 

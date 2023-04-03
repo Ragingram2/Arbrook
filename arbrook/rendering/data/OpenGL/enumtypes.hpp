@@ -35,6 +35,14 @@ namespace rythe::rendering::internal
 		FLOAT = GL_FLOAT
 	};
 
+	enum class FormatType
+	{
+		RG32F = GL_RG32F,
+		RGB32F = GL_RGB32F,
+		RGBA32F = GL_RGBA32F,
+		R32U = GL_R32UI
+	};
+
 	enum class WrapMode
 	{
 		CLAMP = GL_CLAMP,
