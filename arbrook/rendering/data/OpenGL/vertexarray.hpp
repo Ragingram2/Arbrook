@@ -5,15 +5,17 @@
 
 #include <rythe/primitives>
 
+#include "rendering/data/vertex.hpp"
 #include "rendering/data/config.hpp"
 #include Buffer_HPP_PATH
 #include EnumTypes_HPP_PATH
+#include Window_HPP_PATH
 
 namespace rythe::rendering::internal
 {
 	struct vertexarray
 	{
-		unsigned int m_id;
+		unsigned int m_id = 0;
 		buffer m_indexBuffer;
 		buffer m_vertexBuffer;
 
@@ -28,6 +30,9 @@ namespace rythe::rendering::internal
 
 		void bind(window& hwnd)
 		{
+			if (m_id == 0)
+				initialize();
+
 			m_hwnd = hwnd;
 			glBindVertexArray(m_id);
 		}
@@ -37,20 +42,39 @@ namespace rythe::rendering::internal
 			glBindVertexArray(0);
 		}
 
-		void bufferVertexData(float data[], int size)
+		void submitAttributes()
 		{
-			m_vertexBuffer.bufferData(m_hwnd, data, size);
+
+		}
+
+		void bufferVertexData(vertex data[], int size)
+		{
+			m_vertexBuffer.bufferData<vertex>(data, size);
 		}
 
 		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(m_hwnd, data, size);
+			m_indexBuffer.bufferData<unsigned int>(data, size);
 		}
 
-		void setAttributePtr(int index, DataType type, int stride, int components = 0, bool normalize=false, const void* pointer = 0)
+		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, int stride, unsigned int offset = 0)
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);
+			glEnableVertexArrayAttrib(m_id, index);
+			switch (components)
+			{
+			case FormatType::RGB32F:
+				glVertexAttribPointer(index, 3, static_cast<GLenum>(DataType::FLOAT), false, stride, &offset);
+				break;
+			case FormatType::RGBA32F:
+				glVertexAttribPointer(index, 4, static_cast<GLenum>(DataType::FLOAT), false, stride, &offset);
+				break;
+			case FormatType::R32U:
+				glVertexAttribPointer(index, 1, static_cast<GLenum>(DataType::UINT), false, stride, &offset);
+				break;
+			case FormatType::RG32F:
+				glVertexAttribPointer(index, 2, static_cast<GLenum>(DataType::FLOAT), false, stride, &offset);
+				break;
+			}
 		}
 	};
 }

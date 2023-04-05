@@ -24,6 +24,6 @@ namespace rythe::rendering
 		void bind() { m_impl.bind(); }
 		template<typename dataType>
 		void bufferData(dataType data[], int size) { m_impl.bufferData(data, size); }
-		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, static_cast<internal::DataType>(type), normalize, stride, pointer); }
+		/*void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0) { m_impl.setAttributePtr(index, components, static_cast<internal::DataType>(type), normalize, stride, pointer); }*/
 	};
 }

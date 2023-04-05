@@ -35,7 +35,6 @@ namespace rythe::rendering::internal
 
 		void bind()
 		{
-			glBindBuffer(static_cast<GLenum>(m_target), 0);
 			glBindBuffer(static_cast<GLenum>(m_target), m_id);
 		}
 
@@ -43,18 +42,15 @@ namespace rythe::rendering::internal
 		void bufferData(dataType data[], int size)
 		{
 			bind();
-
-			std::vector<dataType> m_data;
-			m_data.insert(m_data.end(), &data[0], &data[size]);
-			glBufferData(static_cast<GLenum>(m_target), size, m_data.data(), static_cast<GLenum>(m_usage));
+			glBufferData(static_cast<GLenum>(m_target), size, data, static_cast<GLenum>(m_usage));
 		}
 
-		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
-		{
-			bind();
+		//void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
+		//{
+		//	bind();
 
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);
-		}
+		//	glEnableVertexAttribArray(index);
+		//	glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);
+		//}
 	};
 }

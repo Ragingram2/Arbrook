@@ -26,4 +26,15 @@
 #define Window_HPP_PATH "rendering/data/DirectX/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/data/DirectX/enumtypes.hpp"
 #define ShaderLanguage "HLSL"
+
+
+#define HR(x) \
+{\
+	HRESULT hr = x;\
+	if(FAILED(hr))\
+	{ \
+		__debugbreak();\
+	} \
+}
+
 #endif

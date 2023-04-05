@@ -17,8 +17,11 @@ namespace rythe::rendering::internal
 
 	enum class PrimitiveType
 	{
-		TRIANGLES = GL_TRIANGLES,
-		TRIANGLESLIST = GL_TRIANGLE_STRIP
+		TRIANGLESLIST = GL_TRIANGLES,
+		TRIANGLESTRIP = GL_TRIANGLE_STRIP,
+		LINELIST = GL_LINES,
+		LINESTRIP = GL_LINE_STRIP,
+		POINTLIST = GL_POINTS
 	};
 
 	enum class DataType
@@ -30,6 +33,14 @@ namespace rythe::rendering::internal
 		SHORT = GL_SHORT,
 		USHORT = GL_UNSIGNED_SHORT,
 		FLOAT = GL_FLOAT
+	};
+
+	enum class FormatType
+	{
+		RG32F = GL_RG32F,
+		RGB32F = GL_RGB32F,
+		RGBA32F = GL_RGBA32F,
+		R32U = GL_R32UI
 	};
 
 	enum class WrapMode

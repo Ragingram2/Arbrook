@@ -52,7 +52,7 @@ namespace rythe::rendering
 			shader->setUniform("u_position", transf.position);
 			shader->setUniform("u_time", example.time);
 
-			m_api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, DataType::UINT, nullptr);
+			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 6, 0, 0);
 
 			renderComp.vao.unbind();
 		}
