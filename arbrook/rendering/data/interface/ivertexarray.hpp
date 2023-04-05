@@ -19,10 +19,12 @@ namespace rythe::rendering
 
 		void unbind() { m_impl.unbind(); }
 
+		void submitAttributes() { m_impl.submitAttributes(); }
+
 		void bufferVertexData(vertex data[], int size) { m_impl.bufferVertexData(data, size); }
 
 		void bufferIndexData(unsigned int data[], int size) { m_impl.bufferIndexData(data, size); }
 
-		void setAttributePtr(std::string attribName, unsigned int index, FormatType components, int stride, unsigned int offset) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset); }
+		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, int stride, unsigned int offset) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset); }
 	};
 }

@@ -37,23 +37,23 @@ namespace rythe::core
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& vao = render.vao;
 
-
-			vao.initialize();
-
-			vao.bind(m_api->getHwnd());
-			vao.bufferVertexData(verticies, sizeof(verticies));
-			vao.bufferIndexData(indicies, sizeof(indicies));
-			m_api->bind(texture);
 			m_api->bind(shader);
-
-			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			vao.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), (3 * sizeof(float)));
-			vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
-
+			m_api->bind(texture);
 			render.m_texture = texture;
 			render.m_shader = shader;
 
+			vao.bind(m_api->getHwnd());
+
+			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(math::vec3), 0);
+			vao.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(math::vec4), sizeof(math::vec3));
+			//vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
+			vao.submitAttributes();
+
+			vao.bufferVertexData(verticies, sizeof(verticies));
+			vao.bufferIndexData(indicies, sizeof(indicies));
+
 			vao.unbind();
+
 
 			auto& transf = ent.addComponent<transform>();
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;

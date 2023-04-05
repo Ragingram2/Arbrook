@@ -58,6 +58,11 @@ namespace rythe::rendering::internal
 
 		}
 
+		GLFWwindow* getWindow()
+		{
+			return hwnd.getWindow();
+		}
+
 		window& getHwnd()
 		{
 			return hwnd;
@@ -172,7 +177,7 @@ namespace rythe::rendering::internal
 
 		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			shader->initialize(hwnd,name, source);
+			shader->initialize(name, source);
 		}
 
 		//move file handling elsewhere, specify default Texture params

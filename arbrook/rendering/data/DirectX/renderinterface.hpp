@@ -106,6 +106,8 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->RSSetViewports(1, &viewport);
 
 			hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
+
+			//m_infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR,true);
 		}
 
 		void close()

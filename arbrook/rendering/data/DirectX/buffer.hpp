@@ -43,18 +43,24 @@ namespace rythe::rendering::internal
 		{
 			bd.ByteWidth = sizeof(dataType) * size;
 
-			hwnd.m_dev->CreateBuffer(&bd, NULL, &m_internalBuffer);
+			D3D11_SUBRESOURCE_DATA initData;
+			ZeroMemory(&initData, sizeof(initData));
+			initData.pSysMem = data;
 
-			D3D11_MAPPED_SUBRESOURCE ms;
-			hwnd.m_devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);
-			memcpy(ms.pData, data, size);
+			hwnd.m_dev->CreateBuffer(&bd, &initData, &m_internalBuffer);
+
+			D3D11_MAPPED_SUBRESOURCE resource;
+			HRESULT hResult = hwnd.m_devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
+
+			// This will be S_OK
+			if (hResult != S_OK)
+			{
+				log::debug("Buffer failed to be filled");
+				return;
+			}
+			resource.pData = data;
+
 			hwnd.m_devcon->Unmap(m_internalBuffer, NULL);
-		}
-
-
-		void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
-		{
-
 		}
 	};
 }

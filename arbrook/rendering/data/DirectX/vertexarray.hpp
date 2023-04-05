@@ -3,6 +3,7 @@
 
 #include <rythe/primitives>
 
+#include "core/logging/logging.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/data/config.hpp"
@@ -29,20 +30,34 @@ namespace rythe::rendering::internal
 		{
 			m_vertexBuffer.initialize(TargetType::ARRAY_BUFFER, UsageType::StaticDraw);
 			m_indexBuffer.initialize(TargetType::ELEMENT_ARRAY_BUFFER, UsageType::StaticDraw);
+			m_id = 1;
 		}
 
 		void bind(window& hwnd)
 		{
 			m_hwnd = hwnd;
+
+			if (m_id == 0)
+				initialize();
+
+			m_vsBlob = rendering::activeShader->VS;
+
 			unsigned int stride[1] = { sizeof(vertex) };
 			unsigned int offset = 0;
+
 			m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_vertexBuffer.m_internalBuffer, stride, &offset);
 			m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), offset);
+			m_hwnd.m_devcon->IASetInputLayout(pLayout);
 		}
 
 		void unbind()
 		{
 
+		}
+
+		void submitAttributes()
+		{
+			m_hwnd.m_dev->CreateInputLayout(m_elementDesc.data(), m_elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &pLayout);
 		}
 
 		void bufferVertexData(vertex data[], int size)
@@ -55,13 +70,9 @@ namespace rythe::rendering::internal
 			m_indexBuffer.bufferData<unsigned int, unsigned int>(m_hwnd, data, size);
 		}
 
-		void setAttributePtr(std::string attribName, unsigned int index, FormatType components, int stride, unsigned int offset)
+		void setAttributePtr(LPCSTR attribName, unsigned int index, FormatType components, int stride, unsigned int offset)
 		{
-			m_elementDesc.push_back(D3D11_INPUT_ELEMENT_DESC{ attribName.c_str(),index, static_cast<DXGI_FORMAT>(components),0,offset,D3D11_INPUT_PER_VERTEX_DATA,0 });
-
-			m_vsBlob = rendering::activeShader->VS;
-			m_hwnd.m_dev->CreateInputLayout(m_elementDesc.data(), m_elementDesc.size() - 1, m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &pLayout);
-			m_hwnd.m_devcon->IASetInputLayout(pLayout);
+			m_elementDesc.emplace_back<D3D11_INPUT_ELEMENT_DESC>({ attribName, index, static_cast<DXGI_FORMAT>(components), 0, offset, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 		}
 	};
 }
