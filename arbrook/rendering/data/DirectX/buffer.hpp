@@ -41,7 +41,7 @@ namespace rythe::rendering::internal
 		template<typename elementType, typename dataType>
 		void bufferData(window& hwnd, elementType data[], int size)
 		{
-			bd.ByteWidth = sizeof(dataType) * size;
+			bd.ByteWidth = sizeof(elementType) * size;
 
 			hwnd.m_dev->CreateBuffer(&bd, NULL, &m_internalBuffer);
 

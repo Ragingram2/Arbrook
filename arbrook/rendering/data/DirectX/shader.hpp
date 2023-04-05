@@ -15,6 +15,14 @@
 
 namespace rythe::rendering::internal
 {
+	enum ConstantBuffer
+	{
+		CB_Application,
+		CB_Frame,
+		CB_Object,
+		NumConstantBuffers
+	};
+
 	struct shader
 	{
 	private:
@@ -22,12 +30,16 @@ namespace rythe::rendering::internal
 		ID3D11VertexShader* pVS;    // the vertex shader
 		ID3D11PixelShader* pPS;     // the pixel shader
 		ID3D11InputLayout* pLayout;    // global
+
+		ID3D11Buffer* constantBuffers[NumConstantBuffers];
+
+		window& m_hwnd;
 	public:
 		unsigned int m_programId;
 		std::string m_name;
 
 		shader() = default;
-		shader(shader* other)
+		shader(shader* other, window& hwnd) : m_hwnd(hwnd)
 		{
 			m_programId = other->m_programId;
 			m_name = other->m_name;
@@ -43,14 +55,14 @@ namespace rythe::rendering::internal
 		{
 			compileShader(0, source.vertexSource);
 			compileShader(1, source.fragSource);
-
+			m_hwnd = hwnd;
 			// encapsulate both shaders into shader objects
-			hwnd.m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &pVS);
-			hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &pPS);
+			m_hwnd.m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &pVS);
+			m_hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &pPS);
 
 			// set the shader objects
-			hwnd.m_devcon->VSSetShader(pVS, 0, 0);
-			hwnd.m_devcon->PSSetShader(pPS, 0, 0);
+			m_hwnd.m_devcon->VSSetShader(pVS, 0, 0);
+			m_hwnd.m_devcon->PSSetShader(pPS, 0, 0);
 
 			// create the input layout object
 			D3D11_INPUT_ELEMENT_DESC ied[] =
@@ -65,7 +77,18 @@ namespace rythe::rendering::internal
 
 		void setUniform(const std::string& uniformName, math::vec4 value)
 		{
+			// Create the constant buffers for the variables defined in the vertex shader.
+			D3D11_BUFFER_DESC constantBufferDesc;
+			ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
 
+			constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			constantBufferDesc.ByteWidth = sizeof(math::vec4);
+			constantBufferDesc.CPUAccessFlags = 0;
+			constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+
+			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Application]);
+			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Frame]);
+			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Object]);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec3 value)

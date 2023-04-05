@@ -166,7 +166,7 @@ namespace rythe::rendering::internal
 		void drawIndexed(PrimitiveType mode, int count, DataType type, const void* indecies)
 		{
 			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd.m_devcon->DrawIndexed(count, 4, 0);
+			hwnd.m_devcon->DrawIndexed(count, 0, 0);
 		}
 
 		void drawIndexdInstanced(PrimitiveType mode, int count, DataType type, const void* indecies, int instanceCount)

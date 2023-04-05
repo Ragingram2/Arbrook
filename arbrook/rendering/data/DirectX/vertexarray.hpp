@@ -16,7 +16,7 @@ namespace rythe::rendering::internal
 		buffer m_indexBuffer;
 		buffer m_vertexBuffer;
 
-		window m_hwnd;
+		window& m_hwnd;
 
 		void initialize(int num = 1)
 		{
@@ -40,13 +40,13 @@ namespace rythe::rendering::internal
 
 		void bufferVertexData(vertex data[], int size)
 		{
-			m_vertexBuffer.bufferData(m_hwnd, data, size);
+			m_vertexBuffer.bufferData<vertex, float>(m_hwnd, data, size);
 
 		}
 
 		void bufferIndexData(unsigned int data[], int size)
 		{
-			m_indexBuffer.bufferData(m_hwnd, data, size);
+			m_indexBuffer.bufferData<unsigned int, unsigned int>(m_hwnd, data, size);
 
 		}
 

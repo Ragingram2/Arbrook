@@ -10,7 +10,7 @@ namespace rythe::core
 		auto wId = registry->m_worldId;
 		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
 
-		vertex verticies[] =
+		gfx::vertex verticies[] =
 		{	//positions					//colors							//tex coors
 			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f } },		/*0.0f, 1.0f,//0*/
 			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f } },		/*0.0f, 0.0f,//1*/
