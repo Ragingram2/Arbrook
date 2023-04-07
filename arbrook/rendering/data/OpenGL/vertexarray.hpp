@@ -13,6 +13,7 @@
 
 namespace rythe::rendering::internal
 {
+	//rename Inputlayou,remove all refs to index buffer, hold references multiple vertex buffers, but don't own them
 	struct vertexarray
 	{
 		unsigned int m_id = 0;
@@ -59,6 +60,7 @@ namespace rythe::rendering::internal
 
 		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, int stride, unsigned int offset = 0)
 		{
+			
 			glEnableVertexArrayAttrib(m_id, index);
 			switch (components)
 			{

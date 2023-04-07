@@ -26,14 +26,9 @@ namespace rythe::rendering::internal
 	struct shader
 	{
 	private:
-		ID3D10Blob* VS, * PS;
-		ID3D11VertexShader* pVS;    // the vertex shader
-		ID3D11PixelShader* pPS;     // the pixel shader
-		ID3D11InputLayout* pLayout;    // global
-
 		ID3D11Buffer* constantBuffers[NumConstantBuffers];
 
-		window& m_hwnd;
+		window m_hwnd;
 	public:
 		unsigned int m_programId;
 		std::string m_name;
@@ -71,20 +66,21 @@ namespace rythe::rendering::internal
 
 		}
 
+		//maybe not use uniforms, look into just setting buffers for shaders
 		void setUniform(const std::string& uniformName, math::vec4 value)
 		{
-			// Create the constant buffers for the variables defined in the vertex shader.
-			D3D11_BUFFER_DESC constantBufferDesc;
-			ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
+			//// Create the constant buffers for the variables defined in the vertex shader.
+			//D3D11_BUFFER_DESC constantBufferDesc;
+			//ZeroMemory(&constantBufferDesc, sizeof(D3D11_BUFFER_DESC));
 
-			constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			constantBufferDesc.ByteWidth = sizeof(math::vec4);
-			constantBufferDesc.CPUAccessFlags = 0;
-			constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+			//constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			//constantBufferDesc.ByteWidth = sizeof(math::vec4);
+			//constantBufferDesc.CPUAccessFlags = 0;
+			//constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 
-			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Application]);
-			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Frame]);
-			m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Object]);
+			//m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Application]);
+			//m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Frame]);
+			//m_hwnd.m_dev->CreateBuffer(&constantBufferDesc, nullptr, &constantBuffers[CB_Object]);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec3 value)
