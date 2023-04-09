@@ -44,8 +44,8 @@ namespace rythe::core
 
 			vao.bind(m_api->getHwnd());
 
-			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(math::vec3), 0);
-			vao.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(math::vec4), sizeof(math::vec3));
+			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
+			vao.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
 			//vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
 			vao.submitAttributes();
 

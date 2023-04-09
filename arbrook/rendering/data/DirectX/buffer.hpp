@@ -41,7 +41,7 @@ namespace rythe::rendering::internal
 		template<typename elementType, typename dataType>
 		void bufferData(window& hwnd, elementType data[], int size)
 		{
-			bd.ByteWidth = sizeof(elementType) * size;
+			bd.ByteWidth = sizeof(dataType) * size;
 
 			D3D11_SUBRESOURCE_DATA initData;
 			ZeroMemory(&initData, sizeof(initData));

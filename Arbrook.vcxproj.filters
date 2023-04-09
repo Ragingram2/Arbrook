@@ -293,6 +293,9 @@
     <ClInclude Include="arbrook\rendering\data\vertex.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">

@@ -25,6 +25,6 @@ namespace rythe::rendering
 
 		void bufferIndexData(unsigned int data[], int size) { m_impl.bufferIndexData(data, size); }
 
-		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, int stride, unsigned int offset) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset); }
+		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset); }
 	};
 }
