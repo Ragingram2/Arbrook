@@ -14,6 +14,7 @@
 
 namespace rythe::rendering::internal
 {
+	//rename Inputlayou,remove all refs to index buffer, hold references multiple vertex buffers, but don't own them
 	struct vertexarray
 	{
 	private:

@@ -26,7 +26,8 @@ namespace rythe::rendering::internal
 	struct shader
 	{
 	private:
-		//ID3D11Buffer* constantBuffers[NumConstantBuffers];
+		ID3D11Buffer* constantBuffers[NumConstantBuffers];
+
 		window m_hwnd;
 	public:
 		unsigned int m_programId;
@@ -59,6 +60,7 @@ namespace rythe::rendering::internal
 			hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
 		}
 
+		//maybe not use uniforms, look into just setting buffers for shaders
 		void setUniform(const std::string& uniformName, math::vec4 value)
 		{
 			//// Create the constant buffers for the variables defined in the vertex shader.

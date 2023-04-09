@@ -18,8 +18,8 @@ namespace rythe::rendering::internal
 
 	private:
 		std::vector<vertexattribute> m_vertexAttribs;
-		ID3D11InputLayout* pLayout;
-		ID3D10Blob* m_vsBlob;
+		ID3D11InputLayout* pLayout = nullptr;
+		ID3D10Blob* m_vsBlob = nullptr;
 		window m_hwnd;
 
 	public:
@@ -27,6 +27,8 @@ namespace rythe::rendering::internal
 		buffer m_indexBuffer;
 		buffer m_vertexBuffer;
 
+	public:
+		//pass a shader to be bound with
 		void initialize(int num = 1)
 		{
 			m_vertexBuffer.initialize(TargetType::ARRAY_BUFFER, UsageType::StaticDraw);
@@ -47,6 +49,8 @@ namespace rythe::rendering::internal
 			unsigned int offset = 0;
 
 			m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_vertexBuffer.m_internalBuffer, stride, &offset);
+
+			//Not required here, it is possible not to need indecies
 			m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), offset);
 			m_hwnd.m_devcon->IASetInputLayout(pLayout);
 		}
@@ -79,7 +83,7 @@ namespace rythe::rendering::internal
 		{
 			m_indexBuffer.bufferData<unsigned int, unsigned int>(m_hwnd, data, size);
 		}
-
+		//use custom vertex attrib, and std::move the string
 		void setAttributePtr(const char* attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset)
 		{
 			m_vertexAttribs.emplace_back(vertexattribute{ attribName, index, components, stride, offset });
