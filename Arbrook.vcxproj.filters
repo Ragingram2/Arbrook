@@ -66,9 +66,6 @@
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\definitions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\ecs\entity.hpp">
@@ -200,9 +197,6 @@
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\vertexarray.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\rendering\rendering.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -225,9 +219,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\shadercache.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\ivertexarray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\shadersource.hpp">
@@ -266,9 +257,6 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -294,6 +282,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\interface\iinputlayout.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\OpenGL\inputlayout.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\DirectX\inputlayout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -155,7 +155,6 @@
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp" />
-    <ClCompile Include="arbrook\rendering\data\definitions.cpp" />
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
@@ -198,18 +197,19 @@
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\inputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp" />
-    <ClInclude Include="arbrook\rendering\data\DirectX\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\interface\iinputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\enumtypes.hpp" />
+    <ClInclude Include="arbrook\rendering\data\OpenGL\inputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\texture.hpp" />
-    <ClInclude Include="arbrook\rendering\data\interface\ivertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\shadersource.hpp" />
     <ClInclude Include="arbrook\rendering\data\texturehandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\buffer.hpp" />
@@ -219,7 +219,6 @@
     <ClInclude Include="arbrook\rendering\data\OpenGL\renderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\irenderinterface.hpp" />
     <ClInclude Include="arbrook\rendering\data\texturecache.hpp" />
-    <ClInclude Include="arbrook\rendering\data\OpenGL\vertexarray.hpp" />
     <ClInclude Include="arbrook\rendering\data\shadercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\window.hpp" />
     <ClInclude Include="arbrook\rendering\data\textureparameters.hpp" />

@@ -50,6 +50,7 @@ namespace rythe::rendering::internal
 	{
 	private:
 		ID3D11InfoQueue* m_infoQueue;
+		ID3D11RasterizerState* m_rasterizerState;
 		window hwnd;
 	public:
 		void initialize(math::ivec2 res, const std::string& name)
@@ -74,7 +75,7 @@ namespace rythe::rendering::internal
 
 			UINT creationFlags = D3D11_CREATE_DEVICE_DEBUG;
 
-			D3D11CreateDeviceAndSwapChain(NULL,
+			auto hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
 				creationFlags,
@@ -87,13 +88,52 @@ namespace rythe::rendering::internal
 				NULL,
 				&hwnd.m_devcon);
 
-			ID3D11Texture2D* pBackBuffer;
-			hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			if (FAILED(hr))
+			{
+				log::error("Something happened");
+				__debugbreak();
+			}
 
-			hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
+			ID3D11Texture2D* pBackBuffer;
+			hr = hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			if (FAILED(hr))
+			{
+				log::error("Something happened");
+				__debugbreak();
+			}
+
+			hr = hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
 			pBackBuffer->Release();
+			if (FAILED(hr))
+			{
+				log::error("Something happened");
+				__debugbreak();
+			}
 
 			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
+
+			//// Setup rasterizer state.
+			//D3D11_RASTERIZER_DESC rasterizerDesc;
+			//ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+
+			//rasterizerDesc.AntialiasedLineEnable = FALSE;
+			//rasterizerDesc.CullMode = D3D11_CULL_BACK;
+			//rasterizerDesc.DepthBias = 0;
+			//rasterizerDesc.DepthBiasClamp = 0.0f;
+			//rasterizerDesc.DepthClipEnable = TRUE;
+			//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+			//rasterizerDesc.FrontCounterClockwise = FALSE;
+			//rasterizerDesc.MultisampleEnable = FALSE;
+			//rasterizerDesc.ScissorEnable = FALSE;
+			//rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+			//// Create the rasterizer state object.
+			//hr = hwnd.m_dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
+			//if (FAILED(hr))
+			//{
+			//	log::error("Something happened");
+			//	__debugbreak();
+			//}
 
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
@@ -102,10 +142,17 @@ namespace rythe::rendering::internal
 			viewport.TopLeftY = 0;
 			viewport.Width = res.x;
 			viewport.Height = res.y;
+			//viewport.MinDepth = 0;
+			//viewport.MaxDepth = 1;
 
 			hwnd.m_devcon->RSSetViewports(1, &viewport);
 
-			hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
+			hr = hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
+			if (FAILED(hr))
+			{
+				log::error("Something happened");
+				__debugbreak();
+			}
 
 			//m_infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR,true);
 		}
@@ -180,7 +227,6 @@ namespace rythe::rendering::internal
 		{
 			hwnd.m_devcon->VSSetShader(shader->m_VS, 0, 0);
 			hwnd.m_devcon->PSSetShader(shader->m_PS, 0, 0);
-			activeShader = shader;
 		}
 
 		void bind(texture_handle handle)
@@ -245,13 +291,13 @@ namespace rythe::rendering::internal
 			return texture;
 		}
 
-		template<typename dataType>
-		void createBuffer(buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0)
+		template<typename elementType, typename dataType = elementType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0)
 		{
 			buffer->initialize(target, usage);
 			if (data)
 			{
-				buffer->bufferData(data, size);
+				buffer->bufferData<elementType,dataType>(hwnd, data, size);
 			}
 		}
 

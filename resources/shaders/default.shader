@@ -53,7 +53,7 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 	VOut output;
 
 	output.position = position;
-	output.color = float4(1.f, 1.f, 1.f, 1.f);
+	output.color = color;
 
 	return output;
 }

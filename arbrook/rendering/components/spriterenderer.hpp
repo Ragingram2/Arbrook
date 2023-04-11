@@ -7,12 +7,12 @@ namespace rythe::rendering
 {
 	struct sprite_renderer
 	{
-		texture_handle m_texture;
-		shader_handle m_shader;
-		vertexarray vao;
+		texture_handle texture;
+		shader_handle shader;
+		inputlayout layout;
 
 		sprite_renderer() = default;
-		sprite_renderer(texture_handle t_handle, shader_handle s_handle) : m_texture(t_handle), m_shader(s_handle) {}
+		sprite_renderer(texture_handle t_handle, shader_handle s_handle) : texture(t_handle), shader(s_handle) {}
 
 	};
 }

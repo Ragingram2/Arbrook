@@ -11,16 +11,16 @@ namespace rythe::core
 		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
 
 		gfx::vertex verticies[] =
-		{	//positions					//colors							//tex coors
-			{ { -0.1f, 0.1f, 0.0f },	{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0*/
-			{ { -0.1f,-0.1f, 0.0f },	{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1*/
-			{ {  0.1f,-0.1f, 0.0f },	{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2*/
-			{ {  0.1f, 0.1f, 0.0f },	{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3*/
+		{	//positions						//colors								//tex coors
+			{ { -0.1f, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f }},		//{ 0.0f, 1.0f } },//0
+			{ {	-0.1f,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f }},		//{ 0.0f, 0.0f } },//1
+			{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f }},		//{ 1.0f, 0.0f } },//2
+			{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f }}		//{ 1.0f, 1.0f } }//3
 		};
 
 		unsigned int indicies[] =
 		{
-			0,1,2,
+			0,2,1,
 			2,3,0
 		};
 
@@ -35,24 +35,26 @@ namespace rythe::core
 			auto& ent = createEntity();
 
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
-			auto& vao = render.vao;
+			auto& layout = render.layout;
 
 			m_api->bind(shader);
 			m_api->bind(texture);
-			render.m_texture = texture;
-			render.m_shader = shader;
+			render.texture = texture;
+			render.shader = shader;
 
-			vao.bind(m_api->getHwnd());
+			auto handle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::ARRAY_BUFFER, gfx::UsageType::StaticDraw, verticies, sizeof(verticies));
+			layout.addBuffer(handle);
+			handle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::ELEMENT_ARRAY_BUFFER, gfx::UsageType::StaticDraw, indicies, sizeof(indicies));
+			layout.addBuffer(handle);
 
-			vao.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			vao.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
+			layout.bind(m_api->getHwnd(), shader);
+
+			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
+			layout.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
 			//vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
-			vao.submitAttributes();
+			layout.submitAttributes();
 
-			vao.bufferVertexData(verticies, sizeof(verticies));
-			vao.bufferIndexData(indicies, sizeof(indicies));
-
-			vao.unbind();
+			layout.unbind();
 
 
 			auto& transf = ent.addComponent<transform>();

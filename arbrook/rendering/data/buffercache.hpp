@@ -14,9 +14,23 @@ namespace rythe::rendering
 	private:
 		static std::unordered_map<std::string, std::unique_ptr<buffer>> m_buffers;
 	public:
-		template<typename dataType>
-		static buffer_handle createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0);
+		template<typename elementType, typename dataType = elementType>
+		static buffer_handle createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0);
 		static buffer_handle getBuffer(const std::string& name);
 		static void deleteBuffer(const std::string& name);
 	};
+
+	template<typename elementType, typename dataType>
+	inline buffer_handle BufferCache::createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, elementType* data, int size)
+	{
+		if (m_buffers.contains(name))
+		{
+			log::warn("Buffer {} already exists, ignoring new buffer, and returning existing one", name);
+			return m_buffers[name].get()->operator->();
+		}
+
+		auto buff = m_buffers.emplace(name, std::make_unique<buffer>()).first->second->operator->();
+
+		return api.createBuffer<elementType, dataType>(buff, target, usage, data, size);
+	}
 }

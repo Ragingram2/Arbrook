@@ -11,16 +11,22 @@
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
 
+namespace rythe::rendering
+{
+	struct buffer_handle;
+}
+
 namespace rythe::rendering::internal
 {
 	struct buffer
 	{
-		unsigned int m_id;
+		friend struct rendering::buffer_handle;
+	public:
+		unsigned int id;
 	private:
 		TargetType m_target;
 		UsageType m_usage;
 		int m_numBuffers = 1;
-
 	public:
 
 		void initialize(TargetType target, UsageType usage)
@@ -28,14 +34,14 @@ namespace rythe::rendering::internal
 			m_target = target;
 			m_usage = usage;
 
-			glGenBuffers(m_numBuffers, &m_id);
+			glGenBuffers(m_numBuffers, &id);
 
 			bind();
 		}
 
 		void bind()
 		{
-			glBindBuffer(static_cast<GLenum>(m_target), m_id);
+			glBindBuffer(static_cast<GLenum>(m_target), id);
 		}
 
 		template<typename dataType>

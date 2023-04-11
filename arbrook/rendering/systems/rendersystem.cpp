@@ -43,18 +43,18 @@ namespace rythe::rendering
 			auto& transf = ent.getComponent<core::transform>();
 			auto& example = ent.getComponent<core::exampleComp>();
 
-			auto& shader = renderComp.m_shader;
-			auto& texture = renderComp.m_texture;
+			auto& shader = renderComp.shader;
+			auto& texture = renderComp.texture;
+
+			renderComp.layout.bind(m_api->getHwnd(), shader);
 			m_api->bind(shader);
 			m_api->bind(texture);
-			renderComp.vao.bind(m_api->getHwnd());
-
-			shader->setUniform("u_position", transf.position);
-			shader->setUniform("u_time", example.time);
+			//shader->setUniform("u_position", transf.position);
+			//shader->setUniform("u_time", example.time);
 
 			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 6, 0, 0);
 
-			renderComp.vao.unbind();
+			renderComp.layout.unbind();
 		}
 
 		m_api->swapBuffers();

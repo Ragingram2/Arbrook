@@ -9,7 +9,7 @@
 #if RenderingAPI == RenderingAPI_OpenGL
 #define TextureParams_HPP_PATH "rendering/data/OpenGL/textureparameters.hpp"//do this more
 #define RenderInterface_HPP_PATH "rendering/data/OpenGL/renderinterface.hpp"
-#define VertexArray_HPP_PATH "rendering/data/OpenGL/vertexarray.hpp"
+#define InputLayout_HPP_PATH "rendering/data/OpenGL/inputlayout.hpp"
 #define Buffer_HPP_PATH "rendering/data/OpenGL/buffer.hpp"
 #define Shader_HPP_PATH "rendering/data/OpenGL/shader.hpp"
 #define Window_HPP_PATH "rendering/data/OpenGL/window.hpp"
@@ -24,7 +24,7 @@ struct RenderInterace
 #if RenderingAPI == RenderingAPI_DX11
 #define TextureParams_HPP_PATH "rendering/data/DirectX/textureparameters.hpp"//do this more
 #define RenderInterface_HPP_PATH "rendering/data/DirectX/renderinterface.hpp"
-#define VertexArray_HPP_PATH "rendering/data/DirectX/vertexarray.hpp"
+#define InputLayout_HPP_PATH "rendering/data/DirectX/inputlayout.hpp"
 #define Buffer_HPP_PATH "rendering/data/DirectX/buffer.hpp"
 #define Shader_HPP_PATH "rendering/data/DirectX/shader.hpp"
 #define Window_HPP_PATH "rendering/data/DirectX/window.hpp"
