@@ -105,7 +105,7 @@ namespace rythe::rendering::internal
 
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
-			glDrawElements(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex));
+			glDrawElements(static_cast<GLenum>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
 		}
 
 		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
@@ -220,13 +220,13 @@ namespace rythe::rendering::internal
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
-		template<typename dataType>
-		void createBuffer(buffer* buffer, TargetType target, UsageType usage, dataType* data = nullptr, int size = 0)
+		template<typename elementType, typename dataType = elementType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0)
 		{
 			buffer->initialize(target, usage);
 			if (data)
 			{
-				buffer->bufferData(data, size);
+				buffer->bufferData<elementType, dataType>(data, size);
 			}
 		}
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();

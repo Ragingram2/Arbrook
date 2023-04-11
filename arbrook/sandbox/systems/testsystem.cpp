@@ -50,11 +50,9 @@ namespace rythe::core
 			layout.bind(m_api->getHwnd(), shader);
 
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			layout.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
+			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
 			//vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
 			layout.submitAttributes();
-
-			layout.unbind();
 
 
 			auto& transf = ent.addComponent<transform>();

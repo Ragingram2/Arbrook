@@ -88,27 +88,12 @@ namespace rythe::rendering::internal
 				NULL,
 				&hwnd.m_devcon);
 
-			if (FAILED(hr))
-			{
-				log::error("Something happened");
-				__debugbreak();
-			}
-
 			ID3D11Texture2D* pBackBuffer;
 			hr = hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-			if (FAILED(hr))
-			{
-				log::error("Something happened");
-				__debugbreak();
-			}
+
 
 			hr = hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
 			pBackBuffer->Release();
-			if (FAILED(hr))
-			{
-				log::error("Something happened");
-				__debugbreak();
-			}
 
 			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
 
@@ -148,11 +133,6 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->RSSetViewports(1, &viewport);
 
 			hr = hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue);
-			if (FAILED(hr))
-			{
-				log::error("Something happened");
-				__debugbreak();
-			}
 
 			//m_infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR,true);
 		}

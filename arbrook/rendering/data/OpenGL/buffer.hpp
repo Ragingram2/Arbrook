@@ -26,7 +26,6 @@ namespace rythe::rendering::internal
 	private:
 		TargetType m_target;
 		UsageType m_usage;
-		int m_numBuffers = 1;
 	public:
 
 		void initialize(TargetType target, UsageType usage)
@@ -34,29 +33,23 @@ namespace rythe::rendering::internal
 			m_target = target;
 			m_usage = usage;
 
-			glGenBuffers(m_numBuffers, &id);
+			glGenBuffers(1, &id);
 
 			bind();
 		}
 
 		void bind()
 		{
+			log::debug("Binding Buffer");
+			glBindBuffer(static_cast<GLenum>(m_target), 0);
 			glBindBuffer(static_cast<GLenum>(m_target), id);
 		}
 
-		template<typename dataType>
-		void bufferData(dataType data[], int size)
+		template<typename elementType, typename dataType = elementType>
+		void bufferData(elementType data[], int size)
 		{
-			bind();
+			log::debug("BufferData");
 			glBufferData(static_cast<GLenum>(m_target), size, data, static_cast<GLenum>(m_usage));
 		}
-
-		//void setAttributePtr(int index, int components, DataType type, bool normalize, int stride, const void* pointer = 0)
-		//{
-		//	bind();
-
-		//	glEnableVertexAttribArray(index);
-		//	glVertexAttribPointer(index, components, static_cast<GLenum>(type), normalize, stride, pointer);
-		//}
 	};
 }

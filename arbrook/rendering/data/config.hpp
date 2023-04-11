@@ -3,7 +3,7 @@
 #define RenderingAPI_OpenGL 0
 #define RenderingAPI_DX11 1
 
-#define RenderingAPI RenderingAPI_DX11
+#define RenderingAPI RenderingAPI_OpenGL
 
 
 #if RenderingAPI == RenderingAPI_OpenGL
@@ -15,9 +15,6 @@
 #define Window_HPP_PATH "rendering/data/OpenGL/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/data/OpenGL/enumtypes.hpp"
 #define ShaderLanguage "GLSL"
-
-struct RenderInterace
-{};
 
 #endif
 
@@ -31,16 +28,13 @@ struct RenderInterace
 #define EnumTypes_HPP_PATH "rendering/data/DirectX/enumtypes.hpp"
 #define ShaderLanguage "HLSL"
 
-struct RenderInterace
-{};
-
-#define HR(x) \
-{\
-	HRESULT hr = x;\
-	if(FAILED(hr))\
-	{ \
-		__debugbreak();\
-	} \
-}
+//#define HR(x) \
+//{\
+//	HRESULT hr = x;\
+//	if(FAILED(hr))\
+//	{ \
+//		__debugbreak();\
+//	} \
+//}
 
 #endif

@@ -17,7 +17,7 @@ namespace rythe::rendering
 	public:
 		void bind(internal::window& hwnd, shader_handle shader) { m_impl.bind(hwnd, shader); }
 
-		void unbind() { m_impl.unbind(); }
+		//void unbind() { m_impl.unbind(); }
 
 		void addBuffer(buffer_handle handle) { m_impl.addBuffer(handle); }
 

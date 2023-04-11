@@ -69,7 +69,7 @@ namespace rythe::rendering
 		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
 		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);
 		//texture_handle createCubeTexture();
-		template<typename elementType, typename dataType>
+		template<typename elementType, typename dataType = elementType>
 		buffer_handle createBuffer(internal::buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0) { m_impl.createBuffer<elementType, dataType>(buffer, static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), data, size); return buffer; }
 		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
