@@ -21,34 +21,31 @@ namespace rythe::rendering::internal
 	{
 	public:
 		unsigned int id;
-		bool initialized = false;
 	private:
 		window m_hwnd;
+		std::vector<vertexattribute> m_vertexAttribs;
 		std::vector<buffer_handle> m_vertexBuffers;
 		buffer_handle m_indexBuffer;
-		std::vector<vertexattribute> m_vertexAttribs;
+		bool m_initialized = false;
 	public:
 		void bind(window& hwnd, shader_handle shader)
 		{
 			m_hwnd = hwnd;
-			if (!initialized)
+			if (!m_initialized && m_vertexBuffers.size() > 0)
 			{
 				glGenVertexArrays(m_vertexBuffers.size(), &id);
 
-				glBindVertexArray(0);
 				glBindVertexArray(id);
 				for (auto& handle : m_vertexBuffers)
 				{
-					handle->initialize(TargetType::ARRAY_BUFFER, UsageType::StaticDraw);
+					handle->bind();
 				}
-				m_indexBuffer->initialize(TargetType::ELEMENT_ARRAY_BUFFER, UsageType::StaticDraw);
-				initialized = true;
+				m_indexBuffer->bind();
+				m_initialized = true;
 				return;
 			}
 
-			glBindVertexArray(0);
 			glBindVertexArray(id);
-			log::debug("Input layout bound");
 			for (auto& handle : m_vertexBuffers)
 			{
 				handle->bind();
@@ -81,20 +78,20 @@ namespace rythe::rendering::internal
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
-				glEnableVertexArrayAttrib(id, attrib.index);
+				glEnableVertexAttribArray(attrib.index);
 				switch (attrib.format)
 				{
 				case FormatType::RGB32F:
-					glVertexAttribPointer(attrib.index, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, &attrib.offset);
+					glVertexAttribPointer(attrib.index, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				case FormatType::RGBA32F:
-					glVertexAttribPointer(attrib.index, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, &attrib.offset);
+					glVertexAttribPointer(attrib.index, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				case FormatType::R32U:
-					glVertexAttribPointer(attrib.index, 1, static_cast<GLenum>(DataType::UINT), false, attrib.stride, &attrib.offset);
+					glVertexAttribPointer(attrib.index, 1, static_cast<GLenum>(DataType::UINT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				case FormatType::RG32F:
-					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, &attrib.offset);
+					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				}
 			}

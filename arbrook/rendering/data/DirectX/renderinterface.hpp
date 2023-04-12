@@ -274,10 +274,10 @@ namespace rythe::rendering::internal
 		template<typename elementType, typename dataType = elementType>
 		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0)
 		{
-			buffer->initialize(target, usage);
+			buffer->initialize(hwnd, target, usage);
 			if (data)
 			{
-				buffer->bufferData<elementType,dataType>(hwnd, data, size);
+				buffer->bufferData<elementType, dataType>(data, size);
 			}
 		}
 

@@ -34,21 +34,17 @@ namespace rythe::rendering::internal
 			m_usage = usage;
 
 			glGenBuffers(1, &id);
-
-			bind();
 		}
 
 		void bind()
 		{
-			log::debug("Binding Buffer");
-			glBindBuffer(static_cast<GLenum>(m_target), 0);
 			glBindBuffer(static_cast<GLenum>(m_target), id);
 		}
 
 		template<typename elementType, typename dataType = elementType>
 		void bufferData(elementType data[], int size)
 		{
-			log::debug("BufferData");
+			glBindBuffer(static_cast<GLenum>(m_target), id);
 			glBufferData(static_cast<GLenum>(m_target), size, data, static_cast<GLenum>(m_usage));
 		}
 	};

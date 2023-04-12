@@ -27,10 +27,12 @@ namespace rythe::rendering::internal
 		D3D11_BUFFER_DESC m_bufferDesc;
 		TargetType m_target;
 		UsageType m_usage;
+		window m_hwnd;
 	public:
 		operator ID3D11Buffer* () const { return internalBuffer; }
-		void initialize(TargetType target, UsageType usage)
+		void initialize(window& hwnd, TargetType target, UsageType usage)
 		{
+			m_hwnd = hwnd;
 			m_target = target;
 			m_usage = usage;
 
@@ -41,15 +43,15 @@ namespace rythe::rendering::internal
 			m_bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		}
 
-		void bind(window& hwnd)
+		void bind()
 		{
 			switch (m_target)
 			{
 			case TargetType::ARRAY_BUFFER:
-				hwnd.m_devcon->IASetVertexBuffers(0, 1, &internalBuffer, &elementSize, 0);
+				m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &internalBuffer, &elementSize, 0);
 				break;
 			case TargetType::ELEMENT_ARRAY_BUFFER:
-				hwnd.m_devcon->IASetIndexBuffer(internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.m_devcon->IASetIndexBuffer(internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -57,16 +59,16 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		template<typename elementType, typename dataType>
-		void bufferData(window& hwnd, elementType data[], int size)
+		template<typename elementType, typename dataType = elementType>
+		void bufferData(elementType data[], int size)
 		{
 			elementSize = sizeof(elementType);
 			m_bufferDesc.ByteWidth = sizeof(dataType) * size;
 
-			hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &internalBuffer);
+			m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &internalBuffer);
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			HRESULT hResult = hwnd.m_devcon->Map(internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
+			HRESULT hResult = m_hwnd.m_devcon->Map(internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
 			memcpy(resource.pData, data, size);
 			// This will be S_OK
 			if (hResult != S_OK)
@@ -75,7 +77,7 @@ namespace rythe::rendering::internal
 				return;
 			}
 
-			hwnd.m_devcon->Unmap(internalBuffer, NULL);
+			m_hwnd.m_devcon->Unmap(internalBuffer, NULL);
 		}
 	};
 }

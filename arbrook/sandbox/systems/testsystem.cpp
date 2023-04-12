@@ -12,10 +12,10 @@ namespace rythe::core
 
 		gfx::vertex verticies[] =
 		{	//positions						//colors								//tex coors
-			{ { -0.1f, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f }},		//{ 0.0f, 1.0f } },//0
-			{ {	-0.1f,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f }},		//{ 0.0f, 0.0f } },//1
-			{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f }},		//{ 1.0f, 0.0f } },//2
-			{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f }}		//{ 1.0f, 1.0f } }//3
+			{ { -0.1f, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
+			{ {	-0.1f,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
+			{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
+			{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
 		};
 
 		unsigned int indicies[] =
@@ -28,6 +28,8 @@ namespace rythe::core
 
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
+		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::ARRAY_BUFFER, gfx::UsageType::StaticDraw);
+		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::ELEMENT_ARRAY_BUFFER, gfx::UsageType::StaticDraw);
 
 		float spawnCount = 1.f;
 		for (int i = 0; i < spawnCount; i++)
@@ -37,23 +39,24 @@ namespace rythe::core
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& layout = render.layout;
 
-			m_api->bind(shader);
-			m_api->bind(texture);
 			render.texture = texture;
 			render.shader = shader;
 
-			auto handle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::ARRAY_BUFFER, gfx::UsageType::StaticDraw, verticies, sizeof(verticies));
-			layout.addBuffer(handle);
-			handle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::ELEMENT_ARRAY_BUFFER, gfx::UsageType::StaticDraw, indicies, sizeof(indicies));
-			layout.addBuffer(handle);
 
+			vertexHandle->bufferData<gfx::vertex, float>(verticies, sizeof(verticies));
+			indexHandle->bufferData(indicies, sizeof(indicies));
+
+			layout.addBuffer(vertexHandle);
+			layout.addBuffer(indexHandle);
+
+			m_api->bind(shader);
+			m_api->bind(texture);
 			layout.bind(m_api->getHwnd(), shader);
 
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), sizeof(math::vec3));
-			//vao.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), (7 * sizeof(float)));
+			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
+			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
 			layout.submitAttributes();
-
 
 			auto& transf = ent.addComponent<transform>();
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;

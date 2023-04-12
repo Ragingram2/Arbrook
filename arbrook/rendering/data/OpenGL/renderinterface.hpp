@@ -105,7 +105,7 @@ namespace rythe::rendering::internal
 
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
-			glDrawElements(static_cast<GLenum>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex));
 		}
 
 		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
@@ -121,8 +121,6 @@ namespace rythe::rendering::internal
 
 		void bind(texture_handle handle)
 		{
-			//glActiveTexture
-			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindTexture(GL_TEXTURE_2D, handle);
 		}
 
@@ -130,7 +128,6 @@ namespace rythe::rendering::internal
 		{
 			//Destructor for shader?
 			glUseProgram(0);
-			//glDeleteProgram(shader->m_programId);
 		}
 
 		void unbind(texture_handle handle)
