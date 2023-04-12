@@ -57,10 +57,10 @@ namespace rythe::rendering::internal
 		{
 			switch (handle.getTargetType())
 			{
-			case TargetType::ARRAY_BUFFER:
+			case TargetType::VERTEX_BUFFER:
 				m_vertexBuffers.push_back(handle);
 				break;
-			case TargetType::ELEMENT_ARRAY_BUFFER:
+			case TargetType::INDEX_BUFFER:
 				m_indexBuffer = handle;
 				break;
 			default:

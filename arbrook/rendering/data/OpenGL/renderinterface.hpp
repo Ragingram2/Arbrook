@@ -113,27 +113,27 @@ namespace rythe::rendering::internal
 			glDrawElementsInstanced(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex), instanceCount);
 		}
 
-		void bind(shader* shader)
-		{
-			glUseProgram(shader->m_programId);
-			activeShader = shader;
-		}
+		//void bind(shader* shader)
+		//{
+		//	glUseProgram(shader->m_programId);
+		//	activeShader = shader;
+		//}
 
-		void bind(texture_handle handle)
-		{
-			glBindTexture(GL_TEXTURE_2D, handle);
-		}
+		//void bind(texture_handle handle)
+		//{
+		//	glBindTexture(GL_TEXTURE_2D, handle);
+		//}
 
-		void unbind(shader* shader)
-		{
-			//Destructor for shader?
-			glUseProgram(0);
-		}
+		//void unbind(shader* shader)
+		//{
+		//	//Destructor for shader?
+		//	glUseProgram(0);
+		//}
 
-		void unbind(texture_handle handle)
-		{
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+		//void unbind(texture_handle handle)
+		//{
+		//	glBindTexture(GL_TEXTURE_2D, 0);
+		//}
 
 		void clear(int flags)
 		{

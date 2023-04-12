@@ -14,6 +14,7 @@ namespace rythe::rendering
 		const APIType* operator->() const { return m_impl; }
 		APIType* operator->() { return &m_impl; }
 
+		void bind() { m_impl.bind(); }
 		void setUniform(const std::string& name, math::vec4 value) { m_impl.setUniform(name, value); }
 		void setUniform(const std::string& name, math::vec3 value) { m_impl.setUniform(name, value); }
 		void setUniform(const std::string& name, math::vec2 value) { m_impl.setUniform(name, value); }

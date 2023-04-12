@@ -28,8 +28,8 @@ namespace rythe::core
 
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
-		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::ARRAY_BUFFER, gfx::UsageType::StaticDraw);
-		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::ELEMENT_ARRAY_BUFFER, gfx::UsageType::StaticDraw);
+		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::StaticDraw);
+		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::StaticDraw);
 
 		float spawnCount = 1.f;
 		for (int i = 0; i < spawnCount; i++)
@@ -49,8 +49,11 @@ namespace rythe::core
 			layout.addBuffer(vertexHandle);
 			layout.addBuffer(indexHandle);
 
-			m_api->bind(shader);
-			m_api->bind(texture);
+			//m_api->bind(shader);
+			//m_api->bind(texture);
+			shader->bind();
+			//make a Itexture
+			//texture->bind();
 			layout.bind(m_api->getHwnd(), shader);
 
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);

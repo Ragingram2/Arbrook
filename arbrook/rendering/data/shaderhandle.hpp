@@ -12,8 +12,6 @@ namespace rythe::rendering
 
 		internal::shader* operator->() { return m_shader; }
 		operator internal::shader& () const { return *m_shader; }
-		operator unsigned int() const { return m_shader->m_programId; }
+		operator unsigned int() const { return m_shader->programId; }
 	};
-
-	inline shader_handle activeShader;
 }

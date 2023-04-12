@@ -114,11 +114,6 @@ namespace rythe::rendering::internal
 
 			//// Create the rasterizer state object.
 			//hr = hwnd.m_dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
-			//if (FAILED(hr))
-			//{
-			//	log::error("Something happened");
-			//	__debugbreak();
-			//}
 
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
@@ -203,25 +198,25 @@ namespace rythe::rendering::internal
 
 		}
 
-		void bind(shader* shader)
-		{
-			hwnd.m_devcon->VSSetShader(shader->m_VS, 0, 0);
-			hwnd.m_devcon->PSSetShader(shader->m_PS, 0, 0);
-		}
+		//void bind(shader* shader)
+		//{
+		//	hwnd.m_devcon->VSSetShader(shader->m_VS, 0, 0);
+		//	hwnd.m_devcon->PSSetShader(shader->m_PS, 0, 0);
+		//}
 
-		void bind(texture_handle handle)
-		{
+		//void bind(texture_handle handle)
+		//{
 
-		}
+		//}
 
-		void unbind(shader* shader)
-		{
+		//void unbind(shader* shader)
+		//{
 
-		}
+		//}
 
-		void unbind(texture_handle handle)
-		{
-		}
+		//void unbind(texture_handle handle)
+		//{
+		//}
 
 		void clear(int flags)
 		{

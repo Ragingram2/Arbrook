@@ -5,26 +5,31 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/data/bufferhandle.hpp"
 
 namespace rythe::rendering::internal
 {
 	struct shader
 	{
-		unsigned int m_programId;
-		std::string m_name;
+	public:
+		unsigned int programId;
+		std::string name;
 
+	private:
+		std::vector<buffer_handle> m_uniformBuffers;
+	public:
 		shader() = default;
 		shader(shader* other)
 		{
-			m_programId = other->m_programId;
-			m_name = other->m_name;
+			programId = other->programId;
+			name = other->name;
 		}
-		operator unsigned int() const { return m_programId; }
+		operator unsigned int() const { return programId; }
 
 		void initialize(const std::string& name, const shader_source& source)
 		{
-			m_name = name;
-			auto& programId = m_programId = glCreateProgram();
+			this->name = name;
+			programId = glCreateProgram();
 
 			unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
 			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
@@ -38,51 +43,78 @@ namespace rythe::rendering::internal
 			glDeleteShader(fs);
 		}
 
+		void bind()
+		{
+			glUseProgram(programId);
+		}
+
+		void addBuffer(ShaderType type, buffer_handle handle)
+		{
+			if (handle.getTargetType() != TargetType::CONSTANT_BUFFER)
+			{
+				log::error("Buffer is not a constant buffer, this is not supported");
+				return;
+			}
+
+			switch (type)
+			{
+			case ShaderType::VERTEX:
+				m_vsConstBuffers.push_back(handle);
+				break;
+			case ShaderType::FRAGMENT:
+				m_psConstBuffers.push_back(handle);
+				break;
+			default:
+				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
+				break;
+			}
+		}
+
 		void setUniform(const std::string& uniformName, math::vec4 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform4f(uniformPos, value.x, value.y, value.z, value.w);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec3 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform3f(uniformPos, value.x, value.y, value.z);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec2 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform2f(uniformPos, value.x, value.y);
 		}
 
 		void setUniform(const std::string& uniformName, float value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform1f(uniformPos, value);
 		}
 
 		void setUniform(const std::string& uniformName, math::ivec4 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform4i(uniformPos, value.x, value.y, value.z, value.w);
 		}
 
 		void setUniform(const std::string& uniformName, math::ivec3 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform3i(uniformPos, value.x, value.y, value.z);
 		}
 
 		void setUniform(const std::string& uniformName, math::ivec2 value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform2i(uniformPos, value.x, value.y);
 		}
 
 		void setUniform(const std::string& uniformName, int value)
 		{
-			int uniformPos = glGetUniformLocation(m_programId, uniformName.c_str());
+			int uniformPos = glGetUniformLocation(programId, uniformName.c_str());
 			glUniform1i(uniformPos, value);
 		}
 

@@ -38,10 +38,10 @@ namespace rythe::rendering
 		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), indexCount, instanceCount, startIndex, baseVertex, startInstance); }
 
 		//void bind();//render targets
-		void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }
-		void bind(texture_handle handle) { m_impl.bind(handle); }
-		void unbind(shader_handle handle) { m_impl.unbind(handle.m_shader); }
-		void unbind(texture_handle handle) { m_impl.unbind(handle); }
+		//void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }
+		//void bind(texture_handle handle) { m_impl.bind(handle); }
+		//void unbind(shader_handle handle) { m_impl.unbind(handle.m_shader); }
+		//void unbind(texture_handle handle) { m_impl.unbind(handle); }
 		void clear(int flags) { m_impl.clear(flags); }
 
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }

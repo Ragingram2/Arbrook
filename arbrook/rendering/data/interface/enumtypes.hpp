@@ -4,10 +4,20 @@
 
 namespace rythe::rendering
 {
+	enum class ShaderType
+	{
+		VERTEX = static_cast<int>(internal::ShaderType::VERTEX),
+		FRAGMENT = static_cast<int>(internal::ShaderType::FRAGMENT),
+		GEOMETRY = static_cast<int>(internal::ShaderType::GEOMETRY),
+		HULL = static_cast<int>(internal::ShaderType::HULL),
+		COMPUTE = static_cast<int>(internal::ShaderType::COMPUTE)
+	};
+
 	enum class TargetType
 	{
-		ARRAY_BUFFER = static_cast<int>(internal::TargetType::ARRAY_BUFFER),
-		ELEMENT_ARRAY_BUFFER = static_cast<int>(internal::TargetType::ELEMENT_ARRAY_BUFFER),
+		VERTEX_BUFFER = static_cast<int>(internal::TargetType::VERTEX_BUFFER),
+		INDEX_BUFFER = static_cast<int>(internal::TargetType::INDEX_BUFFER),
+		CONSTANT_BUFFER = static_cast<int>(internal::TargetType::CONSTANT_BUFFER),
 		TEXTURE2D = static_cast<int>(internal::TargetType::TEXTURE2D)
 	};
 

@@ -1,16 +1,19 @@
 #GLSL
 #shader vertex
-#version 330 core
+#version 450 core
 
 layout(location = 0) in vec4 vPosition;
 layout(location = 1) in vec3 vColor;
 layout(location = 2) in vec2 vTexCoord;
 
+layout(std140) uniform cBuffer
+{
+	vec2 u_position;
+	float u_time;
+};
+
 out vec3 aColor;
 out vec2 TexCoord;
-
-uniform vec2 u_position;
-uniform float u_time;
 
 void main()
 {
@@ -42,6 +45,12 @@ void main()
 
 #HLSL
 #shader vertex
+cbuffer myCbuffer : register(b0)
+{
+	float3 u_position;
+	float u_time;
+};
+
 struct VOut
 {
 	float4 position : SV_POSITION;
@@ -52,7 +61,8 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 {
 	VOut output;
 
-	output.position = position;
+	float2 offset = float2(0, sin(u_time));
+	output.position = position + float4(u_position + offset, 0, 0);
 	output.color = color;
 
 	return output;

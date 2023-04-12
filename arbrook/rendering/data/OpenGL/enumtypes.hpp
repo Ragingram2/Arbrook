@@ -3,10 +3,20 @@
 
 namespace rythe::rendering::internal
 {
+	enum class ShaderType
+	{
+		VERTEX,
+		FRAGMENT,
+		GEOMETRY,
+		HULL,
+		COMPUTE
+	};
+
 	enum class TargetType : GLenum
 	{
-		ARRAY_BUFFER = GL_ARRAY_BUFFER,
-		ELEMENT_ARRAY_BUFFER = GL_ELEMENT_ARRAY_BUFFER,
+		VERTEX_BUFFER = GL_ARRAY_BUFFER,
+		INDEX_BUFFER = GL_ELEMENT_ARRAY_BUFFER,
+		CONSTANT_BUFFER = GL_UNIFORM_BUFFER,
 		TEXTURE2D = GL_TEXTURE_2D
 	};
 

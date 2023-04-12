@@ -59,19 +59,14 @@ namespace rythe::rendering::internal
 				m_hwnd.m_devcon->IASetInputLayout(m_layout);
 		}
 
-		void unbind()
-		{
-			//Unbinding is done automatically
-		}
-
 		void addBuffer(buffer_handle handle)
 		{
 			switch (handle.getTargetType())
 			{
-			case TargetType::ARRAY_BUFFER:
+			case TargetType::VERTEX_BUFFER:
 				m_vertexBuffers.push_back(handle);
 				break;
-			case TargetType::ELEMENT_ARRAY_BUFFER:
+			case TargetType::INDEX_BUFFER:
 				m_indexBuffer = handle;
 				break;
 			default:
