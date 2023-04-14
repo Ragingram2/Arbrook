@@ -271,6 +271,7 @@
     <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
+    <ClInclude Include="arbrook\rendering\data\DirectX\dx11includes.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\inputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp" />

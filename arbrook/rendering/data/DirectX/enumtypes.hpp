@@ -23,7 +23,10 @@ namespace rythe::rendering::internal
 
 	enum class UsageType
 	{
-		StaticDraw = D3D11_USAGE_DYNAMIC
+		DEFAULT = D3D11_USAGE_DEFAULT,
+		IMMUTABLE = D3D11_USAGE_IMMUTABLE,
+		STATICDRAW = D3D11_USAGE_DYNAMIC,
+		STAGING = D3D11_USAGE_STAGING
 	};
 
 	enum class PrimitiveType

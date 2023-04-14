@@ -1,4 +1,6 @@
 #pragma once
+#include <unordered_map>
+
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <D3DX10.h>
@@ -13,6 +15,7 @@
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/config.hpp"
 #include Window_HPP_PATH
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering::internal
 {
@@ -22,8 +25,8 @@ namespace rythe::rendering::internal
 		window m_hwnd;
 		ID3D11VertexShader* m_VS = nullptr;
 		ID3D11PixelShader* m_PS = nullptr;
-		std::vector<buffer_handle> m_vsConstBuffers;
-		std::vector<buffer_handle> m_psConstBuffers;
+		std::unordered_map<std::string, buffer_handle> m_vsConstBuffers;
+		std::unordered_map<std::string, buffer_handle> m_psConstBuffers;
 	public:
 		unsigned int programId;
 		std::string name;
@@ -62,22 +65,22 @@ namespace rythe::rendering::internal
 			m_hwnd.m_devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
-			for (auto& handle : m_vsConstBuffers)
+			for (auto& [name,handle] : m_vsConstBuffers)
 			{
-				buffers.push_back(handle.buffer->operator ID3D11Buffer * ());
+				buffers.push_back(handle.buffer->m_impl);
 			}
 			m_hwnd.m_devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
-			for (auto& handle : m_psConstBuffers)
+			for (auto& [name, handle] : m_psConstBuffers)
 			{
-				buffers.push_back(handle.buffer->operator ID3D11Buffer * ());
+				buffers.push_back(handle.buffer->m_impl);
 			}
 			m_hwnd.m_devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)
 		{
-			if (handle.getTargetType() != TargetType::CONSTANT_BUFFER)
+			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;
@@ -86,10 +89,32 @@ namespace rythe::rendering::internal
 			switch (type)
 			{
 			case ShaderType::VERTEX:
-				m_vsConstBuffers.push_back(handle);
+				m_vsConstBuffers.emplace(handle->getName(), handle);
 				break;
 			case ShaderType::FRAGMENT:
-				m_psConstBuffers.push_back(handle);
+				m_psConstBuffers.emplace(handle->getName(),handle);
+				break;
+			default:
+				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
+				break;
+			}
+		}
+
+		void setBuffer(const std::string& name, ShaderType type, buffer_handle handle)
+		{
+			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
+			{
+				log::error("Buffer is not a constant buffer, this is not supported");
+				return;
+			}
+
+			switch (type)
+			{
+			case ShaderType::VERTEX:
+				m_vsConstBuffers[name] = handle;
+				break;
+			case ShaderType::FRAGMENT:
+				m_psConstBuffers[name] = handle;
 				break;
 			default:
 				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));

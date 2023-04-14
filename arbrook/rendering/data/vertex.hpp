@@ -12,4 +12,11 @@ namespace rythe::rendering
 		vertex(math::vec3 position, math::vec4 color, math::vec2 uv) : m_position(position), m_color(color), m_uv(uv) {}
 		~vertex() = default;
 	};
+
+	struct vtx_constant
+	{
+		math::vec3 position;
+		float time;
+	};
+
 }

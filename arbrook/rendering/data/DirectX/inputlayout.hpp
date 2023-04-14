@@ -12,10 +12,22 @@
 #include Buffer_HPP_PATH
 #include EnumTypes_HPP_PATH
 
+namespace rythe::rendering
+{
+	template<typename APIType>
+	struct Ishader;
+
+	namespace internal
+	{
+		struct shader;
+	}
+}
+
 namespace rythe::rendering::internal
 {
 	struct inputlayout
 	{
+		friend struct rendering::Ishader<shader>;
 	public:
 		unsigned int id = 0;
 	private:
@@ -31,10 +43,10 @@ namespace rythe::rendering::internal
 	public:
 
 		//pass a shader to be bound with
-		void bind(window& hwnd, shader_handle shader)
+		void bind(window& hwnd, rendering::shader_handle shader)
 		{
 			m_hwnd = hwnd;
-			m_vsBlob = shader->VS;
+			m_vsBlob = shader->getImpl().VS;
 
 			std::vector<ID3D11Buffer*> buffers;
 			int i = 0;
@@ -42,16 +54,16 @@ namespace rythe::rendering::internal
 			offset.resize(m_vertexBuffers.size());
 			for (auto& handle : m_vertexBuffers)
 			{
-				stride[i] = handle->elementSize;
+				stride[i] = handle->m_impl.elementSize;
 				offset[i] = (i <= 0 ? 0 : offset[i - 1] + stride[i]);
 				i++;
-				buffers.push_back(handle.buffer->operator ID3D11Buffer * ());
+				buffers.push_back(handle.buffer->m_impl);
 			}
 
 			m_hwnd.m_devcon->IASetVertexBuffers(0, m_vertexBuffers.size(), buffers.data(), stride.data(), offset.data());
 
 			if (m_indexBuffer.buffer != nullptr)
-				m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.buffer->internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
 			else
 				log::warn("No index buffer was bound, thats ok if this was intended behaviour");
 
@@ -61,7 +73,7 @@ namespace rythe::rendering::internal
 
 		void addBuffer(buffer_handle handle)
 		{
-			switch (handle.getTargetType())
+			switch (static_cast<internal::TargetType>(handle.getTargetType()))
 			{
 			case TargetType::VERTEX_BUFFER:
 				m_vertexBuffers.push_back(handle);

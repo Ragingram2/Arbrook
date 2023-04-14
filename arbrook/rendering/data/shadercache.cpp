@@ -9,10 +9,10 @@ namespace rythe::rendering
 		if (m_shaders.contains(name))
 		{
 			log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
-			return m_shaders[name].get()->operator->();
+			return m_shaders[name].get();
 		}
 
-		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second->operator->();
+		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second.get();
 
 		return api.createShader(shad, name, loadShader(filepath));
 	}
@@ -21,10 +21,10 @@ namespace rythe::rendering
 	{
 		if (m_shaders.contains(name))
 		{
-			return m_shaders[name].get()->operator->();
+			return m_shaders[name].get();
 		}
 		log::warn("Shader {} does not exist", name);
-		return nullptr;
+		return shader_handle{};
 	}
 
 	void ShaderCache::deleteShader(const std::string& name)

@@ -8,6 +8,7 @@
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
+#include "rendering/data/interface/ishader.hpp"
 #include "rendering/data/config.hpp"
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH
@@ -64,13 +65,13 @@ namespace rythe::rendering
 
 		//void setLineWidth();
 
-		shader_handle createShader(internal::shader* shader, const std::string& name, const shader_source& source) { m_impl.createShader(shader, name, source); return shader; };
+		shader_handle createShader(Ishader<internal::shader>* shader, const std::string& name, const shader_source& source) { m_impl.createShader(&shader->getImpl(), name, source); return shader; };
 		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath) { return m_impl.createTexture2D(texture, name, filepath); }
 		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
 		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);
 		//texture_handle createCubeTexture();
 		template<typename elementType, typename dataType = elementType>
-		buffer_handle createBuffer(internal::buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0) { m_impl.createBuffer(buffer, static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), data, size); return buffer; }
+		buffer_handle createBuffer(Ibuffer<internal::buffer>* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0) { m_impl.createBuffer(&buffer->getImpl(), static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), data, size); return buffer; }
 		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
 

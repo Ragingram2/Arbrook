@@ -12,6 +12,8 @@
 namespace rythe::rendering
 {
 	struct buffer_handle;
+	template<typename APIType>
+	struct Ibuffer;
 }
 
 namespace rythe::rendering::internal
@@ -19,30 +21,28 @@ namespace rythe::rendering::internal
 	struct buffer
 	{
 		friend struct rendering::buffer_handle;
+		friend struct Ibuffer<internal::buffer>;
 	public:
 		unsigned int id = 0;
+		std::string name;
 		unsigned int elementSize = 0;
 		ID3D11Buffer* internalBuffer;
 	private:
+		unsigned int m_defaultBufferSize = 50;
 		D3D11_BUFFER_DESC m_bufferDesc;
 		TargetType m_target;
 		UsageType m_usage;
 		window m_hwnd;
 	public:
 		operator ID3D11Buffer* () const { return internalBuffer; }
-		void initialize(window& hwnd, TargetType target, UsageType usage)
+		void initialize(window& hwnd, TargetType target, UsageType usage, unsigned int elemntSize = 0)
 		{
 			m_hwnd = hwnd;
 			m_target = target;
 			m_usage = usage;
 
-			ZeroMemory(&m_bufferDesc, sizeof(m_bufferDesc));
-
-			m_bufferDesc.Usage = static_cast<D3D11_USAGE>(m_usage);
-			m_bufferDesc.BindFlags = static_cast<D3D11_BIND_FLAG>(m_target);
-			m_bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			m_bufferDesc.MiscFlags = 0;
-			m_bufferDesc.StructureByteStride = 0;
+			elementSize = elemntSize;
+			createBuffer();
 		}
 
 		void bind()
@@ -67,25 +67,51 @@ namespace rythe::rendering::internal
 		template<typename elementType, typename dataType = elementType>
 		void bufferData(elementType data[], int size)
 		{
-			elementSize = sizeof(elementType);
-			if (m_target == TargetType::CONSTANT_BUFFER)
-				m_bufferDesc.ByteWidth = static_cast<unsigned int>(sizeof(elementType) + (16 - (sizeof(elementType) % 16)));
-			else
-				m_bufferDesc.ByteWidth = sizeof(dataType) * size;
-
-			m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &internalBuffer);
+			if (size > m_defaultBufferSize)
+			{
+				m_defaultBufferSize = size;
+				elementSize = sizeof(elementType);
+				createBuffer();
+			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			HRESULT hResult = m_hwnd.m_devcon->Map(internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
-			memcpy(resource.pData, data, size);
-			// This will be S_OK
-			if (hResult != S_OK)
+			HRESULT hr = m_hwnd.m_devcon->Map(internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
+			m_hwnd.checkError();
+			memcpy(resource.pData, data, size * sizeof(elementType));
+			if (FAILED(hr))
 			{
-				log::debug("Buffer failed to be filled");
+				log::error("Buffer failed to be filled");
 				return;
 			}
 
 			m_hwnd.m_devcon->Unmap(internalBuffer, NULL);
+		}
+
+	private:
+		void createBuffer()
+		{
+			ZeroMemory(&m_bufferDesc, sizeof(m_bufferDesc));
+
+			m_bufferDesc.Usage = static_cast<D3D11_USAGE>(m_usage);
+			m_bufferDesc.BindFlags = static_cast<D3D11_BIND_FLAG>(m_target);
+			m_bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			m_bufferDesc.MiscFlags = 0;
+			m_bufferDesc.StructureByteStride = 0;
+
+			if (m_target == TargetType::CONSTANT_BUFFER)
+				m_bufferDesc.ByteWidth = static_cast<unsigned int>(elementSize + (16 - (elementSize % 16)));
+			else
+				m_bufferDesc.ByteWidth = elementSize;
+
+			m_bufferDesc.ByteWidth *= m_defaultBufferSize;
+
+			HRESULT hr = m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &internalBuffer);
+			m_hwnd.checkError();
+			if (FAILED(hr))
+			{
+				log::error("Buffer failed to be created");
+				return;
+			}
 		}
 	};
 }

@@ -22,10 +22,10 @@ namespace rythe::rendering
 	{
 		if (m_buffers.contains(name))
 		{
-			return m_buffers[name].get()->operator->();
+			return m_buffers[name].get();
 		}
 		log::warn("Buffer {} does not exist", name);
-		return nullptr;
+		return buffer_handle{};
 	}
 
 	void BufferCache::deleteBuffer(const std::string& name)

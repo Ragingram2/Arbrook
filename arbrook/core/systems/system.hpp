@@ -20,7 +20,7 @@ namespace rythe::core
 
 	struct transform
 	{
-		math::vec2 position = math::vec2(0.0f, 0.0f);
+		math::vec3 position = math::vec3(0.0f, 0.0f,0.0f);
 		math::vec2 scale = math::vec2(1.0f, 1.0f);
 		float rotation = 0;
 	};

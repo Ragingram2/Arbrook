@@ -22,6 +22,14 @@ namespace rythe::rendering::internal
 
 	enum class UsageType
 	{
+		DEFAULT = 0,
+		IMMUTABLE = 0,
+		STATICDRAW = GL_STATIC_DRAW,
+		STAGING = 0
+	};
+
+	enum class UsageType
+	{
 		StaticDraw = GL_STATIC_DRAW
 	};
 

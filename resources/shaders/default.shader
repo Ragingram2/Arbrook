@@ -8,7 +8,7 @@ layout(location = 2) in vec2 vTexCoord;
 
 layout(std140) uniform cBuffer
 {
-	vec2 u_position;
+	vec3 u_position;
 	float u_time;
 };
 
@@ -18,7 +18,7 @@ out vec2 TexCoord;
 void main()
 {
 	vec2 offset = vec2(0, sin(u_time));
-	gl_Position = vPosition + vec4(u_position + offset, 0, 0);
+	gl_Position = vPosition + vec4(u_position + offset, 0);
 	aColor = vColor;
 	TexCoord = vTexCoord;
 }
@@ -30,15 +30,11 @@ in vec3 aColor;
 in vec2 TexCoord;
 out vec4 FragColor;
 
-uniform vec4 u_color;
 uniform sampler2D ourTexture;
 
 void main()
 {
 	vec4 tColor = texture(ourTexture, TexCoord);
-	//float a = 0.0f;
-	//vec3 oColor = tColor.xyz + u_color.xyz;
-	//float len = dot(oColor , oColor);
 	FragColor = tColor;
 }
 #END
@@ -61,8 +57,8 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 {
 	VOut output;
 
-	float2 offset = float2(0, sin(u_time));
-	output.position = position + float4(u_position + offset, 0, 0);
+	float3 offset = float3(0, sin(u_time),0);
+	output.position = position + float4(u_position + offset, 0);
 	output.color = color;
 
 	return output;

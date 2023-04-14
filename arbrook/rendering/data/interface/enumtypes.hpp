@@ -23,7 +23,10 @@ namespace rythe::rendering
 
 	enum class UsageType
 	{
-		StaticDraw = static_cast<int>(internal::UsageType::StaticDraw)
+		DEFAULT = static_cast<int>(internal::UsageType::DEFAULT),
+		IMMUTABLE = static_cast<int>(internal::UsageType::IMMUTABLE),
+		STATICDRAW = static_cast<int>(internal::UsageType::STATICDRAW),
+		STAGING = static_cast<int>(internal::UsageType::STAGING)
 	};
 
 	enum class PrimitiveType

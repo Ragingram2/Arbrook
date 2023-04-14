@@ -26,10 +26,11 @@ namespace rythe::rendering
 		if (m_buffers.contains(name))
 		{
 			log::warn("Buffer {} already exists, ignoring new buffer, and returning existing one", name);
-			return m_buffers[name].get()->operator->();
+			return m_buffers[name].get();
 		}
 
-		auto buff = m_buffers.emplace(name, std::make_unique<buffer>()).first->second->operator->();
+		auto buff = m_buffers.emplace(name, std::make_unique<buffer>()).first->second.get();
+		buff->m_impl.name = name;
 
 		return api.createBuffer<elementType, dataType>(buff, target, usage, data, size);
 	}
