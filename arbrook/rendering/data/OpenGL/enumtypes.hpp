@@ -28,11 +28,6 @@ namespace rythe::rendering::internal
 		STAGING = 0
 	};
 
-	enum class UsageType
-	{
-		StaticDraw = GL_STATIC_DRAW
-	};
-
 	enum class PrimitiveType
 	{
 		TRIANGLESLIST = GL_TRIANGLES,

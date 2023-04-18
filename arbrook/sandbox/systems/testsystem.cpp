@@ -30,7 +30,7 @@ namespace rythe::core
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
 		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW);
-		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant, float>(*m_api, "Constant Buffer 1", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
+		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant, float>(*m_api, "Constant Buffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
 
 		float spawnCount = 2.f;
 		gfx::vtx_constant constants[2];
@@ -66,8 +66,8 @@ namespace rythe::core
 			layout.bind(m_api->getHwnd(), shader);
 
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
-			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
+			layout.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
+			layout.setAttributePtr("TEXCOORD", 0, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
 			layout.submitAttributes();
 		}
 
@@ -80,8 +80,8 @@ namespace rythe::core
 
 	void TestSystem::update()
 	{
-		auto constantHandle = gfx::BufferCache::getBuffer("Constant Buffer 1");
-		gfx::vtx_constant constants[2];
+		//auto constantHandle = gfx::BufferCache::getBuffer("Constant Buffer");
+		//gfx::vtx_constant constants[2];
 
 		int i = 0;
 		for (auto& ent : m_filter)
@@ -99,11 +99,11 @@ namespace rythe::core
 				example.inc = -example.inc;
 			example.time += example.inc;
 
-			constants[i++] = gfx::vtx_constant{ transf.position,example.time };
-			//constants[1] = vtx_constant{ transf.position,example.time };
+			//constants[i++] = gfx::vtx_constant{ transf.position,example.time };
+			////constants[1] = vtx_constant{ transf.position,example.time };
 		}
 
-		constantHandle->bufferData<gfx::vtx_constant, float>(constants, i);
+		//constantHandle->bufferData<gfx::vtx_constant, float>(constants, i);
 	}
 
 	void TestSystem::shutdown()

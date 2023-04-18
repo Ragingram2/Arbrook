@@ -16,7 +16,8 @@ namespace rythe::rendering::internal
 		std::string name;
 
 	private:
-		std::vector<buffer_handle> m_uniformBuffers;
+		std::vector<buffer_handle> m_vsConstBuffers;
+		std::vector<buffer_handle> m_psConstBuffers;
 	public:
 		shader() = default;
 		shader(shader* other)
@@ -50,7 +51,7 @@ namespace rythe::rendering::internal
 
 		void addBuffer(ShaderType type, buffer_handle handle)
 		{
-			if (handle.getTargetType() != TargetType::CONSTANT_BUFFER)
+			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;

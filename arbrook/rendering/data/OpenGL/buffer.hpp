@@ -14,6 +14,8 @@
 namespace rythe::rendering
 {
 	struct buffer_handle;
+	template<typename APIType>
+	struct Ibuffer;
 }
 
 namespace rythe::rendering::internal
@@ -21,8 +23,10 @@ namespace rythe::rendering::internal
 	struct buffer
 	{
 		friend struct rendering::buffer_handle;
+		friend struct Ibuffer<internal::buffer>;
 	public:
 		unsigned int id;
+		std::string name;
 	private:
 		TargetType m_target;
 		UsageType m_usage;
@@ -45,7 +49,7 @@ namespace rythe::rendering::internal
 		void bufferData(elementType data[], int size)
 		{
 			glBindBuffer(static_cast<GLenum>(m_target), id);
-			glBufferData(static_cast<GLenum>(m_target), size, data, static_cast<GLenum>(m_usage));
+			glBufferData(static_cast<GLenum>(m_target), size * sizeof(elementType), data, static_cast<GLenum>(m_usage));
 		}
 	};
 }

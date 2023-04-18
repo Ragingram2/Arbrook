@@ -2,9 +2,16 @@
 #shader vertex
 #version 450 core
 
-layout(location = 0) in vec4 vPosition;
-layout(location = 1) in vec3 vColor;
-layout(location = 2) in vec2 vTexCoord;
+out VOUT
+{
+	vec3 position;
+	vec4 color;
+	vec2 texCoord;
+} fs_in;
+
+//layout(location = 0) in vec4 vPosition;
+//layout(location = 1) in vec3 vColor;
+//layout(location = 2) in vec2 vTexCoord;
 
 layout(std140) uniform cBuffer
 {
@@ -17,10 +24,10 @@ out vec2 TexCoord;
 
 void main()
 {
-	vec2 offset = vec2(0, sin(u_time));
-	gl_Position = vPosition + vec4(u_position + offset, 0);
-	aColor = vColor;
-	TexCoord = vTexCoord;
+	vec3 offset = vec3(0, sin(u_time), 0);
+	gl_Position = vec4(fs_in.position + u_position + offset, 0);
+	aColor = fs_in.color;
+	TexCoord = fs_in.texCoord;
 }
 
 #shader fragment

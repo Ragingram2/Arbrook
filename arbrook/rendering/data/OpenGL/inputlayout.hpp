@@ -55,7 +55,7 @@ namespace rythe::rendering::internal
 
 		void addBuffer(buffer_handle handle)
 		{
-			switch (handle.getTargetType())
+			switch (static_cast<internal::TargetType>(handle.getTargetType()))
 			{
 			case TargetType::VERTEX_BUFFER:
 				m_vertexBuffers.push_back(handle);
