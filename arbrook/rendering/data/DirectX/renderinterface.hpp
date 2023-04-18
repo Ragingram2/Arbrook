@@ -178,9 +178,10 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->DrawIndexed(indexCount, startIndex, baseVertex);
 		}
 
-		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
+		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
-
+			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.m_devcon->DrawIndexedInstanced(indexCount, instanceCount,startIndex, baseVertex, startInstance);
 		}
 
 		//void bind(shader* shader)

@@ -36,7 +36,7 @@ namespace rythe::rendering
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount) { m_impl.drawArrays(static_cast<internal::PrimitiveType>(mode), startVertex, vertexCount); }
 		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance) { m_impl.drawArraysInstanced(static_cast<internal::PrimitiveType>(mode), vertexCount, instanceCount, startVertex, instanceCount, startInstance); }
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex) { m_impl.drawIndexed(static_cast<internal::PrimitiveType>(mode), indexCount, startIndex, baseVertex); }
-		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), indexCount, instanceCount, startIndex, baseVertex, startInstance); }
+		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), indexCount, instanceCount, startIndex, baseVertex, startInstance); }
 
 		//void bind();//render targets
 		//void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }

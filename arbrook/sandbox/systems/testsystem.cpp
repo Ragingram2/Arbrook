@@ -33,6 +33,7 @@ namespace rythe::core
 		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant, float>(*m_api, "Constant Buffer 1", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
 
 		float spawnCount = 2.f;
+		gfx::vtx_constant constants[2];
 		for (int i = 0; i < spawnCount; i++)
 		{
 			auto& ent = createEntity();
@@ -58,11 +59,7 @@ namespace rythe::core
 			layout.addBuffer(vertexHandle);
 			layout.addBuffer(indexHandle);
 
-			gfx::vtx_constant constants[] = { {transf.position,example.time} };
-			constantHandle->bufferData<gfx::vtx_constant, float>(constants, 1);
-
-			shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
-			shader->bind();
+			constants[i] = gfx::vtx_constant{ transf.position, example.time };
 
 			//make a Itexture
 			//texture->bind();
@@ -73,6 +70,12 @@ namespace rythe::core
 			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
 			layout.submitAttributes();
 		}
+
+		constantHandle->bufferData<gfx::vtx_constant, float>(constants, spawnCount);
+
+		shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
+		shader->bind();
+
 	}
 
 	void TestSystem::update()
@@ -80,6 +83,7 @@ namespace rythe::core
 		auto constantHandle = gfx::BufferCache::getBuffer("Constant Buffer 1");
 		gfx::vtx_constant constants[2];
 
+		int i = 0;
 		for (auto& ent : m_filter)
 		{
 			auto& transf = ent.getComponent<transform>();
@@ -95,11 +99,11 @@ namespace rythe::core
 				example.inc = -example.inc;
 			example.time += example.inc;
 
-			constants[0] = gfx::vtx_constant{ transf.position,example.time };
+			constants[i++] = gfx::vtx_constant{ transf.position,example.time };
 			//constants[1] = vtx_constant{ transf.position,example.time };
 		}
 
-		constantHandle->bufferData<gfx::vtx_constant, float>(constants, sizeof(constants) / sizeof(gfx::vtx_constant));
+		constantHandle->bufferData<gfx::vtx_constant, float>(constants, i);
 	}
 
 	void TestSystem::shutdown()
