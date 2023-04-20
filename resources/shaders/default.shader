@@ -1,39 +1,38 @@
 #GLSL
 #shader vertex
-#version 450 core
+#version 420 core
 
-out VOUT
+struct vertex
 {
 	vec3 position;
 	vec4 color;
 	vec2 texCoord;
-} fs_in;
+};
 
-//layout(location = 0) in vec4 vPosition;
-//layout(location = 1) in vec3 vColor;
-//layout(location = 2) in vec2 vTexCoord;
+layout(location = 0) in vertex vtx;
 
-layout(std140) uniform cBuffer
+layout(std140, binding = 0) uniform cBuffer
 {
 	vec3 u_position;
 	float u_time;
 };
 
-out vec3 aColor;
+out vec4 aColor;
 out vec2 TexCoord;
 
 void main()
 {
 	vec3 offset = vec3(0, sin(u_time), 0);
-	gl_Position = vec4(fs_in.position + u_position + offset, 0);
-	aColor = fs_in.color;
-	TexCoord = fs_in.texCoord;
+	gl_Position = vec4(vtx.position + u_position + offset, 1);
+	//aColor = vColor;
+	aColor = vtx.color;
+	TexCoord = vtx.texCoord;
 }
 
 #shader fragment
-#version 330 core
+#version 420 core
 
-in vec3 aColor;
+in vec4 aColor;
 in vec2 TexCoord;
 out vec4 FragColor;
 
@@ -64,7 +63,7 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 {
 	VOut output;
 
-	float3 offset = float3(0, sin(u_time),0);
+	float3 offset = float3(0, sin(u_time), 0);
 	output.position = position + float4(u_position + offset, 0);
 	output.color = color;
 

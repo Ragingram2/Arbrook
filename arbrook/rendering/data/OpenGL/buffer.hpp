@@ -27,17 +27,26 @@ namespace rythe::rendering::internal
 	public:
 		unsigned int id;
 		std::string name;
+		unsigned int bindId = 0;
 	private:
 		TargetType m_target;
 		UsageType m_usage;
 	public:
 
-		void initialize(TargetType target, UsageType usage)
+		template<typename elementType, typename dataType = elementType>
+		void initialize(TargetType target, UsageType usage, int size)
 		{
 			m_target = target;
 			m_usage = usage;
 
 			glGenBuffers(1, &id);
+
+			if (m_target == TargetType::CONSTANT_BUFFER)
+			{
+				glBindBuffer(static_cast<GLenum>(m_target), id);
+				glBufferData(static_cast<GLenum>(m_target), size, nullptr, static_cast<GLenum>(m_usage));
+				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, size);
+			}
 		}
 
 		void bind()
@@ -49,7 +58,15 @@ namespace rythe::rendering::internal
 		void bufferData(elementType data[], int size)
 		{
 			glBindBuffer(static_cast<GLenum>(m_target), id);
-			glBufferData(static_cast<GLenum>(m_target), size * sizeof(elementType), data, static_cast<GLenum>(m_usage));
+
+			if (m_target == TargetType::CONSTANT_BUFFER)
+			{
+				glBufferSubData(static_cast<GLenum>(m_target), 0, size * sizeof(elementType), data);
+			}
+			else
+			{
+				glBufferData(static_cast<GLenum>(m_target), size * sizeof(elementType), data, static_cast<GLenum>(m_usage));
+			}
 		}
 	};
 }

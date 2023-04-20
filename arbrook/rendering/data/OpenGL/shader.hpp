@@ -69,6 +69,8 @@ namespace rythe::rendering::internal
 				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
 				break;
 			}
+
+			glUniformBlockBinding(programId, glGetUniformBlockIndex(programId, "cBuffer"), handle->m_impl.bindId);
 		}
 
 		void setUniform(const std::string& uniformName, math::vec4 value)

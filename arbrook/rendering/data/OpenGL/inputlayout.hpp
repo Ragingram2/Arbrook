@@ -46,11 +46,11 @@ namespace rythe::rendering::internal
 			}
 
 			glBindVertexArray(id);
-			for (auto& handle : m_vertexBuffers)
-			{
-				handle->bind();
-			}
-			m_indexBuffer->bind();
+			//for (auto& handle : m_vertexBuffers)
+			//{
+			//	handle->bind();
+			//}
+			//m_indexBuffer->bind();
 		}
 
 		void addBuffer(buffer_handle handle)
@@ -78,7 +78,6 @@ namespace rythe::rendering::internal
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
-				glEnableVertexAttribArray(attrib.index);
 				switch (attrib.format)
 				{
 				case FormatType::RGB32F:
@@ -94,6 +93,7 @@ namespace rythe::rendering::internal
 					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				}
+				glEnableVertexAttribArray(attrib.index);
 			}
 		}
 	};
