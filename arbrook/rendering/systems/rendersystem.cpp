@@ -37,9 +37,10 @@ namespace rythe::rendering
 		m_api->clear(GL_COLOR_BUFFER_BIT);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
-		auto constantHandle = BufferCache::getBuffer("Constant Buffer");
-		vtx_constant constants[1];
+		//auto constantHandle = BufferCache::getBuffer("Constant Buffer");
+		//vtx_constant constants[2];
 
+		int i = 0;
 		for (auto& ent : m_filter)
 		{
 			auto& renderComp = ent.getComponent<sprite_renderer>();
@@ -48,8 +49,8 @@ namespace rythe::rendering
 
 			auto& shader = renderComp.shader;
 			auto& texture = renderComp.texture;
-			constants[0] = vtx_constant{ transf.position,example.time };
-			constantHandle->bufferData<vtx_constant, float>(constants, 1);
+			//constants[i++] = vtx_constant{ transf.position,example.time };
+			//constantHandle->bufferData<vtx_constant, float>(constants, 2);
 			shader->bind();
 			//m_api->bind(texture);
 			renderComp.layout.bind(m_api->getHwnd(), shader);

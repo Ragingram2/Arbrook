@@ -19,8 +19,8 @@ namespace rythe::core
 
 		unsigned int indicies[] =
 		{
-			0,2,1,
-			2,3,0
+			0,1,2,
+			0,2,3
 		};
 
 
@@ -61,20 +61,22 @@ namespace rythe::core
 
 			constants[i] = gfx::vtx_constant{ transf.position, example.time };
 
+			//shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
+			//shader->bind();
 			//make a Itexture
 			//texture->bind();
 			layout.bind(m_api->getHwnd(), shader);
 
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
-			layout.setAttributePtr("COLOR", 0, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
-			layout.setAttributePtr("TEXCOORD", 0, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
+			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
+			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
 			layout.submitAttributes();
 		}
 
 		constantHandle->bufferData<gfx::vtx_constant, float>(constants, spawnCount);
 
 		shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
-		shader->bind();
+		//shader->bind();
 
 	}
 

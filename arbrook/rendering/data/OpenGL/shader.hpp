@@ -6,6 +6,8 @@
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/config.hpp"
+#include EnumTypes_HPP_PATH
 
 namespace rythe::rendering::internal
 {
@@ -32,8 +34,8 @@ namespace rythe::rendering::internal
 			this->name = name;
 			programId = glCreateProgram();
 
-			unsigned int vs = compileShader(GL_VERTEX_SHADER, source.vertexSource);
-			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, source.fragSource);
+			unsigned int vs = compileShader(ShaderType::VERTEX, source.vertexSource);
+			unsigned int fs = compileShader(ShaderType::FRAGMENT, source.fragSource);
 
 			glAttachShader(programId, vs);
 			glAttachShader(programId, fs);
@@ -120,9 +122,9 @@ namespace rythe::rendering::internal
 		}
 
 	private:
-		unsigned int compileShader(unsigned int type, const std::string& source)
+		unsigned int compileShader(ShaderType type, const std::string& source)
 		{
-			unsigned int id = glCreateShader(type);
+			unsigned int id = glCreateShader(static_cast<GLenum>(type));
 			const char* src = source.c_str();
 			glShaderSource(id, 1, &src, nullptr);
 			glCompileShader(id);
