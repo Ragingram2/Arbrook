@@ -5,8 +5,8 @@ namespace rythe::rendering::internal
 {
 	enum class ShaderType
 	{
-		VERTEX,
-		FRAGMENT,
+		VERTEX = GL_VERTEX_SHADER,
+		FRAGMENT = GL_FRAGMENT_SHADER,
 		GEOMETRY,
 		HULL,
 		COMPUTE

@@ -184,26 +184,6 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->DrawIndexedInstanced(indexCount, instanceCount,startIndex, baseVertex, startInstance);
 		}
 
-		//void bind(shader* shader)
-		//{
-		//	hwnd.m_devcon->VSSetShader(shader->m_VS, 0, 0);
-		//	hwnd.m_devcon->PSSetShader(shader->m_PS, 0, 0);
-		//}
-
-		//void bind(texture_handle handle)
-		//{
-
-		//}
-
-		//void unbind(shader* shader)
-		//{
-
-		//}
-
-		//void unbind(texture_handle handle)
-		//{
-		//}
-
 		void clear(int flags)
 		{
 

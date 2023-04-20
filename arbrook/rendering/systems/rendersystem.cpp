@@ -39,6 +39,7 @@ namespace rythe::rendering
 
 		auto constantHandle = BufferCache::getBuffer("Constant Buffer");
 
+		int i = 0;
 		for (auto& ent : m_filter)
 		{
 			auto& renderComp = ent.getComponent<sprite_renderer>();

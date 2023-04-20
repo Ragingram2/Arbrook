@@ -52,8 +52,8 @@ namespace rythe::rendering::internal
 		void initialize(window& hwnd, const std::string& name, const shader_source& source)
 		{
 			m_hwnd = hwnd;
-			compileShader(0, source.vertexSource);
-			compileShader(1, source.fragSource);
+			compileShader(ShaderType::VERTEX, source.vertexSource);
+			compileShader(ShaderType::FRAGMENT, source.fragSource);
 
 			m_hwnd.m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
 			m_hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
@@ -164,14 +164,14 @@ namespace rythe::rendering::internal
 		}
 
 	private:
-		unsigned int compileShader(unsigned int type, const std::string& source)
+		unsigned int compileShader(ShaderType type, const std::string& source)
 		{
 			HRESULT hr;
-			if (type == 0)
+			if (type == ShaderType::VERTEX)
 			{
 				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "VShader", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &VS, nullptr);
 			}
-			else if (type == 1)
+			else if (type == ShaderType::FRAGMENT)
 			{
 				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "PShader", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &PS, nullptr);
 			}
