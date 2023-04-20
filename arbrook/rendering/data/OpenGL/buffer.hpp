@@ -16,6 +16,11 @@ namespace rythe::rendering
 	struct buffer_handle;
 	template<typename APIType>
 	struct Ibuffer;
+
+	namespace internal
+	{
+		struct inputlayout;
+	}
 }
 
 namespace rythe::rendering::internal
@@ -24,6 +29,7 @@ namespace rythe::rendering::internal
 	{
 		friend struct rendering::buffer_handle;
 		friend struct Ibuffer<internal::buffer>;
+		friend struct internal::inputlayout;
 	public:
 		unsigned int id;
 		std::string name;
@@ -31,22 +37,19 @@ namespace rythe::rendering::internal
 	private:
 		TargetType m_target;
 		UsageType m_usage;
+		unsigned int m_size;
+		unsigned int m_elementSize;
 	public:
 
-		template<typename elementType, typename dataType = elementType>
+		template<typename elementType>
 		void initialize(TargetType target, UsageType usage, int size)
 		{
 			m_target = target;
 			m_usage = usage;
+			m_size = size;
+			m_elementSize = sizeof(elementType);
 
-			glGenBuffers(1, &id);
-
-			if (m_target == TargetType::CONSTANT_BUFFER)
-			{
-				glBindBuffer(static_cast<GLenum>(m_target), id);
-				glBufferData(static_cast<GLenum>(m_target), size, nullptr, static_cast<GLenum>(m_usage));
-				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, size);
-			}
+			createBuffer();
 		}
 
 		void bind()
@@ -54,18 +57,43 @@ namespace rythe::rendering::internal
 			glBindBuffer(static_cast<GLenum>(m_target), id);
 		}
 
-		template<typename elementType, typename dataType = elementType>
-		void bufferData(elementType data[], int size)
+		template<typename elementType>
+		void bufferData(elementType data[], int size = 0)
 		{
-			glBindBuffer(static_cast<GLenum>(m_target), id);
+			bind();
+
+			if (size < 1)
+			{
+				size = m_size;
+			}
+			else if (size > m_size)
+			{
+				m_size = size;
+				m_elementSize = sizeof(elementType);
+				createBuffer();
+			}
 
 			if (m_target == TargetType::CONSTANT_BUFFER)
 			{
-				glBufferSubData(static_cast<GLenum>(m_target), 0, size * sizeof(elementType), data);
+				glBufferSubData(static_cast<GLenum>(m_target), 0, m_size * sizeof(elementType), data);
 			}
 			else
 			{
-				glBufferData(static_cast<GLenum>(m_target), size * sizeof(elementType), data, static_cast<GLenum>(m_usage));
+				glBufferData(static_cast<GLenum>(m_target), m_size * sizeof(elementType), data, static_cast<GLenum>(m_usage));
+			}
+		}
+
+	private:
+		void createBuffer()
+		{
+			if (id == 0)
+				glGenBuffers(1, &id);
+
+			bind();
+			glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, nullptr, static_cast<GLenum>(m_usage));
+			if (m_target == TargetType::CONSTANT_BUFFER)
+			{
+				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, m_size);
 			}
 		}
 	};

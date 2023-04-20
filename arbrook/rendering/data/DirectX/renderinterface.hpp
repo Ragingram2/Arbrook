@@ -181,7 +181,7 @@ namespace rythe::rendering::internal
 		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
 			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd.m_devcon->DrawIndexedInstanced(indexCount, instanceCount,startIndex, baseVertex, startInstance);
+			hwnd.m_devcon->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
 		}
 
 		void clear(int flags)
@@ -232,13 +232,13 @@ namespace rythe::rendering::internal
 			return texture;
 		}
 
-		template<typename elementType, typename dataType = elementType>
-		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0)
+		template<typename elementType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1)
 		{
-			buffer->initialize(hwnd, target, usage, sizeof(elementType));
+			buffer->initialize<elementType>(hwnd, target, usage, size);
 			if (data)
 			{
-				buffer->bufferData<elementType, dataType>(data, size);
+				buffer->bufferData(data);
 			}
 		}
 

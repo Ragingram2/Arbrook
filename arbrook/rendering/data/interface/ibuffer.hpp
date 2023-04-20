@@ -37,8 +37,8 @@ namespace rythe::rendering
 	public:
 		void initialize(TargetType target, UsageType usage) { m_impl.initialize(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage)); }
 		void bind() { m_impl.bind(); }
-		template<typename elementType, typename dataType = elementType>
-		void bufferData(elementType data[], int size) { m_impl.bufferData<elementType,dataType>(data, size); }
+		template<typename elementType>
+		void bufferData(elementType data[], int size = 0) { m_impl.bufferData(data, size); }
 
 		std::string getName() { return m_impl.name; }
 		unsigned int getId() { return m_impl.id; }

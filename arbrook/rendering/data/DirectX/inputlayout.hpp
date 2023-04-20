@@ -54,7 +54,7 @@ namespace rythe::rendering::internal
 			offset.resize(m_vertexBuffers.size());
 			for (auto& handle : m_vertexBuffers)
 			{
-				stride[i] = handle->m_impl.elementSize;
+				stride[i] = handle->m_impl.m_elementSize;
 				offset[i] = (i <= 0 ? 0 : offset[i - 1] + stride[i]);
 				i++;
 				buffers.push_back(handle.buffer->m_impl);
@@ -87,7 +87,6 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		//use custom vertex attrib, and std::move the string
 		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset)
 		{
 			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, stride, offset });

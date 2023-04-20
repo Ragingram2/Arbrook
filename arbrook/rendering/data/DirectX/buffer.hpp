@@ -14,6 +14,11 @@ namespace rythe::rendering
 	struct buffer_handle;
 	template<typename APIType>
 	struct Ibuffer;
+
+	namespace internal
+	{
+		struct inputlayout;
+	}
 }
 
 namespace rythe::rendering::internal
@@ -22,26 +27,29 @@ namespace rythe::rendering::internal
 	{
 		friend struct rendering::buffer_handle;
 		friend struct Ibuffer<internal::buffer>;
+		friend struct internal::inputlayout;
 	public:
 		unsigned int id = 0;
 		std::string name;
-		unsigned int elementSize = 0;
-		ID3D11Buffer* internalBuffer;
 	private:
-		unsigned int m_defaultBufferSize = 50;
+		unsigned int m_size;
 		D3D11_BUFFER_DESC m_bufferDesc;
 		TargetType m_target;
 		UsageType m_usage;
 		window m_hwnd;
+		unsigned int m_elementSize = 0;
+		ID3D11Buffer* m_internalBuffer;
 	public:
-		operator ID3D11Buffer* () const { return internalBuffer; }
-		void initialize(window& hwnd, TargetType target, UsageType usage, unsigned int elemntSize = 0)
+		operator ID3D11Buffer* () const { return m_internalBuffer; }
+		template<typename elementType>
+		void initialize(window& hwnd, TargetType target, UsageType usage, int size)
 		{
 			m_hwnd = hwnd;
 			m_target = target;
 			m_usage = usage;
+			m_size = size;
+			m_elementSize = sizeof(elementType);
 
-			elementSize = elemntSize;
 			createBuffer();
 		}
 
@@ -50,13 +58,13 @@ namespace rythe::rendering::internal
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &internalBuffer, &elementSize, 0);
+				m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_internalBuffer, &m_elementSize, 0);
 				break;
 			case TargetType::INDEX_BUFFER:
-				m_hwnd.m_devcon->IASetIndexBuffer(internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.m_devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				m_hwnd.m_devcon->VSSetConstantBuffers(0, 1, &internalBuffer);
+				m_hwnd.m_devcon->VSSetConstantBuffers(0, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -64,27 +72,31 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		template<typename elementType, typename dataType = elementType>
-		void bufferData(elementType data[], int size)
+		template<typename elementType>
+		void bufferData(elementType data[], int size = 0)
 		{
-			if (size > m_defaultBufferSize)
+			if (size < 1)
 			{
-				m_defaultBufferSize = size;
-				elementSize = sizeof(elementType);
+				size = m_size;
+			}
+			else if (size > m_size)
+			{
+				m_size = size;
+				m_elementSize = sizeof(elementType);
 				createBuffer();
 			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			HRESULT hr = m_hwnd.m_devcon->Map(internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
+			HRESULT hr = m_hwnd.m_devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
 			m_hwnd.checkError();
-			memcpy(resource.pData, data, size * sizeof(elementType));
+			memcpy(resource.pData, data, m_size * sizeof(elementType));
 			if (FAILED(hr))
 			{
 				log::error("Buffer failed to be filled");
 				return;
 			}
 
-			m_hwnd.m_devcon->Unmap(internalBuffer, NULL);
+			m_hwnd.m_devcon->Unmap(m_internalBuffer, NULL);
 		}
 
 	private:
@@ -99,13 +111,13 @@ namespace rythe::rendering::internal
 			m_bufferDesc.StructureByteStride = 0;
 
 			if (m_target == TargetType::CONSTANT_BUFFER)
-				m_bufferDesc.ByteWidth = static_cast<unsigned int>(elementSize + (16 - (elementSize % 16)));
+				m_bufferDesc.ByteWidth = static_cast<unsigned int>(m_elementSize + (16 - (m_elementSize % 16)));
 			else
-				m_bufferDesc.ByteWidth = elementSize;
+				m_bufferDesc.ByteWidth = m_elementSize;
 
-			m_bufferDesc.ByteWidth *= m_defaultBufferSize;
+			m_bufferDesc.ByteWidth *= m_size;
 
-			HRESULT hr = m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &internalBuffer);
+			HRESULT hr = m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer);
 			m_hwnd.checkError();
 			if (FAILED(hr))
 			{

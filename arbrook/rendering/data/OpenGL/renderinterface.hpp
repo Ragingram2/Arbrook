@@ -217,13 +217,13 @@ namespace rythe::rendering::internal
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
-		template<typename elementType, typename dataType = elementType>
-		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 0)
+		template<typename elementType>
+		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1)
 		{
-			buffer->initialize<elementType, dataType>(target, usage, size * sizeof(elementType));
+			buffer->initialize<elementType>(target, usage, size * sizeof(elementType));
 			if (data)
 			{
-				buffer->bufferData<elementType, dataType>(data, size);
+				buffer->bufferData<elementType>(data, size);
 			}
 		}
 		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();

@@ -23,31 +23,29 @@ namespace rythe::core
 			0,2,3
 		};
 
-
 		m_api->makeCurrent();
+
 		float spawnCount = 2.f;
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
 		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW);
-		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant, float>(*m_api, "Constant Buffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, nullptr, spawnCount);
+		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant, float>(*m_api, "Constant Buffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, nullptr, 1);
 
-
-		gfx::vtx_constant constants[2];
 		for (int i = 0; i < spawnCount; i++)
 		{
 			auto& ent = createEntity();
 
+			//These positions aren't really random as they don't take a fluxuating seed into account
 			auto& transf = ent.addComponent<transform>();
 			float randX = ((std::rand() % 200) / 100.f) - 1.f;
 			float randY = ((std::rand() % 200) / 100.f) - 1.f;
 			transf.position = math::vec3(randX, randY, 0.0f);
+			log::debug("Random Pos: [{},{}]", randX, randY);
 
 			auto& example = ent.addComponent<exampleComp>();
 			example.time = (std::rand() % 10) / 10.f;
 			example.inc = (((std::rand() % 10) / 10.f) - 1.f) / 100.f;
-
-			constants[i] = gfx::vtx_constant{ transf.position, example.time };
 
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& layout = render.layout;
@@ -55,7 +53,7 @@ namespace rythe::core
 			render.texture = texture;
 			render.shader = shader;
 
-			vertexHandle->bufferData<gfx::vertex, float>(verticies, sizeof(verticies) / sizeof(gfx::vertex));
+			vertexHandle->bufferData(verticies, sizeof(verticies) / sizeof(gfx::vertex));
 			indexHandle->bufferData(indicies, sizeof(indicies) / sizeof(unsigned int));
 
 			layout.addBuffer(vertexHandle);
@@ -65,24 +63,17 @@ namespace rythe::core
 			//texture->bind();
 			shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
 			shader->bind();
-			layout.bind(m_api->getHwnd(), shader);
 
+			layout.bind(m_api->getHwnd(), shader);
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
 			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
 			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
 			layout.submitAttributes();
 		}
-
-		constantHandle->bufferData<gfx::vtx_constant, float>(constants, spawnCount);
-
 	}
 
 	void TestSystem::update()
 	{
-		auto constantHandle = gfx::BufferCache::getBuffer("Constant Buffer");
-		gfx::vtx_constant constants[2];
-
-		int  i = 0;
 		for (auto& ent : m_filter)
 		{
 			auto& transf = ent.getComponent<transform>();
@@ -97,11 +88,7 @@ namespace rythe::core
 			if (example.time > 1.0f || example.time < 0.0f)
 				example.inc = -example.inc;
 			example.time += example.inc;
-
-			constants[i++] = gfx::vtx_constant{ transf.position,example.time };
 		}
-
-		constantHandle->bufferData<gfx::vtx_constant, float>(constants, i);
 	}
 
 	void TestSystem::shutdown()

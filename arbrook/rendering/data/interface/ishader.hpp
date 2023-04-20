@@ -33,16 +33,17 @@ namespace rythe::rendering
 	public:
 		void bind() { m_impl.bind(); }
 		void addBuffer(ShaderType type, buffer_handle handle) { m_impl.addBuffer(static_cast<internal::ShaderType>(type), handle); }
-		void setBuffer(int index, ShaderType type, buffer_handle handle) { m_impl.setBuffer(index, static_cast<internal::ShaderType>(type), handle); }
-		void setUniform(const std::string& name, math::vec4 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, math::vec3 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, math::vec2 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, float value) { m_impl.setUniform(name, value); }
+		template<typename elementType>
+		void setData(const std::string& bufferName, elementType data[]) { m_impl.setData(bufferName, data); }
+		//void setUniform(const std::string& name, math::vec4 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, math::vec3 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, math::vec2 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, float value) { m_impl.setUniform(name, value); }
 
-		void setUniform(const std::string& name, math::ivec4 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, math::ivec3 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, math::ivec2 value) { m_impl.setUniform(name, value); }
-		void setUniform(const std::string& name, int value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, math::ivec4 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, math::ivec3 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, math::ivec2 value) { m_impl.setUniform(name, value); }
+		//void setUniform(const std::string& name, int value) { m_impl.setUniform(name, value); }
 
 		std::string getName() { return m_impl.name; }
 		unsigned int getId() { return m_impl.programId; }

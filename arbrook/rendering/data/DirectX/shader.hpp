@@ -65,7 +65,7 @@ namespace rythe::rendering::internal
 			m_hwnd.m_devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
-			for (auto& [name,handle] : m_vsConstBuffers)
+			for (auto& [name, handle] : m_vsConstBuffers)
 			{
 				buffers.push_back(handle.buffer->m_impl);
 			}
@@ -92,7 +92,7 @@ namespace rythe::rendering::internal
 				m_vsConstBuffers.emplace(handle->getName(), handle);
 				break;
 			case ShaderType::FRAGMENT:
-				m_psConstBuffers.emplace(handle->getName(),handle);
+				m_psConstBuffers.emplace(handle->getName(), handle);
 				break;
 			default:
 				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
@@ -100,67 +100,18 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setBuffer(const std::string& name, ShaderType type, buffer_handle handle)
+		template<typename elementType>
+		void setData(const std::string& bufferName, elementType data[])
 		{
-			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
+			if (m_vsConstBuffers.count(bufferName) != 0)
 			{
-				log::error("Buffer is not a constant buffer, this is not supported");
-				return;
+				m_vsConstBuffers[bufferName]->bufferData(data);
 			}
 
-			switch (type)
+			if (m_psConstBuffers.count(bufferName) != 0)
 			{
-			case ShaderType::VERTEX:
-				m_vsConstBuffers[name] = handle;
-				break;
-			case ShaderType::FRAGMENT:
-				m_psConstBuffers[name] = handle;
-				break;
-			default:
-				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
-				break;
+				m_psConstBuffers[bufferName]->bufferData(data);
 			}
-		}
-
-		//maybe not use uniforms, look into just setting buffers for shaders
-		void setUniform(const std::string& uniformName, math::vec4 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, math::vec3 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, math::vec2 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, float value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, math::ivec4 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, math::ivec3 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, math::ivec2 value)
-		{
-
-		}
-
-		void setUniform(const std::string& uniformName, int value)
-		{
-
 		}
 
 	private:
