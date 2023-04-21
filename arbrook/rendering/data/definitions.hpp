@@ -10,6 +10,7 @@
 #include InputLayout_HPP_PATH 
 #include Buffer_HPP_PATH
 #include Shader_HPP_PATH
+#include Texture_HPP_PATH
 #include Window_HPP_PATH
 
 namespace rythe::rendering
@@ -18,4 +19,5 @@ namespace rythe::rendering
 	typedef Iinputlayout<internal::inputlayout> inputlayout;
 	typedef Ibuffer<internal::buffer> buffer;
 	typedef Ishader<internal::shader> shader;
+	typedef Itexture<internal::texture> texture;
 }

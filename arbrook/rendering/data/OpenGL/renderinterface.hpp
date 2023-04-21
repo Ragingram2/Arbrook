@@ -15,9 +15,10 @@
 #include Window_HPP_PATH
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH
+#include Texture_HPP_PATH
 
-#include <stb/stb_image.h>
-#define STB_IMAGE_IMPLEMENTATION
+//#include <stb/stb_image.h>
+//#define STB_IMAGE_IMPLEMENTATION
 
 namespace rythe::rendering::internal
 {
@@ -178,42 +179,11 @@ namespace rythe::rendering::internal
 		}
 
 		//move file handling elsewhere, specify default Texture params
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,rendering::FilterMode::LINEAR_MIPMAP_LINEAR, rendering::FilterMode::LINEAR })
+		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,rendering::FilterMode::LINEAR, rendering::FilterMode::LINEAR }, bool generateMipMaps = false)
 		{
-			texture->m_name = name;
-			auto& resolution = texture->m_params.m_resolution;
-			auto& channels = texture->m_params.m_channels;
-			unsigned int& id = texture->m_id;
-			glGenTextures(1, &id);
-			glBindTexture(static_cast<GLenum>(TargetType::TEXTURE2D), id);
-
-			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_WRAP_S, static_cast<GLint>(params.m_wrapModeS));
-			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_WRAP_T, static_cast<GLint>(params.m_wrapModeT));
-			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_MIN_FILTER, static_cast<GLint>(params.m_minFilterMode));
-			glTexParameteri(static_cast<GLenum>(TargetType::TEXTURE2D), GL_TEXTURE_MAG_FILTER, static_cast<GLint>(params.m_magFilterMode));
-			stbi_set_flip_vertically_on_load(true);
-
-			texture->m_data = stbi_load(filepath.c_str(), &resolution.x, &resolution.y, &channels, 0);
-			if (!texture->m_data)
-			{
-				log::error("Image failed to load");
-				return nullptr;
-			}
-
-			//make some enums for the data formats
-			switch (channels)
-			{
-			case 4:
-				glTexImage2D(static_cast<GLenum>(TargetType::TEXTURE2D), 0, GL_RGBA, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->m_data);
-				break;
-			case 3:
-				glTexImage2D(static_cast<GLenum>(TargetType::TEXTURE2D), 0, GL_RGB, resolution.x, resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, texture->m_data);
-				break;
-			}
-			//make this optional
-			glGenerateMipmap(static_cast<GLenum>(TargetType::TEXTURE2D));
-
-			return texture;
+			texture->name = name;
+			texture->initialize(TargetType::TEXTURE2D, params, generateMipMaps);
+			texture->loadData(filepath);
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);
 		////std::unique_ptr<texture3D> createTexture3D(const std::string& filepath);
@@ -307,7 +277,7 @@ namespace rythe::rendering::internal
 		{
 		case GL_DEBUG_SEVERITY_HIGH:
 			log::error("[{}-{}] {}: {}", s, t, id, message);
-			__debugbreak();
+			//__debugbreak();
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
 			log::warn("[{}-{}] {}: {}", s, t, id, message);

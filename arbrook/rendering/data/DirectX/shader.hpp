@@ -121,16 +121,22 @@ namespace rythe::rendering::internal
 			if (type == ShaderType::VERTEX)
 			{
 				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "VShader", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &VS, nullptr);
+				if (FAILED(hr))
+				{
+					log::error("Vertex Shader Compilation failed");
+					m_hwnd.checkError();
+				}
 			}
 			else if (type == ShaderType::FRAGMENT)
 			{
 				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "PShader", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &PS, nullptr);
+				if (FAILED(hr))
+				{
+					log::error("Fragment Shader Compilation failed");
+					m_hwnd.checkError();
+				}
 			}
 
-			if (FAILED(hr))
-			{
-				log::error("Shader Compilation failed");
-			}
 			return 0;
 		}
 	};

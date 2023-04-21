@@ -18,7 +18,7 @@ namespace rythe::rendering::internal
 		VERTEX_BUFFER = D3D11_BIND_VERTEX_BUFFER,
 		INDEX_BUFFER = D3D11_BIND_INDEX_BUFFER,
 		CONSTANT_BUFFER = D3D11_BIND_CONSTANT_BUFFER,
-		TEXTURE2D = 0
+		TEXTURE2D = D3D11_BIND_SHADER_RESOURCE
 	};
 
 	enum class UsageType
@@ -59,10 +59,10 @@ namespace rythe::rendering::internal
 
 	enum class WrapMode
 	{
-		CLAMP = 0,
+		CLAMP = D3D11_TEXTURE_ADDRESS_CLAMP,
 		CLAMP_TO_EDGE = 0,
-		CLAMP_TO_BORDER = 0,
-		REPEAT = 0
+		CLAMP_TO_BORDER = D3D11_TEXTURE_ADDRESS_BORDER,
+		REPEAT = D3D11_TEXTURE_ADDRESS_MIRROR
 	};
 
 	enum class FilterMode

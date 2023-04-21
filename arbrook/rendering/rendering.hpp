@@ -1,6 +1,5 @@
 #pragma once
 #include "rendering/data/definitions.hpp"
-#include "rendering/data/texture.hpp"
 #include "rendering/data/shadercache.hpp"
 #include "rendering/data/texturecache.hpp"
 #include "rendering/data/buffercache.hpp"

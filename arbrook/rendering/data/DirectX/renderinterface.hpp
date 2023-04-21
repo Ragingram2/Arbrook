@@ -4,21 +4,10 @@
 #include <memory>
 #include <stdio.h>
 
-//#include <D3D11.h>
-//#include <D3DX11.h>
-//#include <D3DX10.h>
-//#include <D3Dcompiler.h>
-//#include <DxErr.h>
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-//#pragma comment (lib, "d3d11.lib")
-//#pragma comment (lib, "d3dx11.lib")
-//#pragma comment (lib, "d3dx10.lib")
-//#pragma comment (lib, "DxErr.lib")
-//#pragma comment (lib, "D3DCompiler.lib")
-//#pragma comment(lib, "legacy_stdio_definitions.lib")
 
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
@@ -227,9 +216,10 @@ namespace rythe::rendering::internal
 			shader->initialize(hwnd, name, source);
 		}
 
-		texture_handle createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR_MIPMAP_LINEAR, rendering::FilterMode::LINEAR })
+		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR, 1 }, bool generateMipMaps = false)
 		{
-			return texture;
+			texture->initialize(hwnd, TargetType::TEXTURE2D, UsageType::IMMUTABLE, params, generateMipMaps);
+			texture->loadData(filepath);
 		}
 
 		template<typename elementType>

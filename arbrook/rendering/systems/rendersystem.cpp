@@ -47,12 +47,11 @@ namespace rythe::rendering
 			auto& texture = renderComp.texture;
 
 			shader->bind();
-			//m_api->bind(texture);
+			texture->bind();
 			renderComp.layout.bind(m_api->getHwnd(), shader);
 
 			vtx_constant constant[] = { { transf.position,example.time } };
 			shader->setData("Constant Buffer", constant);
-			//shader->setUniform("u_time", example.time);
 
 			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 6, 0, 0);
 		}

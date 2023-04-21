@@ -8,15 +8,15 @@ namespace rythe::rendering
 {
 	struct texture_parameters
 	{
-		int m_channels;
-		math::ivec2 m_resolution;
+		int channels;
+		math::ivec2 resolution;
 
-		WrapMode m_wrapModeS;
-		WrapMode m_wrapModeT;
-		FilterMode m_minFilterMode;
-		FilterMode m_magFilterMode;
+		WrapMode wrapModeS;
+		WrapMode wrapModeT;
+		FilterMode filterMode;
+		int mipLevels;
 
 		texture_parameters() = default;
-		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode minFilterMode, FilterMode magFilterMode) : m_wrapModeS(wrapModeS), m_wrapModeT(wrapModeT), m_minFilterMode(minFilterMode), m_magFilterMode(magFilterMode) { }
+		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode filterMode, int mipLevels = 0) : wrapModeS(wrapModeS), wrapModeT(wrapModeT), filterMode(filterMode), mipLevels(mipLevels) { }
 	};
 }

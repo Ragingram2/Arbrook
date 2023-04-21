@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
 
-#include "core/math/math.hpp"
+#include "rendering/data/textureparameters.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/texturehandle.hpp"
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering
 {
-	class ShaderCache;
+	class TextureCache;
 	template<typename APIType>
 	class IRenderInterface;
 	namespace internal
@@ -22,22 +22,21 @@ namespace rythe::rendering
 namespace rythe::rendering
 {
 	template<typename APIType>
-	struct Ishader
+	struct Itexture
 	{
-		friend class ShaderCache;
+		friend class TextureCache;
 		friend class IRenderInterface<internal::RenderInterface>;
 		friend struct internal::inputlayout;
-		friend struct shader_handle;
+		friend struct texture_handle;
 	private:
 		APIType m_impl;
 	public:
 		void bind() { m_impl.bind(); }
-		void addBuffer(ShaderType type, buffer_handle handle) { m_impl.addBuffer(static_cast<internal::ShaderType>(type), handle); }
-		template<typename elementType>
-		void setData(const std::string& bufferName, elementType data[]) { m_impl.setData(bufferName, data); }
+		void loadData(const std::string& filepath) { m_impl.loadData(filepath); }
 
-		std::string getName() { return m_impl.name; }
-		unsigned int getId() { return m_impl.programId; }
+		unsigned int getId() { return m_impl.id; }
+		const std::string& getName() { return m_impl.name; }
+
 	private:
 		APIType& getImpl() { return m_impl; }
 	};

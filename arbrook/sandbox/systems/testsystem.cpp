@@ -59,10 +59,9 @@ namespace rythe::core
 			layout.addBuffer(vertexHandle);
 			layout.addBuffer(indexHandle);
 
-			//make a Itexture
-			//texture->bind();
 			shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
 			shader->bind();
+			texture->bind();
 
 			layout.bind(m_api->getHwnd(), shader);
 			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);

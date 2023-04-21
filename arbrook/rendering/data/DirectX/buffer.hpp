@@ -33,12 +33,15 @@ namespace rythe::rendering::internal
 		std::string name;
 	private:
 		unsigned int m_size;
+		unsigned int m_elementSize = 0;
+
+		ID3D11Buffer* m_internalBuffer;
 		D3D11_BUFFER_DESC m_bufferDesc;
+
 		TargetType m_target;
 		UsageType m_usage;
 		window m_hwnd;
-		unsigned int m_elementSize = 0;
-		ID3D11Buffer* m_internalBuffer;
+
 	public:
 		operator ID3D11Buffer* () const { return m_internalBuffer; }
 		template<typename elementType>
