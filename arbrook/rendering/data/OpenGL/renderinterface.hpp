@@ -175,14 +175,13 @@ namespace rythe::rendering::internal
 
 		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			shader->initialize(name, source);
+			shader->initialize(hwnd, name, source);
 		}
 
-		//move file handling elsewhere, specify default Texture params
-		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT,rendering::FilterMode::LINEAR, rendering::FilterMode::LINEAR }, bool generateMipMaps = false)
+		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR, rendering::FormatType::RGBA8UN, 1 }, bool generateMipMaps = false)
 		{
 			texture->name = name;
-			texture->initialize(TargetType::TEXTURE2D, params, generateMipMaps);
+			texture->initialize(hwnd, TargetType::TEXTURE2D, UsageType::DEFAULT, params, generateMipMaps);
 			texture->loadData(filepath);
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);

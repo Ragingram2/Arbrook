@@ -53,7 +53,8 @@ namespace rythe::rendering::internal
 		RG32F = GL_RG32F,
 		RGB32F = GL_RGB32F,
 		RGBA32F = GL_RGBA32F,
-		R32U = GL_R32UI
+		R32U = GL_R32UI,
+		RGBA8UN = GL_RGBA8_SNORM
 	};
 
 	enum class WrapMode

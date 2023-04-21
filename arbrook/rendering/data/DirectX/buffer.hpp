@@ -121,7 +121,6 @@ namespace rythe::rendering::internal
 			m_bufferDesc.ByteWidth *= m_size;
 
 			HRESULT hr = m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer);
-			m_hwnd.checkError();
 			if (FAILED(hr))
 			{
 				log::error("Buffer failed to be created");

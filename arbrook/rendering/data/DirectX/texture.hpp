@@ -43,8 +43,16 @@ namespace rythe::rendering::internal
 			m_texType = texType;
 			m_usage = usage;
 			this->params = params;
+		}
 
+		void bind()
+		{
+			m_hwnd.m_devcon->PSSetShaderResources(0, 1, &m_shaderResource);
+			m_hwnd.m_devcon->PSSetSamplers(0, 1, &m_texSamplerState);
+		}
 
+		void loadData(const std::string& filepath, bool flipVertical = true)
+		{
 			ZeroMemory(&m_sampDesc, sizeof(m_sampDesc));
 			m_sampDesc.Filter = static_cast<D3D11_FILTER>(params.filterMode);// D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 			m_sampDesc.AddressU = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeS);//D3D11_TEXTURE_ADDRESS_WRAP;
@@ -59,16 +67,7 @@ namespace rythe::rendering::internal
 			{
 				log::error("Texture sampler failed creation");
 			}
-		}
 
-		void bind()
-		{
-			m_hwnd.m_devcon->PSSetShaderResources(0, 1, &m_shaderResource);
-			m_hwnd.m_devcon->PSSetSamplers(0, 1, &m_texSamplerState);
-		}
-
-		void loadData(const std::string& filepath, bool flipVertical = true)
-		{
 			log::debug("loading Data");
 			stbi_set_flip_vertically_on_load(flipVertical);
 			data = stbi_load(filepath.c_str(), &params.resolution.x, &params.resolution.y, &params.channels, 0);
@@ -77,36 +76,33 @@ namespace rythe::rendering::internal
 				log::error("Image failed to load");
 			}
 
-			int ImagePitch = m_texDesc.Width * 4;
-			D3D11_SUBRESOURCE_DATA subData = {};
-
-			subData.pSysMem = data;
-			subData.SysMemPitch = ImagePitch;
-
 			ZeroMemory(&m_texDesc, sizeof(m_texDesc));
 			m_texDesc.Width = params.resolution.x;
 			m_texDesc.Height = params.resolution.y;
 			m_texDesc.MipLevels = params.mipLevels;
 			m_texDesc.ArraySize = 1;
-			m_texDesc.Format = static_cast<DXGI_FORMAT>(FormatType::RGBA32F);
+			m_texDesc.Format = static_cast<DXGI_FORMAT>(params.format);
 			m_texDesc.SampleDesc.Count = 1;
 			m_texDesc.SampleDesc.Quality = 0;
 			m_texDesc.Usage = static_cast<D3D11_USAGE>(m_usage);
 			m_texDesc.BindFlags = static_cast<unsigned int>(m_texType);
 
-			HRESULT hr = m_hwnd.m_dev->CreateTexture2D(&m_texDesc,&subData,&m_texture);
+			D3D11_SUBRESOURCE_DATA subData;
+			subData.pSysMem = data;
+			subData.SysMemPitch = m_texDesc.Width * 4;
 
+			hr = m_hwnd.m_dev->CreateTexture2D(&m_texDesc, &subData, &m_texture);
 			if (FAILED(hr))
 			{
 				log::error("Texture creation failed");
+				m_hwnd.checkError();
 			}
-
-			//free(data);
 
 			hr = m_hwnd.m_dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource);
 			if (FAILED(hr))
 			{
 				log::error("Failed to create the ShaderResourceView");
+				m_hwnd.checkError();
 			}
 		}
 	};

@@ -54,7 +54,8 @@ namespace rythe::rendering
 		RG32F = static_cast<int>(internal::FormatType::RG32F),
 		RGB32F = static_cast<int>(internal::FormatType::RGB32F),
 		RGBA32F = static_cast<int>(internal::FormatType::RGBA32F),
-		R32U = static_cast<int>(internal::FormatType::R32U)
+		R32U = static_cast<int>(internal::FormatType::R32U),
+		RGBA8UN = static_cast<int>(internal::FormatType::RGBA8UN)
 	};
 
 	enum class WrapMode

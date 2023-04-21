@@ -14,9 +14,10 @@ namespace rythe::rendering
 		WrapMode wrapModeS;
 		WrapMode wrapModeT;
 		FilterMode filterMode;
+		FormatType format;
 		int mipLevels;
 
 		texture_parameters() = default;
-		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode filterMode, int mipLevels = 0) : wrapModeS(wrapModeS), wrapModeT(wrapModeT), filterMode(filterMode), mipLevels(mipLevels) { }
+		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode filterMode, FormatType format, int mipLevels = 0) : wrapModeS(wrapModeS), wrapModeT(wrapModeT), filterMode(filterMode), format(format), mipLevels(mipLevels) { }
 	};
 }

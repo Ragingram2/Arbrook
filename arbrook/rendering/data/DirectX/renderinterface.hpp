@@ -49,7 +49,7 @@ namespace rythe::rendering::internal
 
 			UINT creationFlags = D3D11_CREATE_DEVICE_DEBUG;
 
-			auto hr = D3D11CreateDeviceAndSwapChain(NULL,
+			HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 				D3D_DRIVER_TYPE_HARDWARE,
 				NULL,
 				creationFlags,
@@ -61,12 +61,23 @@ namespace rythe::rendering::internal
 				&hwnd.m_dev,
 				NULL,
 				&hwnd.m_devcon);
+			if (FAILED(hr))
+			{
+				log::error("Initializing the device and swapchain failed");
+			}
 
 			ID3D11Texture2D* pBackBuffer;
 			hr = hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-
+			if (FAILED(hr))
+			{
+				log::error("Retrieving the backbuffer failed");
+			}
 
 			hr = hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
+			if (FAILED(hr))
+			{
+				log::error("Creating a render target view failed");
+			}
 			pBackBuffer->Release();
 
 			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
@@ -102,7 +113,10 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->RSSetViewports(1, &viewport);
 
 			hr = hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&hwnd.m_infoQueue);
-
+			if (FAILED(hr))
+			{
+				log::error("Retrieving the info queue failed");
+			}
 			//m_infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR,true);
 		}
 
@@ -216,7 +230,7 @@ namespace rythe::rendering::internal
 			shader->initialize(hwnd, name, source);
 		}
 
-		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR, 1 }, bool generateMipMaps = false)
+		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR,rendering::FormatType::RGBA8UN, 1 }, bool generateMipMaps = false)
 		{
 			texture->initialize(hwnd, TargetType::TEXTURE2D, UsageType::IMMUTABLE, params, generateMipMaps);
 			texture->loadData(filepath);
@@ -234,7 +248,6 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-
 			UINT64 message_count = hwnd.m_infoQueue->GetNumStoredMessages();
 
 			for (UINT64 i = 0; i < message_count; i++) {

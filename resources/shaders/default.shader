@@ -59,7 +59,7 @@ VOut VShader(float3 position : POSITION, float4 color : COLOR, float2 texCoord :
 	VOut output;
 
 	float3 offset = float3(0, sin(u_time), 0);
-	output.p_position = float4(position + u_position + offset, 0);
+	output.p_position = float4(position + u_position + offset, 1);
 	output.p_color = color;
 	output.p_texcoord = texCoord;
 
