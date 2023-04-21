@@ -54,10 +54,10 @@ namespace rythe::rendering::internal
 		void loadData(const std::string& filepath, bool flipVertical = true)
 		{
 			ZeroMemory(&m_sampDesc, sizeof(m_sampDesc));
-			m_sampDesc.Filter = static_cast<D3D11_FILTER>(params.filterMode);// D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			m_sampDesc.AddressU = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeS);//D3D11_TEXTURE_ADDRESS_WRAP;
-			m_sampDesc.AddressV = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);//D3D11_TEXTURE_ADDRESS_WRAP;
-			m_sampDesc.AddressW = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);//D3D11_TEXTURE_ADDRESS_WRAP;
+			m_sampDesc.Filter = static_cast<D3D11_FILTER>(params.filterMode);
+			m_sampDesc.AddressU = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeS);
+			m_sampDesc.AddressV = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);
+			m_sampDesc.AddressW = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);
 			//m_sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 			m_sampDesc.MinLOD = 0;
 			m_sampDesc.MaxLOD = D3D11_FLOAT32_MAX;

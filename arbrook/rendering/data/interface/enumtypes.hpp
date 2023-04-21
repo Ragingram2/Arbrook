@@ -61,7 +61,6 @@ namespace rythe::rendering
 	enum class WrapMode
 	{
 		CLAMP = static_cast<int>(internal::WrapMode::CLAMP),
-		CLAMP_TO_EDGE = static_cast<int>(internal::WrapMode::CLAMP_TO_EDGE),
 		CLAMP_TO_BORDER = static_cast<int>(internal::WrapMode::CLAMP_TO_BORDER),
 		REPEAT = static_cast<int>(internal::WrapMode::REPEAT)
 	};

@@ -5,7 +5,7 @@ namespace rythe::rendering
 {
 	std::unordered_map<std::string, std::unique_ptr<texture>> TextureCache::m_textures;
 
-	texture_handle TextureCache::createTexture2D(RenderInterface& api, const std::string& name, const std::string& filepath, texture_parameters params)
+	texture_handle TextureCache::createTexture2D(RenderInterface& api, const std::string& name, const std::string& filepath, texture_parameters params, bool initialize)
 	{
 		if (m_textures.contains(name))
 		{
@@ -14,7 +14,10 @@ namespace rythe::rendering
 		}
 		auto& tex = m_textures.emplace(name, std::make_unique<texture>()).first->second;
 
-		return api.createTexture2D(tex.get(), name, filepath);
+		if (initialize)
+			return api.createTexture2D(tex.get(), name, filepath);
+		else
+			return texture_handle{ nullptr };
 	}
 
 	texture_handle TextureCache::getTexture2D(const std::string& name)

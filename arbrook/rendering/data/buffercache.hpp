@@ -14,13 +14,13 @@ namespace rythe::rendering
 	private:
 		static std::unordered_map<std::string, std::unique_ptr<buffer>> m_buffers;
 	public:
-		template<typename elementType, typename dataType = elementType>
+		template<typename elementType>
 		static buffer_handle createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1);
 		static buffer_handle getBuffer(const std::string& name);
 		static void deleteBuffer(const std::string& name);
 	};
 
-	template<typename elementType, typename dataType>
+	template<typename elementType>
 	inline buffer_handle BufferCache::createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, elementType* data, int size)
 	{
 		if (m_buffers.contains(name))
@@ -32,6 +32,6 @@ namespace rythe::rendering
 		auto buff = m_buffers.emplace(name, std::make_unique<buffer>()).first->second.get();
 		buff->m_impl.name = name;
 
-		return api.createBuffer<elementType, dataType>(buff, target, usage, data, size);
+		return api.createBuffer(buff, target, usage, data, size);
 	}
 }
