@@ -83,23 +83,25 @@ namespace rythe::rendering::internal
 			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
 
 			//// Setup rasterizer state.
-			//D3D11_RASTERIZER_DESC rasterizerDesc;
-			//ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+			D3D11_RASTERIZER_DESC rasterizerDesc;
+			ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
-			//rasterizerDesc.AntialiasedLineEnable = FALSE;
-			//rasterizerDesc.CullMode = D3D11_CULL_BACK;
-			//rasterizerDesc.DepthBias = 0;
-			//rasterizerDesc.DepthBiasClamp = 0.0f;
-			//rasterizerDesc.DepthClipEnable = TRUE;
-			//rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-			//rasterizerDesc.FrontCounterClockwise = FALSE;
-			//rasterizerDesc.MultisampleEnable = FALSE;
-			//rasterizerDesc.ScissorEnable = FALSE;
-			//rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+			rasterizerDesc.AntialiasedLineEnable = FALSE;
+			rasterizerDesc.CullMode = D3D11_CULL_BACK;
+			rasterizerDesc.DepthBias = 0;
+			rasterizerDesc.DepthBiasClamp = 0.0f;
+			rasterizerDesc.DepthClipEnable = TRUE;
+			rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+			rasterizerDesc.FrontCounterClockwise = TRUE;
+			rasterizerDesc.MultisampleEnable = FALSE;
+			rasterizerDesc.ScissorEnable = FALSE;
+			rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
-			//// Create the rasterizer state object.
-			//hr = hwnd.m_dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
+			// Create the rasterizer state object.
+			hr = hwnd.m_dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
 
+			hwnd.m_devcon->RSSetState(m_rasterizerState);
+			
 			D3D11_VIEWPORT viewport;
 			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
 

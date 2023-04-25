@@ -77,7 +77,7 @@ namespace rythe::rendering
 			vtx_constant constant[] = { { transf.position,example.time } };
 			shader->setData("Constant Buffer", constant);
 
-			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 6, 0, 0);
+			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 4, 0, 0);
 		}
 
 

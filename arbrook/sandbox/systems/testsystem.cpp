@@ -17,15 +17,19 @@ namespace rythe::core
 		//	{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
 		//};
 
-		//unsigned int indicies[] =
-		//{
-		//	0,1,2,
-		//	0,2,3
-		//};
+		unsigned int indicies[] =
+		{
+			1,2,0,3
+			//0,2,3
+			//0,1,2,
+			//0,2,3
+			//0,0,0,
+			//0,0,0
+		};
 
 		m_api->makeCurrent();
 
-		float spawnCount = 2.f;
+		float spawnCount = 10.f;
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		//auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
