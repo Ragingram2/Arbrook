@@ -1,7 +1,7 @@
 #include "sandbox/systems/testsystem.hpp"
-
 namespace rythe::core
 {
+
 	void TestSystem::setup()
 	{
 		log::info("Initializing Test System");
@@ -10,6 +10,7 @@ namespace rythe::core
 		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
 
 		m_api->makeCurrent();
+		setKeyBind<events::key_input, TestSystem, &TestSystem::key_callback>();
 
 		float spawnCount = 10.f;
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
@@ -73,10 +74,20 @@ namespace rythe::core
 				example.inc = -example.inc;
 			example.time += example.inc;
 		}
+
+		m_api->pollEvents();
 	}
 
 	void TestSystem::shutdown()
 	{
 		log::info("Shutting down Test System ");
+	}
+
+	void TestSystem::key_callback(events::key_input& input)
+	{
+		if (input.key == GLFW_KEY_E && input.action == GLFW_PRESS)
+		{
+			log::debug("E Key pressed");
+		}
 	}
 }

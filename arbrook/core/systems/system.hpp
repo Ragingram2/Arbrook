@@ -66,6 +66,9 @@ namespace rythe::core
 
 		template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
 		void bindEvent();
+
+		template<typename event_type,  typename ownerType = System<componentTypes...>, void(ownerType::* func_type)(event_type&)>
+		void setKeyBind();
 	};
 }
 

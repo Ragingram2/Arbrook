@@ -17,5 +17,7 @@ namespace rythe::core
 		void setup() override;
 		void update() override;
 		void shutdown() override;
+
+		void key_callback(events::key_input& input);
 	};
 }

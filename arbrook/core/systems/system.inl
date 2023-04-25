@@ -38,8 +38,15 @@ namespace rythe::core
 
 	template<typename... componentTypes>
 	template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
-	inline void System<componentTypes...>::bindEvent()
+	void System<componentTypes...>::bindEvent()
 	{
 		Program::Instance().m_registry->get_service<events::EventBus>()->bind<event_type, System<componentTypes...>, void(System<componentTypes...>::*)(event_type&)>(*this);
+	}
+
+	template<typename... componentTypes>
+	template<typename event_type, typename ownerType, void(ownerType::* func_type)(event_type&)>
+	void System<componentTypes...>::setKeyBind()
+	{
+		Program::Instance().m_registry->get_service<events::EventBus>()->bind<event_type, ownerType, void(ownerType::*)(event_type&)>(this*);
 	}
 }

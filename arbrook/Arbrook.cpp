@@ -20,7 +20,7 @@ int main()
 	registry.register_service<LoggingService>();
 	pointer<events::EventBus> eventBus = registry.register_service<events::EventBus>();
 	registry.register_service<scheduling::Scheduler>();
-	pointer<ecs::Registry> ecsReg = registry.register_service<ecs::Registry>();
+	registry.register_service<ecs::Registry>();
 
 	//Register events
 	eventBus->bind<events::exit,Program,&Program::exit>(Program::Instance());

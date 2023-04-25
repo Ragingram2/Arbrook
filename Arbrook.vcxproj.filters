@@ -302,6 +302,9 @@
     <ClInclude Include="arbrook\rendering\data\DirectX\texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">
