@@ -19,30 +19,6 @@ namespace rythe::rendering
 			log::error("Window initialization failed");
 			return;
 		}
-
-		//We can't do this here because no entities exist during rendersystems setup. We need to make model and material abstractions
-		auto vertexHandle = BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
-		auto indexHandle = BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW);
-		auto constantHandle = BufferCache::createBuffer<vtx_constant>(*m_api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW, nullptr, 1);
-
-		for (auto& ent : m_filter)
-		{
-			auto& renderComp = ent.getComponent<sprite_renderer>();
-			vertexHandle->bufferData(renderComp.verticies, 4);
-			indexHandle->bufferData(renderComp.indicies, 6);
-			renderComp.layout.addBuffer(vertexHandle);
-			renderComp.layout.addBuffer(indexHandle);
-
-			renderComp.shader->addBuffer(ShaderType::VERTEX, constantHandle);
-			renderComp.shader->bind();
-			renderComp.texture->bind();
-
-			renderComp.layout.bind(m_api->getHwnd(), renderComp.shader);
-			renderComp.layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, sizeof(vertex), 0);
-			renderComp.layout.setAttributePtr("COLOR", 1, FormatType::RGBA32F, sizeof(vertex), 3.0f * sizeof(float));
-			renderComp.layout.setAttributePtr("TEXCOORD", 2, FormatType::RG32F, sizeof(vertex), 7.0f * sizeof(float));
-			renderComp.layout.submitAttributes();
-		}
 	}
 
 	void Renderer::update()

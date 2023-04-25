@@ -15,11 +15,11 @@ namespace rythe::rendering
 			{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
 			{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
 		};
-		unsigned int indicies[6] =
+		unsigned int indicies[4] =
 		{
-			0,1,2,
-			0,2,3
+			1,2,0,3
 		};
+
 		texture_handle texture;
 		shader_handle shader;
 		inputlayout layout;

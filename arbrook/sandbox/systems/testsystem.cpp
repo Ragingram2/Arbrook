@@ -9,32 +9,14 @@ namespace rythe::core
 		auto wId = registry->m_worldId;
 		m_api = &registry->m_entities[wId].getComponent<gfx::RenderInterface>();
 
-		//gfx::vertex verticies[] =
-		//{	//positions						//colors								//tex coors
-		//	{ { -0.1f, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		//	{ {	-0.1f,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
-		//	{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		//	{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
-		//};
-
-		unsigned int indicies[] =
-		{
-			1,2,0,3
-			//0,2,3
-			//0,1,2,
-			//0,2,3
-			//0,0,0,
-			//0,0,0
-		};
-
 		m_api->makeCurrent();
 
 		float spawnCount = 10.f;
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
-		//auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex, float>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
-		//auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW);
-		//auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant>(*m_api, "Constant Buffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, nullptr, 1);
+		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
+		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW);
+		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant>(*m_api, "Constant Buffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, nullptr, 1);
 
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -53,14 +35,23 @@ namespace rythe::core
 			auto& render = ent.addComponent<gfx::sprite_renderer>();
 			auto& layout = render.layout;
 
+			vertexHandle->bufferData(render.verticies, 4);
+			indexHandle->bufferData(render.indicies, 4);
+			layout.addBuffer(vertexHandle);
+			layout.addBuffer(indexHandle);
+
+			shader->addBuffer(gfx::ShaderType::VERTEX, constantHandle);
+			shader->bind();
+			texture->bind();
+
+			layout.bind(m_api->getHwnd(), shader);
+			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0);
+			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float));
+			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float));
+			layout.submitAttributes();
+
 			render.texture = texture;
 			render.shader = shader;
-
-			//vertexHandle->bufferData(verticies, sizeof(verticies) / sizeof(gfx::vertex));
-			//indexHandle->bufferData(indicies, sizeof(indicies) / sizeof(unsigned int));
-
-			//layout.addBuffer(vertexHandle);
-			//layout.addBuffer(indexHandle);
 
 		}
 	}
