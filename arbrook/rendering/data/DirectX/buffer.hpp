@@ -61,13 +61,13 @@ namespace rythe::rendering::internal
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				m_hwnd.m_devcon->IASetVertexBuffers(0, 1, &m_internalBuffer, &m_elementSize, 0);
+				m_hwnd.devcon->IASetVertexBuffers(0, 1, &m_internalBuffer, &m_elementSize, 0);
 				break;
 			case TargetType::INDEX_BUFFER:
-				m_hwnd.m_devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				m_hwnd.m_devcon->VSSetConstantBuffers(0, 1, &m_internalBuffer);
+				m_hwnd.devcon->VSSetConstantBuffers(0, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -90,7 +90,7 @@ namespace rythe::rendering::internal
 			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			HRESULT hr = m_hwnd.m_devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
+			HRESULT hr = m_hwnd.devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource);
 			m_hwnd.checkError();
 			memcpy(resource.pData, data, m_size * sizeof(elementType));
 			if (FAILED(hr))
@@ -99,7 +99,7 @@ namespace rythe::rendering::internal
 				return;
 			}
 
-			m_hwnd.m_devcon->Unmap(m_internalBuffer, NULL);
+			m_hwnd.devcon->Unmap(m_internalBuffer, NULL);
 		}
 
 	private:
@@ -120,7 +120,7 @@ namespace rythe::rendering::internal
 
 			m_bufferDesc.ByteWidth *= m_size;
 
-			HRESULT hr = m_hwnd.m_dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer);
+			HRESULT hr = m_hwnd.dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer);
 			if (FAILED(hr))
 			{
 				log::error("Buffer failed to be created");

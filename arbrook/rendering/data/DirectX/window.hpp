@@ -22,14 +22,16 @@ namespace rythe::rendering::internal
 		math::ivec2 m_resolution;
 		std::string m_windowName;
 
-		IDXGISwapChain* m_swapchain;             // the pointer to the swap chain interface
-		ID3D11Device* m_dev;                     // the pointer to our Direct3D device interface
-		ID3D11DeviceContext* m_devcon;           // the pointer to our Direct3D device context
-		ID3D11RenderTargetView* m_backbuffer;    // global declaration
-		ID3D11InfoQueue* m_infoQueue;
+		IDXGISwapChain* swapchain = nullptr;             // the pointer to the swap chain interface
+		ID3D11Device* dev = nullptr;                     // the pointer to our Direct3D device interface
+		ID3D11DeviceContext* devcon = nullptr;           // the pointer to our Direct3D device context
+		ID3D11RenderTargetView* backbuffer = nullptr;    // global declaration
+		ID3D11DepthStencilView* depthStencil = nullptr;
+		ID3D11Texture2D* depthStencilBuffer = nullptr;
+		ID3D11InfoQueue* infoQueue = nullptr;
 	public:
 		window() = default;
-		window(window& hwnd) 
+		window(window& hwnd)
 		{
 			m_resolution = hwnd.m_resolution;
 			m_windowName = hwnd.m_windowName;
@@ -76,14 +78,14 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-			UINT64 message_count = m_infoQueue->GetNumStoredMessages();
+			UINT64 message_count = infoQueue->GetNumStoredMessages();
 
 			for (UINT64 i = 0; i < message_count; i++) {
 				SIZE_T message_size = 0;
-				m_infoQueue->GetMessage(i, nullptr, &message_size);
+				infoQueue->GetMessage(i, nullptr, &message_size);
 
 				D3D11_MESSAGE* message = (D3D11_MESSAGE*)malloc(message_size);
-				m_infoQueue->GetMessage(i, message, &message_size);
+				infoQueue->GetMessage(i, message, &message_size);
 				switch (message->Severity)
 				{
 				case D3D11_MESSAGE_SEVERITY_CORRUPTION:
@@ -102,7 +104,7 @@ namespace rythe::rendering::internal
 
 				free(message);
 			}
-			m_infoQueue->ClearStoredMessages();
+			infoQueue->ClearStoredMessages();
 		}
 	};
 }

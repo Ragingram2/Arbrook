@@ -34,7 +34,7 @@ namespace rythe::rendering
 			return;
 		}
 
-		m_api->clear(GL_COLOR_BUFFER_BIT);
+		m_api->clear(ClearBit::COLOR);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
 		for (auto& ent : m_filter)

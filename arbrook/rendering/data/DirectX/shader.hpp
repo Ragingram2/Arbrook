@@ -55,27 +55,27 @@ namespace rythe::rendering::internal
 			compileShader(ShaderType::VERTEX, source.vertexSource);
 			compileShader(ShaderType::FRAGMENT, source.fragSource);
 
-			m_hwnd.m_dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
-			m_hwnd.m_dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
+			m_hwnd.dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
+			m_hwnd.dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
 		}
 
 		void bind()
 		{
-			m_hwnd.m_devcon->VSSetShader(m_VS, 0, 0);
-			m_hwnd.m_devcon->PSSetShader(m_PS, 0, 0);
+			m_hwnd.devcon->VSSetShader(m_VS, 0, 0);
+			m_hwnd.devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
 			for (auto& [name, handle] : m_vsConstBuffers)
 			{
 				buffers.push_back(handle.buffer->m_impl);
 			}
-			m_hwnd.m_devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
+			m_hwnd.devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
 			for (auto& [name, handle] : m_psConstBuffers)
 			{
 				buffers.push_back(handle.buffer->m_impl);
 			}
-			m_hwnd.m_devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
+			m_hwnd.devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)

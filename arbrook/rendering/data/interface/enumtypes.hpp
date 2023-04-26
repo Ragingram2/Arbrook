@@ -74,4 +74,14 @@ namespace rythe::rendering
 		LINEAR_MIPMAP_NEAREST = static_cast<int>(internal::FilterMode::LINEAR_MIPMAP_NEAREST),
 		LINEAR_MIPMAP_LINEAR = static_cast<int>(internal::FilterMode::LINEAR_MIPMAP_LINEAR)
 	};
+
+	enum class ClearBit
+	{
+		COLOR = static_cast<int>(internal::ClearBit::COLOR),
+		DEPTH = static_cast<int>(internal::ClearBit::DEPTH),
+		STENCIL = static_cast<int>(internal::ClearBit::STENCIL),
+		COLOR_DEPTH = static_cast<int>(internal::ClearBit::COLOR_DEPTH),
+		DEPTH_STENCIL = static_cast<int>(internal::ClearBit::DEPTH_STENCIL),
+		COLOR_DEPTH_STENCIL = static_cast<int>(internal::ClearBit::COLOR_DEPTH_STENCIL)
+	};
 }

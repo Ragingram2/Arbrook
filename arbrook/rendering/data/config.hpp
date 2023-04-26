@@ -1,11 +1,6 @@
 #pragma once
 
-#define RenderingAPI_OpenGL 0
-#define RenderingAPI_DX11 1
-
-#define RenderingAPI RenderingAPI_DX11
-
-#if RenderingAPI == RenderingAPI_OpenGL
+#if RenderingAPI == RenderingAPI_OGL
 #define Texture_HPP_PATH "rendering/data/OpenGL/texture.hpp"
 #define TextureParams_HPP_PATH "rendering/data/OpenGL/textureparameters.hpp"
 #define RenderInterface_HPP_PATH "rendering/data/OpenGL/renderinterface.hpp"
@@ -29,3 +24,5 @@
 #define EnumTypes_HPP_PATH "rendering/data/DirectX/enumtypes.hpp"
 #define ShaderLanguage "HLSL"
 #endif
+
+

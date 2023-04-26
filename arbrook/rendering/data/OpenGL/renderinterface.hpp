@@ -43,6 +43,7 @@ namespace rythe::rendering::internal
 				return;
 			}
 
+#ifdef _DEBUG
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
@@ -52,6 +53,7 @@ namespace rythe::rendering::internal
 				glDebugMessageCallback(&RenderInterface::debugCallback, nullptr);
 			else if (GLEW_ARB_debug_output)
 				glDebugMessageCallbackARB(&RenderInterface::debugCallbackARB, nullptr);
+#endif
 		}
 
 		void close()
@@ -124,6 +126,19 @@ namespace rythe::rendering::internal
 			glClearColor(color.r, color.g, color.b, color.a);
 		}
 
+		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = -1, float maxDepth = 1)
+		{
+			if (width == 0 && height == 0)
+			{
+				width = hwnd.m_resolution.x;
+				height = hwnd.m_resolution.y;
+			}
+
+			glViewport(topLeftX, topLeftY, width, height);
+			glDepthRange(minDepth, maxDepth);
+
+		}
+
 		void enableStencil()
 		{
 			glEnable(GL_STENCIL_TEST);
@@ -159,7 +174,7 @@ namespace rythe::rendering::internal
 		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR, rendering::FormatType::RGBA8UN, 1 }, bool generateMipMaps = false)
 		{
 			texture->name = name;
-			texture->initialize(TargetType::TEXTURE2D,  params, generateMipMaps);
+			texture->initialize(TargetType::TEXTURE2D, params, generateMipMaps);
 			texture->loadData(filepath);
 		}
 		////std::unique_ptr<texture1D> createTexture1D(const std::string& filepath);

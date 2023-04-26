@@ -24,7 +24,8 @@ namespace rythe::rendering::internal
 	class RenderInterface
 	{
 	private:
-		ID3D11RasterizerState* m_rasterizerState;
+		ID3D11RasterizerState* m_rasterizerState = nullptr;
+		float colorData[4];
 		window hwnd;
 	public:
 		void initialize(math::ivec2 res, const std::string& name)
@@ -57,32 +58,50 @@ namespace rythe::rendering::internal
 				NULL,
 				D3D11_SDK_VERSION,
 				&scd,
-				&hwnd.m_swapchain,
-				&hwnd.m_dev,
+				&hwnd.swapchain,
+				&hwnd.dev,
 				NULL,
-				&hwnd.m_devcon);
+				&hwnd.devcon);
 			if (FAILED(hr))
 			{
 				log::error("Initializing the device and swapchain failed");
 			}
 
 			ID3D11Texture2D* pBackBuffer;
-			hr = hwnd.m_swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+			hr = hwnd.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 			if (FAILED(hr))
 			{
 				log::error("Retrieving the backbuffer failed");
 			}
 
-			hr = hwnd.m_dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.m_backbuffer);
+			hr = hwnd.dev->CreateRenderTargetView(pBackBuffer, NULL, &hwnd.backbuffer);
 			if (FAILED(hr))
 			{
 				log::error("Creating a render target view failed");
 			}
 			pBackBuffer->Release();
 
-			hwnd.m_devcon->OMSetRenderTargets(1, &hwnd.m_backbuffer, NULL);
+			D3D11_TEXTURE2D_DESC depthStencilDesc;
 
-			//// Setup rasterizer state.
+			depthStencilDesc.Width = res.x;
+			depthStencilDesc.Height = res.y;
+			depthStencilDesc.MipLevels = 1;
+			depthStencilDesc.ArraySize = 1;
+			depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			depthStencilDesc.SampleDesc.Count = 1;
+			depthStencilDesc.SampleDesc.Quality = 0;
+			depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
+			depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+			depthStencilDesc.CPUAccessFlags = 0;
+			depthStencilDesc.MiscFlags = 0;
+
+			//Create the Depth/Stencil View
+			hwnd.dev->CreateTexture2D(&depthStencilDesc, NULL, &hwnd.depthStencilBuffer);
+			hwnd.dev->CreateDepthStencilView(hwnd.depthStencilBuffer, NULL, &hwnd.depthStencil);
+
+			hwnd.devcon->OMSetRenderTargets(1, &hwnd.backbuffer, hwnd.depthStencil);
+
+			// Setup rasterizer state.
 			D3D11_RASTERIZER_DESC rasterizerDesc;
 			ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
@@ -98,38 +117,31 @@ namespace rythe::rendering::internal
 			rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
 			// Create the rasterizer state object.
-			hr = hwnd.m_dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
+			hr = hwnd.dev->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
 
-			hwnd.m_devcon->RSSetState(m_rasterizerState);
-			
-			D3D11_VIEWPORT viewport;
-			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+			hwnd.devcon->RSSetState(m_rasterizerState);
 
-			viewport.TopLeftX = 0;
-			viewport.TopLeftY = 0;
-			viewport.Width = res.x;
-			viewport.Height = res.y;
-			//viewport.MinDepth = 0;
-			//viewport.MaxDepth = 1;
+			setViewport();
 
-			hwnd.m_devcon->RSSetViewports(1, &viewport);
-
-			hr = hwnd.m_dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&hwnd.m_infoQueue);
+#ifdef _DEBUG
+			hr = hwnd.dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&hwnd.infoQueue);
 			if (FAILED(hr))
 			{
 				log::error("Retrieving the info queue failed");
 			}
 			//m_infoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR,true);
+#endif
+
 		}
 
 		void close()
 		{
-			hwnd.m_swapchain->SetFullscreenState(FALSE, NULL);
+			hwnd.swapchain->SetFullscreenState(FALSE, NULL);
 
-			hwnd.m_swapchain->Release();
-			hwnd.m_backbuffer->Release();
-			hwnd.m_dev->Release();
-			hwnd.m_devcon->Release();
+			hwnd.swapchain->Release();
+			hwnd.backbuffer->Release();
+			hwnd.dev->Release();
+			hwnd.devcon->Release();
 		}
 
 		GLFWwindow* getWindow()
@@ -164,40 +176,68 @@ namespace rythe::rendering::internal
 
 		void swapBuffers()
 		{
-			hwnd.m_swapchain->Present(1, 0);
+			hwnd.swapchain->Present(1, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
 		{
-
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->Draw(vertexCount, startVertex);
 		}
 
 		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance)
 		{
-
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawInstanced(vertexCount, instanceCount, startVertex, startInstance);
 		}
 
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
-			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd.m_devcon->DrawIndexed(indexCount, startIndex, baseVertex);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawIndexed(indexCount, startIndex, baseVertex);
 		}
 
 		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
-			hwnd.m_devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			hwnd.m_devcon->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
 		}
 
-		void clear(int flags)
+		void clear(internal::ClearBit flags)
 		{
-
+			hwnd.devcon->ClearDepthStencilView(hwnd.depthStencil, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
+			if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
+				hwnd.devcon->ClearRenderTargetView(hwnd.backbuffer, colorData);
 		}
 
 		void setClearColor(math::vec4 color)
 		{
-			float colorData[] = { color.r, color.g, color.b, color.a };
-			hwnd.m_devcon->ClearRenderTargetView(hwnd.m_backbuffer, colorData);
+			colorData[0] = color.r;
+			colorData[1] = color.g;
+			colorData[2] = color.b;
+			colorData[3] = color.a;
+		}
+
+		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = -1, float maxDepth = 1)
+		{
+			if (width == 0 && height == 0)
+			{
+				width = hwnd.m_resolution.x;
+				height = hwnd.m_resolution.y;
+			}
+
+			D3D11_VIEWPORT viewport;
+			ZeroMemory(&viewport, sizeof(D3D11_VIEWPORT));
+
+			viewport.TopLeftX = topLeftX;
+			viewport.TopLeftY = topLeftY;
+			viewport.Width = width;
+			viewport.Height = height;
+			viewport.MinDepth = minDepth;
+			viewport.MaxDepth = maxDepth;
+
+			hwnd.devcon->RSSetViewports(numViewPorts, &viewport);
+
 		}
 
 		void enableStencil()
@@ -250,14 +290,14 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-			UINT64 message_count = hwnd.m_infoQueue->GetNumStoredMessages();
+			UINT64 message_count = hwnd.infoQueue->GetNumStoredMessages();
 
 			for (UINT64 i = 0; i < message_count; i++) {
 				SIZE_T message_size = 0;
-				hwnd.m_infoQueue->GetMessage(i, nullptr, &message_size);
+				hwnd.infoQueue->GetMessage(i, nullptr, &message_size);
 
 				D3D11_MESSAGE* message = (D3D11_MESSAGE*)malloc(message_size);
-				hwnd.m_infoQueue->GetMessage(i, message, &message_size);
+				hwnd.infoQueue->GetMessage(i, message, &message_size);
 				switch (message->Severity)
 				{
 				case D3D11_MESSAGE_SEVERITY_CORRUPTION:
@@ -276,7 +316,7 @@ namespace rythe::rendering::internal
 
 				free(message);
 			}
-			hwnd.m_infoQueue->ClearStoredMessages();
+			hwnd.infoQueue->ClearStoredMessages();
 		}
 	};
 }

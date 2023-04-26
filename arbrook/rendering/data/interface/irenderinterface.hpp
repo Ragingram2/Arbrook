@@ -43,7 +43,7 @@ namespace rythe::rendering
 		//void bind(texture_handle handle) { m_impl.bind(handle); }
 		//void unbind(shader_handle handle) { m_impl.unbind(handle.m_shader); }
 		//void unbind(texture_handle handle) { m_impl.unbind(handle); }
-		void clear(int flags) { m_impl.clear(flags); }
+		void clear(ClearBit flags) { m_impl.clear(static_cast<internal::ClearBit>(flags)); }
 
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }

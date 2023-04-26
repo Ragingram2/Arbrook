@@ -60,15 +60,15 @@ namespace rythe::rendering::internal
 				buffers.push_back(handle.buffer->m_impl);
 			}
 
-			m_hwnd.m_devcon->IASetVertexBuffers(0, m_vertexBuffers.size(), buffers.data(), stride.data(), offset.data());
+			m_hwnd.devcon->IASetVertexBuffers(0, m_vertexBuffers.size(), buffers.data(), stride.data(), offset.data());
 
 			if (m_indexBuffer.buffer != nullptr)
-				m_hwnd.m_devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
 			else
 				log::warn("No index buffer was bound, thats ok if this was intended behaviour");
 
 			if (m_layout != nullptr)
-				m_hwnd.m_devcon->IASetInputLayout(m_layout);
+				m_hwnd.devcon->IASetInputLayout(m_layout);
 		}
 
 		void addBuffer(buffer_handle handle)
@@ -99,8 +99,8 @@ namespace rythe::rendering::internal
 				elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), 0, static_cast<DXGI_FORMAT>(attrib.format), 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
 			}
 
-			m_hwnd.m_dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout);
-			m_hwnd.m_devcon->IASetInputLayout(m_layout);
+			m_hwnd.dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout);
+			m_hwnd.devcon->IASetInputLayout(m_layout);
 		}
 	};
 }
