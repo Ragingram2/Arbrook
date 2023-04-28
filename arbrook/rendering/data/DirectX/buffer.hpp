@@ -82,7 +82,7 @@ namespace rythe::rendering::internal
 			{
 				size = m_size;
 			}
-			else if (size > m_size)
+			else if (size != m_size)
 			{
 				m_size = size;
 				m_elementSize = sizeof(elementType);

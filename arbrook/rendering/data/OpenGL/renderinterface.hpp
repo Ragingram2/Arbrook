@@ -116,9 +116,9 @@ namespace rythe::rendering::internal
 			glDrawElementsInstanced(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex), instanceCount);
 		}
 
-		void clear(int flags)
+		void clear(internal::ClearBit flags)
 		{
-			glClear(flags);
+			glClear(static_cast<int>(flags));
 		}
 
 		void setClearColor(math::vec4 color)
@@ -126,7 +126,7 @@ namespace rythe::rendering::internal
 			glClearColor(color.r, color.g, color.b, color.a);
 		}
 
-		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = -1, float maxDepth = 1)
+		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
 		{
 			if (width == 0 && height == 0)
 			{

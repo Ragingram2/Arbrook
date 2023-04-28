@@ -84,4 +84,28 @@ namespace rythe::rendering
 		DEPTH_STENCIL = static_cast<int>(internal::ClearBit::DEPTH_STENCIL),
 		COLOR_DEPTH_STENCIL = static_cast<int>(internal::ClearBit::COLOR_DEPTH_STENCIL)
 	};
+
+	enum class DepthFuncs
+	{
+		ALWAYS = static_cast<int>(internal::DepthFuncs::ALWAYS),
+		NEVER = static_cast<int>(internal::DepthFuncs::NEVER),
+		LESS = static_cast<int>(internal::DepthFuncs::LESS),
+		EQUAL = static_cast<int>(internal::DepthFuncs::EQUAL),
+		LESS_EQUAL = static_cast<int>(internal::DepthFuncs::LESS_EQUAL),
+		GREATER = static_cast<int>(internal::DepthFuncs::GREATER),
+		NOT_EQUAL = static_cast<int>(internal::DepthFuncs::NOT_EQUAL),
+		GREATER_EQUAL = static_cast<int>(internal::DepthFuncs::GREATER_EQUAL)
+	};
+
+	enum class StencilOp
+	{
+		KEEP = static_cast<int>(internal::StencilOp::KEEP),
+		ZERO = static_cast<int>(internal::StencilOp::ZERO),
+		REPLACE = static_cast<int>(internal::StencilOp::REPLACE),
+		INCR = static_cast<int>(internal::StencilOp::INCR),
+		INCR_WRAP = static_cast<int>(internal::StencilOp::INCR_WRAP),
+		DECR = static_cast<int>(internal::StencilOp::DECR),
+		DECR_WRAP = static_cast<int>(internal::StencilOp::DECR_WRAP),
+		INVERT = static_cast<int>(internal::StencilOp::INVERT)
+	};
 }

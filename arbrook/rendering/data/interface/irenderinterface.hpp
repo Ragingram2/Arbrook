@@ -38,30 +38,27 @@ namespace rythe::rendering
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex) { m_impl.drawIndexed(static_cast<internal::PrimitiveType>(mode), indexCount, startIndex, baseVertex); }
 		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance) { m_impl.drawIndexedInstanced(static_cast<internal::PrimitiveType>(mode), indexCount, instanceCount, startIndex, baseVertex, startInstance); }
 
-		//void bind();//render targets
-		//void bind(shader_handle handle) { m_impl.bind(handle.m_shader); }
-		//void bind(texture_handle handle) { m_impl.bind(handle); }
-		//void unbind(shader_handle handle) { m_impl.unbind(handle.m_shader); }
-		//void unbind(texture_handle handle) { m_impl.unbind(handle); }
 		void clear(ClearBit flags) { m_impl.clear(static_cast<internal::ClearBit>(flags)); }
-
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }
 		void setClearColor(float r, float g, float b, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(r, g, b, alpha)); }
 
-		void enableStencil() { m_impl.enableStencil(); }
-		void disableStencil() { m_impl.disableStencil(); }
-		void setClearStencil() { m_impl.setClearStencil(); }
-		void setStencilOp() { m_impl.setStencilOp(); }
-		void setStencilFunc() { m_impl.setStencilFunc(); }
+		void enableDepthTest() { m_impl.enableDepthTest(); }
+		void disableDepthTest() { m_impl.disableDepthTest(); }
+		void enableDepthWrite() { m_impl.enableDepthWrite(); }
+		void disableDepthWrite() { m_impl.disableDepthWrite(); }
+		void setDepthFunction(DepthFuncs function) { m_impl.setDepthFunction(static_cast<internal::DepthFuncs>(function)); }
+		void enableStencilTest() { m_impl.enableStencilTest(); }
+		void disableStencilTest() { m_impl.disableStencilTest(); }
+		void setStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) { m_impl.setStencilOp(static_cast<internal::StencilOp>(fail), static_cast<internal::StencilOp>(zfail), static_cast<internal::StencilOp>(zpass)); }
+		void setStencilFunction() { m_impl.setStencilFunction(); }
+		void updateDepthStencil() { m_impl.updateDepthStencil(); }
 
 		//void setViewport();
 		//void setScissorTest();
 		//void setBlend(bool blend);
 		//void setBlendParam();
-		//void setDepthTest();
-		//void setDepthWrite();
-		//void setDepthFunction();
+
 
 		//void setLineWidth();
 
@@ -72,7 +69,6 @@ namespace rythe::rendering
 		//texture_handle createCubeTexture();
 		template<typename elementType>
 		buffer_handle createBuffer(Ibuffer<internal::buffer>* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1) { m_impl.createBuffer(&buffer->getImpl(), static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), data, size); return buffer; }
-		//void createInputLayout() ??? what is this?
 		//void createRenderTarget()
 
 		void checkError() { m_impl.checkError(); }

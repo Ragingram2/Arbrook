@@ -19,6 +19,11 @@ namespace rythe::rendering
 			log::error("Window initialization failed");
 			return;
 		}
+
+		m_api->enableDepthTest();
+		m_api->enableDepthWrite();
+		m_api->setDepthFunction(DepthFuncs::LESS_EQUAL);
+		m_api->updateDepthStencil();
 	}
 
 	void Renderer::update()
@@ -34,7 +39,7 @@ namespace rythe::rendering
 			return;
 		}
 
-		m_api->clear(ClearBit::COLOR);
+		m_api->clear(ClearBit::COLOR_DEPTH_STENCIL);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
 		for (auto& ent : m_filter)

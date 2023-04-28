@@ -68,7 +68,6 @@ namespace rythe::rendering::internal
 				log::error("Texture sampler failed creation");
 			}
 
-			log::debug("loading Data");
 			stbi_set_flip_vertically_on_load(flipVertical);
 			data = stbi_load(filepath.c_str(), &params.resolution.x, &params.resolution.y, &params.channels, 0);
 			if (!data)

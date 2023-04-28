@@ -26,7 +26,7 @@ namespace rythe::rendering::internal
 		ID3D11Device* dev = nullptr;                     // the pointer to our Direct3D device interface
 		ID3D11DeviceContext* devcon = nullptr;           // the pointer to our Direct3D device context
 		ID3D11RenderTargetView* backbuffer = nullptr;    // global declaration
-		ID3D11DepthStencilView* depthStencil = nullptr;
+		ID3D11DepthStencilView* depthStencilView = nullptr;
 		ID3D11Texture2D* depthStencilBuffer = nullptr;
 		ID3D11InfoQueue* infoQueue = nullptr;
 	public:
