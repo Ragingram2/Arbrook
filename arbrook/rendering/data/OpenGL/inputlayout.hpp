@@ -92,6 +92,9 @@ namespace rythe::rendering::internal
 				case FormatType::RG32F:
 					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
+				default:
+					log::warn("Format {} is not supported for vertex attributes",STRINGIFY(attrib.format));
+					break;
 				}
 				glEnableVertexAttribArray(attrib.index);
 			}

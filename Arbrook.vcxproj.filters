@@ -27,9 +27,6 @@
     <ClCompile Include="arbrook\core\logging\logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\core\engine\services\service.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\core\logging\loggingservice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -300,6 +297,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\input\input.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\input\modules\inputmodule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,11 +4,13 @@
 #include "core/core.hpp"
 #include "sandbox/modules/testmodule.hpp"
 #include "rendering/modules/rendermodule.hpp"
+#include "input/modules/inputmodule.hpp"
 
 using namespace rythe::core;
 
 namespace gfx = rythe::rendering;
 namespace events = rythe::core::events;
+namespace input = rythe::input;
 
 int main()
 {
@@ -29,7 +31,7 @@ int main()
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
 	scheduler->reportModule<gfx::RenderModule>();
 	scheduler->reportModule<TestModule>();
-
+	scheduler->reportModule<input::InputModule>();
 
 	//Initialize engine
 	Program::Instance().initialize();

@@ -207,7 +207,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -247,15 +247,15 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;$(SolutionDir)external_include\GLFW\lib;$(SolutionDir)external_include\GL\lib;$(SolutionDir)external_include\gainput\build\lib\Debug;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib;gainputstatic-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugOGL|x64'">
@@ -267,15 +267,15 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;D:\Repos\Arbrook\external_include\GLFW\lib;D:\Repos\Arbrook\external_include\GL\lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;$(SolutionDir)external_include\GLFW\lib;$(SolutionDir)external_include\GL\lib;$(SolutionDir)external_include\gainput\build\lib\Debug;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib;gainputstatic-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -288,7 +288,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -305,7 +305,6 @@
     <ClCompile Include="arbrook\core\ecs\registry.cpp" />
     <ClCompile Include="arbrook\core\events\eventbus.cpp" />
     <ClCompile Include="arbrook\core\logging\loggingservice.cpp" />
-    <ClCompile Include="arbrook\core\engine\services\service.cpp" />
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp" />
@@ -345,6 +344,8 @@
     <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
+    <ClInclude Include="arbrook\input\input.hpp" />
+    <ClInclude Include="arbrook\input\modules\inputmodule.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />

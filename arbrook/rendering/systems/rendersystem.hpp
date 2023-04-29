@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "core/core.hpp"
