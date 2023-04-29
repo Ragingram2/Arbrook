@@ -108,4 +108,11 @@ namespace rythe::rendering::internal
 		DECR_WRAP = D3D11_STENCIL_OP_DECR_SAT,
 		INVERT = D3D11_STENCIL_OP_INVERT
 	};
+
+	enum class Face
+	{
+		FRONT =0,
+		BACK = 1,
+		FRONT_BACK = 2
+	};
 }

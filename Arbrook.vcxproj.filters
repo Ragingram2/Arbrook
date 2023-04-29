@@ -341,5 +341,6 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="resources\shaders\default.shader" />
+    <None Include="resources\shaders\color.shader" />
   </ItemGroup>
 </Project>

@@ -139,29 +139,55 @@ namespace rythe::rendering::internal
 
 		}
 
-		void enableStencil()
+		void enableDepthTest()
+		{
+			glEnable(GL_DEPTH_TEST);
+		}
+
+		void disableDepthTest()
+		{
+			glDisable(GL_DEPTH_TEST);
+		}
+
+		void enableDepthWrite()
+		{
+			glStencilMask(0xFF);
+		}
+
+		void disableDepthWrite()
+		{
+			glStencilMask(0x00);
+		}
+
+		void setDepthFunction(internal::DepthFuncs function)
+		{
+			glDepthFunc(static_cast<GLenum>(function));
+		}
+
+		void enableStencilTest()
 		{
 			glEnable(GL_STENCIL_TEST);
 		}
 
-		void disableStencil()
+		void disableStencilTest()
 		{
 			glDisable(GL_STENCIL_TEST);
 		}
 
-		void setClearStencil()
+		void setStencilOp(Face face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)
 		{
-
+			glStencilOpSeparate(static_cast<GLenum>(face), static_cast<GLenum>(fail), static_cast<GLenum>(zfail), static_cast<GLenum>(zpass));
 		}
 
-		void setStencilOp(unsigned int fail, unsigned int zfail, unsigned int zpass)
+		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask)
 		{
-			glStencilOp(fail, zfail, zpass);
+			//The function definition is wrong here
+			glStencilFuncSeparate(static_cast<GLenum>(face), static_cast<GLenum>(func), ref, mask);
 		}
 
-		void setStencilFunc(unsigned int func, int ref, unsigned int mask)
+		void updateDepthStencil()
 		{
-			glStencilFunc(func, ref, mask);
+
 		}
 
 		//createVAO();
@@ -269,7 +295,7 @@ namespace rythe::rendering::internal
 		{
 		case GL_DEBUG_SEVERITY_HIGH:
 			log::error("[{}-{}] {}: {}", s, t, id, message);
-			//__debugbreak();
+			__debugbreak();
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
 			log::warn("[{}-{}] {}: {}", s, t, id, message);

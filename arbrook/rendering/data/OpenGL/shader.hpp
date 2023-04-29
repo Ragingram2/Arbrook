@@ -86,7 +86,7 @@ namespace rythe::rendering::internal
 				break;
 			}
 
-			glUniformBlockBinding(programId, glGetUniformBlockIndex(programId, "cBuffer"), handle->m_impl.bindId);
+			glUniformBlockBinding(programId, glGetUniformBlockIndex(programId, handle->getName().c_str()), handle->m_impl.bindId);
 		}
 
 	private:

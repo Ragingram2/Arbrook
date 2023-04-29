@@ -50,11 +50,11 @@ namespace rythe::rendering
 		void setDepthFunction(DepthFuncs function) { m_impl.setDepthFunction(static_cast<internal::DepthFuncs>(function)); }
 		void enableStencilTest() { m_impl.enableStencilTest(); }
 		void disableStencilTest() { m_impl.disableStencilTest(); }
-		void setStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) { m_impl.setStencilOp(static_cast<internal::StencilOp>(fail), static_cast<internal::StencilOp>(zfail), static_cast<internal::StencilOp>(zpass)); }
-		void setStencilFunction() { m_impl.setStencilFunction(); }
+		void setStencilOp(Face face, StencilOp fail, StencilOp zfail, StencilOp zpass) { m_impl.setStencilOp(static_cast<internal::Face>(face), static_cast<internal::StencilOp>(fail), static_cast<internal::StencilOp>(zfail), static_cast<internal::StencilOp>(zpass)); }
+		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask) { m_impl.setStencilFunction(static_cast<internal::Face>(face), static_cast<internal::DepthFuncs>(func), ref, mask); }
 		void updateDepthStencil() { m_impl.updateDepthStencil(); }
 
-		//void setViewport();
+		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1) { m_impl.setViewport(numViewPorts, topLeftX, topLeftY, width, height, minDepth, maxDepth); }
 		//void setScissorTest();
 		//void setBlend(bool blend);
 		//void setBlendParam();

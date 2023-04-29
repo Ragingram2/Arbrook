@@ -19,11 +19,6 @@ namespace rythe::rendering
 			log::error("Window initialization failed");
 			return;
 		}
-
-		m_api->enableDepthTest();
-		m_api->enableDepthWrite();
-		m_api->setDepthFunction(DepthFuncs::LESS_EQUAL);
-		m_api->updateDepthStencil();
 	}
 
 	void Renderer::update()
@@ -39,6 +34,7 @@ namespace rythe::rendering
 			return;
 		}
 
+		auto colorShader = ShaderCache::getShader("color");
 		m_api->clear(ClearBit::COLOR_DEPTH_STENCIL);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 
@@ -56,9 +52,31 @@ namespace rythe::rendering
 			renderComp.layout.bind(m_api->getHwnd(), shader);
 
 			vtx_constant constant[] = { { transf.position,example.time } };
-			shader->setData("Constant Buffer", constant);
+			shader->setData("ConstantBuffer", constant);
+			colorShader->setData("ConstantBuffer", constant);
 
+			m_api->setDepthFunction(DepthFuncs::LESS_EQUAL);
+			m_api->enableStencilTest();
+			m_api->setStencilOp(Face::FRONT_BACK, StencilOp::KEEP, StencilOp::KEEP, StencilOp::REPLACE);
+
+			m_api->setStencilFunction(Face::FRONT_BACK, DepthFuncs::ALWAYS, 1, 0xFF);
+			m_api->enableDepthWrite();
+			m_api->updateDepthStencil();
 			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 4, 0, 0);
+
+			m_api->setStencilFunction(Face::FRONT_BACK, DepthFuncs::NOT_EQUAL, 1, 0xFF);
+			m_api->disableDepthWrite();
+			m_api->disableDepthTest();
+			m_api->updateDepthStencil();
+			colorShader->bind();
+			m_api->drawIndexed(PrimitiveType::TRIANGLESTRIP, 4, 0, 0);
+
+			m_api->enableDepthWrite();
+			m_api->setStencilFunction(Face::FRONT_BACK, DepthFuncs::ALWAYS, 1, 0xFF);
+			m_api->enableDepthTest();
+			m_api->updateDepthStencil();
+
+			m_api->clear(ClearBit::STENCIL);
 		}
 
 

@@ -18,9 +18,8 @@ out vec2 TexCoord;
 void main()
 {
 	vec3 offset = vec3(0, sin(u_time), 0);
-	gl_Position = vec4(v_position + u_position + offset, 1);
+	gl_Position = vec4((v_position * 1.25) + u_position + offset, 1);
 	aColor = v_color;
-	TexCoord = v_texCoord;
 }
 
 #shader fragment
@@ -34,8 +33,8 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-	vec4 tColor = texture(ourTexture, TexCoord);
-	FragColor = tColor;
+	//vec4 tColor = texture(ourTexture, TexCoord);
+	FragColor = aColor;
 }
 #END
 
@@ -59,7 +58,7 @@ VOut VShader(float3 position : POSITION, float4 color : COLOR, float2 texCoord :
 	VOut output;
 
 	float3 offset = float3(0, sin(u_time), 0);
-	output.p_position = float4(position + u_position + offset, 1);
+	output.p_position = float4((position * 1.25) + u_position + offset, 1);
 	output.p_color = color;
 	output.p_texcoord = texCoord;
 
@@ -72,6 +71,7 @@ SamplerState m_sampler;
 
 float4 PShader(float4 position : SV_POSITION, float4 color : COLOR, float2 texCoord : TEXCOORD) : SV_TARGET
 {
-	return m_texture.Sample(m_sampler, texCoord);
+	//return m_texture.Sample(m_sampler, texCoord);
+	return color;
 }
 #END

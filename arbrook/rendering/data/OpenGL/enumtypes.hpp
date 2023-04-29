@@ -108,4 +108,11 @@ namespace rythe::rendering::internal
 		DECR_WRAP = GL_DECR_WRAP,
 		INVERT = GL_INVERT
 	};
+
+	enum class Face
+	{
+		FRONT = GL_FRONT,
+		BACK = GL_BACK,
+		FRONT_BACK = GL_FRONT_AND_BACK
+	};
 }

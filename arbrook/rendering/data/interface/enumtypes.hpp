@@ -108,4 +108,11 @@ namespace rythe::rendering
 		DECR_WRAP = static_cast<int>(internal::StencilOp::DECR_WRAP),
 		INVERT = static_cast<int>(internal::StencilOp::INVERT)
 	};
+
+	enum class Face
+	{
+		FRONT = static_cast<int>(internal::Face::FRONT),
+		BACK = static_cast<int>(internal::Face::BACK),
+		FRONT_BACK = static_cast<int>(internal::Face::FRONT_BACK)
+	};
 }

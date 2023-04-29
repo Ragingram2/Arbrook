@@ -50,14 +50,14 @@ namespace rythe::rendering::internal
 
 			ZeroMemory(&m_swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-			m_swapChainDesc.BufferCount = 1;                                    // one back buffer
-			m_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;     // use 32-bit color
-			m_swapChainDesc.BufferDesc.Width = res.x;                    // set the back buffer width
-			m_swapChainDesc.BufferDesc.Height = res.y;                  // set the back buffer height
-			m_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;      // how swap chain is to be used
-			m_swapChainDesc.OutputWindow = glfwGetWin32Window(m_hwnd.getWindow());                                // the window to be used
-			m_swapChainDesc.SampleDesc.Count = 1;                               // how many multisamples
-			m_swapChainDesc.Windowed = TRUE;                                    // windowed/full-screen mode
+			m_swapChainDesc.BufferCount = 1;
+			m_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+			m_swapChainDesc.BufferDesc.Width = res.x;
+			m_swapChainDesc.BufferDesc.Height = res.y;
+			m_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+			m_swapChainDesc.OutputWindow = glfwGetWin32Window(m_hwnd.getWindow());
+			m_swapChainDesc.SampleDesc.Count = 1;
+			m_swapChainDesc.Windowed = TRUE;
 			m_swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 			UINT creationFlags = D3D11_CREATE_DEVICE_DEBUG;
@@ -156,7 +156,7 @@ namespace rythe::rendering::internal
 
 			m_hwnd.devcon->RSSetState(m_rasterizerState);
 
-			setViewport(1, 0, 0, res.x, res.y);
+			setViewport(1, 0, 0, res.x, res.y, 0, 1);
 
 		}
 
@@ -231,6 +231,7 @@ namespace rythe::rendering::internal
 
 		void clear(internal::ClearBit flags)
 		{
+			if (flags == internal::ClearBit::COLOR_DEPTH_STENCIL || flags == internal::ClearBit::DEPTH_STENCIL || flags == internal::ClearBit::DEPTH || flags == internal::ClearBit::STENCIL)
 			m_hwnd.devcon->ClearDepthStencilView(m_hwnd.depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
 			if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
 				m_hwnd.devcon->ClearRenderTargetView(m_hwnd.backbuffer, m_colorData);
@@ -244,7 +245,7 @@ namespace rythe::rendering::internal
 			m_colorData[3] = color.a;
 		}
 
-		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
+		void setViewport(float numViewPorts, float topLeftX, float topLeftY, float width, float height, float minDepth, float maxDepth)
 		{
 			if (width == 0 && height == 0)
 			{
@@ -300,34 +301,52 @@ namespace rythe::rendering::internal
 			m_depthStencilDesc.StencilEnable = false;
 		}
 
-		//m_depthStencilDesc.DepthEnable = true;
-			//m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-			//m_depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-			//depthStencilDesc.StencilEnable = false;
-			//depthStencilDesc.StencilReadMask = 0xFF;
-			//depthStencilDesc.StencilWriteMask = 0xFF;
-			//depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-			//depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-			//depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-			//depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-		void setStencilOp(int face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)
+		void setStencilOp(Face face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)
 		{
-
+			switch (face)
+			{
+			case Face::FRONT:
+				m_depthStencilDesc.FrontFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
+				m_depthStencilDesc.FrontFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
+				m_depthStencilDesc.FrontFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
+				break;
+			case Face::BACK:
+				m_depthStencilDesc.BackFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
+				m_depthStencilDesc.BackFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
+				m_depthStencilDesc.BackFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
+				break;
+			case Face::FRONT_BACK:
+				m_depthStencilDesc.FrontFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
+				m_depthStencilDesc.FrontFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
+				m_depthStencilDesc.FrontFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
+				m_depthStencilDesc.BackFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
+				m_depthStencilDesc.BackFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
+				m_depthStencilDesc.BackFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
+				break;
+			}
 		}
 
-		void setStencilFunc(DepthFuncs func, unsigned int  ref, unsigned int mask)
+		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask)
 		{
-
+			m_depthStencilDesc.StencilReadMask = mask;
+			m_depthStencilDesc.StencilWriteMask = mask;
+			switch (face)
+			{
+			case Face::FRONT:
+				m_depthStencilDesc.FrontFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
+				break;
+			case Face::BACK:
+				m_depthStencilDesc.BackFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
+				break;
+			case Face::FRONT_BACK:
+				m_depthStencilDesc.FrontFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
+				m_depthStencilDesc.BackFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
+				break;
+			}
 		}
 
 		void updateDepthStencil()
 		{
-			log::info("Updating Depth Stencil");
 			HRESULT hr = m_hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
 			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
 
