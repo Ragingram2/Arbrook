@@ -245,9 +245,6 @@
     <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

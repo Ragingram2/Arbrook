@@ -15,9 +15,9 @@ namespace rythe::core
 		auto texture = gfx::TextureCache::createTexture2D(*m_api, "Rythe", "resources/textures/Rythe.png");
 		auto shader = gfx::ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		auto colorShader = gfx::ShaderCache::createShader(*m_api, "color", "resources/shaders/color.shader");
-		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW);
-		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW);
-		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, nullptr, 1);
+		auto vertexHandle = gfx::BufferCache::createBuffer<gfx::vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER);
+		auto indexHandle = gfx::BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", gfx::TargetType::INDEX_BUFFER);
+		auto constantHandle = gfx::BufferCache::createBuffer<gfx::vtx_constant>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER);
 
 		for (int i = 0; i < spawnCount; i++)
 		{
@@ -54,7 +54,6 @@ namespace rythe::core
 
 			render.texture = texture;
 			render.shader = shader;
-
 		}
 	}
 

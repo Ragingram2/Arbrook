@@ -214,7 +214,6 @@ namespace rythe::rendering::internal
 				buffer->bufferData<elementType>(data, size);
 			}
 		}
-		//std::unique_ptr<buffer<constant, unsigned int>> createConstantBuffer();
 
 		void checkError()
 		{

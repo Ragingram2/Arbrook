@@ -347,7 +347,6 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffercache.hpp" />
-    <ClInclude Include="arbrook\rendering\data\bufferconcepts.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp" />
     <ClInclude Include="arbrook\rendering\data\DirectX\dx11includes.hpp" />
