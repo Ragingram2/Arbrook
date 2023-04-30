@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include <GLFW/glfw3.h>
 
 #include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
@@ -20,6 +19,8 @@ namespace rythe::rendering
 	{
 	public:
 		RenderInterface* m_api;
+		core::ecs::entity testEnt;
+		float count = 0;
 
 		Renderer() = default;
 		virtual ~Renderer() = default;
@@ -27,5 +28,20 @@ namespace rythe::rendering
 		void setup() override;
 		void update() override;
 		void shutdown() override;
+
+		//void TestClearColor();
+		//void TestClearDepth();
+		//void TestClearStencil();
+		void TestDrawArrays();
+		void TestDrawArraysInstanced();
+		void TestDrawIndexed();
+		void TestDrawIndexedInstanced();
+		void TestSetViewport();
+		void TestDepthTest();
+		void TestStencilTest();
+
+		void TestCreateShader();
+		void TestCreateTexture();
+		void TestCreateBuffer();
 	};
 }

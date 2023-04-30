@@ -39,16 +39,19 @@ namespace rythe::rendering::internal
 		}
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
 
-		GLFWwindow* getWindow()
-		{
-			return m_window;
-		}
-
-		void initialize(math::ivec2 res, const std::string& name)
+		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			m_resolution = res;
 			m_windowName = name;
-			m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
+			if (!window)
+				m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
+			else
+				m_window = window;
+		}
+
+		GLFWwindow* getWindow()
+		{
+			return m_window;
 		}
 
 		void swapBuffers()

@@ -115,4 +115,10 @@ namespace rythe::rendering::internal
 		BACK = GL_BACK,
 		FRONT_BACK = GL_FRONT_AND_BACK
 	};
+
+	enum class InputClass
+	{
+		PER_VERTEX = 0,
+		PER_INSTANCE = 1
+	};
 }

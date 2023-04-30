@@ -19,14 +19,19 @@ namespace rythe::rendering::internal
 		window() = default;
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
 
+		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
+		{
+			m_resolution = res;
+			m_windowName = name;
+			if (!window)
+				m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
+			else
+				m_window = window;
+		}
+
 		GLFWwindow* getWindow()
 		{
 			return m_window;
-		}
-
-		void initialize(math::ivec2 res, const std::string& name)
-		{
-			m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
 		}
 
 		void swapBuffers()

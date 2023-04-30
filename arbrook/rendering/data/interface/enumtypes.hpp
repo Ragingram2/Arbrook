@@ -115,4 +115,10 @@ namespace rythe::rendering
 		BACK = static_cast<int>(internal::Face::BACK),
 		FRONT_BACK = static_cast<int>(internal::Face::FRONT_BACK)
 	};
+
+	enum class InputClass
+	{
+		PER_VERTEX = static_cast<int>(internal::InputClass::PER_VERTEX),
+		PER_INSTANCE = static_cast<int>(internal::InputClass::PER_INSTANCE)
+	};
 }

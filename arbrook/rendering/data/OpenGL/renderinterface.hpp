@@ -27,10 +27,10 @@ namespace rythe::rendering::internal
 	private:
 		window hwnd;
 	public:
-		void initialize(math::ivec2 res, const std::string& name)
+		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing OpenGL");
-			hwnd.initialize(res, name);
+			hwnd.initialize(res, name, window);
 			hwnd.makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -111,7 +111,7 @@ namespace rythe::rendering::internal
 			glDrawElements(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex));
 		}
 
-		void drawIndexdInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
+		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
 			glDrawElementsInstanced(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(startIndex), instanceCount);
 		}

@@ -8,7 +8,7 @@ namespace rythe::rendering
 	{
 		if (m_shaders.contains(name))
 		{
-			log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
+			//log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
 			return m_shaders[name].get();
 		}
 

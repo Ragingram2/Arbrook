@@ -40,7 +40,8 @@ namespace rythe::rendering::internal
 				{
 					handle->bind();
 				}
-				m_indexBuffer->bind();
+				if (m_indexBuffer.buffer)
+					m_indexBuffer->bind();
 				m_initialized = true;
 				return;
 			}
@@ -69,15 +70,17 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset = 0)
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass)
 		{
-			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, stride, offset });
+			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, stride, offset, inputClass });
 		}
 
 		void submitAttributes()
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
+
+				glEnableVertexAttribArray(attrib.index);
 				switch (attrib.format)
 				{
 				case FormatType::RGB32F:
@@ -93,10 +96,10 @@ namespace rythe::rendering::internal
 					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				default:
-					log::warn("Format {} is not supported for vertex attributes",STRINGIFY(attrib.format));
+					log::warn("Format {} is not supported for vertex attributes", STRINGIFY(attrib.format));
 					break;
 				}
-				glEnableVertexAttribArray(attrib.index);
+				glVertexAttribDivisor(attrib.index, static_cast<GLuint>(attrib.inputClass));
 			}
 		}
 	};

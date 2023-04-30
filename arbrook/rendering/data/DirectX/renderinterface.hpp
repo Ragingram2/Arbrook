@@ -42,11 +42,11 @@ namespace rythe::rendering::internal
 		float m_colorData[4];
 		window m_hwnd;
 	public:
-		void initialize(math::ivec2 res, const std::string& name)
+		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing DX11");
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-			m_hwnd.initialize(res, name);
+			m_hwnd.initialize(res, name, window);
 
 			ZeroMemory(&m_swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
@@ -232,7 +232,7 @@ namespace rythe::rendering::internal
 		void clear(internal::ClearBit flags)
 		{
 			if (flags == internal::ClearBit::COLOR_DEPTH_STENCIL || flags == internal::ClearBit::DEPTH_STENCIL || flags == internal::ClearBit::DEPTH || flags == internal::ClearBit::STENCIL)
-			m_hwnd.devcon->ClearDepthStencilView(m_hwnd.depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
+				m_hwnd.devcon->ClearDepthStencilView(m_hwnd.depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
 			if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
 				m_hwnd.devcon->ClearRenderTargetView(m_hwnd.backbuffer, m_colorData);
 		}

@@ -115,4 +115,10 @@ namespace rythe::rendering::internal
 		BACK = 1,
 		FRONT_BACK = 2
 	};
+
+	enum class InputClass
+	{
+		PER_VERTEX = 0,
+		PER_INSTANCE = 1
+	};
 }

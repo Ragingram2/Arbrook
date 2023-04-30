@@ -87,16 +87,16 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset)
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass)
 		{
-			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, stride, offset });
+			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, stride, offset, inputClass });
 		}
 
 		void submitAttributes()
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
-				elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), 0, static_cast<DXGI_FORMAT>(attrib.format), 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 });
+				elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), 0, static_cast<DXGI_FORMAT>(attrib.format), 0, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),0 });
 			}
 
 			m_hwnd.dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout);

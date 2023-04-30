@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <memory>
 
-#include <GL/glew.h>
-
 #include "core/core.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/definitions.hpp"

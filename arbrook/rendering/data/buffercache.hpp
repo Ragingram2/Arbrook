@@ -25,7 +25,7 @@ namespace rythe::rendering
 	{
 		if (m_buffers.contains(name))
 		{
-			log::warn("Buffer {} already exists, ignoring new buffer, and returning existing one", name);
+			//log::warn("Buffer {} already exists, ignoring new buffer, and returning existing one", name);
 			return m_buffers[name].get();
 		}
 
