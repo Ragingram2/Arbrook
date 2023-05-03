@@ -47,9 +47,9 @@ namespace rythe::core
 			texture->bind();
 
 			layout.bind(m_api->getHwnd(), shader);
-			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0,gfx::InputClass::PER_VERTEX);
-			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float), gfx::InputClass::PER_VERTEX);
-			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float), gfx::InputClass::PER_VERTEX);
+			layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, sizeof(gfx::vertex), 0, gfx::InputClass::PER_VERTEX, 0);
+			layout.setAttributePtr("COLOR", 1, gfx::FormatType::RGBA32F, sizeof(gfx::vertex), 3.0f * sizeof(float), gfx::InputClass::PER_VERTEX, 0);
+			layout.setAttributePtr("TEXCOORD", 2, gfx::FormatType::RG32F, sizeof(gfx::vertex), 7.0f * sizeof(float), gfx::InputClass::PER_VERTEX, 0);
 			layout.submitAttributes();
 
 			render.texture = texture;

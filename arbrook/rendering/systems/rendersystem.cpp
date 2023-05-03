@@ -26,13 +26,14 @@ namespace rythe::rendering
 		auto& layout = renderer.layout;
 		auto vertexHandle = BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", TargetType::VERTEX_BUFFER);
 		auto indexHandle = BufferCache::createBuffer<unsigned int>(*m_api, "Index Buffer", TargetType::INDEX_BUFFER);
+		auto constantHandle = BufferCache::createBuffer<vtx_constant>(*m_api, "ConstantBuffer", TargetType::CONSTANT_BUFFER);
 		auto shader = ShaderCache::createShader(*m_api, "color", "resources/shaders/color.shader");
 		layout.addBuffer(indexHandle);
 		layout.addBuffer(vertexHandle);
 		layout.bind(m_api->getHwnd(), shader);
-		layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, sizeof(vertex), 0, InputClass::PER_VERTEX);
-		layout.setAttributePtr("COLOR", 1, FormatType::RGBA32F, sizeof(vertex), 3.0f * sizeof(float), InputClass::PER_VERTEX);
-		layout.setAttributePtr("TEXCOORD", 2, FormatType::RG32F, sizeof(vertex), 7.0f * sizeof(float), InputClass::PER_VERTEX);
+		layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, sizeof(vertex), 0, InputClass::PER_VERTEX, 0);
+		layout.setAttributePtr("COLOR", 1, FormatType::RGBA32F, sizeof(vertex), 3.0f * sizeof(float), InputClass::PER_VERTEX, 0);
+		layout.setAttributePtr("TEXCOORD", 2, FormatType::RG32F, sizeof(vertex), 7.0f * sizeof(float), InputClass::PER_VERTEX, 0);
 		layout.submitAttributes();
 	}
 
@@ -213,24 +214,25 @@ namespace rythe::rendering
 		auto& layout = renderer.layout;
 		buffer_handle vertexHandle = BufferCache::getBuffer("Vertex Buffer");
 		buffer_handle indexHandle = BufferCache::getBuffer("Index Buffer");
+		buffer_handle constantHandle = BufferCache::getBuffer("ConstantBuffer");
 		shader_handle shader = ShaderCache::getShader("color");
-		vertex verticies[8] =
+		vertex verticies[4] =
 		{	//positions									//colors								//tex coors
-			{ { -0.1f + count, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-			{ {	-0.1f + count,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
-			{ { 0.1f + count,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-			{ { 0.1f + count, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } },//3
+			{ { -0.1f, 0.1f, 0.0f },		{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
+			{ {	-0.1f,-0.1f, 0.0f },		{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
+			{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
+			{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
 
-			{ { -0.1f, 0.1f + count, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//4
-			{ {	-0.1f, -0.1f + count, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//5
-			{ { 0.1f,-0.1f + count, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//6
-			{ { 0.1f, 0.1f + count, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//7
+			//{ { -0.1f, 0.1f + count, 0.0f },		{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//4
+			//{ {	-0.1f, -0.1f + count, 0.0f },		{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//5
+			//{ { 0.1f,-0.1f + count, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//6
+			//{ { 0.1f, 0.1f + count, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//7
 		};
 
-		unsigned int indicies[8] =
+		unsigned int indicies[4] =
 		{
-			1,2,0,3,
-			5,6,4,7,
+			1,2,0,3/*,
+			5,6,4,7,*/
 		};
 
 		int idxCount = sizeof(indicies) / sizeof(unsigned int);
@@ -239,10 +241,12 @@ namespace rythe::rendering
 		if (count == 0)
 		{
 			indexHandle->bufferData(indicies, idxCount);
+			shader->addBuffer(ShaderType::VERTEX, constantHandle);
 		}
 
 		m_api->clear(ClearBit::COLOR);
-
+		vtx_constant constant[] = { { math::vec3(count,0,0),0 }, {math::vec3(0,count,0),0}};
+		shader->setData("ConstantBuffer", constant);
 		vertexHandle->bufferData(verticies, vtxCount);
 
 		shader->bind();

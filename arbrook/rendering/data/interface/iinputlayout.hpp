@@ -21,6 +21,6 @@ namespace rythe::rendering
 
 		void submitAttributes() { m_impl.submitAttributes(); }
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset, static_cast<internal::InputClass>(inputClass)); }
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instanceStep) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
 	};
 }

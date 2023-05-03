@@ -15,9 +15,10 @@ namespace rythe::rendering
 		unsigned int stride;
 		unsigned int offset;
 		internal::InputClass inputClass;
+		unsigned int step;
 
 	public:
 		vertexattribute() = default;
-		vertexattribute(const std::string&& nam, unsigned int idx, internal::FormatType frmt, unsigned int strd, unsigned int offst,internal::InputClass inputClass) : name(nam), index(idx), format(frmt), stride(strd), offset(offst), inputClass(inputClass) {}
+		vertexattribute(const std::string&& nam, unsigned int idx, internal::FormatType frmt, unsigned int strd, unsigned int offst,internal::InputClass inputClass, unsigned int step) : name(nam), index(idx), format(frmt), stride(strd), offset(offst), inputClass(inputClass), step(step) {}
 	};
 }

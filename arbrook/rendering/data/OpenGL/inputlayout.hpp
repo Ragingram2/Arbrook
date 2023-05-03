@@ -70,9 +70,9 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass)
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
-			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, stride, offset, inputClass });
+			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, stride, offset, inputClass, instancedStep });
 		}
 
 		void submitAttributes()
@@ -99,7 +99,15 @@ namespace rythe::rendering::internal
 					log::warn("Format {} is not supported for vertex attributes", STRINGIFY(attrib.format));
 					break;
 				}
-				glVertexAttribDivisor(attrib.index, static_cast<GLuint>(attrib.inputClass));
+				switch (attrib.inputClass)
+				{
+				case InputClass::PER_VERTEX:
+					glVertexAttribDivisor(attrib.index, 0);
+					break;
+				case InputClass::PER_INSTANCE:
+					glVertexAttribDivisor(attrib.index, attrib.step);
+					break;
+				}
 			}
 		}
 	};

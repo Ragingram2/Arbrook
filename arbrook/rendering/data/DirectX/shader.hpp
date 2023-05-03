@@ -103,15 +103,21 @@ namespace rythe::rendering::internal
 		template<typename elementType>
 		void setData(const std::string& bufferName, elementType data[])
 		{
+			bool dataSet = false;
 			if (m_vsConstBuffers.count(bufferName) != 0)
 			{
 				m_vsConstBuffers[bufferName]->bufferData(data);
+				dataSet = true;
 			}
 
 			if (m_psConstBuffers.count(bufferName) != 0)
 			{
 				m_psConstBuffers[bufferName]->bufferData(data);
+				dataSet = true;
 			}
+
+			if (!dataSet)
+				log::error("No data was buffered, because the buffer {} was not added or does not exist",bufferName);
 		}
 
 	private:
