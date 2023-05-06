@@ -47,6 +47,7 @@ namespace rythe::rendering
 		void disableDepthTest() { m_impl.disableDepthTest(); }
 		void enableDepthWrite() { m_impl.enableDepthWrite(); }
 		void disableDepthWrite() { m_impl.disableDepthWrite(); }
+		void setStencilMask(int mask) { m_impl.setStencilMask(mask); }
 		void setDepthFunction(DepthFuncs function) { m_impl.setDepthFunction(static_cast<internal::DepthFuncs>(function)); }
 		void enableStencilTest() { m_impl.enableStencilTest(); }
 		void disableStencilTest() { m_impl.disableStencilTest(); }

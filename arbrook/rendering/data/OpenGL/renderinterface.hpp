@@ -151,12 +151,17 @@ namespace rythe::rendering::internal
 
 		void enableDepthWrite()
 		{
-			glStencilMask(0xFF);
+			glDepthMask(GL_TRUE);
 		}
 
 		void disableDepthWrite()
 		{
-			glStencilMask(0x00);
+			glDepthMask(GL_FALSE);
+		}
+
+		void setStencilMask(int mask)
+		{
+			glStencilMask(mask);
 		}
 
 		void setDepthFunction(internal::DepthFuncs function)
