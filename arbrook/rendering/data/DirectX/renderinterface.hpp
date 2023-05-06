@@ -266,24 +266,22 @@ namespace rythe::rendering::internal
 
 		}
 
-		void enableDepthTest()
+		void depthTest(bool enable)
 		{
-			m_depthStencilDesc.DepthEnable = true;
+			m_depthStencilDesc.DepthEnable = enable;
 		}
 
-		void disableDepthTest()
+		void depthWrite(bool enable)
 		{
-			m_depthStencilDesc.DepthEnable = false;
+			if (enable)
+				m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			else
+				m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		}
 
-		void enableDepthWrite()
+		void setStencilMask(int mask)
 		{
-			m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		}
 
-		void disableDepthWrite()
-		{
-			m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 		}
 
 		void setDepthFunction(internal::DepthFuncs function)
@@ -291,14 +289,9 @@ namespace rythe::rendering::internal
 			m_depthStencilDesc.DepthFunc = static_cast<D3D11_COMPARISON_FUNC>(function);
 		}
 
-		void enableStencilTest()
+		void stencilTest(bool enable)
 		{
-			m_depthStencilDesc.StencilEnable = true;
-		}
-
-		void disableStencilTest()
-		{
-			m_depthStencilDesc.StencilEnable = false;
+			m_depthStencilDesc.StencilEnable = enable;
 		}
 
 		void setStencilOp(Face face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)

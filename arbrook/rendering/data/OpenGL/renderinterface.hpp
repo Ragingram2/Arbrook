@@ -139,24 +139,14 @@ namespace rythe::rendering::internal
 
 		}
 
-		void enableDepthTest()
+		void depthTest(bool enable)
 		{
-			glEnable(GL_DEPTH_TEST);
+			glEnable(enable);
 		}
 
-		void disableDepthTest()
+		void depthWrite(bool enable)
 		{
-			glDisable(GL_DEPTH_TEST);
-		}
-
-		void enableDepthWrite()
-		{
-			glDepthMask(GL_TRUE);
-		}
-
-		void disableDepthWrite()
-		{
-			glDepthMask(GL_FALSE);
+			glDepthMask(enable);
 		}
 
 		void setStencilMask(int mask)

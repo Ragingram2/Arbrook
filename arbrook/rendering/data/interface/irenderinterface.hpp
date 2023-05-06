@@ -43,14 +43,11 @@ namespace rythe::rendering
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }
 		void setClearColor(float r, float g, float b, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(r, g, b, alpha)); }
 
-		void enableDepthTest() { m_impl.enableDepthTest(); }
-		void disableDepthTest() { m_impl.disableDepthTest(); }
-		void enableDepthWrite() { m_impl.enableDepthWrite(); }
-		void disableDepthWrite() { m_impl.disableDepthWrite(); }
+		void depthTest(bool enable) { m_impl.depthTest(enable); }
+		void depthWrite(bool enable) { m_impl.depthWrite(enable); }
 		void setStencilMask(int mask) { m_impl.setStencilMask(mask); }
 		void setDepthFunction(DepthFuncs function) { m_impl.setDepthFunction(static_cast<internal::DepthFuncs>(function)); }
-		void enableStencilTest() { m_impl.enableStencilTest(); }
-		void disableStencilTest() { m_impl.disableStencilTest(); }
+		void stencilTest(bool enable) { m_impl.stencilTest(enable); }
 		void setStencilOp(Face face, StencilOp fail, StencilOp zfail, StencilOp zpass) { m_impl.setStencilOp(static_cast<internal::Face>(face), static_cast<internal::StencilOp>(fail), static_cast<internal::StencilOp>(zfail), static_cast<internal::StencilOp>(zpass)); }
 		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask) { m_impl.setStencilFunction(static_cast<internal::Face>(face), static_cast<internal::DepthFuncs>(func), ref, mask); }
 		void updateDepthStencil() { m_impl.updateDepthStencil(); }
@@ -58,10 +55,7 @@ namespace rythe::rendering
 		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1) { m_impl.setViewport(numViewPorts, topLeftX, topLeftY, width, height, minDepth, maxDepth); }
 		//void setScissorTest();
 		//void setBlend(bool blend);
-		//void setBlendParam();
-
-
-		//void setLineWidth();
+		//void setBlendParam()
 
 		shader_handle createShader(Ishader<internal::shader>* shader, const std::string& name, const shader_source& source) { m_impl.createShader(&shader->getImpl(), name, source); return shader; };
 		texture_handle createTexture2D(Itexture<internal::texture>* texture, const std::string& name, const std::string& filepath) { m_impl.createTexture2D(&texture->getImpl(), name, filepath); return texture; }
