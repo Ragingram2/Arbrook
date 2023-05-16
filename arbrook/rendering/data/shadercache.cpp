@@ -29,7 +29,10 @@ namespace rythe::rendering
 
 	void ShaderCache::deleteShader(const std::string& name)
 	{
-
+		if (m_shaders.contains(name))
+		{
+			m_shaders.erase(name);
+		}
 	}
 
 	shader_source ShaderCache::loadShader(const std::string& filepath)

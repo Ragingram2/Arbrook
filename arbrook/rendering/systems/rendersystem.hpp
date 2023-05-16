@@ -8,6 +8,7 @@
 #include "rendering/data/texturecache.hpp"
 #include "rendering/data/buffercache.hpp"
 #include "rendering/components/spriterenderer.hpp"
+#include "rendering/data/renderingtest.hpp"
 #include "rendering/data/vertex.hpp"
 
 namespace rythe::rendering
@@ -15,17 +16,32 @@ namespace rythe::rendering
 	namespace log = core::log;
 	namespace math = core::math;
 
+	static math::vec3* generateVertexData(math::vec3 position = math::vec3(0, 0, 0), math::vec3 dimensions = math::vec3(.1f, .1f, 0.0f))
+	{
+		math::vec3 data[6] =
+		{
+			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(-1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,1.0f,0.0f) * dimensions) + position}
+		};
+		return std::move(data);
+	}
+
 	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
 		RenderInterface* m_api;
-		core::ecs::entity testEnt;
 		static float count;
 
-		static std::vector<void(Renderer::*)()> m_testScenes;
+		static std::vector<rendering_test> m_testScenes;
 		static int currentScene;
 
 		static bool initializeTest;
+		static bool updateTest;
+		static bool stopTest;
 
 		Renderer() = default;
 		virtual ~Renderer() = default;
@@ -54,19 +70,23 @@ namespace rythe::rendering
 				{
 				case GLFW_KEY_RIGHT:
 					currentScene++;
+					stopTest = true;
+					updateTest = false;
+					initializeTest = true;
 					break;
 				case GLFW_KEY_LEFT:
 					currentScene--;
+					stopTest = true;
+					updateTest = false;
+					initializeTest = true;
 					break;
 				}
 			}
 
-			if (currentScene > m_testScenes.size()-1)
+			if (currentScene > m_testScenes.size() - 1)
 				currentScene = 0;
 			else if (currentScene < 0)
 				currentScene = m_testScenes.size() - 1;
-
-			initializeTest = true;
 
 		}
 	};

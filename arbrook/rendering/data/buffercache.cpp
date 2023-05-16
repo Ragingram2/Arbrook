@@ -16,6 +16,9 @@ namespace rythe::rendering
 
 	void BufferCache::deleteBuffer(const std::string& name)
 	{
-
+		if (m_buffers.contains(name))
+		{
+			m_buffers.erase(name);
+		}
 	}
 }
