@@ -371,33 +371,7 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-			UINT64 message_count = m_hwnd.infoQueue->GetNumStoredMessages();
-
-			for (UINT64 i = 0; i < message_count; i++) {
-				SIZE_T message_size = 0;
-				m_hwnd.infoQueue->GetMessage(i, nullptr, &message_size);
-
-				D3D11_MESSAGE* message = (D3D11_MESSAGE*)malloc(message_size);
-				m_hwnd.infoQueue->GetMessage(i, message, &message_size);
-				switch (message->Severity)
-				{
-				case D3D11_MESSAGE_SEVERITY_CORRUPTION:
-					log::fatal("DX11: {}", message->pDescription);
-					break;
-				case D3D11_MESSAGE_SEVERITY_ERROR:
-					log::error("DX11: {}", message->pDescription);
-					break;
-				case D3D11_MESSAGE_SEVERITY_INFO:
-					log::info("DX11: {}", message->pDescription);
-					break;
-				case D3D11_MESSAGE_SEVERITY_WARNING:
-					log::warn("DX11: {}", message->pDescription);
-					break;
-				}
-
-				free(message);
-			}
-			m_hwnd.infoQueue->ClearStoredMessages();
+			m_hwnd.checkError();
 		}
 	};
 }

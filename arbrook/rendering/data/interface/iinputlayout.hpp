@@ -19,8 +19,12 @@ namespace rythe::rendering
 
 		void addBuffer(buffer_handle handle) { m_impl.addBuffer(handle); }
 
+		void clearBuffers() { m_impl.clearBuffers(); }
+
 		void submitAttributes() { m_impl.submitAttributes(); }
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instanceStep) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass = InputClass::PER_VERTEX, unsigned int instanceStep = 0) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), inputSlot, stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
+
+		void clearAttributes() { m_impl.clearAttributes(); }
 	};
 }

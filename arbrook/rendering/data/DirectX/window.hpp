@@ -82,6 +82,14 @@ namespace rythe::rendering::internal
 		void checkError()
 		{
 			UINT64 message_count = infoQueue->GetNumStoredMessages();
+			D3D11_MESSAGE_ID hide[]
+			{
+			};
+			D3D11_INFO_QUEUE_FILTER filter;
+			ZeroMemory(&filter, sizeof(filter));
+			filter.DenyList.NumIDs = sizeof(hide);
+			filter.DenyList.pIDList = hide;
+			infoQueue->AddStorageFilterEntries(&filter);
 
 			for (UINT64 i = 0; i < message_count; i++) {
 				SIZE_T message_size = 0;

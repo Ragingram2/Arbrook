@@ -47,11 +47,6 @@ namespace rythe::rendering::internal
 			}
 
 			glBindVertexArray(id);
-			//for (auto& handle : m_vertexBuffers)
-			//{
-			//	handle->bind();
-			//}
-			//m_indexBuffer->bind();
 		}
 
 		void addBuffer(buffer_handle handle)
@@ -70,16 +65,21 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
+		void clearBuffers()
 		{
-			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, stride, offset, inputClass, instancedStep });
+			m_vertexBuffers.clear();
+			m_indexBuffer = nullptr;
+		}
+
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
+		{
+			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, inputSlot,stride, offset, inputClass, instancedStep });
 		}
 
 		void submitAttributes()
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
-
 				glEnableVertexAttribArray(attrib.index);
 				switch (attrib.format)
 				{
@@ -109,6 +109,11 @@ namespace rythe::rendering::internal
 					break;
 				}
 			}
+		}
+
+		void clearAttributes()
+		{
+			m_vertexAttribs.clear();
 		}
 	};
 }

@@ -342,5 +342,7 @@
     </None>
     <None Include="resources\shaders\default.shader" />
     <None Include="resources\shaders\color.shader" />
+    <None Include="resources\shaders\test.shader" />
+    <None Include="resources\shaders\instance_test.shader" />
   </ItemGroup>
 </Project>

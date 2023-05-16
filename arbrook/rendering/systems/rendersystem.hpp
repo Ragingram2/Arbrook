@@ -19,6 +19,13 @@ namespace rythe::rendering
 	{
 	public:
 		RenderInterface* m_api;
+		core::ecs::entity testEnt;
+		static float count;
+
+		static std::vector<void(Renderer::*)()> m_testScenes;
+		static int currentScene;
+
+		static bool initializeTest;
 
 		Renderer() = default;
 		virtual ~Renderer() = default;
@@ -26,5 +33,41 @@ namespace rythe::rendering
 		void setup() override;
 		void update() override;
 		void shutdown() override;
+
+		void TestDrawArrays();
+		void TestDrawArraysInstanced();
+		void TestDrawIndexed();
+		void TestDrawIndexedInstanced();
+		void TestSetViewport();
+		void TestDepthTest();
+		void TestStencilTest();
+
+		void TestCreateShader();
+		void TestCreateTexture();
+		void TestCreateBuffer();
+
+		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			if (action == GLFW_PRESS)
+			{
+				switch (key)
+				{
+				case GLFW_KEY_RIGHT:
+					currentScene++;
+					break;
+				case GLFW_KEY_LEFT:
+					currentScene--;
+					break;
+				}
+			}
+
+			if (currentScene > m_testScenes.size()-1)
+				currentScene = 0;
+			else if (currentScene < 0)
+				currentScene = m_testScenes.size() - 1;
+
+			initializeTest = true;
+
+		}
 	};
 }

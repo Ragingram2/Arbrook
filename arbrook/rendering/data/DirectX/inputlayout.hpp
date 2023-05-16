@@ -64,11 +64,15 @@ namespace rythe::rendering::internal
 
 			if (m_indexBuffer.buffer != nullptr)
 				m_hwnd.devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+#ifdef _DEBUG
 			else
-				log::warn("No index buffer was bound, thats ok if this was intended behaviour");
+				//log::warn("No index buffer was bound, thats ok if this was intended behaviour");
+#endif // DEBUG
 
 			if (m_layout != nullptr)
+			{
 				m_hwnd.devcon->IASetInputLayout(m_layout);
+			}
 		}
 
 		void addBuffer(buffer_handle handle)
@@ -87,20 +91,32 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int stride, unsigned int offset, InputClass inputClass,unsigned int instancedStep)
+		void clearBuffers()
 		{
-			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, stride, offset, inputClass, instancedStep });
+			m_vertexBuffers.clear();
+			m_indexBuffer = nullptr;
+		}
+
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass,unsigned int instancedStep)
+		{
+			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, inputSlot, stride, offset, inputClass, instancedStep });
 		}
 
 		void submitAttributes()
 		{
 			for (auto& attrib : m_vertexAttribs)
 			{
-				elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), 0, static_cast<DXGI_FORMAT>(attrib.format), 0, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
+				elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), 0, static_cast<DXGI_FORMAT>(attrib.format), attrib.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
 			}
 
+			//check for null in vs blob
 			m_hwnd.dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout);
 			m_hwnd.devcon->IASetInputLayout(m_layout);
+		}
+
+		void clearAttributes()
+		{
+			m_vertexAttribs.clear();
 		}
 	};
 }
