@@ -115,5 +115,11 @@ namespace rythe::rendering::internal
 		{
 			m_vertexAttribs.clear();
 		}
+
+		void release()
+		{
+			clearBuffers();
+			clearAttributes();
+		}
 	};
 }

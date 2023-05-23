@@ -38,6 +38,7 @@ namespace rythe::rendering
 
 		static std::vector<rendering_test> m_testScenes;
 		static int currentScene;
+		static int lastScene;
 
 		static bool initializeTest;
 		static bool updateTest;
@@ -66,6 +67,7 @@ namespace rythe::rendering
 		{
 			if (action == GLFW_PRESS)
 			{
+				lastScene = currentScene;
 				switch (key)
 				{
 				case GLFW_KEY_RIGHT:
@@ -82,12 +84,14 @@ namespace rythe::rendering
 					break;
 				}
 			}
-
-			if (currentScene > m_testScenes.size() - 1)
+			if (currentScene > static_cast<int>(m_testScenes.size() - 1))
+			{
 				currentScene = 0;
+			}
 			else if (currentScene < 0)
+			{
 				currentScene = m_testScenes.size() - 1;
-
+			}
 		}
 	};
 }

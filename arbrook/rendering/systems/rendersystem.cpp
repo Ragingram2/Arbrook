@@ -5,7 +5,7 @@ namespace rythe::rendering
 	//a fucntion that will generate vertex buffers with given paramters
 	std::vector<rendering_test> Renderer::m_testScenes;
 	int Renderer::currentScene = 0;
-	float Renderer::count = 0;
+	int Renderer::lastScene = 0;
 	bool Renderer::initializeTest = true;
 	bool Renderer::updateTest = false;
 	bool Renderer::stopTest = false;
@@ -38,67 +38,124 @@ namespace rythe::rendering
 		//ShaderCache::createShader(*m_api, "default", "resources/shaders/default.shader");
 		//ShaderCache::createShader(*m_api, "test", "resources/shaders/test.shader");
 		//ShaderCache::createShader(*m_api, "instance_test", "resources/shaders/instance_test.shader");
-		auto setupFunc = [](inputlayout* layout, RenderInterface* api)
-		{
-			log::debug("Initializing TestDrawArrays");
-			glfwSetWindowTitle(api->getWindow(), "TestDrawArrays");
-			auto vertexHandle = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, generateVertexData(), 6);
-			auto shaderHandle = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
-			shaderHandle->bind();
-			layout->addBuffer(vertexHandle);
-			layout->bind(api->getHwnd(), shaderHandle);
-			layout->setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-			layout->submitAttributes();
-		};
 
-		auto updateFunc = [](inputlayout* layout, RenderInterface* api)
-		{
-			auto shaderHandle = ShaderCache::getShader("test");
-			api->clear(ClearBit::COLOR);
-			shaderHandle->bind();
-			layout->bind(api->getHwnd(), shaderHandle);
-			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
-		};
-
-		auto destroyFunc = [](inputlayout* layout, RenderInterface* api)
-		{
-			BufferCache::deleteBuffer("Vertex Buffer");
-			ShaderCache::deleteShader("test");
-		};
-
-		m_testScenes.emplace_back(rendering_test
+		//DrawArrays
+		m_testScenes.emplace_back(
+			[](inputlayout* layout, RenderInterface* api)
 			{
-				setupFunc,
-				updateFunc,
-				destroyFunc
+				log::debug("Initializing TestDrawArrays");
+				glfwSetWindowTitle(api->getWindow(), "TestDrawArrays");
+				math::vec3 verticies[6] =
+				{	//positions						
+					{  -0.1f, 0.1f, 0.0f  },//0
+					{ 	-0.1f,-0.1f, 0.0f  },//1
+					{  0.1f,-0.1f, 0.0f  },//2
+					{  -0.1f, 0.1f, 0.0f  },//0
+					{  0.1f,-0.1f, 0.0f },//2
+					{  0.1f, 0.1f, 0.0f }//3
+				};
+				auto vertexHandle = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, 6);
+				auto shaderHandle = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
+				shaderHandle->bind();
+				layout->addBuffer(vertexHandle);
+				layout->bind(api->getHwnd(), shaderHandle);
+				layout->setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+				layout->submitAttributes();
+			},
+			[](inputlayout* layout, RenderInterface* api)
+			{
+				auto shaderHandle = ShaderCache::getShader("test");
+				api->clear(ClearBit::COLOR);
+				shaderHandle->bind();
+				layout->bind(api->getHwnd(), shaderHandle);
+				api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+			},
+			[](inputlayout* layout, RenderInterface* api)
+			{
+				BufferCache::deleteBuffer("Vertex Buffer");
+				ShaderCache::deleteShader("test");
+				layout->release();
 			});
 
+		//DrawArraysInstanced
 		m_testScenes.emplace_back(rendering_test
 			{
 				[](inputlayout* layout, RenderInterface* api)
 					{
 						log::debug("Initializing TestDrawArraysInstanced");
 						glfwSetWindowTitle(api->getWindow(), "TestDrawArraysInstanced");
-						//auto vertexHandle = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, generateVertexData(), 6);
-						//auto shaderHandle = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
-						//shaderHandle->bind();
-						//layout.addBuffer(vertexHandle);
-						//layout.bind(api->getHwnd(), shaderHandle);
-						//layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-						//layout.submitAttributes();
+						math::vec3 verticies[6] =
+						{	//positions						
+							{  -0.1f, 0.1f, 0.0f  },//0
+							{ 	-0.1f,-0.1f, 0.0f  },//1
+							{  0.1f,-0.1f, 0.0f  },//2
+							{  -0.1f, 0.1f, 0.0f  },//0
+							{  0.1f,-0.1f, 0.0f },//2
+							{  0.1f, 0.1f, 0.0f }//3
+						};
+						BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, 6);
+						ShaderCache::createShader(*api, "instance_test", "resources/shaders/instance_test.shader");
 					},
 				[](inputlayout* layout, RenderInterface* api)
 					{
-						//auto shaderHandle = ShaderCache::getShader("test");
-						//api->clear(ClearBit::COLOR);
-						//shaderHandle->bind();
-						//layout.bind(api->getHwnd(), shaderHandle);
-						//api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+						auto shader = ShaderCache::getShader("instance_test");
+						api->clear(ClearBit::COLOR);
+						shader->bind();
+						layout->bind(api->getHwnd(), shader);
+						api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 6, 2, 0, 0);
 					},
 				[](inputlayout* layout, RenderInterface* api)
 					{
-						//BufferCache::deleteBuffer("Vertex Buffer");
-						//ShaderCache::deleteShader("test");
+					BufferCache::deleteBuffer("Vertex Buffer");
+					ShaderCache::deleteShader("instance_test");
+					layout->release();
+					}
+			});
+
+		//DrawIndexed
+		m_testScenes.emplace_back(rendering_test
+			{
+				[](inputlayout* layout, RenderInterface* api)
+					{
+						log::debug("Initializing TestDrawIndexed");
+						glfwSetWindowTitle(api->getWindow(), "TestDrawIndexed");
+						math::vec3 verticies[6] =
+						{	//positions						
+							{  -0.1f, 0.1f, 0.0f  },//0
+							{ 	-0.1f,-0.1f, 0.0f  },//1
+							{  0.1f,-0.1f, 0.0f  },//2
+							{  -0.1f, 0.1f, 0.0f  },//0
+							{  0.1f,-0.1f, 0.0f },//2
+							{  0.1f, 0.1f, 0.0f }//3
+						};
+						auto vertexHandle = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, 6);
+						unsigned int indicies[4] =
+						{
+							1,2,0,3
+						};
+						auto indexHandle =BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, 4);
+						auto shaderHandle = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
+						shaderHandle->bind();
+						layout->addBuffer(vertexHandle);
+						layout->addBuffer(indexHandle);
+						layout->bind(api->getHwnd(), shaderHandle);
+						layout->setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+						layout->submitAttributes();
+					},
+				[](inputlayout* layout, RenderInterface* api)
+					{
+						auto shader = ShaderCache::getShader("test");
+						api->clear(ClearBit::COLOR);
+						shader->bind();
+						layout->bind(api->getHwnd(), shader);
+						api->drawIndexed(PrimitiveType::TRIANGLESLIST, 4, 0, 0);
+					},
+				[](inputlayout* layout, RenderInterface* api)
+					{
+					BufferCache::deleteBuffer("Vertex Buffer");
+					BufferCache::deleteBuffer("Index Buffer");
+					ShaderCache::deleteShader("test");
+					layout->release();
 					}
 			});
 
@@ -129,7 +186,8 @@ namespace rythe::rendering
 
 		if (stopTest)
 		{
-			m_testScenes[currentScene].destroy(m_api);
+			log::debug(lastScene);
+			m_testScenes[lastScene].destroy(m_api);
 			stopTest = false;
 		}
 		else if (initializeTest)
@@ -148,11 +206,11 @@ namespace rythe::rendering
 
 		m_api->checkError();
 
-		count += .01f;
-		if (count > 1)
-		{
-			count = -1;
-		}
+		//count += .01f;
+		//if (count > 1)
+		//{
+		//	count = -1;
+		//}
 	}
 
 	void Renderer::shutdown()

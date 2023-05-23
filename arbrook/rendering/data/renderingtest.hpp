@@ -18,6 +18,13 @@ namespace rythe::rendering
 
 	public:
 		rendering_test() = default;
+		rendering_test(const rendering_test& test)
+		{
+			m_setupFunc = test.m_setupFunc;
+			m_updateFunc = test.m_updateFunc;
+			m_destroyFunc = test.m_destroyFunc;
+			layout = test.layout;
+		}
 		rendering_test(function_ptr setup, function_ptr update, function_ptr destroy)
 		{
 			m_setupFunc = setup;

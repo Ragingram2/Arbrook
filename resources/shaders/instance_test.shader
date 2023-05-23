@@ -37,7 +37,7 @@ VOut VShader(VIn vin, uint instanceID : SV_InstanceID)
 {
 	VOut output;
 
-	output.p_position = float4(vin.position + float3((float)(instanceID)/10.0, 0, 0), 1);
+	output.p_position = float4(vin.position + float3((float)((instanceID)/10.0)*3.0, 0, 0), 1);
 
 	return output;
 }
