@@ -61,17 +61,12 @@ namespace rythe::rendering::internal
 			}
 
 			m_hwnd.devcon->IASetVertexBuffers(0, m_vertexBuffers.size(), buffers.data(), stride.data(), offset.data());
+			m_hwnd.checkError();
 
 			if (m_indexBuffer.buffer != nullptr)
-				m_hwnd.devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
-#ifdef _DEBUG
-			else
-				//log::warn("No index buffer was bound, thats ok if this was intended behaviour");
-#endif // DEBUG
-
-			if (m_layout != nullptr)
 			{
-				m_hwnd.devcon->IASetInputLayout(m_layout);
+				m_hwnd.devcon->IASetIndexBuffer(m_indexBuffer.buffer->m_impl, static_cast<DXGI_FORMAT>(FormatType::R32U), 0);
+				m_hwnd.checkError();
 			}
 		}
 
@@ -97,7 +92,7 @@ namespace rythe::rendering::internal
 			m_indexBuffer = nullptr;
 		}
 
-		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass,unsigned int instancedStep)
+		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
 			m_vertexAttribs.emplace_back(vertexattribute{ std::move(attribName), index, components, inputSlot, stride, offset, inputClass, instancedStep });
 		}
@@ -117,14 +112,17 @@ namespace rythe::rendering::internal
 		void clearAttributes()
 		{
 			m_vertexAttribs.clear();
+			elementDesc.clear();
 		}
 
 		void release()
 		{
 			if (!m_layout)
+			{
 				return;
-
+			}
 			m_layout->Release();
+			m_layout = nullptr;
 			clearBuffers();
 			clearAttributes();
 		}

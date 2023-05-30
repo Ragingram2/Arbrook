@@ -51,17 +51,10 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		void TestDrawArrays();
-		void TestDrawArraysInstanced();
-		void TestDrawIndexed();
-		void TestDrawIndexedInstanced();
 		void TestSetViewport();
 		void TestDepthTest();
 		void TestStencilTest();
 
-		void TestCreateShader();
-		void TestCreateTexture();
-		void TestCreateBuffer();
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 		{

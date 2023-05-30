@@ -107,20 +107,20 @@ namespace rythe::rendering::internal
 
 			ZeroMemory(&m_depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 
-			//m_depthStencilDesc.DepthEnable = true;
-			//m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-			//m_depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-			//depthStencilDesc.StencilEnable = false;
-			//depthStencilDesc.StencilReadMask = 0xFF;
-			//depthStencilDesc.StencilWriteMask = 0xFF;
-			//depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-			//depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-			//depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-			//depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+			/*m_depthStencilDesc.DepthEnable = true;
+			m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+			m_depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;*/
+			//m_depthStencilDesc.StencilEnable = false;
+			//m_depthStencilDesc.StencilReadMask = 0xFF;
+			//m_depthStencilDesc.StencilWriteMask = 0xFF;
+			//m_depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			//m_depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+			//m_depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			//m_depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+			//m_depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+			//m_depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+			//m_depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+			//m_depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 			hr = m_hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
 			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
@@ -245,7 +245,7 @@ namespace rythe::rendering::internal
 			m_colorData[3] = color.a;
 		}
 
-		void setViewport(float numViewPorts, float topLeftX, float topLeftY, float width, float height, float minDepth, float maxDepth)
+		void setViewport(float numViewPorts, float leftX, float leftY, float width, float height, float minDepth, float maxDepth)
 		{
 			if (width == 0 && height == 0)
 			{
@@ -255,8 +255,8 @@ namespace rythe::rendering::internal
 
 			ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
 
-			m_viewport.TopLeftX = topLeftX;
-			m_viewport.TopLeftY = topLeftY;
+			m_viewport.TopLeftX = leftX;
+			m_viewport.TopLeftY = leftY;
 			m_viewport.Width = width;
 			m_viewport.Height = height;
 			m_viewport.MinDepth = minDepth;
@@ -281,7 +281,7 @@ namespace rythe::rendering::internal
 
 		void setStencilMask(int mask)
 		{
-
+			m_depthStencilDesc.StencilWriteMask = mask;
 		}
 
 		void setDepthFunction(internal::DepthFuncs function)
@@ -302,8 +302,14 @@ namespace rythe::rendering::internal
 				m_depthStencilDesc.FrontFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
 				m_depthStencilDesc.FrontFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
 				m_depthStencilDesc.FrontFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
+				m_depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+				m_depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+				m_depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 				break;
 			case Face::BACK:
+				m_depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+				m_depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+				m_depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 				m_depthStencilDesc.BackFace.StencilFailOp = static_cast<D3D11_STENCIL_OP>(fail);
 				m_depthStencilDesc.BackFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
 				m_depthStencilDesc.BackFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
@@ -322,13 +328,14 @@ namespace rythe::rendering::internal
 		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask)
 		{
 			m_depthStencilDesc.StencilReadMask = mask;
-			m_depthStencilDesc.StencilWriteMask = mask;
 			switch (face)
 			{
 			case Face::FRONT:
 				m_depthStencilDesc.FrontFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
+				m_depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
 				break;
 			case Face::BACK:
+				m_depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_NEVER;
 				m_depthStencilDesc.BackFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
 				break;
 			case Face::FRONT_BACK:

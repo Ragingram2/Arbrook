@@ -126,22 +126,25 @@ namespace rythe::rendering::internal
 			glClearColor(color.r, color.g, color.b, color.a);
 		}
 
-		void setViewport(float numViewPorts = 1, float topLeftX = 0, float topLeftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
+		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
 		{
-			if (width == 0 && height == 0)
-			{
+			if (width <= 0)
 				width = hwnd.m_resolution.x;
-				height = hwnd.m_resolution.y;
-			}
 
-			glViewport(topLeftX, topLeftY, width, height);
+			if (height <= 0)
+				height = hwnd.m_resolution.y;
+
+			glViewport(leftX, leftY, width, height);
 			glDepthRange(minDepth, maxDepth);
 
 		}
 
 		void depthTest(bool enable)
 		{
-			glEnable(enable);
+			if (enable)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
 		}
 
 		void depthWrite(bool enable)
@@ -159,14 +162,12 @@ namespace rythe::rendering::internal
 			glDepthFunc(static_cast<GLenum>(function));
 		}
 
-		void enableStencilTest()
+		void stencilTest(bool enable)
 		{
-			glEnable(GL_STENCIL_TEST);
-		}
-
-		void disableStencilTest()
-		{
-			glDisable(GL_STENCIL_TEST);
+			if (enable)
+				glEnable(GL_STENCIL_TEST);
+			else
+				glDisable(GL_STENCIL_TEST);
 		}
 
 		void setStencilOp(Face face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)

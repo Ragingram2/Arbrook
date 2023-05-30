@@ -1,4 +1,7 @@
 #pragma once
+#include <chrono>
+#include <ctime>
+
 #include <rythe/delegate>
 
 #include "core/ecs/ecs.hpp"
@@ -15,6 +18,11 @@ namespace rythe::rendering
 		function_delegate m_updateFunc;
 		function_delegate m_destroyFunc;
 		inputlayout layout;
+
+		float setupTime = 0;
+		float destroyTime = 0;
+		float updateTimeSum = 0;
+		float updateCount = 0;
 
 	public:
 		rendering_test() = default;
@@ -34,17 +42,39 @@ namespace rythe::rendering
 
 		void setup(RenderInterface* api)
 		{
-			m_setupFunc(&layout,api);
+			auto startTime = std::chrono::high_resolution_clock::now();
+			m_setupFunc(&layout, api);
+			auto endTime = std::chrono::high_resolution_clock::now();
+			auto dur = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+			setupTime = dur.count() / 1000.0f;
 		}
 
 		void update(RenderInterface* api)
 		{
-			m_updateFunc(&layout,api);
+			auto startTime = std::chrono::high_resolution_clock::now();
+			m_updateFunc(&layout, api);
+			auto endTime = std::chrono::high_resolution_clock::now();
+			auto dur = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+			updateTimeSum += dur.count() / 1000.0f;
+			updateCount++;
 		}
 
 		void destroy(RenderInterface* api)
 		{
-			m_destroyFunc(&layout,api);
+			auto startTime = std::chrono::high_resolution_clock::now();
+			m_destroyFunc(&layout, api);
+			auto endTime = std::chrono::high_resolution_clock::now();
+			auto dur = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+			destroyTime = dur.count() / 1000.0f;
+
+			log::info("Setup time: {}ms", setupTime);
+			log::info("Avg Update time: {}ms", updateTimeSum / updateCount);
+			log::info("Destroy Time: {}ms", destroyTime);
+
+			setupTime = 0;
+			updateTimeSum = 0;
+			updateCount = 0;
+			destroyTime = 0;
 		}
 	};
 }

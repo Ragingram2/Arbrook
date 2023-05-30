@@ -10,7 +10,7 @@ namespace rythe::core
 
 	void LoggingService::update()
 	{
-		//std::cout << "Program service tick" << std::endl;
+
 	}
 
 	void LoggingService::shutdown()
