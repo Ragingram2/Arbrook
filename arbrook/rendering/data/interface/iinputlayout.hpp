@@ -28,5 +28,8 @@ namespace rythe::rendering
 		void clearAttributes() { m_impl.clearAttributes(); }
 
 		void release() { m_impl.release(); }
+
+		unsigned int getId() { return m_impl.id; }
+		void setId(unsigned int id) { m_impl.id = id; }
 	};
 }
