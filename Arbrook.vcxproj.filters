@@ -351,5 +351,6 @@
     <None Include="resources\shaders\test.shader" />
     <None Include="resources\shaders\instance_test.shader" />
     <None Include="resources\shaders\scaled_color.shader" />
+    <None Include="resources\shaders\fluid.shader" />
   </ItemGroup>
 </Project>

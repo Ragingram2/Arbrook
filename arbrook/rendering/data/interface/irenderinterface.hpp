@@ -30,6 +30,7 @@ namespace rythe::rendering
 		void makeCurrent() { m_impl.makeCurrent(); }
 		void setSwapInterval(int interval) { m_impl.setSwapInterval(interval); }
 		bool shouldWindowClose() { return m_impl.shouldWindowClose(); }
+		void setWindowTitle(const std::string& name) { m_impl.setWindowTitle(name); }
 		void pollEvents() { m_impl.pollEvents(); }
 		void swapBuffers() { m_impl.swapBuffers(); }
 

@@ -41,7 +41,9 @@ namespace rythe::rendering
 		void bufferData(elementType data[], int size = 0) { m_impl.bufferData(data, size); }
 
 		std::string getName() { return m_impl.name; }
+		void setName(std::string name) { m_impl.name = name; }
 		unsigned int getId() { return m_impl.id; }
+		void setId(unsigned int id) { m_impl.id = id; }
 		TargetType getTargetType() { return static_cast<TargetType>(m_impl.m_target); }
 	private:
 		APIType& getImpl() { return m_impl; }

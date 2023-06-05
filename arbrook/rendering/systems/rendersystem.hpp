@@ -38,13 +38,14 @@ namespace rythe::rendering
 		RenderInterface* m_api;
 		static float count;
 
-		static std::vector<rendering_test> m_testScenes;
+		static std::vector<std::unique_ptr<rendering_test>> m_testScenes;
 		static int currentScene;
 		static int lastScene;
 
 		static bool initializeTest;
 		static bool updateTest;
 		static bool stopTest;
+		static unsigned int bufferId;
 
 		Renderer() = default;
 		virtual ~Renderer() = default;
@@ -53,7 +54,6 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		void TestSetViewport();
 		void TestDepthTest();
 		void TestStencilTest();
 

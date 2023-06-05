@@ -74,6 +74,11 @@ namespace rythe::rendering::internal
 			return glfwWindowShouldClose(m_window);
 		}
 
+		void setWindowTitle(const std::string& name)
+		{
+			glfwSetWindowTitle(m_window, name.data());
+		}
+
 		void makeCurrent()
 		{
 			glfwMakeContextCurrent(m_window);

@@ -86,6 +86,11 @@ namespace rythe::rendering::internal
 			return hwnd.shouldClose();
 		}
 
+		void setWindowTitle(const std::string& name)
+		{
+			hwnd.setWindowTitle(name);
+		}
+
 		void pollEvents()
 		{
 			hwnd.pollEvents();

@@ -25,5 +25,7 @@ namespace rythe::rendering
 		void pollEvents() { m_impl.pollEvents(); }
 
 		bool shouldClose() { return m_impl.shouldClose(); }
+
+		void setWindowTitle(const std::string& name) { m_impl.setWindowTitle(name); }
 	};
 }
