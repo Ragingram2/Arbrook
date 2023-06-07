@@ -1,5 +1,4 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
 
 #include "core/core.hpp"
 #include "sandbox/modules/testmodule.hpp"

@@ -17,6 +17,7 @@
 
 namespace rythe::rendering
 {
+
 	struct rendering_test
 	{
 		virtual ~rendering_test() = default;

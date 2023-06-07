@@ -9,7 +9,6 @@ namespace rythe::rendering
 	bool Renderer::initializeTest = true;
 	bool Renderer::updateTest = false;
 	bool Renderer::stopTest = false;
-	unsigned int Renderer::bufferId = 0;
 
 	void Renderer::setup()
 	{
@@ -50,6 +49,8 @@ namespace rythe::rendering
 		//DrawIndexedInstanced
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
+
+		m_testResults.resize(m_testScenes.size());
 
 		////TestSetViewport
 		////m_testScenes.emplace_back(rendering_test
@@ -250,16 +251,38 @@ namespace rythe::rendering
 		{
 			m_testScenes[lastScene]->destroy(m_api);
 			stopTest = false;
+			m_testResults[currentScene].m_frameTime = timeSum / maxTests;
+			m_testResults[currentScene].serialize();
+			testCount = 0;
+			timeSum = 0;
 		}
 		else if (initializeTest)
 		{
+			if (lastScene == m_testScenes.size() - 1 && currentScene == 0)
+			{
+				//rythe::core::events::exit evnt(0);
+				//raiseEvent(evnt);
+				log::debug("Line Break");
+			}
+			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);
+			auto end = std::chrono::high_resolution_clock::now();
+			m_testResults[currentScene].m_setupTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()/1000000.0f;
 			initializeTest = false;
 			updateTest = true;
 		}
 		else if (updateTest)
 		{
+			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->update(m_api);
+			auto end = std::chrono::high_resolution_clock::now();
+			timeSum += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f;
+
+			if (testCount >= maxTests)
+			{
+				key_callback(nullptr, GLFW_KEY_RIGHT, 0, GLFW_PRESS, 0);
+			}
+			testCount++;
 		}
 
 		m_api->swapBuffers();

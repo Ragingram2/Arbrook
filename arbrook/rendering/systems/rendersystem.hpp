@@ -32,6 +32,24 @@ namespace rythe::rendering
 		return std::move(data);
 	}
 
+	struct test_result
+	{
+	public:
+		std::string m_testName;
+		float m_setupTime;
+		float m_frameTime;
+
+		test_result() = default;
+		test_result(std::string name, float setupTime, float frameTime) : m_testName(name), m_setupTime(setupTime), m_frameTime(frameTime) { }
+		~test_result() = default;
+		std::string serialize()
+		{
+			log::debug("Test took {} ms to initialize", m_setupTime);
+			log::debug("Test took an average of {} ms per frame", m_frameTime);
+			return "";
+		}
+	};
+
 	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
@@ -45,7 +63,11 @@ namespace rythe::rendering
 		static bool initializeTest;
 		static bool updateTest;
 		static bool stopTest;
-		static unsigned int bufferId;
+
+		std::vector<test_result> m_testResults;
+		int testCount = 0;
+		float maxTests = 100.0f;
+		float timeSum = 0.0f;
 
 		Renderer() = default;
 		virtual ~Renderer() = default;
@@ -79,6 +101,7 @@ namespace rythe::rendering
 					break;
 				}
 			}
+
 			if (currentScene > static_cast<int>(m_testScenes.size() - 1))
 			{
 				currentScene = 0;
