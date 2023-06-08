@@ -146,23 +146,6 @@ namespace rythe::rendering
 
 #pragma region Bare API
 
-		//		//TestSetViewport
-		//		//m_testScenes.emplace_back(rendering_test
-		//		//	{
-		//		//		[](inputlayout* layout, RenderInterface* api)
-		//		//			{
-		//		//				log::debug("Initializing TestSetViewport");
-		//		//				glfwSetWindowTitle(api->getWindow(), "TestSetViewport");
-		//		//			},
-		//		//		[](inputlayout* layout, RenderInterface* api)
-		//		//			{
-		//		//				api->setViewport(1, 300, 300, 600, 600, 0, 1);
-		//		//				api->setClearColor(.5f, .5f, .5f, 1.0f);
-		//		//				api->clear(ClearBit::COLOR);
-		//		//			},
-		//		//		[](inputlayout* layout, RenderInterface* api) { }
-		//		//	});
-		//
 		//		//TestStencilTest
 		//		m_testScenes.emplace_back(rendering_test
 		//			{
@@ -260,9 +243,8 @@ namespace rythe::rendering
 		{
 			if (lastScene == m_testScenes.size() - 1 && currentScene == 0)
 			{
-				//rythe::core::events::exit evnt(0);
-				//raiseEvent(evnt);
-				log::debug("Line Break");
+				rythe::core::events::exit evnt(0);
+				raiseEvent(evnt);
 			}
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);
@@ -299,66 +281,6 @@ namespace rythe::rendering
 	{
 		glfwTerminate();
 		m_api->close();
-	}
-
-	void Renderer::TestDepthTest()
-	{
-		glfwSetWindowTitle(m_api->getWindow(), "TestDepthTest");
-		//auto& renderer = testEnt.getComponent<sprite_renderer>();
-		//auto& layout = renderer.layout;
-		//buffer_handle vertexHandle = BufferCache::getBuffer("Vertex Buffer");
-		//shader_handle shader = ShaderCache::getShader("test");
-		////vertex verticies[12] =
-		////{	//positions									//colors								//tex coors
-		////	{ { -0.1f + count, 0.1f, 0.0f},			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		////	{ {	-0.1f + count,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
-		////	{ { 0.1f + count,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		////	{ { -0.1f + count, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		////	{ { 0.1f + count,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		////	{ { 0.1f + count, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } },//3
-
-		////	{ { -0.1f, 0.1f + count, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		////	{ {	-0.1f,-0.1f + count, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
-		////	{ { 0.1f,-0.1f + count, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		////	{ { -0.1f, 0.1f + count, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		////	{ { 0.1f,-0.1f + count, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		////	{ { 0.1f, 0.1f + count, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
-		////};
-		//math::vec3 verticies[6] =
-		//{	//positions						
-		//	{  -0.1f, 0.1f, 0.0f  },//0
-		//	{ 	-0.1f,-0.1f, 0.0f  },//1
-		//	{  0.1f,-0.1f, 0.0f  },//2
-		//	{  -0.1f, 0.1f, 0.0f  },//0
-		//	{  0.1f,-0.1f, 0.0f },//2
-		//	{  0.1f, 0.1f, 0.0f }//3
-		//};
-
-
-		//if (initializeTest)
-		//{
-		//	layout.clearAttributes();
-		//	layout.clearBuffers();
-		//	layout.addBuffer(vertexHandle);
-		//	vertexHandle->bufferData(verticies, 6);
-		//	shader->bind();
-		//	layout.bind(m_api->getHwnd(), shader);
-		//	layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-		//	layout.submitAttributes();
-		//	initializeTest = false;
-		//}
-
-		//m_api->clear(ClearBit::COLOR_DEPTH);
-
-		//vertexHandle->bufferData(verticies, 6);
-		//shader->bind();
-		//layout.bind(m_api->getHwnd(), shader);
-		//m_api->depthTest(true);
-		//m_api->depthWrite(true);
-		//m_api->setDepthFunction(DepthFuncs::LESS);
-		//m_api->updateDepthStencil();
-		//m_api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
-		////m_api->clear(ClearBit::DEPTH);
 	}
 
 	void Renderer::TestStencilTest()

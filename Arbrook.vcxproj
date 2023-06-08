@@ -308,7 +308,6 @@
     <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp" />
-    <ClCompile Include="arbrook\rendering\data\renderingtest.cpp" />
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />

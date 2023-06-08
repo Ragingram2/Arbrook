@@ -5,6 +5,9 @@
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <bx/math.h>
+#include <bx/allocator.h>
+#include <bx/file.h>
+#include <bx/string.h>
 
 #include <rythe/delegate>
 
@@ -254,30 +257,105 @@ namespace rythe::rendering
 	 { -0.1f,  0.1f, 0.0f }
 	};
 
+	struct BgfxCallback : public bgfx::CallbackI
+	{
+		virtual ~BgfxCallback()
+		{
+		}
+
+		virtual void fatal(const char* _filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char* _str) override
+		{
+			BX_UNUSED(_filePath, _line);
+
+			// Something unexpected happened, inform user and bail out.
+			log::error("Fatal error [{}]: {}", _code, _str);
+
+			//abort();
+		}
+
+		virtual void traceVargs(const char* _filePath, uint16_t _line, const char* _format, va_list _argList) override
+		{
+			//log::debug("%s (%d): ", _filePath, _line);
+			//log::debug(_format, _argList);
+		}
+
+		virtual void profilerBegin(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) override
+		{
+		}
+
+		virtual void profilerBeginLiteral(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) override
+		{
+		}
+
+		virtual void profilerEnd() override
+		{
+		}
+
+		virtual uint32_t cacheReadSize(uint64_t _id) override
+		{
+			return 0;
+		}
+
+		virtual bool cacheRead(uint64_t _id, void* _data, uint32_t _size) override
+		{
+			return false;
+		}
+
+		virtual void cacheWrite(uint64_t _id, const void* _data, uint32_t _size) override
+		{
+
+		}
+
+		virtual void screenShot(const char* _filePath, uint32_t _width, uint32_t _height, uint32_t _pitch, const void* _data, uint32_t /*_size*/, bool _yflip) override
+		{
+
+		}
+
+		virtual void captureBegin(uint32_t _width, uint32_t _height, uint32_t /*_pitch*/, bgfx::TextureFormat::Enum /*_format*/, bool _yflip) override
+		{
+
+		}
+
+		virtual void captureEnd() override
+		{
+
+		}
+
+		virtual void captureFrame(const void* _data, uint32_t /*_size*/) override
+		{
+		}
+	};
+
 	struct BGFX_DrawArraysTest : public rendering_test
 	{
 		bgfx::PlatformData platformData;
 		bgfx::VertexBufferHandle vertexBuffer;
 		bgfx::ProgramHandle shader;
 		bgfx::VertexLayout inputLayout;
-		bgfx::Init bgfxInit;
+		BgfxCallback callback;
 
 		virtual void setup(RenderInterface* api) override
 		{
 			log::debug("Initializing BGFX_DrawArraysTest");
 			glfwSetWindowTitle(api->getWindow(), "BGFX_DrawArraysTest");
-			platformData.ndt = nullptr;
-			platformData.nwh = api->getWindow();
 
+			bgfx::Init init;
+			init.platformData.ndt = nullptr;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 #if RenderingAPI == RenderingAPI_OGL
-			bgfxInit.type = bgfx::RendererType::OpenGL;
+			init.type = bgfx::RendererType::OpenGL;
+			init.platformData.context = glfwGetCurrentContext();
 #elif RenderingAPI == RenderingAPI_DX11
-			bgfxInit.type = bgfx::RendererType::Direct3D11;
+			init.type = bgfx::RendererType::Direct3D11;
+			init.platformData.context = api->getHwnd().dev; 
+			init.platformData.backBuffer = api->getHwnd().backbuffer;
+			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
 #endif
-			bgfx::setPlatformData(platformData);
-			bgfx::init();
-			bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
+			init.resolution.width = api->getHwnd().m_resolution.x;
+			init.resolution.height = api->getHwnd().m_resolution.y;
+			init.callback = &callback;
+			bgfx::init(init);
 			bgfx::setDebug(BGFX_DEBUG_TEXT /*| BGFX_DEBUG_STATS*/);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
@@ -289,12 +367,15 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 			bgfx::setState(BGFX_STATE_DEFAULT);
+			bgfx::touch(0);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
 			bgfx::submit(0, shader);
+			bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -303,7 +384,6 @@ namespace rythe::rendering
 				bgfx::destroy(shader);
 
 			bgfx::destroy(vertexBuffer);
-			bgfx::shutdown();
 		}
 	};
 #pragma endregion
@@ -507,7 +587,7 @@ namespace rythe::rendering
 		virtual void destroy(RenderInterface* api) override
 		{
 			ShaderCache::deleteShader("test");
-		}
+}
 	};
 
 #elif RenderingAPI == RenderingAPI_DX11

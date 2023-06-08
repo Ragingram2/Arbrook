@@ -76,9 +76,7 @@ namespace rythe::rendering
 		void update() override;
 		void shutdown() override;
 
-		void TestDepthTest();
 		void TestStencilTest();
-
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 		{

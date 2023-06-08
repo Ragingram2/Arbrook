@@ -1,6 +1,9 @@
-vec3 v_position;
+$input a_position
+$output v_color0
+
+#include <bgfx_shader.sh>
 
 void main()
 {
-	gl_Position = vec4(v_position,1.0);
+    gl_Position = vec4(a_position, 1.0);
 }
