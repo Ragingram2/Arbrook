@@ -228,7 +228,7 @@ namespace rythe::rendering
 		bgfx::ShaderHandle fhandle = bgfx::createShader(mem);
 		if (fhandle.idx == bgfx::kInvalidHandle)
 			log::error("Fragment Shader failed compile");
-		bgfx::setName(fhandle, name.c_str());
+		bgfx::setName(fhandle, "TestFragment");
 
 		file.open(vsPath);
 		if (file.is_open()) {
@@ -244,17 +244,19 @@ namespace rythe::rendering
 		bgfx::ShaderHandle vhandle = bgfx::createShader(mem);
 		if (vhandle.idx == bgfx::kInvalidHandle)
 			log::error("Vertex Shader failed compile");
-		bgfx::setName(vhandle, name.c_str());
+		bgfx::setName(vhandle, "TestVertex");
 
 		return bgfx::createProgram(vhandle, fhandle, true);
 	}
 
-	static const math::vec3 verts[] =
-	{
-	 {  0.1f,  0.1f, 0.0f },
-	 {  0.1f, -0.1f, 0.0f},
-	 { -0.1f, -0.1f, 0.0f},
-	 { -0.1f,  0.1f, 0.0f }
+	static const 	math::vec3 verts[6] =
+	{	//positions						
+		{  -0.1f, 0.1f, 0.0f  },//0
+		{ 	-0.1f,-0.1f, 0.0f  },//1
+		{  0.1f,-0.1f, 0.0f  },//2
+		{  -0.1f, 0.1f, 0.0f  },//0
+		{  0.1f,-0.1f, 0.0f },//2
+		{  0.1f, 0.1f, 0.0f }//3
 	};
 
 	struct BgfxCallback : public bgfx::CallbackI
@@ -347,7 +349,7 @@ namespace rythe::rendering
 			init.platformData.context = glfwGetCurrentContext();
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.context = api->getHwnd().dev; 
+			init.platformData.context = api->getHwnd().dev;
 			init.platformData.backBuffer = api->getHwnd().backbuffer;
 			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
 #endif
@@ -356,7 +358,6 @@ namespace rythe::rendering
 			init.resolution.height = api->getHwnd().m_resolution.y;
 			init.callback = &callback;
 			bgfx::init(init);
-			bgfx::setDebug(BGFX_DEBUG_TEXT /*| BGFX_DEBUG_STATS*/);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
 
@@ -367,13 +368,13 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 			bgfx::setVertexBuffer(0, vertexBuffer);
-			bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 			bgfx::setState(BGFX_STATE_DEFAULT);
 			bgfx::touch(0);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			bgfx::setVertexBuffer(0, vertexBuffer);
 			bgfx::submit(0, shader);
 			bgfx::frame();
 		}
@@ -587,7 +588,7 @@ namespace rythe::rendering
 		virtual void destroy(RenderInterface* api) override
 		{
 			ShaderCache::deleteShader("test");
-}
+		}
 	};
 
 #elif RenderingAPI == RenderingAPI_DX11
