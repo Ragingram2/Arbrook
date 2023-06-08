@@ -2,6 +2,9 @@
 #include <chrono>
 #include <ctime>
 #include <GLFW/glfw3.h>
+#include <bgfx/bgfx.h>
+#include <bgfx/platform.h>
+#include <bx/math.h>
 
 #include <rythe/delegate>
 
@@ -27,7 +30,6 @@ namespace rythe::rendering
 	};
 
 #pragma region My API
-	//make seperate rendering test structs 
 	struct API_DrawArraysTest : public rendering_test
 	{
 		inputlayout layout;
@@ -57,8 +59,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			shader->bind();
-			layout.bind(api->getHwnd(), shader);
 			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
 		}
 
@@ -99,8 +99,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			shader->bind();
-			layout.bind(api->getHwnd(), shader);
 			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 6, 2, 0, 0);
 		}
 
@@ -147,8 +145,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			shader->bind();
-			layout.bind(api->getHwnd(), shader);
 			api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, 0, 0);
 		}
 
@@ -196,8 +192,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			shader->bind();
-			layout.bind(api->getHwnd(), shader);
 			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, 6, 2, 0, 0, 0);
 		}
 
@@ -212,18 +206,78 @@ namespace rythe::rendering
 #pragma endregion
 
 #pragma region BGFX
+
+	inline bgfx::ProgramHandle loadShader(std::string name, std::string filePath)
+	{
+		auto source = ShaderCache::loadShader(filePath);
+		const bgfx::Memory* mem = bgfx::copy(source.fragSource.c_str(), source.fragSource.length() + 1);
+		mem->data[mem->size - 1] = '\0';
+		bgfx::ShaderHandle fhandle = bgfx::createShader(mem);
+		//bgfx::setName(fhandle, name.c_str());
+
+		mem = bgfx::copy(source.vertexSource.c_str(), source.vertexSource.length() + 1);
+		mem->data[mem->size - 1] = '\0';
+		bgfx::ShaderHandle vhandle = bgfx::createShader(mem);
+		//bgfx::setName(vhandle, name.c_str());
+
+		return bgfx::createProgram(vhandle, fhandle, true);
+	}
+
+	static const math::vec3 verts[] =
+	{
+	 {  0.1f,  0.1f, 0.0f },
+	 {  0.1f, -0.1f, 0.0f},
+	 { -0.1f, -0.1f, 0.0f},
+	 { -0.1f,  0.1f, 0.0f }
+	};
+
 	struct BGFX_DrawArraysTest : public rendering_test
 	{
+		bgfx::PlatformData platformData;
+		bgfx::VertexBufferHandle vertexBuffer;
+		bgfx::ProgramHandle shader;
+		bgfx::VertexLayout inputLayout;
+		bgfx::Init bgfxInit;
+
 		virtual void setup(RenderInterface* api) override
 		{
+			log::debug("Initializing BGFX_DrawArraysTest");
+			glfwSetWindowTitle(api->getWindow(), "BGFX_DrawArraysTest");
+			platformData.ndt = nullptr;
+			platformData.nwh = api->getWindow();
+
+#if RenderingAPI == RenderingAPI_OGL
+			bgfxInit.type = bgfx::RendererType::OpenGL;
+#elif RenderingAPI == RenderingAPI_DX11
+			bgfxInit.type = bgfx::RendererType::Direct3D11;
+#endif
+			bgfx::setPlatformData(platformData);
+			bgfx::renderFrame();
+			bgfx::init();
+			bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
+
+			bgfx::setDebug(BGFX_DEBUG_TEXT /*| BGFX_DEBUG_STATS*/);
+
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
+			shader = loadShader("test", "resources/shaders/test.shader");
+
+			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setState(BGFX_STATE_DEFAULT);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			bgfx::submit(0, shader);
+			bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
+			bgfx::destroy(shader);
+			bgfx::destroy(vertexBuffer);
+			bgfx::shutdown();
 		}
 	};
 #pragma endregion

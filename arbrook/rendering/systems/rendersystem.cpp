@@ -39,6 +39,7 @@ namespace rythe::rendering
 
 		//DrawArrays
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
 		//DrawArraysInstanced
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
@@ -251,10 +252,6 @@ namespace rythe::rendering
 		{
 			m_testScenes[lastScene]->destroy(m_api);
 			stopTest = false;
-			m_testResults[currentScene].m_frameTime = timeSum / maxTests;
-			m_testResults[currentScene].serialize();
-			testCount = 0;
-			timeSum = 0;
 		}
 		else if (initializeTest)
 		{
@@ -267,7 +264,7 @@ namespace rythe::rendering
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);
 			auto end = std::chrono::high_resolution_clock::now();
-			m_testResults[currentScene].m_setupTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()/1000000.0f;
+			m_testResults[currentScene].m_setupTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f;
 			initializeTest = false;
 			updateTest = true;
 		}
@@ -280,6 +277,10 @@ namespace rythe::rendering
 
 			if (testCount >= maxTests)
 			{
+				m_testResults[currentScene].m_frameTime = timeSum / maxTests;
+				m_testResults[currentScene].serialize();
+				testCount = 0;
+				timeSum = 0;
 				key_callback(nullptr, GLFW_KEY_RIGHT, 0, GLFW_PRESS, 0);
 			}
 			testCount++;
