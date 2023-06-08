@@ -421,10 +421,13 @@
     <None Include="external_include\rsl\src\rythe\utilities" />
     <None Include="resources\shaders\color.shader" />
     <None Include="resources\shaders\default.shader" />
+    <None Include="resources\shaders\varying.def.sc" />
     <None Include="resources\shaders\fluid.shader" />
     <None Include="resources\shaders\instance_test.shader" />
     <None Include="resources\shaders\scaled_color.shader" />
     <None Include="resources\shaders\test.shader" />
+    <None Include="resources\shaders\testFS.sc" />
+    <None Include="resources\shaders\testVS.sc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -207,18 +207,41 @@ namespace rythe::rendering
 
 #pragma region BGFX
 
-	inline bgfx::ProgramHandle loadShader(std::string name, std::string filePath)
+	inline bgfx::ProgramHandle loadShader(std::string name, std::string fsPath, std::string vsPath)
 	{
-		auto source = ShaderCache::loadShader(filePath);
-		const bgfx::Memory* mem = bgfx::copy(source.fragSource.c_str(), source.fragSource.length() + 1);
+		char* data = new char[2048];
+		std::ifstream file;
+		size_t fileSize;
+		file.open(fsPath);
+		if (file.is_open()) {
+			file.seekg(0, std::ios::end);
+			fileSize = file.tellg();
+			file.seekg(0, std::ios::beg);
+			file.read(data, fileSize);
+			file.close();
+		}
+		const bgfx::Memory* mem = bgfx::copy(data, fileSize + 1);
 		mem->data[mem->size - 1] = '\0';
 		bgfx::ShaderHandle fhandle = bgfx::createShader(mem);
-		//bgfx::setName(fhandle, name.c_str());
+		if (fhandle.idx == bgfx::kInvalidHandle)
+			log::error("Fragment Shader failed compile");
+		bgfx::setName(fhandle, name.c_str());
 
-		mem = bgfx::copy(source.vertexSource.c_str(), source.vertexSource.length() + 1);
+		file.open(vsPath);
+		if (file.is_open()) {
+			file.seekg(0, std::ios::end);
+			fileSize = file.tellg();
+			file.seekg(0, std::ios::beg);
+			file.read(data, fileSize);
+			file.close();
+		}
+
+		mem = bgfx::copy(data, fileSize + 1);
 		mem->data[mem->size - 1] = '\0';
 		bgfx::ShaderHandle vhandle = bgfx::createShader(mem);
-		//bgfx::setName(vhandle, name.c_str());
+		if (vhandle.idx == bgfx::kInvalidHandle)
+			log::error("Vertex Shader failed compile");
+		bgfx::setName(vhandle, name.c_str());
 
 		return bgfx::createProgram(vhandle, fhandle, true);
 	}
@@ -252,7 +275,6 @@ namespace rythe::rendering
 			bgfxInit.type = bgfx::RendererType::Direct3D11;
 #endif
 			bgfx::setPlatformData(platformData);
-			bgfx::renderFrame();
 			bgfx::init();
 			bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
@@ -261,7 +283,10 @@ namespace rythe::rendering
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
-			shader = loadShader("test", "resources/shaders/test.shader");
+			shader = loadShader("test", "resources/shaders/testFS.shader", "resources/shaders/testVS.shader");
+
+			if (shader.idx == bgfx::kInvalidHandle)
+				log::error("Shader failed to compile");
 
 			bgfx::setVertexBuffer(0, vertexBuffer);
 			bgfx::setState(BGFX_STATE_DEFAULT);
@@ -270,12 +295,13 @@ namespace rythe::rendering
 		virtual void update(RenderInterface* api) override
 		{
 			bgfx::submit(0, shader);
-			bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
-			bgfx::destroy(shader);
+			if (shader.idx != bgfx::kInvalidHandle)
+				bgfx::destroy(shader);
+
 			bgfx::destroy(vertexBuffer);
 			bgfx::shutdown();
 		}
