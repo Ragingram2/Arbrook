@@ -31,6 +31,22 @@ namespace rythe::rendering
 		Native
 	};
 
+	//template<size_t N>
+	//struct lstring {
+	//	constexpr lstring(const char(&str)[N]) {
+	//		std::copy_n(str, N, value);
+	//	}
+
+	//	char value[N];
+	//};
+
+	//template<APIType t, lstring n>
+	//struct test_properties
+	//{
+	//	APIType type = t;
+	//	std::string name = n.value;
+	//};
+
 	struct rendering_test
 	{
 		APIType type;
@@ -65,21 +81,16 @@ namespace rythe::rendering
 	struct API_DrawArraysTest : public rendering_test
 	{
 		inputlayout layout;
-		buffer_handle buffer;
+		buffer_handle vBuffer;
+		buffer_handle cBuffer;
 		shader_handle shader;
-
-		API_DrawArraysTest() = default;
-		API_DrawArraysTest() 
-		{
-			type = APIType::Arbrook;
-			name = "DrawArrays";
-		}
-		~API_DrawArraysTest() = default;
 
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}_Test{}", stringify(APIType::Arbrook), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(APIType::Arbrook), name).c_str());
+			type = Arbrook;
+			name = "DrawArrays";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			math::vec3 verticies[6] =
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
@@ -90,9 +101,11 @@ namespace rythe::rendering
 				{  0.1f, 0.1f, 0.0f }//3
 			};
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
-			buffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
+			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
+			cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
-			layout.addBuffer(buffer);
+			layout.addBuffer(vBuffer);
 			layout.bind(api->getHwnd(), shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
 			layout.submitAttributes();
@@ -100,12 +113,21 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
+					shader->setData("Constant Buffer", pos);
+					api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+				}
+			}
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
+			BufferCache::deleteBuffer("Constant Buffer");
 			ShaderCache::deleteShader("test");
 			layout.release();
 		}
@@ -117,18 +139,13 @@ namespace rythe::rendering
 		buffer_handle buffer;
 		shader_handle shader;
 
-		API_DrawArraysInstancedTest() = default;
-		API_DrawArraysInstancedTest()
-		{
-			type = APIType::Arbrook;
-			name = "DrawArraysInstanced";
-		}
-		~API_DrawArraysInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}_Test{}", stringify(APIType::Arbrook), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(APIType::Arbrook), name).c_str());
+			type = Arbrook;
+			name = "DrawArraysInstanced";
+
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			math::vec3 verticies[6] =
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
@@ -149,7 +166,7 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 6, 2, 0, 0);
+			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 6, 25, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -164,21 +181,16 @@ namespace rythe::rendering
 	{
 		inputlayout layout;
 		buffer_handle vBuffer;
+		buffer_handle cBuffer;
 		buffer_handle idxBuffer;
 		shader_handle shader;
 
-		API_DrawIndexedTest() = default;
-		API_DrawIndexedTest()
-		{
-			type = APIType::Arbrook;
-			name = "DrawIndexed";
-		}
-		~API_DrawIndexedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}_Test{}", stringify(APIType::Arbrook), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(APIType::Arbrook), name).c_str());
+			type = Arbrook;
+			name = "DrawIndexed";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			math::vec3 verticies[4] =
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
@@ -194,6 +206,8 @@ namespace rythe::rendering
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
 			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
 			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
+			cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			layout.addBuffer(vBuffer);
 			layout.addBuffer(idxBuffer);
@@ -204,13 +218,22 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, 0, 0);
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
+					shader->setData("Constant Buffer", pos);
+					api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, 0, 0);
+				}
+			}
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
 			BufferCache::deleteBuffer("Index Buffer");
+			BufferCache::deleteBuffer("Constant Buffer");
 			ShaderCache::deleteShader("test");
 			layout.release();
 		}
@@ -223,18 +246,12 @@ namespace rythe::rendering
 		buffer_handle idxBuffer;
 		shader_handle shader;
 
-		API_DrawIndexedInstancedTest() = default;
-		API_DrawIndexedInstancedTest()
-		{
-			type = APIType::Arbrook;
-			name = "DrawIndexedInstanced";
-		}
-		~API_DrawIndexedInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}_Test{}", stringify(APIType::Arbrook), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(APIType::Arbrook), name).c_str());
+			type = Arbrook;
+			name = "DrawIndexedInstanced";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			math::vec3 verticies[4] =
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
@@ -401,13 +418,6 @@ namespace rythe::rendering
 		bgfx::VertexLayout inputLayout;
 		BgfxCallback callback;
 
-		BGFX_DrawArraysTest() = default;
-		BGFX_DrawArraysTest()
-		{
-			type = APIType::BGFX;
-			name = "DrawArrays";
-		}
-		~BGFX_DrawArraysTest() = default;
 
 		uint64_t state = 0
 			| BGFX_STATE_WRITE_RGB
@@ -418,8 +428,10 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}_Test{}", stringify(APIType::BGFX), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(APIType::BGFX), name).c_str());
+			type = BGFX;
+			name = "DrawArrays";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 
 			bgfx::Init init;
 			init.platformData.ndt = nullptr;
@@ -438,15 +450,11 @@ namespace rythe::rendering
 			init.resolution.height = api->getHwnd().m_resolution.y;
 			init.callback = &callback;
 			bgfx::init(init);
-			api->checkError();
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
-			api->checkError();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
-			api->checkError();
 			shader = loadShader("test", "resources/shaders/testFS.shader", "resources/shaders/testVS.shader");
-			api->checkError();
 
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
@@ -484,18 +492,12 @@ namespace rythe::rendering
 		unsigned int shaderId;
 		shader_handle shader;
 
-		Native_DrawArraysTest() = default;
-		Native_DrawArraysTest()
-		{
-			type = APIType::Native;
-			name = "DrawArrays";
-		}
-		~Native_DrawArraysTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}OGL_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawArrays";
+			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 			math::vec3 verticies[6] =
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
@@ -540,18 +542,12 @@ namespace rythe::rendering
 		unsigned int shaderId;
 		shader_handle shader;
 
-		Native_DrawArraysInstancedTest() = default;
-		Native_DrawArraysInstancedTest()
-		{
-			type = APIType::Native;
-			name = "DrawArraysInstanced";
-		}
-		~Native_DrawArraysInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}OGL_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawArraysInstanced";
+			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 			math::vec3 vertices[6] =
 			{   // positions
 				{ -0.1f, 0.1f, 0.0f },  // 0
@@ -596,18 +592,12 @@ namespace rythe::rendering
 		unsigned int shaderId;
 		shader_handle shader;
 
-		Native_DrawIndexedTest() = default;
-		Native_DrawIndexedTest()
-		{
-			type = APIType::Native;
-			name = "DrawIndexed";
-		}
-		~Native_DrawIndexedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}OGL_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawIndexed";
+			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 
 			math::vec3 vertices[4] =
 			{   // positions
@@ -659,18 +649,12 @@ namespace rythe::rendering
 		unsigned int shaderId;
 		shader_handle shader;
 
-		Native_DrawIndexedInstancedTest() = default;
-		Native_DrawIndexedInstancedTest()
-		{
-			type = APIType::Native;
-			name = "DrawIndexedInstanced";
-		}
-		~Native_DrawIndexedInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}OGL_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawIndexedInstanced";
+			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 			math::vec3 vertices[4] =
 			{   // positions
 				{ -0.1f, -0.1f, 0.0f }, // 0
@@ -750,9 +734,6 @@ namespace rythe::rendering
 
 	struct Native_DrawArraysTest : public rendering_test
 	{
-		APIType type = APIType::Native;
-		std::string name = "DrawArrays";
-
 		ID3D11Buffer* vertexBuffer;
 		ID3D11InputLayout* inputLayout;
 		ID3D11VertexShader* vertexShader;
@@ -762,18 +743,12 @@ namespace rythe::rendering
 		ID3D11DeviceContext* deviceContext;
 		ID3D11Device* device;
 
-		Native_DrawArraysTest() = default;
-		Native_DrawArraysTest()
-		{
-			type = APIType::Native;
-			name = "DrawArrays";
-		}
-		~Native_DrawArraysTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}DX11_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawArrays";
+			log::debug("Initializing {}DX11_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(type), name).c_str());
 
 			device = api->getHwnd().dev;
 			deviceContext = api->getHwnd().devcon;
@@ -831,9 +806,6 @@ namespace rythe::rendering
 
 	struct Native_DrawArraysInstancedTest : public rendering_test
 	{
-		APIType type = APIType::Native;
-		std::string name = "DrawArraysInstanced";
-
 		ID3D11Buffer* vertexBuffer;
 		ID3D11InputLayout* inputLayout;
 		ID3D11VertexShader* vertexShader;
@@ -843,18 +815,12 @@ namespace rythe::rendering
 		ID3D11DeviceContext* deviceContext;
 		ID3D11Device* device;
 
-		Native_DrawArraysInstancedTest() = default;
-		Native_DrawArraysInstancedTest()
-		{
-			type = APIType::Native;
-			name = "DrawArraysInstanced";
-		}
-		~Native_DrawArraysInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}DX11_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawArraysInstanced";
+			log::debug("Initializing {}DX11_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(type), name).c_str());
 
 			device = api->getHwnd().dev;
 			deviceContext = api->getHwnd().devcon;
@@ -912,8 +878,6 @@ namespace rythe::rendering
 
 	struct Native_DrawIndexedTest : public rendering_test
 	{
-		APIType type = APIType::Native;
-		std::string name = "DrawIndexed";
 		ID3D11Buffer* vertexBuffer;
 		ID3D11Buffer* indexBuffer;
 		ID3D11InputLayout* inputLayout;
@@ -924,18 +888,12 @@ namespace rythe::rendering
 		ID3D11DeviceContext* deviceContext;
 		ID3D11Device* device;
 
-		Native_DrawIndexedTest() = default;
-		Native_DrawIndexedTest()
-		{
-			type = APIType::Native;
-			name = "DrawIndexed";
-		}
-		~Native_DrawIndexedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}DX11_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawIndexed";
+			log::debug("Initializing {}DX11_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(type), name).c_str());
 			device = api->getHwnd().dev;
 			deviceContext = api->getHwnd().devcon;
 
@@ -1019,18 +977,12 @@ namespace rythe::rendering
 		ID3D11DeviceContext* deviceContext;
 		ID3D11Device* device;
 
-		Native_DrawIndexedInstancedTest() = default;
-		Native_DrawIndexedInstancedTest()
-		{
-			type = APIType::Native;
-			name = "DrawIndexed";
-		}
-		~Native_DrawIndexedInstancedTest() = default;
-
 		virtual void setup(RenderInterface* api) override
 		{
-			log::debug("Initializing {}DX11_Test{}", stringify(APIType::Native), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(APIType::Native), name).c_str());
+			type = Native;
+			name = "DrawIndexedInstanced";
+			log::debug("Initializing {}DX11_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}DX11_Test{}", stringify(type), name).c_str());
 			device = api->getHwnd().dev;
 			deviceContext = api->getHwnd().devcon;
 

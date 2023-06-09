@@ -6,7 +6,8 @@ layout(location = 0) in vec3 v_position;
 
 void main()
 {
-	gl_Position = vec4(v_position + vec3((gl_InstanceID / 10.0) * 3.0, 0, 0), 1.0);
+	vec3 offset = (vec3(gl_InstanceID % 5, gl_InstanceID / 5, 0) / 2.5) - vec3(.8, .8, 0);
+	gl_Position = vec4(v_position + offset, 1.0);
 }
 
 #shader fragment
@@ -37,7 +38,8 @@ VOut VShader(VIn vin, uint instanceID : SV_InstanceID)
 {
 	VOut output;
 
-	output.p_position = float4(vin.position + float3((float)((instanceID)/10.0)*3.0, 0, 0), 1);
+	float3 offset = (float3(instanceID % 5, instanceID / 5, 0) / 2.5) - float3(.8, .8, 0);
+	output.p_position = float4(vin.position + offset, 1.0);
 
 	return output;
 }

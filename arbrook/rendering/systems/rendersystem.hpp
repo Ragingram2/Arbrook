@@ -2,6 +2,7 @@
 #include <chrono>
 #include <ctime>
 #include <memory>
+#include <iostream>
 
 #include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
@@ -44,6 +45,17 @@ namespace rythe::rendering
 	{
 		std::unordered_map<APIType, result_times> testTimes;
 
+		std::string serialize()
+		{
+			std::string times;
+
+			for (auto& [t, resultTime] : testTimes)
+			{
+				times.append(std::format(",{}", resultTime.frameTime));
+			}
+			return times;
+		}
+
 		void printResult()
 		{
 			for (auto& [type, resultTime] : testTimes)
@@ -66,17 +78,32 @@ namespace rythe::rendering
 				}
 				log::debug("API[{}]: Test took {} ms to initialize", api, resultTime.setupTime);
 				log::debug("API[{}]: Test took an average of {} ms per frame", api, resultTime.frameTime);
+
 			}
 		}
 	};
 
 	struct CSVWriter
 	{
+	private:
+		std::string fullPath;
+		std::string filePath;
+		std::string fileName;
+
+		std::string output;
+	public:
 		std::unordered_map<std::string, test_result> results;
+
+		CSVWriter(std::string path)
+		{
+			fullPath = path;
+			auto idx = path.find_last_of('/');
+			fileName = path.substr(idx, path.size() - 1);
+			filePath = path.substr(0, idx);
+		}
 
 		void writeSetupTime(std::string testName, APIType type, float setupTime)
 		{
-			log::debug(testName);
 			results[testName].testTimes[type].setupTime = setupTime;
 		}
 
@@ -87,11 +114,16 @@ namespace rythe::rendering
 
 		void printResults()
 		{
+			std::ofstream file;
+			file.open(fullPath);
+			file << "APIS,Arbrook,Native,BGFX" << std::endl;
 			for (auto& [name, result] : results)
 			{
 				log::debug("Results for test \"{}\"", name);
 				result.printResult();
+				file << name << result.serialize() << std::endl;
 			}
+			file.close();
 
 			results.clear();
 		}
@@ -111,9 +143,9 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
-		CSVWriter writer;
+		CSVWriter writer = CSVWriter("resources/logs/data.csv");
 		int testCount = 0;
-		float maxTests = 100.0f;
+		float maxTests = 1000.0f;
 		float timeSum = 0.0f;
 
 		Renderer() = default;

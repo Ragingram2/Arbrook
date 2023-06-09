@@ -4,9 +4,14 @@
 
 layout(location = 0) in vec3 v_position;
 
+layout(std140, binding = 0) uniform ConstantBuffer
+{
+	vec3 u_position;
+};
+
 void main()
 {
-	gl_Position = vec4(v_position, 1.0);
+	gl_Position = vec4(v_position + u_position, 1.0);
 }
 
 #shader fragment
@@ -16,12 +21,17 @@ out vec4 FragColor;
 
 void main()
 {
-	FragColor = vec4(1,0,0,1);
+	FragColor = vec4(1, 0, 0, 1);
 }
 #END
 
 #HLSL
 #shader vertex
+
+cbuffer ConstantBuffer : register(b0)
+{
+	float3 u_position;
+};
 
 struct VOut
 {
@@ -32,7 +42,7 @@ VOut VShader(float3 position : POSITION)
 {
 	VOut output;
 
-	output.p_position = float4(position, 1);
+	output.p_position = float4(position + u_position, 1);
 
 	return output;
 }

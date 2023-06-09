@@ -241,9 +241,9 @@ namespace rythe::rendering
 		{
 			if (lastScene == m_testScenes.size() - 1 && currentScene == 0)
 			{
-				//rythe::core::events::exit evnt(0);
-				//raiseEvent(evnt);
 				writer.printResults();
+				rythe::core::events::exit evnt(0);
+				raiseEvent(evnt);
 			}
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);
