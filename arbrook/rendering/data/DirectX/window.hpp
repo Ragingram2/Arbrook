@@ -89,6 +89,8 @@ namespace rythe::rendering::internal
 			UINT64 message_count = infoQueue->GetNumStoredMessages();
 			D3D11_MESSAGE_ID hide[]
 			{
+					 D3D11_MESSAGE_ID_SETPRIVATEDATA_CHANGINGPARAMS,
+					 D3D11_MESSAGE_ID_SETPRIVATEDATA_INVALIDFREEDATA
 			};
 			D3D11_INFO_QUEUE_FILTER filter;
 			ZeroMemory(&filter, sizeof(filter));

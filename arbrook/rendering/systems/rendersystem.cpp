@@ -243,8 +243,9 @@ namespace rythe::rendering
 		{
 			if (lastScene == m_testScenes.size() - 1 && currentScene == 0)
 			{
-				rythe::core::events::exit evnt(0);
-				raiseEvent(evnt);
+				//rythe::core::events::exit evnt(0);
+				//raiseEvent(evnt);
+				log::info("Testing Break");
 			}
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);

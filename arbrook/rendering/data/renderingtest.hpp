@@ -336,6 +336,13 @@ namespace rythe::rendering
 		bgfx::VertexLayout inputLayout;
 		BgfxCallback callback;
 
+		uint64_t state = 0
+			| BGFX_STATE_WRITE_RGB
+			| BGFX_STATE_WRITE_A
+			| BGFX_STATE_WRITE_Z
+			| BGFX_STATE_FRONT_CCW
+			| BGFX_STATE_MSAA;
+
 		virtual void setup(RenderInterface* api) override
 		{
 			log::debug("Initializing BGFX_DrawArraysTest");
@@ -358,23 +365,26 @@ namespace rythe::rendering
 			init.resolution.height = api->getHwnd().m_resolution.y;
 			init.callback = &callback;
 			bgfx::init(init);
+			api->checkError();
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+			api->checkError();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
+			api->checkError();
 			shader = loadShader("test", "resources/shaders/testFS.shader", "resources/shaders/testVS.shader");
+			api->checkError();
 
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setVertexBuffer(0, vertexBuffer);
-			bgfx::setState(BGFX_STATE_DEFAULT);
-			bgfx::touch(0);
+			bgfx::setViewRect(0, 0, 0, uint16_t(600), uint16_t(600));
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
 			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setState(state);
 			bgfx::submit(0, shader);
 			bgfx::frame();
 		}
@@ -385,6 +395,8 @@ namespace rythe::rendering
 				bgfx::destroy(shader);
 
 			bgfx::destroy(vertexBuffer);
+			bgfx::shutdown();
+			api->initialize(api->getHwnd().m_resolution, "", api->getWindow());
 		}
 	};
 #pragma endregion
@@ -588,8 +600,8 @@ namespace rythe::rendering
 		virtual void destroy(RenderInterface* api) override
 		{
 			ShaderCache::deleteShader("test");
-		}
-	};
+}
+};
 
 #elif RenderingAPI == RenderingAPI_DX11
 
