@@ -13,6 +13,7 @@
 #include "rendering/data/renderingtest.hpp"
 #include "rendering/data/vertex.hpp"
 
+
 namespace rythe::rendering
 {
 	namespace log = core::log;
@@ -32,21 +33,67 @@ namespace rythe::rendering
 		return std::move(data);
 	}
 
+
+	struct result_times
+	{
+		float setupTime;
+		float frameTime;
+	};
+
 	struct test_result
 	{
-	public:
-		std::string m_testName;
-		float m_setupTime;
-		float m_frameTime;
+		std::unordered_map<APIType, result_times> testTimes;
 
-		test_result() = default;
-		test_result(std::string name, float setupTime, float frameTime) : m_testName(name), m_setupTime(setupTime), m_frameTime(frameTime) { }
-		~test_result() = default;
-		std::string serialize()
+		void printResult()
 		{
-			log::debug("Test took {} ms to initialize", m_setupTime);
-			log::debug("Test took an average of {} ms per frame", m_frameTime);
-			return "";
+			for (auto& [type, resultTime] : testTimes)
+			{
+				std::string api;
+				switch (type)
+				{
+				case APIType::Arbrook:
+					api = "Arbrook";
+					break;
+				case APIType::BGFX:
+					api = "BGFX";
+					break;
+				case APIType::Native:
+					api = "Native";
+					break;
+				case APIType::None:
+					api = "None";
+					break;
+				}
+				log::debug("API[{}]: Test took {} ms to initialize", api, resultTime.setupTime);
+				log::debug("API[{}]: Test took an average of {} ms per frame", api, resultTime.frameTime);
+			}
+		}
+	};
+
+	struct CSVWriter
+	{
+		std::unordered_map<std::string, test_result> results;
+
+		void writeSetupTime(std::string testName, APIType type, float setupTime)
+		{
+			log::debug(testName);
+			results[testName].testTimes[type].setupTime = setupTime;
+		}
+
+		void writeFrameTime(std::string testName, APIType type, float frameTime)
+		{
+			results[testName].testTimes[type].frameTime = frameTime;
+		}
+
+		void printResults()
+		{
+			for (auto& [name, result] : results)
+			{
+				log::debug("Results for test \"{}\"", name);
+				result.printResult();
+			}
+
+			results.clear();
 		}
 	};
 
@@ -64,7 +111,7 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
-		std::vector<test_result> m_testResults;
+		CSVWriter writer;
 		int testCount = 0;
 		float maxTests = 100.0f;
 		float timeSum = 0.0f;
