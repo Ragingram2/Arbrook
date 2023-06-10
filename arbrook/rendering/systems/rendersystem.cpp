@@ -38,6 +38,7 @@ namespace rythe::rendering
 #pragma region Abstracted API
 
 		//DrawArrays
+		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
 		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
@@ -219,7 +220,7 @@ namespace rythe::rendering
 	{
 		m_api->makeCurrent();
 
-		m_api->setSwapInterval(1);
+		m_api->setSwapInterval(0);
 
 		if (m_api->shouldWindowClose())
 		{

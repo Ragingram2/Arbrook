@@ -15,6 +15,10 @@ Global
 		DebugOGL|x86 = DebugOGL|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		ReleaseDX11|x64 = ReleaseDX11|x64
+		ReleaseDX11|x86 = ReleaseDX11|x86
+		ReleaseOGL|x64 = ReleaseOGL|x64
+		ReleaseOGL|x86 = ReleaseOGL|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{606BBD1C-727D-48F1-A599-C439442BF23E}.Debug|x64.ActiveCfg = Debug|x64
@@ -33,6 +37,14 @@ Global
 		{606BBD1C-727D-48F1-A599-C439442BF23E}.Release|x64.Build.0 = Release|x64
 		{606BBD1C-727D-48F1-A599-C439442BF23E}.Release|x86.ActiveCfg = Release|Win32
 		{606BBD1C-727D-48F1-A599-C439442BF23E}.Release|x86.Build.0 = Release|Win32
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseDX11|x64.ActiveCfg = ReleaseDX11|x64
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseDX11|x64.Build.0 = ReleaseDX11|x64
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseDX11|x86.ActiveCfg = ReleaseDX11|Win32
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseDX11|x86.Build.0 = ReleaseDX11|Win32
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseOGL|x64.ActiveCfg = ReleaseOGL|x64
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseOGL|x64.Build.0 = ReleaseOGL|x64
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseOGL|x86.ActiveCfg = ReleaseOGL|Win32
+		{606BBD1C-727D-48F1-A599-C439442BF23E}.ReleaseOGL|x86.Build.0 = ReleaseOGL|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

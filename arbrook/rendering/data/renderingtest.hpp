@@ -2,12 +2,13 @@
 #include <chrono>
 #include <ctime>
 #include <GLFW/glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <bx/math.h>
 #include <bx/allocator.h>
 #include <bx/file.h>
-#include <bx/string.h>
 
 #include <rythe/delegate>
 
@@ -77,6 +78,51 @@ namespace rythe::rendering
 		return "";
 	}
 
+	struct dummy_test : public rendering_test
+	{
+		inputlayout layout;
+		buffer_handle vBuffer;
+		buffer_handle cBuffer;
+		shader_handle shader;
+
+		virtual void setup(RenderInterface* api) override
+		{
+			type = None;
+			name = "";
+			log::debug("Initializing", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), "Initializing");
+			math::vec3 verticies[6] =
+			{	//positions						
+				{  -0.1f, 0.1f, 0.0f  },//0
+				{ 	-0.1f,-0.1f, 0.0f  },//1
+				{  0.1f,-0.1f, 0.0f  },//2
+				{  -0.1f, 0.1f, 0.0f  },//0
+				{  0.1f,-0.1f, 0.0f },//2
+				{  0.1f, 0.1f, 0.0f }//3
+			};
+			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
+			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
+			//cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			//shader->addBuffer(ShaderType::VERTEX, cBuffer);
+			shader->bind();
+			layout.addBuffer(vBuffer);
+			layout.bind(api->getHwnd(), shader);
+			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			layout.submitAttributes();
+		}
+		virtual void update(RenderInterface* api) override
+		{
+			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+		}
+		virtual void destroy(RenderInterface* api) override
+		{
+			BufferCache::deleteBuffer("Vertex Buffer");
+			BufferCache::deleteBuffer("Constant Buffer");
+			ShaderCache::deleteShader("test");
+			layout.release();
+		}
+	};
+
 #pragma region My API
 	struct API_DrawArraysTest : public rendering_test
 	{
@@ -102,8 +148,8 @@ namespace rythe::rendering
 			};
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
 			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
-			cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
-			shader->addBuffer(ShaderType::VERTEX, cBuffer);
+			//cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			//shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			layout.addBuffer(vBuffer);
 			layout.bind(api->getHwnd(), shader);
@@ -113,21 +159,21 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
-			{
-				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
-				{
-					math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
-					shader->setData("Constant Buffer", pos);
-					api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
-				}
-			}
+			//for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			//{
+			//	for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+			//	{
+			//		math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
+			//		shader->setData("Constant Buffer", pos);
+			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+			//	}
+			//}
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
-			BufferCache::deleteBuffer("Constant Buffer");
+			//BufferCache::deleteBuffer("Constant Buffer");
 			ShaderCache::deleteShader("test");
 			layout.release();
 		}
@@ -206,8 +252,8 @@ namespace rythe::rendering
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
 			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
 			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
-			cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
-			shader->addBuffer(ShaderType::VERTEX, cBuffer);
+			//cBuffer = BufferCache::createBuffer<math::vec3>(*api, "Constant Buffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			//shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			layout.addBuffer(vBuffer);
 			layout.addBuffer(idxBuffer);
@@ -218,22 +264,22 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
-			{
-				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
-				{
-					math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
-					shader->setData("Constant Buffer", pos);
-					api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, 0, 0);
-				}
-			}
+			//for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			//{
+			//	for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+			//	{
+			//		math::vec3 pos[] = { { x + .2f, y + .2f, 0.0f } };
+			//		shader->setData("Constant Buffer", pos);
+			api->drawIndexed(PrimitiveType::TRIANGLESLIST, 6, 0, 0);
+			//	}
+			//}
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
 			BufferCache::deleteBuffer("Index Buffer");
-			BufferCache::deleteBuffer("Constant Buffer");
+			//BufferCache::deleteBuffer("Constant Buffer");
 			ShaderCache::deleteShader("test");
 			layout.release();
 		}

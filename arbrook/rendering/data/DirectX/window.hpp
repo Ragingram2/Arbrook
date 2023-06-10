@@ -86,6 +86,7 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
+#if _DEBUG
 			UINT64 message_count = infoQueue->GetNumStoredMessages();
 			D3D11_MESSAGE_ID hide[]
 			{
@@ -123,6 +124,7 @@ namespace rythe::rendering::internal
 				free(message);
 			}
 			infoQueue->ClearStoredMessages();
+#endif
 		}
 	};
 }

@@ -51,6 +51,8 @@ namespace rythe::rendering
 
 			for (auto& [t, resultTime] : testTimes)
 			{
+				if (t == APIType::None)
+					continue;
 				times.append(std::format(",{}", resultTime.frameTime));
 			}
 			return times;
@@ -104,11 +106,15 @@ namespace rythe::rendering
 
 		void writeSetupTime(std::string testName, APIType type, float setupTime)
 		{
+			if (type == None)
+				return;
 			results[testName].testTimes[type].setupTime = setupTime;
 		}
 
 		void writeFrameTime(std::string testName, APIType type, float frameTime)
 		{
+			if (type == None)
+				return;
 			results[testName].testTimes[type].frameTime = frameTime;
 		}
 
@@ -143,9 +149,13 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
-		CSVWriter writer = CSVWriter("resources/logs/data.csv");
+#if RenderingAPI == RenderingAPI_OGL
+		CSVWriter writer = CSVWriter("resources/logs/ogldata.csv");
+#elif RenderingAPI == RenderingAPI_DX11
+		CSVWriter writer = CSVWriter("resources/logs/dx11data.csv");
+#endif
 		int testCount = 0;
-		float maxTests = 1000.0f;
+		float maxTests = 5000.0f;
 		float timeSum = 0.0f;
 
 		Renderer() = default;

@@ -207,7 +207,7 @@ namespace rythe::rendering::internal
 
 		void swapBuffers()
 		{
-			m_hwnd.swapchain->Present(1, 0);
+			m_hwnd.swapchain->Present(0, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
