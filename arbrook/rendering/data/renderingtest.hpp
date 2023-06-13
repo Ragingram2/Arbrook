@@ -1,9 +1,10 @@
 #pragma once
 #include <chrono>
 #include <ctime>
-#include <GLFW/glfw3.h>
+
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
+
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <bx/math.h>
@@ -117,7 +118,7 @@ namespace rythe::rendering
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
-			BufferCache::deleteBuffer("Constant Buffer");
+			//BufferCache::deleteBuffer("Constant Buffer");
 			ShaderCache::deleteShader("test");
 			layout.release();
 		}
@@ -395,10 +396,10 @@ namespace rythe::rendering
 
 		virtual void fatal(const char* _filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char* _str) override
 		{
-			BX_UNUSED(_filePath, _line);
+			//BX_UNUSED(_filePath, _line);
 
 			// Something unexpected happened, inform user and bail out.
-			log::error("Fatal error [{}]: {}", _code, _str);
+			log::error("Fatal error {}:{} [{}]: {}", _filePath, _line, _code, _str);
 
 			//abort();
 		}
@@ -481,12 +482,13 @@ namespace rythe::rendering
 
 			bgfx::Init init;
 			init.platformData.ndt = nullptr;
-			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 #if RenderingAPI == RenderingAPI_OGL
 			init.type = bgfx::RendererType::OpenGL;
-			init.platformData.context = glfwGetCurrentContext();
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
+			init.platformData.context = api->getWindow();
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 			init.platformData.context = api->getHwnd().dev;
 			init.platformData.backBuffer = api->getHwnd().backbuffer;
 			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
