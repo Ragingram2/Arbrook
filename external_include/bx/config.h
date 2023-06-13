@@ -5,6 +5,7 @@
 
 #ifndef BX_CONFIG_H_HEADER_GUARD
 #define BX_CONFIG_H_HEADER_GUARD
+#define BGFX_CONFIG_RENDERER_OPENGL = 42
 
 #ifndef BX_CONFIG_DEBUG
 //#	error "BX_CONFIG_DEBUG must be defined in build script!"

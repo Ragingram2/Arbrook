@@ -20,21 +20,6 @@ namespace rythe::rendering
 	namespace log = core::log;
 	namespace math = core::math;
 
-	static math::vec3* generateVertexData(math::vec3 position = math::vec3(0, 0, 0), math::vec3 dimensions = math::vec3(.1f, .1f, 0.0f))
-	{
-		math::vec3 data[6] =
-		{
-			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
-			{(math::vec3(-1.0f,-1.0f,0.0f) * dimensions) + position},
-			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
-			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
-			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
-			{(math::vec3(1.0f,1.0f,0.0f) * dimensions) + position}
-		};
-		return std::move(data);
-	}
-
-
 	struct result_times
 	{
 		float setupTime;
@@ -168,8 +153,6 @@ namespace rythe::rendering
 		void setup() override;
 		void update() override;
 		void shutdown() override;
-
-		void TestStencilTest();
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 		{

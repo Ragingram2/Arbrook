@@ -25,6 +25,20 @@
 
 namespace rythe::rendering
 {
+	inline std::vector<math::vec3> generateVertexData(math::vec3 position = math::vec3(0, 0, 0), math::vec3 dimensions = math::vec3(.1f, .1f, 0.0f))
+	{
+		std::vector<math::vec3> data =
+		{
+			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(-1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(-1.0f,1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,-1.0f,0.0f) * dimensions) + position},
+			{(math::vec3(1.0f,1.0f,0.0f) * dimensions) + position}
+		};
+		return data;
+	}
+
 	enum APIType
 	{
 		None,
@@ -32,22 +46,6 @@ namespace rythe::rendering
 		BGFX,
 		Native
 	};
-
-	//template<size_t N>
-	//struct lstring {
-	//	constexpr lstring(const char(&str)[N]) {
-	//		std::copy_n(str, N, value);
-	//	}
-
-	//	char value[N];
-	//};
-
-	//template<APIType t, lstring n>
-	//struct test_properties
-	//{
-	//	APIType type = t;
-	//	std::string name = n.value;
-	//};
 
 	struct rendering_test
 	{
@@ -92,7 +90,7 @@ namespace rythe::rendering
 			name = "";
 			log::debug("Initializing", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), "Initializing");
-			math::vec3 verticies[6] =
+			math::vec3 verticies[] = 
 			{	//positions						
 				{  -0.1f, 0.1f, 0.0f  },//0
 				{ 	-0.1f,-0.1f, 0.0f  },//1
@@ -485,7 +483,6 @@ namespace rythe::rendering
 #if RenderingAPI == RenderingAPI_OGL
 			init.type = bgfx::RendererType::OpenGL;
 			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
-			init.platformData.context = api->getWindow();
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
 			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
@@ -502,12 +499,18 @@ namespace rythe::rendering
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
-			shader = loadShader("test", "resources/shaders/testFS.shader", "resources/shaders/testVS.shader");
+#if RenderingAPI == RenderingAPI_OGL
+			shader = loadShader("test", "resources/shaders/ogl/testFS.shader", "resources/shaders/ogl/testVS.shader");
+#elif RenderingAPI == RenderingAPI_DX11
+			shader = loadShader("test", "resources/shaders/dx11/testFS.shader", "resources/shaders/dx11/testVS.shader");
+#endif
 
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
 			bgfx::setViewRect(0, 0, 0, uint16_t(600), uint16_t(600));
+			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setState(state);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -520,10 +523,9 @@ namespace rythe::rendering
 
 		virtual void destroy(RenderInterface* api) override
 		{
+			bgfx::destroy(vertexBuffer);
 			if (shader.idx != bgfx::kInvalidHandle)
 				bgfx::destroy(shader);
-
-			bgfx::destroy(vertexBuffer);
 			bgfx::shutdown();
 			api->initialize(api->getHwnd().m_resolution, "", api->getWindow());
 		}
@@ -617,9 +619,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			glUseProgram(shaderId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
 			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 2); // Draw 2 instances
 		}
 
@@ -670,11 +669,14 @@ namespace rythe::rendering
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -723,11 +725,13 @@ namespace rythe::rendering
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
-			glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr, 2);
+			glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, reinterpret_cast <void*>(0), 2);
 		}
 
 		virtual void destroy(RenderInterface* api) override
