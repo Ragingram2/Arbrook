@@ -122,7 +122,11 @@ namespace rythe::rendering
 		{
 			std::ofstream file;
 			file.open(fullPath);
-			file << "APIS,Arbrook,Native,BGFX" << std::endl;
+			file << "APIS,";
+			for (auto& [type, _] : results.begin()->second.testTimes)
+				file << stringify(type) << ",";
+			file << std::endl;
+
 			for (auto& [name, result] : results)
 			{
 				log::debug("Results for test \"{}\"", name);

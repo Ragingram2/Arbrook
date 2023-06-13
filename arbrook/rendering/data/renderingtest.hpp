@@ -569,9 +569,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			glUseProgram(shaderId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
@@ -675,9 +672,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			glUseProgram(shaderId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		}
 
@@ -731,9 +725,6 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
-			glUseProgram(shaderId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 			glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr, 2);
 		}
 

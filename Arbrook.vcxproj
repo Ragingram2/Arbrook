@@ -405,7 +405,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\bx;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
