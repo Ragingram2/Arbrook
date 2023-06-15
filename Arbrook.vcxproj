@@ -488,6 +488,7 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\input\input.hpp" />
     <ClInclude Include="arbrook\input\modules\inputmodule.hpp" />
+    <ClInclude Include="arbrook\rendering\components\camera.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
@@ -561,7 +562,9 @@
     <None Include="external_include\rsl\src\rythe\type_util" />
     <None Include="external_include\rsl\src\rythe\utilities" />
     <None Include="resources\shaders\color.shader" />
+    <None Include="resources\shaders\cube.shader" />
     <None Include="resources\shaders\default.shader" />
+    <None Include="resources\shaders\instance_cube.shader" />
     <None Include="resources\shaders\varying.def.sc" />
     <None Include="resources\shaders\fluid.shader" />
     <None Include="resources\shaders\instance_test.shader" />

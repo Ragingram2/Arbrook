@@ -96,7 +96,7 @@ namespace rythe::rendering::internal
 					glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 					break;
 				default:
-					log::warn("Format {} is not supported for vertex attributes", STRINGIFY(attrib.format));
+					log::warn("Format is not supported for vertex attributes");
 					break;
 				}
 				switch (attrib.inputClass)
@@ -105,7 +105,7 @@ namespace rythe::rendering::internal
 					glVertexAttribDivisor(attrib.index, 0);
 					break;
 				case InputClass::PER_INSTANCE:
-					glVertexAttribDivisor(attrib.index, attrib.step);
+					glVertexAttribDivisor(attrib.index, 1);
 					break;
 				}
 			}

@@ -308,6 +308,9 @@
     <ClInclude Include="arbrook\rendering\data\renderingtest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arbrook\rendering\components\camera.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="arbrook\core\engine\services\serviceregistry.inl">
@@ -352,5 +355,7 @@
     <None Include="resources\shaders\testFS.sc" />
     <None Include="resources\shaders\testVS.sc" />
     <None Include="resources\shaders\varying.def.sc" />
+    <None Include="resources\shaders\cube.shader" />
+    <None Include="resources\shaders\instance_cube.shader" />
   </ItemGroup>
 </Project>

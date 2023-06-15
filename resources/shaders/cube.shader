@@ -6,12 +6,14 @@ layout(location = 0) in vec3 v_position;
 
 layout(std140, binding = 0) uniform ConstantBuffer
 {
-	vec3 u_position;
+	mat4 u_view;
+	mat4 u_projection;
+	mat4 u_model;
 };
 
 void main()
 {
-	gl_Position = vec4(v_position + u_position, 1);
+	gl_Position = u_projection * u_view * u_model * vec4(v_position, 1.0f);
 }
 
 #shader fragment
@@ -30,7 +32,9 @@ void main()
 
 cbuffer ConstantBuffer : register(b0)
 {
-	float3 u_position = float3(0, 0, 0);
+	float4x4 u_view;
+	float4x4 u_projection;
+	float4x4 u_model;
 };
 
 struct VOut
@@ -42,7 +46,7 @@ VOut VShader(float3 position : POSITION)
 {
 	VOut output;
 
-	output.p_position = float4(position + u_position, 1);
+	output.p_position = u_projection * u_view * u_model * float4(position, 1.0f);
 
 	return output;
 }

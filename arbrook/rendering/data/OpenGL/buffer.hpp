@@ -58,7 +58,7 @@ namespace rythe::rendering::internal
 		}
 
 		template<typename elementType>
-		void bufferData(elementType data[], int size = 0)
+		void bufferData(elementType data[], int size = 1)
 		{
 			bind();
 

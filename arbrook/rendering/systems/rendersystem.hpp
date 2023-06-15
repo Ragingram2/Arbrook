@@ -144,7 +144,11 @@ namespace rythe::rendering
 		CSVWriter writer = CSVWriter("resources/logs/dx11data.csv");
 #endif
 		int testCount = 0;
+#ifdef _DEBUG
 		float maxTests = 5000.0f;
+#else
+		float maxTests = 50000.0f;
+#endif
 		float timeSum = 0.0f;
 
 		Renderer() = default;

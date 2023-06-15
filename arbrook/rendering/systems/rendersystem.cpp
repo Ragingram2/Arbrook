@@ -36,7 +36,7 @@ namespace rythe::rendering
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
-		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
+		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
 
 		//DrawArraysInstanced
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
@@ -158,6 +158,11 @@ namespace rythe::rendering
 			writer.writeSetupTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f);
 			initializeTest = false;
 			updateTest = true;
+
+			if (m_testScenes[currentScene]->type == None)
+			{
+				testCount = maxTests * .95f;
+			}
 		}
 		else if (updateTest)
 		{
