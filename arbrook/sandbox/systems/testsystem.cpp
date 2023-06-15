@@ -39,13 +39,16 @@ namespace rythe::core
 		layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
 		layout.setAttributePtr("TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
 		layout.submitAttributes();
+		addDensity(0, 0, 1);
+		addDensity(0, 6, 1);
 		shader->setData("ConstantBuffer", &cube);
 	}
 
 	void TestSystem::update()
 	{
 		m_api->makeCurrent();
-		m_api->setSwapInterval(0);
+		m_api->setSwapInterval(1);
+
 		if (m_api->shouldWindowClose())
 		{
 			rythe::core::events::exit evnt(0);
@@ -56,9 +59,11 @@ namespace rythe::core
 		m_api->setViewport(1, 0, 0, 600, 600, 0, 1);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 		m_api->clear(gfx::ClearBit::COLOR);
-		addDensity(SIZE / 2, SIZE / 2, 10);
-		addVelocity(SIZE / 2, SIZE / 2, 0, 0);
-		step(10, .02f);
+
+		//addDensity(SIZE / 2, 0, 1);
+		//addDensity(0, SIZE / 2, 1);
+		//addVelocity(SIZE / 2, SIZE / 2, 0, 0);
+		//step(10, .02f);
 		render();
 
 		m_api->swapBuffers();

@@ -8,7 +8,7 @@ namespace rythe::core
 {
 	//#define IX3(x, y, z) ((x) + (y) * N + (z) * N * N)
 #define IX(x, y) ((x) + (y) * N)
-#define SIZE 8
+#define SIZE 16
 
 	struct FluidCube
 	{
@@ -17,7 +17,7 @@ namespace rythe::core
 		float diffusion = .1f;
 		float viscosity = .01f;
 
-		float source[SIZE*SIZE];
+		float source[SIZE * SIZE];
 		float density[SIZE * SIZE];
 
 		float Velx[SIZE * SIZE];
@@ -49,7 +49,7 @@ namespace rythe::core
 		void setup() override;
 		void update() override;
 		void shutdown() override;
-		
+
 		void render();
 
 		void step(int iter, float dt)
@@ -188,6 +188,7 @@ namespace rythe::core
 		{
 			int N = cube.size;
 			cube.density[IX(x, y)] += amount;
+			log::debug(cube.density[IX(x, y)]);
 		}
 
 		void addVelocity(int x, int y, float amountX, float amountY)

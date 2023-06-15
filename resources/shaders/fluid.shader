@@ -23,14 +23,14 @@ layout(std140, binding = 0) uniform ConstantBuffer
 		float diffusion;
 		float viscosity;
 
-		float source[64];
-		float density[64];
+		float source[256];
+		float density[256];
 
-		float Velx[64];
-		float Vely[64];
+		float Velx[256];
+		float Vely[256];
 
-		float Velx0[64];
-		float Vely0[64];
+		float Velx0[256];
+		float Vely0[256];
 };
 
 in vec2 TexCoord;
@@ -38,9 +38,16 @@ out vec4 FragColor;
 
 void main()
 {
-	int idx = int((TexCoord.x * 8.0) + (TexCoord.y * 8.0)); 
-	FragColor = vec4(density[idx],density[idx]/.5,density[idx],1.0); 
-}
+	//int x = int(TexCoord.x * 10)*size;
+	//int y = int(TexCoord.y * 10)*size;
+	//int idx = x + y; 
+	//float val = density[0];
+	//FragColor = vec4(val,val,val,1.0); 
+	if(TexCoord.x < 0.1 && TexCoord.y < 0.1)
+		FragColor = vec4(density[0]);
+	else
+		FragColor = vec4(TexCoord.x, TexCoord.y,0,1.0);
+	}
 #END
 
 #HLSL
