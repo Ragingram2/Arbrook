@@ -35,7 +35,7 @@ namespace rythe::rendering
 		//DrawArrays
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
-		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
+		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
 		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
 
 		//DrawArraysInstanced

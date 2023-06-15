@@ -8,41 +8,29 @@ namespace rythe::core
 {
 	//#define IX3(x, y, z) ((x) + (y) * N + (z) * N * N)
 #define IX(x, y) ((x) + (y) * N)
+#define SIZE 8
 
 	struct FluidCube
 	{
-		int size;
-		float deltaTime;
-		float diffusion;
-		float viscosity;
+		int size = SIZE;
+		float deltaTime = .02f;
+		float diffusion = .1f;
+		float viscosity = .01f;
 
-		std::vector<float> source;
-		std::vector<float> density;
+		float source[SIZE*SIZE];
+		float density[SIZE * SIZE];
 
-		std::vector<float> Velx;
-		std::vector<float> Vely;
+		float Velx[SIZE * SIZE];
+		float Vely[SIZE * SIZE];
 
-		std::vector<float> Velx0;
-		std::vector<float> Vely0;
+		float Velx0[SIZE * SIZE];
+		float Vely0[SIZE * SIZE];
+	};
 
-		FluidCube() = default;
-		FluidCube(int s, int diff, int visc, float dt)
-		{
-			size = s;
-			deltaTime = dt;
-			diffusion = diff;
-			viscosity = visc;
-
-			auto N = s * s * s;
-			source.resize(N);
-			density.resize(N);
-
-			Velx.resize(N);
-			Vely.resize(N);
-
-			Velx0.resize(N);
-			Vely0.resize(N);
-		}
+	struct vertex
+	{
+		math::vec3 position;
+		math::vec2 uv;
 	};
 
 	class TestSystem : public System<transform>
@@ -50,6 +38,10 @@ namespace rythe::core
 	public:
 		gfx::RenderInterface* m_api;
 		FluidCube cube;
+		gfx::buffer_handle vertexHandle;
+		gfx::buffer_handle constantHandle;
+		gfx::shader_handle shader;
+		gfx::inputlayout layout;
 
 		TestSystem() = default;
 		virtual ~TestSystem() = default;
@@ -57,23 +49,25 @@ namespace rythe::core
 		void setup() override;
 		void update() override;
 		void shutdown() override;
+		
+		void render();
 
 		void step(int iter, float dt)
 		{
-			diffuse(1, cube.Velx0.data(), cube.Velx.data(), cube.viscosity, dt, iter);
-			diffuse(2, cube.Vely0.data(), cube.Vely.data(), cube.viscosity, dt, iter);
+			diffuse(1, cube.Velx0, cube.Velx, cube.viscosity, dt, iter);
+			diffuse(2, cube.Vely0, cube.Vely, cube.viscosity, dt, iter);
 			//diffuse();
 
-			project(cube.Velx0.data(), cube.Vely0.data(), cube.Velx.data(), cube.Vely.data(), iter);
+			project(cube.Velx0, cube.Vely0, cube.Velx, cube.Vely, iter);
 
-			advect(1, cube.Velx.data(), cube.Velx0.data(), cube.Velx0.data(), cube.Vely0.data(), dt);
-			advect(2, cube.Vely.data(), cube.Vely0.data(), cube.Velx0.data(), cube.Vely0.data(), dt);
+			advect(1, cube.Velx, cube.Velx0, cube.Velx0, cube.Vely0, dt);
+			advect(2, cube.Vely, cube.Vely0, cube.Velx0, cube.Vely0, dt);
 			//advect();
 
-			project(cube.Velx.data(), cube.Vely.data(), cube.Velx0.data(), cube.Vely0.data(), iter);
+			project(cube.Velx, cube.Vely, cube.Velx0, cube.Vely0, iter);
 
-			diffuse(0, cube.source.data(), cube.density.data(), cube.diffusion, dt, iter);
-			advect(0, cube.density.data(), cube.source.data(), cube.Velx.data(), cube.Vely.data(), dt);
+			diffuse(0, cube.source, cube.density, cube.diffusion, dt, iter);
+			advect(0, cube.density, cube.source, cube.Velx, cube.Vely, dt);
 		}
 
 		void diffuse(int b, float* x, float* x0, float diff, float dt, int iter)
@@ -203,11 +197,6 @@ namespace rythe::core
 
 			cube.Velx[idx] += amountX;
 			cube.Vely[idx] += amountY;
-		}
-
-		void render()
-		{
-
 		}
 	};
 }

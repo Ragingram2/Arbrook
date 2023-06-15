@@ -369,7 +369,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\vcpkg\installed\x64-windows-static\debug\lib;$(SolutionDir)external_include\GLFW\lib;$(SolutionDir)external_include\bgfx\lib;$(SolutionDir)external_include\bimg\lib;$(SolutionDir)external_include\GL\lib;$(SolutionDir)external_include\gainput\build\lib\Debug;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib;gainputstatic-d.lib;bgfx-d.lib;bimg-d.lib;bx-d.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);opengl32.lib;glfw3_mt.lib;glew32s.lib;bgfx-d.lib;bimg-d.lib;bx-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
