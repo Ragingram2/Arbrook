@@ -7,7 +7,7 @@
 namespace rythe::core
 {
 	//#define IX3(x, y, z) ((x) + (y) * N + (z) * N * N)
-#define IX(x, y) ((x) + (y) * N)
+#define IX(x, y) ((x) + (y * N))
 #define SIZE 16
 
 	struct FluidCube
@@ -187,8 +187,8 @@ namespace rythe::core
 		void addDensity(int x, int y, float amount)
 		{
 			int N = cube.size;
-			cube.density[IX(x, y)] += amount;
-			log::debug(cube.density[IX(x, y)]);
+			int idx = IX(x, y);
+			cube.density[idx] += amount;
 		}
 
 		void addVelocity(int x, int y, float amountX, float amountY)

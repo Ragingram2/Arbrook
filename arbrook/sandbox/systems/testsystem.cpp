@@ -30,18 +30,17 @@ namespace rythe::core
 
 		shader = gfx::ShaderCache::createShader(*m_api, "test", "resources/shaders/fluid.shader");
 		vertexHandle = gfx::BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
-		constantHandle = gfx::BufferCache::createBuffer<FluidCube>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
-
-		shader->bind();
+		constantHandle = gfx::BufferCache::createBuffer<float>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, cube.density, 256);
 		shader->addBuffer(gfx::ShaderType::FRAGMENT, constantHandle);
+		shader->bind();
 		layout.addBuffer(vertexHandle);
 		layout.bind(m_api->getHwnd(), shader);
 		layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
 		layout.setAttributePtr("TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
 		layout.submitAttributes();
 		addDensity(0, 0, 1);
-		addDensity(0, 6, 1);
-		shader->setData("ConstantBuffer", &cube);
+		addDensity(0, 1, 1);
+		//shader->setData("ConstantBuffer", &cube);
 	}
 
 	void TestSystem::update()
@@ -77,7 +76,7 @@ namespace rythe::core
 
 	void TestSystem::render()
 	{
-		shader->setData("ConstantBuffer", &cube);
+		shader->setData("ConstantBuffer", cube.density);
 		m_api->drawArrays(gfx::PrimitiveType::TRIANGLESLIST, 0, 6);
 	}
 }

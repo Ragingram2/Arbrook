@@ -22,7 +22,7 @@ namespace rythe::rendering::internal
 
 	enum class UsageType
 	{
-		DEFAULT = 0,
+		DEFAULT = GL_DYNAMIC_DRAW,
 		IMMUTABLE = 0,
 		STATICDRAW = GL_STATIC_DRAW,
 		STAGING = 0

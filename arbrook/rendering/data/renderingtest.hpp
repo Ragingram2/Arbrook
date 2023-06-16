@@ -287,6 +287,7 @@ namespace rythe::rendering
 			buffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
 			matrixBuffer = BufferCache::createBuffer<math::mat4>(*api, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			constantBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
 			layout.addBuffer(buffer);
 			layout.addBuffer(matrixBuffer);
