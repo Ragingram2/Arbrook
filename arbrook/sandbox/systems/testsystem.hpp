@@ -6,16 +6,16 @@
 
 namespace rythe::core
 {
-	//#define IX3(x, y, z) ((x) + (y) * N + (z) * N * N)
 #define IX(x, y) ((x) + (y * N))
-#define SIZE 16
+#define SIZE 32
+#define DIFFUSION 0.000001f
+#define VISCOSITY 0.0000001f
 
 	struct FluidCube
 	{
 		int size = SIZE;
-		float deltaTime = .02f;
-		float diffusion = .1f;
-		float viscosity = .01f;
+		float diffusion;
+		float viscosity;
 
 		float source[SIZE * SIZE];
 		float density[SIZE * SIZE];
@@ -56,13 +56,11 @@ namespace rythe::core
 		{
 			diffuse(1, cube.Velx0, cube.Velx, cube.viscosity, dt, iter);
 			diffuse(2, cube.Vely0, cube.Vely, cube.viscosity, dt, iter);
-			//diffuse();
 
 			project(cube.Velx0, cube.Vely0, cube.Velx, cube.Vely, iter);
 
 			advect(1, cube.Velx, cube.Velx0, cube.Velx0, cube.Vely0, dt);
 			advect(2, cube.Vely, cube.Vely0, cube.Velx0, cube.Vely0, dt);
-			//advect();
 
 			project(cube.Velx, cube.Vely, cube.Velx0, cube.Vely0, iter);
 
@@ -73,8 +71,8 @@ namespace rythe::core
 		void diffuse(int b, float* x, float* x0, float diff, float dt, int iter)
 		{
 			int N = cube.size;
-			float a = dt * diff * (N - 2) * (N - 2);
-			linearSolve(b, x, x0, a, 1 + 6 * a, iter);
+			float a = dt * diff * N * N;
+			linearSolve(b, x, x0, a, 1 + 4 * a, iter);
 		}
 
 		void advect(int b, float* d, float* d0, float* velX, float* velY, float dt)
@@ -83,8 +81,8 @@ namespace rythe::core
 
 			float i0, i1, j0, j1;
 
-			float dtx = dt * (N - 2);
-			float dty = dt * (N - 2);
+			float dtx = dt * N;
+			float dty = dt * N;
 
 			float s0, s1, t0, t1;
 			float tmp1, tmp2, x, y;
@@ -143,6 +141,18 @@ namespace rythe::core
 					p[IX(i, j)] = 0;
 				}
 			}
+			setBound(0, div); setBound(0, p);
+			linearSolve(0, div, p, 1, 4, iter);
+			for (int i = 1; i <= N; i++)
+			{
+				for (int j = 1; j <= N; j++)
+				{
+					velX[IX(i, j)] -= .5 * (p[IX(i + 1, j)] - p[IX(i - 1, j)]) * N;
+					velY[IX(i, j)] -= .5 * (p[IX(i, j + 1)] - p[IX(i, j - 1)]) * N;
+				}
+			}
+
+			setBound(1, velX); setBound(2, velY);
 		}
 
 		void linearSolve(int b, float* x, float* x0, float a, float c, int iter)
@@ -162,8 +172,8 @@ namespace rythe::core
 								+ x[IX(i, j - 1)])) * cRecip;
 					}
 				}
+				setBound(b, x);
 			}
-			setBound(b, x);
 		}
 
 		void setBound(int b, float* x)

@@ -16,9 +16,11 @@ void main()
 #shader fragment
 #version 420 core
 
+#define SIZE 32.0
+
 layout(std140, binding = 0) uniform ConstantBuffer
 {
-		float density[256];
+		vec4 source[256];
 };
 
 in vec2 TexCoord;
@@ -26,12 +28,13 @@ out vec4 FragColor;
 
 void main()
 {
-	int x = int((TexCoord.x) * 16.0);
-	int y = int((TexCoord.y) * 16.0);
+	int x = int((TexCoord.x) * SIZE);
+	int y = int((TexCoord.y) * SIZE);
 
-	int idx = int(x + (y * 16.0));
-	float val = density[idx];
-	FragColor = vec4(val, val, val, 1.0);
+	int idx = int(x + (y * SIZE));
+	float val = source[idx / 4][idx % 4];
+	FragColor = vec4(vec3(val/SIZE), 1.0);
+	//FragColor = vec4(vec3(idx)/(SIZE*SIZE),1.0);
 }
 #END
 
