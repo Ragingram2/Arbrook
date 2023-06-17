@@ -53,7 +53,9 @@ namespace rythe::rendering::internal
 		{
 			m_hwnd = hwnd;
 			compileShader(ShaderType::VERTEX, source.vertexSource);
+			hwnd.checkError();
 			compileShader(ShaderType::FRAGMENT, source.fragSource);
+			hwnd.checkError();
 
 			m_hwnd.dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
 			m_hwnd.dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
@@ -124,21 +126,35 @@ namespace rythe::rendering::internal
 		unsigned int compileShader(ShaderType type, const std::string& source)
 		{
 			HRESULT hr;
+			ID3DBlob* error;
+
+			UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+			flags |= D3DCOMPILE_DEBUG;
+#endif
 			if (type == ShaderType::VERTEX)
 			{
-				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "VShader", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &VS, nullptr);
+				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "VShader", "vs_4_0", flags, 0, &VS, &error);
 				if (FAILED(hr))
 				{
 					log::error("Vertex Shader Compilation failed");
+					if (error)
+					{
+						log::error((char*)error->GetBufferPointer());
+					}
 					m_hwnd.checkError();
 				}
 			}
 			else if (type == ShaderType::FRAGMENT)
 			{
-				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "PShader", "ps_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &PS, nullptr);
+				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "PShader", "ps_4_0", flags, 0, &PS, &error);
 				if (FAILED(hr))
 				{
 					log::error("Fragment Shader Compilation failed");
+					if (error)
+					{
+						log::error((char*)error->GetBufferPointer());
+					}
 					m_hwnd.checkError();
 				}
 			}

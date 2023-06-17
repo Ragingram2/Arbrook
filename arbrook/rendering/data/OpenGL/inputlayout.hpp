@@ -99,6 +99,7 @@ namespace rythe::rendering::internal
 					log::warn("Format is not supported for vertex attributes");
 					break;
 				}
+
 				switch (attrib.inputClass)
 				{
 				case InputClass::PER_VERTEX:
@@ -109,6 +110,8 @@ namespace rythe::rendering::internal
 					break;
 				}
 			}
+
+			clearAttributes();
 		}
 
 		void clearAttributes()

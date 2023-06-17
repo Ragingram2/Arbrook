@@ -32,9 +32,9 @@ void main()
 
 cbuffer ConstantBuffer : register(b0)
 {
-	float4x4 u_view;
-	float4x4 u_projection;
-	float4x4 u_model;
+	matrix u_view;
+	matrix u_projection;
+	matrix u_model;
 };
 
 struct VOut
@@ -46,7 +46,11 @@ VOut VShader(float3 position : POSITION)
 {
 	VOut output;
 
-	output.p_position = u_projection * u_view * u_model * float4(position, 1.0f);
+    float4 worldPosition = mul(float4(position, 1.0f), u_model);
+
+    float4 viewPosition = mul(worldPosition, u_view);
+
+    output.p_position = mul(viewPosition, u_projection);
 
 	return output;
 }

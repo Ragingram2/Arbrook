@@ -2,8 +2,10 @@
 #shader vertex
 #version 420 core
 
-layout(location = 0) in vec3 v_position;
+
+layout(location = 0) in vec4 v_position;
 layout(location = 1) in mat4 v_model;
+
 
 layout(std140, binding = 0) uniform ConstantBuffer
 {
@@ -14,8 +16,7 @@ layout(std140, binding = 0) uniform ConstantBuffer
 
 void main()
 {
-	vec3 offset = (vec3(gl_InstanceID % 5, gl_InstanceID / 5, 0) / 2.5) - vec3(.8, .8, 0);
-	gl_Position = u_projection * u_view * v_model * vec4(v_position, 1.0f);
+	gl_Position = (u_projection * u_view * v_model * v_position);
 }
 
 #shader fragment
@@ -44,11 +45,11 @@ struct VOut
 	float4 p_position : SV_POSITION;
 };
 
-VOut VShader(float3 position : POSITION)
+VOut VShader(float3 position : POSITION, column_major float4x4 model : MODEL)
 {
 	VOut output;
 
-	output.p_position = u_projection * u_view * u_model * float4(position, 1.0f);
+	output.p_position = mul(u_projection * u_view * model, float4(position, 1.0));
 
 	return output;
 }

@@ -145,7 +145,7 @@ namespace rythe::rendering
 #endif
 		int testCount = 0;
 #ifdef _DEBUG
-		float maxTests = 5000.0f;
+		float maxTests = 10000.0f;
 #else
 		float maxTests = 50000.0f;
 #endif

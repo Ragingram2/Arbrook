@@ -93,7 +93,7 @@ namespace rythe::rendering::internal
 			glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, nullptr, static_cast<GLenum>(m_usage));
 			if (m_target == TargetType::CONSTANT_BUFFER)
 			{
-				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, static_cast<unsigned int>(m_elementSize + (16 - (m_elementSize % 16))));
+				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, m_elementSize);
 			}
 		}
 	};

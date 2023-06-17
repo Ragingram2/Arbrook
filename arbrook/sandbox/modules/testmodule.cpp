@@ -5,6 +5,6 @@ namespace rythe::core
 	void TestModule::setup()
 	{
 		log::info("Initializing Test Module");
-		reportSystem<TestSystem>();
+		//reportSystem<TestSystem>();
 	}
 }
