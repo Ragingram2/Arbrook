@@ -19,11 +19,6 @@
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH
 
-#ifdef _DEBUG
-#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;}
-#else
-#define CHECKERROR(hr,text,func)
-#endif
 
 namespace rythe::rendering::internal
 {
@@ -107,21 +102,6 @@ namespace rythe::rendering::internal
 
 			ZeroMemory(&m_depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 
-			/*m_depthStencilDesc.DepthEnable = true;
-			m_depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-			m_depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;*/
-			//m_depthStencilDesc.StencilEnable = false;
-			//m_depthStencilDesc.StencilReadMask = 0xFF;
-			//m_depthStencilDesc.StencilWriteMask = 0xFF;
-			//m_depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//m_depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-			//m_depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//m_depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-			//m_depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-			//m_depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-			//m_depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-			//m_depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
 			hr = m_hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
 			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
 
@@ -140,7 +120,7 @@ namespace rythe::rendering::internal
 			ZeroMemory(&m_rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
 			m_rasterizerDesc.AntialiasedLineEnable = FALSE;
-			m_rasterizerDesc.CullMode = D3D11_CULL_BACK;
+			m_rasterizerDesc.CullMode = D3D11_CULL_NONE;
 			m_rasterizerDesc.DepthBias = 0;
 			m_rasterizerDesc.DepthBiasClamp = 0.0f;
 			m_rasterizerDesc.DepthClipEnable = TRUE;

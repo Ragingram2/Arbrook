@@ -15,17 +15,11 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
-		void bind(internal::window& hwnd, shader_handle shader) { m_impl.bind(hwnd, shader); }
+		void initialize(internal::window& hwnd, unsigned int numBuffers, shader_handle shader) { m_impl.initialize(hwnd, numBuffers, shader); }
 
-		void addBuffer(buffer_handle handle) { m_impl.addBuffer(handle); }
-
-		void clearBuffers() { m_impl.clearBuffers(); }
-
-		void submitAttributes() { m_impl.submitAttributes(); }
+		void bind() { m_impl.bind(); }
 
 		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass = InputClass::PER_VERTEX, unsigned int instanceStep = 0) { m_impl.setAttributePtr(attribName, index, static_cast<internal::FormatType>(components), inputSlot, stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
-
-		void clearAttributes() { m_impl.clearAttributes(); }
 
 		void release() { m_impl.release(); }
 

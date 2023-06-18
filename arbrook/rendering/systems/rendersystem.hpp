@@ -138,6 +138,8 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
+		bool enableTesting = false;
+
 #if RenderingAPI == RenderingAPI_OGL
 		CSVWriter writer = CSVWriter("resources/logs/ogldata.csv");
 #elif RenderingAPI == RenderingAPI_DX11
@@ -177,6 +179,9 @@ namespace rythe::rendering
 					updateTest = false;
 					initializeTest = true;
 					break;
+				case GLFW_KEY_1:
+					ShaderCache::reloadShaders();
+						break;
 				}
 			}
 

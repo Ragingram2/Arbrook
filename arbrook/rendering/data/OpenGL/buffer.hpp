@@ -52,7 +52,7 @@ namespace rythe::rendering::internal
 			createBuffer();
 		}
 
-		void bind()
+		void bind(int stream = 0)
 		{
 			glBindBuffer(static_cast<GLenum>(m_target), id);
 		}

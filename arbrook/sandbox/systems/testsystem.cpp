@@ -28,18 +28,19 @@ namespace rythe::core
 			{{  1.f, 1.f, 0.0f },{1,1}}//3
 		};
 
-		
+
 
 		shader = gfx::ShaderCache::createShader(*m_api, "test", "resources/shaders/fluid.shader");
 		vertexHandle = gfx::BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
-		constantHandle = gfx::BufferCache::createBuffer<float>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, cube.source, (cube.size * cube.size)/4);
+		constantHandle = gfx::BufferCache::createBuffer<float>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW, cube.source, (cube.size * cube.size) / 4);
 		shader->addBuffer(gfx::ShaderType::FRAGMENT, constantHandle);
 		shader->bind();
-		layout.addBuffer(vertexHandle);
-		layout.bind(m_api->getHwnd(), shader);
+
+		layout.initialize(m_api->getHwnd(), 1, shader);
+		vertexHandle->bind();
 		layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
 		layout.setAttributePtr("TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
-		layout.submitAttributes();
+		layout.bind();
 	}
 
 	void TestSystem::update()
@@ -62,7 +63,7 @@ namespace rythe::core
 		{
 			for (int y = -2; y <= 2; y++)
 			{
-				addDensity((SIZE / 2)+x, (SIZE / 2)+y, .5f);
+				addDensity((SIZE / 2) + x, (SIZE / 2) + y, .5f);
 			}
 		}
 		//addVelocity(SIZE / 2, SIZE / 2, 0, .1f);

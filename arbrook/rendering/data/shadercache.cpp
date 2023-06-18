@@ -2,22 +2,24 @@
 
 namespace rythe::rendering
 {
-	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
+	std::unordered_map<ShaderName, std::unique_ptr<shader>> ShaderCache::m_shaders;
+	std::unordered_map<ShaderName, FilePath> ShaderCache::m_filePaths;
+	RenderInterface* ShaderCache::m_api;
 
-	shader_handle ShaderCache::createShader(RenderInterface& api, const std::string& name, const std::string& filepath)
+	shader_handle ShaderCache::createShader(RenderInterface& api, const ShaderName& name, const FilePath& filepath)
 	{
 		if (m_shaders.contains(name))
 		{
-			//log::warn("Shader {} already exists, ignoring new shader, and returning existing one", name);
 			return m_shaders[name].get();
 		}
-
+		m_filePaths.emplace(name, filepath);
 		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second.get();
+		m_api = &api;
 
 		return api.createShader(shad, name, loadShader(filepath));
 	}
 
-	shader_handle ShaderCache::getShader(const std::string& name)
+	shader_handle ShaderCache::getShader(const ShaderName& name)
 	{
 		if (m_shaders.contains(name))
 		{
@@ -33,6 +35,21 @@ namespace rythe::rendering
 		{
 			m_shaders.erase(name);
 		}
+
+		if (m_filePaths.contains(name))
+		{
+			m_filePaths.erase(name);
+		}
+	}
+
+	void ShaderCache::reloadShaders()
+	{
+		for (auto& [name, shader] : m_shaders)
+		{
+			log::debug("reloading {} at path {} ", name, m_filePaths[name]);
+			m_api->createShader(shader.get(), name, loadShader(m_filePaths[name]));
+		}
+		log::debug("Done!");
 	}
 
 	shader_source ShaderCache::loadShader(const std::string& filepath)

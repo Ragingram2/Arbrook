@@ -36,20 +36,20 @@ namespace rythe::rendering
 
 		//DrawArrays
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
 		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
 
 		//DrawArraysInstanced
-		//m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
 
 		////DrawIndexed
-		//m_testScenes.emplace_back(std::make_unique<API_DrawIndexedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
+		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
 
 		////DrawIndexedInstanced
-		//m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
 
 #pragma endregion
 	}
@@ -103,7 +103,7 @@ namespace rythe::rendering
 			auto end = std::chrono::high_resolution_clock::now();
 			timeSum += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f;
 
-			if (testCount >= maxTests)
+			if (enableTesting && testCount >= maxTests)
 			{
 				writer.writeFrameTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, timeSum / maxTests);
 				testCount = 0;

@@ -22,6 +22,14 @@
 #define Window_HPP_PATH "rendering/data/DirectX/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/data/DirectX/enumtypes.hpp"
 #define ShaderLanguage "HLSL"
+
+#ifdef _DEBUG
+#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;__debugbreak();}
+#else
+#define CHECKERROR(hr,text,func)
 #endif
+#endif
+
+
 
 

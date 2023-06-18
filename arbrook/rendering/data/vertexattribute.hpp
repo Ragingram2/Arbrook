@@ -4,6 +4,7 @@
 
 #include "rendering/data/config.hpp"
 #include EnumTypes_HPP_PATH
+
 namespace rythe::rendering
 {
 	struct vertexattribute
