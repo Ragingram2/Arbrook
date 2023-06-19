@@ -8,8 +8,8 @@ namespace rythe::core
 {
 #define IX(x, y) ((x) + (y * N))
 #define SIZE 32
-#define DIFFUSION 0.000001f
-#define VISCOSITY 0.0000001f
+#define DIFFUSION .0001f
+#define VISCOSITY 0.00000001f
 
 	struct FluidCube
 	{
@@ -54,8 +54,8 @@ namespace rythe::core
 
 		void step(int iter, float dt)
 		{
-			diffuse(1, cube.Velx0, cube.Velx, cube.viscosity, dt, iter);
-			diffuse(2, cube.Vely0, cube.Vely, cube.viscosity, dt, iter);
+			diffuse(1, cube.Velx0, cube.Velx, VISCOSITY, dt, iter);
+			diffuse(2, cube.Vely0, cube.Vely, VISCOSITY, dt, iter);
 
 			project(cube.Velx0, cube.Vely0, cube.Velx, cube.Vely, iter);
 
@@ -64,7 +64,7 @@ namespace rythe::core
 
 			project(cube.Velx, cube.Vely, cube.Velx0, cube.Vely0, iter);
 
-			diffuse(0, cube.source, cube.density, cube.diffusion, dt, iter);
+			diffuse(0, cube.source, cube.density, DIFFUSION, dt, iter);
 			advect(0, cube.density, cube.source, cube.Velx, cube.Vely, dt);
 		}
 

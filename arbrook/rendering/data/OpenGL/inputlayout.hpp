@@ -32,6 +32,7 @@ namespace rythe::rendering::internal
 			glGenVertexArrays(1, &id);
 		}
 
+		//This needs to be reworked into having the buffers stored.
 		void bind()
 		{
 			glBindVertexArray(id);

@@ -22,6 +22,10 @@ namespace rythe::rendering
 	}
 }
 
+//This is where my addition notes will go
+//Support owning multiple buffers
+//possibly move currently bound buffers to the render interface
+
 namespace rythe::rendering
 {
 	template<typename APIType>

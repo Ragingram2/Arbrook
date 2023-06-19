@@ -5,7 +5,7 @@ namespace rythe::rendering
 {
 	struct camera
 	{
-		math::vec3 pos = math::vec3(0, 0, 3);
+		math::vec3 pos = math::vec3(0, 0, 5.f);
 		math::vec3 front = math::vec3(0.0f, 0.0f, -1.0f);
 
 		math::vec3 target = math::vec3(0, 0, 0);

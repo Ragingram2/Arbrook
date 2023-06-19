@@ -21,3 +21,6 @@ namespace rythe::rendering
 	typedef Ishader<internal::shader> shader;
 	typedef Itexture<internal::texture> texture;
 }
+
+#define Width 600.f
+#define Height 600.f

@@ -20,6 +20,7 @@ namespace rythe::rendering
 		static void deleteBuffer(const std::string& name);
 	};
 
+
 	template<typename elementType>
 	inline buffer_handle BufferCache::createBuffer(RenderInterface& api, const std::string& name, TargetType target, UsageType usage, elementType* data, int size)
 	{

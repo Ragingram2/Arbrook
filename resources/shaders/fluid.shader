@@ -16,7 +16,7 @@ void main()
 #shader fragment
 #version 420 core
 
-#define SIZE 32.0
+#define SIZE 32
 
 layout(std140, binding = 0) uniform ConstantBuffer
 {
@@ -33,8 +33,8 @@ void main()
 
 	int idx = int(x + (y * SIZE));
 	float val = source[idx / 4][idx % 4];
-	FragColor = vec4(vec3(val/SIZE), 1.0);
-	//FragColor = vec4(vec3(idx)/(SIZE*SIZE),1.0);
+	//float val = source[idx];
+	FragColor = vec4(vec3(val), 1.0);
 }
 #END
 

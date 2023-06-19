@@ -153,7 +153,7 @@ namespace rythe::rendering
 #ifdef _DEBUG
 		float maxTests = 10000.0f;
 #else
-		float maxTests = 50000.0f;
+		float maxTests = 10000.0f;
 #endif
 		float timeSum = 0.0f;
 
