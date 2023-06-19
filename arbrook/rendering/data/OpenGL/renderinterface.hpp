@@ -33,9 +33,10 @@ namespace rythe::rendering::internal
 			hwnd.initialize(res, name, window);
 			hwnd.makeCurrent();
 
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 
 			if (glewInit() != GLEW_OK)
 			{
@@ -294,7 +295,7 @@ namespace rythe::rendering::internal
 		{
 		case GL_DEBUG_SEVERITY_HIGH:
 			log::error("[{}-{}] {}: {}", s, t, id, message);
-			__debugbreak();
+			//__debugbreak();
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
 			log::warn("[{}-{}] {}: {}", s, t, id, message);
@@ -303,7 +304,7 @@ namespace rythe::rendering::internal
 			log::debug("[{}-{}] {}: {}", s, t, id, message);
 			break;
 		case GL_DEBUG_SEVERITY_NOTIFICATION:
-			//log::debug("[{}-{}] {}: {}", s, t, id, message);
+			log::debug("[{}-{}] {}: {}", s, t, id, message);
 			break;
 		default:
 			log::debug("[{}-{}] {}: {}", s, t, id, message);

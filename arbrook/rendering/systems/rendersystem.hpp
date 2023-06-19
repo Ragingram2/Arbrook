@@ -138,7 +138,7 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
-		bool enableTesting = false;
+		bool enableTesting = true;
 
 #if RenderingAPI == RenderingAPI_OGL
 		CSVWriter writer = CSVWriter("resources/logs/ogldata.csv");
@@ -193,6 +193,16 @@ namespace rythe::rendering
 			{
 				currentScene = m_testScenes.size() - 1;
 			}
+		}
+
+		void nextScene()
+		{
+			key_callback(nullptr, GLFW_KEY_RIGHT, 0, GLFW_PRESS, 0);
+		}
+
+		void previousScene()
+		{
+			key_callback(nullptr, GLFW_KEY_LEFT, 0, GLFW_PRESS, 0);
 		}
 	};
 }

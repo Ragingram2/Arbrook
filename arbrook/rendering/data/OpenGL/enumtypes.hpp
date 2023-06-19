@@ -25,7 +25,7 @@ namespace rythe::rendering::internal
 		DEFAULT = GL_DYNAMIC_DRAW,
 		IMMUTABLE = 0,
 		STATICDRAW = GL_STATIC_DRAW,
-		STAGING = 0
+		STAGING = GL_STREAM_DRAW
 	};
 
 	enum class PrimitiveType

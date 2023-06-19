@@ -26,7 +26,7 @@
 #ifdef _DEBUG
 #define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;__debugbreak();}
 #else
-#define CHECKERROR(hr,text,func)
+#define CHECKERROR(hr,text,func) if(FAILED(hr)) {}
 #endif
 #endif
 

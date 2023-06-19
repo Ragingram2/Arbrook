@@ -33,8 +33,11 @@ namespace rythe::rendering::internal
 		unsigned int id = 0;
 		std::string name;
 	private:
+		unsigned int m_offsets;
+		unsigned int m_slot;
 		unsigned int m_size;
 		unsigned int m_elementSize = 0;
+
 
 		ID3D11Buffer* m_internalBuffer;
 		D3D11_BUFFER_DESC m_bufferDesc;
@@ -57,19 +60,20 @@ namespace rythe::rendering::internal
 			createBuffer();
 		}
 
-		void bind(int stream = 0)
+		void bind(int slot = 0, int offset = 0)
 		{
-			unsigned int offsets[1] = { 0 };
+			m_slot = slot;
+			m_offsets = offset;
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				m_hwnd.devcon->IASetVertexBuffers(stream, 1, &m_internalBuffer, &m_elementSize, offsets);
+				m_hwnd.devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
 				break;
 			case TargetType::INDEX_BUFFER:
-				m_hwnd.devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), offsets[0]);
+				m_hwnd.devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				m_hwnd.devcon->VSSetConstantBuffers(stream, 1, &m_internalBuffer);
+				m_hwnd.devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -89,6 +93,22 @@ namespace rythe::rendering::internal
 				m_size = size;
 				m_elementSize = sizeof(elementType);
 				createBuffer();
+			}
+
+			switch (m_target)
+			{
+			case TargetType::VERTEX_BUFFER:
+				m_hwnd.devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
+				break;
+			case TargetType::INDEX_BUFFER:
+				m_hwnd.devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
+				break;
+			case TargetType::CONSTANT_BUFFER:
+				m_hwnd.devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
+				break;
+			default:
+				log::error("That type is not supported");
+				break;
 			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;

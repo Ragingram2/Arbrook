@@ -37,6 +37,8 @@ namespace rythe::rendering::internal
 	private:
 		TargetType m_target;
 		UsageType m_usage;
+		unsigned int m_slot;
+		unsigned int m_offset;
 		unsigned int m_size;
 		unsigned int m_elementSize;
 	public:
@@ -52,9 +54,11 @@ namespace rythe::rendering::internal
 			createBuffer();
 		}
 
-		void bind(int stream = 0)
+		void bind(int slot = 0, int offset = 0)
 		{
 			glBindBuffer(static_cast<GLenum>(m_target), id);
+			m_slot = slot;
+			m_offset = offset;
 		}
 
 		template<typename elementType>

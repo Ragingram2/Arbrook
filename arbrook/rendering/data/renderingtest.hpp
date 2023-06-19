@@ -94,9 +94,10 @@ namespace rythe::rendering
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
 			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
 			shader->bind();
-			vBuffer->bind();
+
 			layout.initialize(api->getHwnd(), 1, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			vBuffer->bind();
 			layout.bind();
 		}
 		virtual void update(RenderInterface* api) override
@@ -286,16 +287,19 @@ namespace rythe::rendering
 			constantBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
-
 			buffer->bind();
+			matrixBuffer->bind(1);
+
 			layout.initialize(api->getHwnd(), 2, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			buffer->bind();
+			//layout.bind();
 
-			matrixBuffer->bind(1);
 			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			matrixBuffer->bind(1);
 			layout.bind();
 
 			data.mvp = projView;
@@ -319,7 +323,6 @@ namespace rythe::rendering
 			}
 
 			matrixBuffer->bufferData(models.data(), models.size());
-			matrixBuffer->bind(1);
 			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 36, count, 0, 0);
 		}
 
@@ -396,9 +399,9 @@ namespace rythe::rendering
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 
-			layout.initialize(api->getHwnd(), 1, shader);
 			vBuffer->bind();
 			idxBuffer->bind();
+			layout.initialize(api->getHwnd(), 1, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
 			layout.bind();
 		}
@@ -414,6 +417,8 @@ namespace rythe::rendering
 					auto model = math::translate(math::mat4(1.0f), pos);
 					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
+					vBuffer->bind();
+					idxBuffer->bind();
 					api->drawIndexed(PrimitiveType::TRIANGLESLIST, 36, 0, 0);
 				}
 			}
@@ -498,18 +503,20 @@ namespace rythe::rendering
 			matrixBuffer = BufferCache::createBuffer<math::mat4>(*api, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
-
+			vBuffer->bind();
+			matrixBuffer->bind(1);
 			idxBuffer->bind();
 
 			layout.initialize(api->getHwnd(), 2, shader);
-
-			vBuffer->bind();
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-			matrixBuffer->bind(1);
+			vBuffer->bind();
+			//layout.bind();
+
 			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			matrixBuffer->bind(1);
 			layout.bind();
 
 			data.mvp = projView;
@@ -532,7 +539,8 @@ namespace rythe::rendering
 				}
 			}
 			matrixBuffer->bufferData(models.data(), models.size());
-			matrixBuffer->bind(1);
+			vBuffer->bind();
+			idxBuffer->bind();
 			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, 36, count, 0, 0, 0);
 		}
 
@@ -555,7 +563,7 @@ namespace rythe::rendering
 		char* data = new char[2048];
 		std::ifstream file;
 		size_t fileSize;
-		file.open(fsPath);
+		file.open(fsPath, std::ifstream::in | std::ifstream::binary);
 		if (file.is_open()) {
 			file.seekg(0, std::ios::end);
 			fileSize = file.tellg();
@@ -570,7 +578,7 @@ namespace rythe::rendering
 			log::error("Fragment Shader failed compile");
 		bgfx::setName(fhandle, "TestFragment");
 
-		file.open(vsPath);
+		file.open(vsPath, std::ifstream::in | std::ifstream::binary);
 		if (file.is_open()) {
 			file.seekg(0, std::ios::end);
 			fileSize = file.tellg();
@@ -586,18 +594,68 @@ namespace rythe::rendering
 			log::error("Vertex Shader failed compile");
 		bgfx::setName(vhandle, "TestVertex");
 
-		return bgfx::createProgram(vhandle, fhandle, true);
+		return bgfx::createProgram(vhandle, fhandle, false);
 	}
 
-	static const 	math::vec3 verts[6] =
-	{	//positions						
-		{  -0.1f, 0.1f, 0.0f  },//0
-		{ 	-0.1f,-0.1f, 0.0f  },//1
-		{  0.1f,-0.1f, 0.0f  },//2
-		{  -0.1f, 0.1f, 0.0f  },//0
-		{  0.1f,-0.1f, 0.0f },//2
-		{  0.1f, 0.1f, 0.0f }//3
+	static const math::vec3 verts[36] =
+	{
+		{ -0.1f, -0.1f, -0.1f},
+		{0.1f, -0.1f, -0.1f },
+		{0.1f,  0.1f, -0.1f},
+		{0.1f,  0.1f, -0.1f},
+		{-0.1f,  0.1f, -0.1f},
+		{-0.1f, -0.1f, -0.1f},
+
+		{ -0.1f, -0.1f,  0.1f},
+		{0.1f, -0.1f,  0.1f},
+		{0.1f,  0.1f,  0.1f},
+		{0.1f,  0.1f,  0.1f},
+		{-0.1f,  0.1f,  0.1f},
+		{-0.1f, -0.1f,  0.1f},
+
+		{ -0.1f,  0.1f,  0.1f},
+		{-0.1f,  0.1f, -0.1f},
+		{-0.1f, -0.1f, -0.1f},
+		{-0.1f, -0.1f, -0.1f},
+		{-0.1f, -0.1f,  0.1f},
+		{-0.1f,  0.1f,  0.1f},
+
+		{0.1f,  0.1f,  0.1f},
+		{0.1f,  0.1f, -0.1f},
+		{0.1f, -0.1f, -0.1f},
+		{0.1f, -0.1f, -0.1f},
+		{0.1f, -0.1f,  0.1f},
+		{0.1f,  0.1f,  0.1f},
+
+		{-0.1f, -0.1f, -0.1f},
+		{0.1f, -0.1f, -0.1f},
+		{0.1f, -0.1f,  0.1f},
+		{0.1f, -0.1f,  0.1f},
+		{-0.1f, -0.1f,  0.1f},
+		{-0.1f, -0.1f, -0.1f},
+
+		{-0.1f,  0.1f, -0.1f},
+		{0.1f,  0.1f, -0.1f},
+		{0.1f,  0.1f,  0.1f},
+		{0.1f,  0.1f,  0.1f},
+		{-0.1f,  0.1f,  0.1f},
+		{-0.1f,  0.1f, -0.1f},
 	};
+	//static const uint16_t ind[] =
+	//{
+	//	0, 1, 2, // 0
+	//	1, 3, 2,
+	//	4, 6, 5, // 2
+	//	5, 6, 7,
+	//	0, 2, 4, // 4
+	//	4, 2, 6,
+	//	1, 5, 3, // 6
+	//	5, 7, 3,
+	//	0, 4, 1, // 8
+	//	4, 5, 1,
+	//	2, 3, 6, // 10
+	//	6, 3, 7,
+	//};
 
 	struct BgfxCallback : public bgfx::CallbackI
 	{
@@ -672,17 +730,19 @@ namespace rythe::rendering
 	{
 		bgfx::PlatformData platformData;
 		bgfx::VertexBufferHandle vertexBuffer;
+		bgfx::IndexBufferHandle indexBuffer;
 		bgfx::ProgramHandle shader;
 		bgfx::VertexLayout inputLayout;
 		BgfxCallback callback;
-
-
 		uint64_t state = 0
 			| BGFX_STATE_WRITE_RGB
 			| BGFX_STATE_WRITE_A
 			| BGFX_STATE_WRITE_Z
 			| BGFX_STATE_FRONT_CCW
 			| BGFX_STATE_MSAA;
+
+		uniformData data;
+		float i = 0;
 
 		virtual void setup(RenderInterface* api) override
 		{
@@ -692,13 +752,12 @@ namespace rythe::rendering
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 
 			bgfx::Init init;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 			init.platformData.ndt = nullptr;
 #if RenderingAPI == RenderingAPI_OGL
 			init.type = bgfx::RendererType::OpenGL;
-			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 			init.platformData.context = api->getHwnd().dev;
 			init.platformData.backBuffer = api->getHwnd().backbuffer;
 			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
@@ -706,12 +765,22 @@ namespace rythe::rendering
 
 			init.resolution.width = api->getHwnd().m_resolution.x;
 			init.resolution.height = api->getHwnd().m_resolution.y;
-			init.callback = &callback;
+			//#ifdef _DEBUG
+			//			init.callback = &callback;
+			//#endif
 			bgfx::init(init);
+
+			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
+			bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
+			bgfx::setViewRect(0, 0, 0, 600, 600);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
+
+			//indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(ind, sizeof(ind)));
+
+
 #if RenderingAPI == RenderingAPI_OGL
 			shader = loadShader("test", "resources/shaders/ogl/testFS.shader", "resources/shaders/ogl/testVS.shader");
 #elif RenderingAPI == RenderingAPI_DX11
@@ -721,24 +790,36 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewRect(0, 0, 0, uint16_t(600), uint16_t(600));
-			bgfx::setVertexBuffer(0, vertexBuffer);
-			bgfx::setState(state);
+			float proj[16];
+			bx::mtxProj(proj, 45.f, float(600) / float(600), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
+			bgfx::setViewTransform(0, math::value_ptr(math::transpose(math::lookAt(cam.pos, cam.pos + cam.front, cam.up))), proj);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
-			bgfx::setVertexBuffer(0, vertexBuffer);
-			bgfx::setState(state);
-			bgfx::submit(0, shader);
+			i += .1f;
+			bgfx::touch(0);
+
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos = { x + .2f, y + .2f, 0.0f };
+					auto model = math::translate(math::mat4(1.0f), pos * 10.f);
+					bgfx::setTransform(math::value_ptr(math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f))));
+
+					bgfx::setVertexBuffer(0, vertexBuffer);
+					bgfx::setState(state);
+					bgfx::submit(0, shader);
+				}
+			}
+
 			bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
 		{
-			bgfx::destroy(vertexBuffer);
-			if (shader.idx != bgfx::kInvalidHandle)
-				bgfx::destroy(shader);
+
 			bgfx::shutdown();
 			api->initialize(api->getHwnd().m_resolution, "", api->getWindow());
 		}
@@ -1311,7 +1392,7 @@ namespace rythe::rendering
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 
-		device->CreateInputLayout(layout, sizeof(layout) / sizeof(layout[0]), vtxBlob->GetBufferPointer(),vtxBlob->GetBufferSize(), &inputLayout);
+		device->CreateInputLayout(layout, sizeof(layout) / sizeof(layout[0]), vtxBlob->GetBufferPointer(), vtxBlob->GetBufferSize(), &inputLayout);
 
 		// Set the input layout
 		deviceContext->IASetInputLayout(inputLayout);

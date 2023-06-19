@@ -36,7 +36,7 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 		void initialize(TargetType target, UsageType usage) { m_impl.initialize(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage)); }
-		void bind(int stream = 0) { m_impl.bind(stream); }
+		void bind(int slot = 0, int offset = 0) { m_impl.bind(slot, offset); }
 		template<typename elementType>
 		void bufferData(elementType data[], int size = 0) { m_impl.bufferData(data, size); }
 
