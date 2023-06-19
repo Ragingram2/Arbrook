@@ -293,7 +293,7 @@ namespace rythe::rendering
 			layout.initialize(api->getHwnd(), 2, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
 			buffer->bind();
-			//layout.bind();
+			layout.bind();
 
 			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
@@ -510,7 +510,7 @@ namespace rythe::rendering
 			layout.initialize(api->getHwnd(), 2, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
 			vBuffer->bind();
-			//layout.bind();
+			layout.bind();
 
 			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
@@ -641,21 +641,32 @@ namespace rythe::rendering
 		{-0.1f,  0.1f,  0.1f},
 		{-0.1f,  0.1f, -0.1f},
 	};
-	//static const uint16_t ind[] =
-	//{
-	//	0, 1, 2, // 0
-	//	1, 3, 2,
-	//	4, 6, 5, // 2
-	//	5, 6, 7,
-	//	0, 2, 4, // 4
-	//	4, 2, 6,
-	//	1, 5, 3, // 6
-	//	5, 7, 3,
-	//	0, 4, 1, // 8
-	//	4, 5, 1,
-	//	2, 3, 6, // 10
-	//	6, 3, 7,
-	//};
+	static const math::vec3 indVerts[8] =
+	{
+		{ -.1f, -.1f,  0.1f}, //0
+		{	 .1f, -.1f,  0.1f}, //1
+		{	-.1f,  .1f,  0.1f}, //2
+		{	 .1f,  .1f,  0.1f}, //3
+		{	-.1f, -.1f, -0.1f}, //4
+		{	 .1f, -.1f, -0.1f}, //5
+		{	-.1f,  .1f, -0.1f}, //6
+		{	 .1f,  .1f, -0.1f}  //7
+	};
+	static const uint16_t ind[] =
+	{
+		0, 1, 2, // 0
+		1, 3, 2,
+		4, 6, 5, // 2
+		5, 6, 7,
+		0, 2, 4, // 4
+		4, 2, 6,
+		1, 5, 3, // 6
+		5, 7, 3,
+		0, 4, 1, // 8
+		4, 5, 1,
+		2, 3, 6, // 10
+		6, 3, 7,
+	};
 
 	struct BgfxCallback : public bgfx::CallbackI
 	{
@@ -739,7 +750,8 @@ namespace rythe::rendering
 			| BGFX_STATE_WRITE_A
 			| BGFX_STATE_WRITE_Z
 			| BGFX_STATE_FRONT_CCW
-			| BGFX_STATE_MSAA;
+			| BGFX_STATE_MSAA
+			| 0;
 
 		uniformData data;
 		float i = 0;
@@ -758,28 +770,28 @@ namespace rythe::rendering
 			init.type = bgfx::RendererType::OpenGL;
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.context = api->getHwnd().dev;
-			init.platformData.backBuffer = api->getHwnd().backbuffer;
-			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
+			//init.platformData.context = api->getHwnd().dev;
+			//init.platformData.backBuffer = api->getHwnd().backbuffer;
+			//init.platformData.backBufferDS = api->getHwnd().depthStencilView;
 #endif
 
 			init.resolution.width = api->getHwnd().m_resolution.x;
 			init.resolution.height = api->getHwnd().m_resolution.y;
-			//#ifdef _DEBUG
-			//			init.callback = &callback;
-			//#endif
+#ifdef _DEBUG
+			init.callback = &callback;
+#endif
+			api->close();
 			bgfx::init(init);
 
+			bgfx::setDebug(BGFX_DEBUG_TEXT);
+
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewMode(0, bgfx::ViewMode::Sequential);
+			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, 600, 600);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
 
 			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
-
-			//indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(ind, sizeof(ind)));
-
 
 #if RenderingAPI == RenderingAPI_OGL
 			shader = loadShader("test", "resources/shaders/ogl/testFS.shader", "resources/shaders/ogl/testVS.shader");
@@ -790,9 +802,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			float proj[16];
-			bx::mtxProj(proj, 45.f, float(600) / float(600), 0.1f, 100.0f, bgfx::getCaps()->homogeneousDepth);
-			bgfx::setViewTransform(0, math::value_ptr(math::transpose(math::lookAt(cam.pos, cam.pos + cam.front, cam.up))), proj);
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), 600.f / 600.f, .1f, 100.0f)));
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -805,8 +815,9 @@ namespace rythe::rendering
 				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
 				{
 					math::vec3 pos = { x + .2f, y + .2f, 0.0f };
-					auto model = math::translate(math::mat4(1.0f), pos * 10.f);
-					bgfx::setTransform(math::value_ptr(math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f))));
+					auto model = math::translate(math::mat4(1.0f), pos);
+					model = math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					bgfx::setTransform(math::value_ptr(model));
 
 					bgfx::setVertexBuffer(0, vertexBuffer);
 					bgfx::setState(state);
@@ -819,9 +830,332 @@ namespace rythe::rendering
 
 		virtual void destroy(RenderInterface* api) override
 		{
-
 			bgfx::shutdown();
-			api->initialize(api->getHwnd().m_resolution, "", api->getWindow());
+			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
+		}
+	};
+
+	struct BGFX_DrawArraysInstancedTest : public rendering_test
+	{
+		std::vector<math::mat4> models;
+
+		bgfx::PlatformData platformData;
+		bgfx::VertexBufferHandle vertexBuffer;
+		bgfx::IndexBufferHandle indexBuffer;
+		bgfx::ProgramHandle shader;
+		bgfx::VertexLayout inputLayout;
+		BgfxCallback callback;
+		uint64_t state = 0
+			| BGFX_STATE_WRITE_RGB
+			| BGFX_STATE_WRITE_A
+			| BGFX_STATE_WRITE_Z
+			| BGFX_STATE_FRONT_CCW
+			| BGFX_STATE_MSAA
+			| 0;
+
+		uniformData data;
+		float i = 0;
+		int index = 0;
+		int count = 25;
+
+
+		virtual void setup(RenderInterface* api) override
+		{
+			type = BGFX;
+			name = "DrawArraysInstanced";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
+
+			bgfx::Init init;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
+			init.platformData.ndt = nullptr;
+#if RenderingAPI == RenderingAPI_OGL
+			init.type = bgfx::RendererType::OpenGL;
+#elif RenderingAPI == RenderingAPI_DX11
+			init.type = bgfx::RendererType::Direct3D11;
+			//init.platformData.context = api->getHwnd().dev;
+			//init.platformData.backBuffer = api->getHwnd().backbuffer;
+			//init.platformData.backBufferDS = api->getHwnd().depthStencilView;
+#endif
+
+			init.resolution.width = api->getHwnd().m_resolution.x;
+			init.resolution.height = api->getHwnd().m_resolution.y;
+#ifdef _DEBUG
+			init.callback = &callback;
+#endif
+			api->close();
+			bgfx::init(init);
+
+			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
+			bgfx::setViewMode(0, bgfx::ViewMode::Default);
+			bgfx::setViewRect(0, 0, 0, 600, 600);
+
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(verts, sizeof(verts)), inputLayout);
+
+#if RenderingAPI == RenderingAPI_OGL
+			shader = loadShader("test", "resources/shaders/ogl/instance_testFS.shader", "resources/shaders/ogl/instance_testVS.shader");
+#elif RenderingAPI == RenderingAPI_DX11
+			shader = loadShader("test", "resources/shaders/dx11/instance_testFS.shader", "resources/shaders/dx11/instance_testVS.shader");
+#endif
+
+			if (shader.idx == bgfx::kInvalidHandle)
+				log::error("Shader failed to compile");
+
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), 600.f / 600.f, .1f, 100.0f)));
+		}
+
+		virtual void update(RenderInterface* api) override
+		{
+			index = 0;
+			i += .1f;
+			bgfx::touch(0);
+
+			uint32_t drawnCubes = bgfx::getAvailInstanceDataBuffer(count, sizeof(math::mat4));
+			bgfx::InstanceDataBuffer instanceBuffer;
+			bgfx::allocInstanceDataBuffer(&instanceBuffer, drawnCubes, sizeof(math::mat4));
+
+			uint8_t* data = instanceBuffer.data;
+			math::mat4* mtx = (math::mat4*)data;
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos = { x + .2f, y + .2f, 0.0f };
+					mtx[index] = math::translate(math::mat4(1.0f), pos);
+					mtx[index] = math::rotate(mtx[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					index++;
+				}
+			}
+
+			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setInstanceDataBuffer(&instanceBuffer);
+			bgfx::setState(state);
+			bgfx::submit(0, shader);
+
+			bgfx::frame();
+		}
+
+		virtual void destroy(RenderInterface* api) override
+		{
+			bgfx::shutdown();
+			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
+		}
+	};
+
+	struct BGFX_DrawIndexedTest : public rendering_test
+	{
+		bgfx::PlatformData platformData;
+		bgfx::VertexBufferHandle vertexBuffer;
+		bgfx::IndexBufferHandle indexBuffer;
+		bgfx::ProgramHandle shader;
+		bgfx::VertexLayout inputLayout;
+		BgfxCallback callback;
+		uint64_t state = 0
+			| BGFX_STATE_WRITE_RGB
+			| BGFX_STATE_WRITE_A
+			| BGFX_STATE_WRITE_Z
+			| BGFX_STATE_FRONT_CCW
+			| BGFX_STATE_MSAA
+			| 0;
+
+		uniformData data;
+		float i = 0;
+
+		virtual void setup(RenderInterface* api) override
+		{
+			type = BGFX;
+			name = "DrawIndexed";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
+			bgfx::Init init;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
+			init.platformData.ndt = nullptr;
+#if RenderingAPI == RenderingAPI_OGL
+			init.type = bgfx::RendererType::OpenGL;
+#elif RenderingAPI == RenderingAPI_DX11
+			init.type = bgfx::RendererType::Direct3D11;
+			//init.platformData.context = api->getHwnd().dev;
+			//init.platformData.backBuffer = api->getHwnd().backbuffer;
+			//init.platformData.backBufferDS = api->getHwnd().depthStencilView;
+#endif
+
+			init.resolution.width = api->getHwnd().m_resolution.x;
+			init.resolution.height = api->getHwnd().m_resolution.y;
+#ifdef _DEBUG
+			init.callback = &callback;
+#endif
+
+			api->close();
+			bgfx::init(init);
+
+			bgfx::setDebug(BGFX_DEBUG_TEXT);
+
+			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
+			bgfx::setViewMode(0, bgfx::ViewMode::Default);
+			bgfx::setViewRect(0, 0, 0, 600, 600);
+
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(indVerts, sizeof(indVerts)), inputLayout);
+
+			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(ind, sizeof(ind)));
+
+
+#if RenderingAPI == RenderingAPI_OGL
+			shader = loadShader("test", "resources/shaders/ogl/testFS.shader", "resources/shaders/ogl/testVS.shader");
+#elif RenderingAPI == RenderingAPI_DX11
+			shader = loadShader("test", "resources/shaders/dx11/testFS.shader", "resources/shaders/dx11/testVS.shader");
+#endif
+
+			if (shader.idx == bgfx::kInvalidHandle)
+				log::error("Shader failed to compile");
+
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), 600.f / 600.f, .1f, 100.0f)));
+		}
+
+		virtual void update(RenderInterface* api) override
+		{
+			i += .1f;
+			bgfx::touch(0);
+
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos = { x + .2f, y + .2f, 0.0f };
+					auto model = math::translate(math::mat4(1.0f), pos);
+					model = math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					bgfx::setTransform(math::value_ptr(model));
+
+					bgfx::setVertexBuffer(0, vertexBuffer);
+					bgfx::setIndexBuffer(indexBuffer);
+					bgfx::setState(state);
+					bgfx::submit(0, shader);
+				}
+			}
+
+			bgfx::frame();
+		}
+
+		virtual void destroy(RenderInterface* api) override
+		{
+			bgfx::shutdown();
+			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
+		}
+	};
+
+	struct BGFX_DrawIndexedInstancedTest : public rendering_test
+	{
+		std::vector<math::mat4> models;
+
+		bgfx::PlatformData platformData;
+		bgfx::VertexBufferHandle vertexBuffer;
+		bgfx::IndexBufferHandle indexBuffer;
+		bgfx::ProgramHandle shader;
+		bgfx::VertexLayout inputLayout;
+		BgfxCallback callback;
+		uint64_t state = 0
+			| BGFX_STATE_WRITE_RGB
+			| BGFX_STATE_WRITE_A
+			| BGFX_STATE_WRITE_Z
+			| BGFX_STATE_FRONT_CCW
+			| BGFX_STATE_MSAA
+			| 0;
+
+		uniformData data;
+		float i = 0;
+		int index = 0;
+		int count = 25;
+
+
+		virtual void setup(RenderInterface* api) override
+		{
+			type = BGFX;
+			name = "DrawIndexedInstanced";
+			log::debug("Initializing {}_Test{}", stringify(type), name);
+			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
+
+			bgfx::Init init;
+			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
+			init.platformData.ndt = nullptr;
+#if RenderingAPI == RenderingAPI_OGL
+			init.type = bgfx::RendererType::OpenGL;
+#elif RenderingAPI == RenderingAPI_DX11
+			init.type = bgfx::RendererType::Direct3D11;
+			init.platformData.context = api->getHwnd().dev;
+			//init.platformData.backBuffer = api->getHwnd().backbuffer;
+			//init.platformData.backBufferDS = api->getHwnd().depthStencilView;
+#endif
+
+			init.resolution.width = api->getHwnd().m_resolution.x;
+			init.resolution.height = api->getHwnd().m_resolution.y;
+#ifdef _DEBUG
+			init.callback = &callback;
+#endif
+			api->close();
+			bgfx::init(init);
+
+			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
+			bgfx::setViewMode(0, bgfx::ViewMode::Default);
+			bgfx::setViewRect(0, 0, 0, 600, 600);
+
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(indVerts, sizeof(indVerts)), inputLayout);
+
+			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(ind, sizeof(ind)));
+
+
+#if RenderingAPI == RenderingAPI_OGL
+			shader = loadShader("test", "resources/shaders/ogl/instance_testFS.shader", "resources/shaders/ogl/instance_testVS.shader");
+#elif RenderingAPI == RenderingAPI_DX11
+			shader = loadShader("test", "resources/shaders/dx11/instance_testFS.shader", "resources/shaders/dx11/instance_testVS.shader");
+#endif
+
+			if (shader.idx == bgfx::kInvalidHandle)
+				log::error("Shader failed to compile");
+
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), 600.f / 600.f, .1f, 100.0f)));
+		}
+
+		virtual void update(RenderInterface* api) override
+		{
+			index = 0;
+			i += .1f;
+			bgfx::touch(0);
+
+			uint32_t drawnCubes = bgfx::getAvailInstanceDataBuffer(count, sizeof(math::mat4));
+			bgfx::InstanceDataBuffer instanceBuffer;
+			bgfx::allocInstanceDataBuffer(&instanceBuffer, drawnCubes, sizeof(math::mat4));
+
+			uint8_t* data = instanceBuffer.data;
+			math::mat4* mtx = (math::mat4*)data;
+			for (float x = -1.0f; x < 1.0f; x += (2.f / 5.f))
+			{
+				for (float y = -1.0f; y < 1.0f; y += (2.f / 5.f))
+				{
+					math::vec3 pos = { x + .2f, y + .2f, 0.0f };
+					mtx[index] = math::translate(math::mat4(1.0f), pos);
+					mtx[index] = math::rotate(mtx[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					index++;
+				}
+			}
+
+			bgfx::setVertexBuffer(0, vertexBuffer);
+			bgfx::setIndexBuffer(indexBuffer);
+			bgfx::setInstanceDataBuffer(&instanceBuffer);
+			bgfx::setState(state);
+			bgfx::submit(0, shader);
+
+			bgfx::frame();
+		}
+
+		virtual void destroy(RenderInterface* api) override
+		{
+			bgfx::shutdown();
+			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
 		}
 	};
 #pragma endregion
@@ -2099,4 +2433,4 @@ namespace rythe::rendering
 	};
 #endif
 #pragma endregion
-}
+	}

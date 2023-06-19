@@ -31,6 +31,7 @@ namespace rythe::rendering
 		glfwSetKeyCallback(m_api->getWindow(), key_callback);
 
 #pragma region Abstracted API
+
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 		//DrawArrays
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
@@ -40,38 +41,37 @@ namespace rythe::rendering
 		//DrawArraysInstanced
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysInstancedTest>());
+
 
 		////DrawIndexed
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedTest>());
 
 		////DrawIndexedInstanced
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
 
 #pragma endregion
 	}
 
 	void Renderer::update()
 	{
-		if (m_testScenes[currentScene]->type != BGFX)
+		m_api->makeCurrent();
+		m_api->setSwapInterval(0);
+
+		m_api->setViewport(1, 0, 0, 600, 600, 0, 1);
+		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
+		m_api->clear(ClearBit::COLOR);
+
+		if (m_api->shouldWindowClose())
 		{
-			m_api->makeCurrent();
-
-			m_api->setSwapInterval(0);
-
-			m_api->setViewport(1, 0, 0, 600, 600, 0, 1);
-			m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
-			m_api->clear(ClearBit::COLOR);
-
-			if (m_api->shouldWindowClose())
-			{
-				rythe::core::events::exit evnt(0);
-				raiseEvent(evnt);
-				return;
-			}
+			rythe::core::events::exit evnt(0);
+			raiseEvent(evnt);
+			return;
 		}
-
 
 		if (stopTest)
 		{
@@ -115,11 +115,9 @@ namespace rythe::rendering
 			testCount++;
 		}
 
-		if (m_testScenes[currentScene]->type != BGFX)
-		{
-			m_api->swapBuffers();
-			m_api->pollEvents();
-		}
+		m_api->swapBuffers();
+
+		m_api->pollEvents();
 
 		m_api->checkError();
 	}

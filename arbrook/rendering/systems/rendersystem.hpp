@@ -57,7 +57,11 @@ namespace rythe::rendering
 					api = "BGFX";
 					break;
 				case APIType::Native:
-					api = "Native";
+#if RenderingAPI == RenderingAPI_OGL
+					api = "NativeOGL";
+#elif RenderingAPI == RenderingAPI_DX11
+					api = "NativeDX11";
+#endif
 					break;
 				case APIType::None:
 					api = "None";

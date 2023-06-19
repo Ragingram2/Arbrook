@@ -357,5 +357,7 @@
     <None Include="resources\shaders\varying.def.sc" />
     <None Include="resources\shaders\cube.shader" />
     <None Include="resources\shaders\instance_cube.shader" />
+    <None Include="resources\shaders\instance_testFS.sc" />
+    <None Include="resources\shaders\instance_testVS.sc" />
   </ItemGroup>
 </Project>
