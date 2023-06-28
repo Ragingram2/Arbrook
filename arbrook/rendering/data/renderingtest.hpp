@@ -59,6 +59,12 @@ namespace rythe::rendering
 		math::mat4 mvp;
 	};
 
+	struct vtx
+	{
+		math::vec3 position;
+		math::vec3 normal;
+	};
+
 	struct rendering_test
 	{
 		APIType type;
@@ -116,14 +122,58 @@ namespace rythe::rendering
 	inline math::mat4 projection = math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f);
 	inline math::mat4 view = math::lookAt(cam.pos, cam.pos + cam.front, cam.up);
 	inline math::mat4 projView = projection * view;
-	inline float count = 1024.f;
-	inline float instanceCount = 65536.f;
+	inline float count = 64.f;
+	inline float instanceCount = 65536.f / 2.f;
 	inline float min = -2.f;
 	inline float max = 2.f;
 
 	inline float step = (max - min) / math::floor(math::sqrt(count));
 	inline float instanceStep = (max - min) / math::floor(math::sqrt(instanceCount));
 
+	static vtx vertexList[36] =
+	{
+		{{ -0.1f, -0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+		{{0.1f, -0.1f, -0.1f },		{ 0.0f, 0.0f, -1.0f}},
+		{{0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+		{{0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+		{{-0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+		{{-0.1f, -0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+
+		{{ -0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{{0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{{0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{{0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{{-0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{{-0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+
+		{{ -0.1f,  0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		{{-0.1f,  0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		{{-0.1f, -0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		{{-0.1f, -0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		{{-0.1f, -0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		{{-0.1f,  0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
+
+		{{0.1f,  0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{{0.1f,  0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{{0.1f, -0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{{0.1f, -0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{{0.1f, -0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{{0.1f,  0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
+
+		{{-0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
+		{{0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
+		{{0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
+		{{0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
+		{{-0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
+		{{-0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
+
+		{{-0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}},
+		{{0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}},
+		{{0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
+		{{0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
+		{{-0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
+		{{-0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}}
+	};
 
 	static math::vec3 verticies[36] =
 	{
@@ -168,6 +218,51 @@ namespace rythe::rendering
 		{0.1f,  0.1f,  0.1f},
 		{-0.1f,  0.1f,  0.1f},
 		{-0.1f,  0.1f, -0.1f},
+	};
+
+	static math::vec3 normals[36] =
+	{
+		{ 0.0f, 0.0f, -1.0f},
+		{ 0.0f, 0.0f, -1.0f},
+		{ 0.0f, 0.0f, -1.0f},
+		{ 0.0f, 0.0f, -1.0f},
+		{ 0.0f, 0.0f, -1.0f},
+		{ 0.0f, 0.0f, -1.0f},
+
+		{ 0.0f, 0.0f, 1.0f},
+		{ 0.0f, 0.0f, 1.0f},
+		{ 0.0f, 0.0f, 1.0f},
+		{ 0.0f, 0.0f, 1.0f},
+		{ 0.0f, 0.0f, 1.0f},
+		{ 0.0f, 0.0f, 1.0f},
+
+		{ -1.0f,  0.0f,  0.0f},
+		{ -1.0f,  0.0f,  0.0f},
+		{ -1.0f,  0.0f,  0.0f},
+		{ -1.0f,  0.0f,  0.0f},
+		{ -1.0f,  0.0f,  0.0f},
+		{ -1.0f,  0.0f,  0.0f},
+
+		{ 1.0f,  0.0f,  0.0f},
+		{ 1.0f,  0.0f,  0.0f},
+		{ 1.0f,  0.0f,  0.0f},
+		{ 1.0f,  0.0f,  0.0f},
+		{ 1.0f,  0.0f,  0.0f},
+		{ 1.0f,  0.0f,  0.0f},
+
+		{0.0f, -1.0f, 0.0f},
+		{0.0f, -1.0f, 0.0f},
+		{0.0f, -1.0f, 0.0f},
+		{0.0f, -1.0f, 0.0f},
+		{0.0f, -1.0f, 0.0f},
+		{0.0f, -1.0f, 0.0f},
+
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
+		{0.0f, 1.0f, 0.0f},
 	};
 
 	static math::vec3 instance_verticies[36] =
@@ -272,6 +367,7 @@ namespace rythe::rendering
 	{
 		inputlayout layout;
 		buffer_handle vBuffer;
+		buffer_handle nBuffer;
 		buffer_handle cBuffer;
 		shader_handle shader;
 		uniformData data;
@@ -283,6 +379,12 @@ namespace rythe::rendering
 			for (auto& vert : verticies)
 			{
 				vert *= (step * 2.f);
+			}
+
+			for (auto& vert : vertexList)
+			{
+				vert.position *= (step * 2.f);
+				//vert.normal *= -1.f;
 			}
 
 			for (auto& vert : indVerticies)
@@ -305,13 +407,14 @@ namespace rythe::rendering
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
-			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
+			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertexList, sizeof(vertexList) / sizeof(vtx));
 			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			vBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr("NORMAL", 1, FormatType::RGB32F, 0, sizeof(vtx), sizeof(math::vec3));
 			layout.bind();
 		}
 
@@ -472,7 +575,7 @@ namespace rythe::rendering
 					shader->setData("ConstantBuffer", &data);
 					vBuffer->bind();
 					idxBuffer->bind();
-					api->drawIndexed(PrimitiveType::TRIANGLESLIST, sizeof(indVerticies) / sizeof(math::vec3), 0, 0);
+					api->drawIndexed(PrimitiveType::TRIANGLESLIST, sizeof(indicies) / sizeof(unsigned int), 0, 0);
 				}
 			}
 		}
@@ -564,7 +667,7 @@ namespace rythe::rendering
 			matrixBuffer->bufferData(models.data(), models.size());
 			vBuffer->bind();
 			idxBuffer->bind();
-			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, sizeof(instance_indVerticies) / sizeof(math::vec3), instanceCount, 0, 0, 0);
+			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, sizeof(indicies) / sizeof(unsigned int), instanceCount, 0, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -714,7 +817,6 @@ namespace rythe::rendering
 			name = "DrawArrays";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-
 			bgfx::Init init;
 			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
 			init.platformData.ndt = nullptr;
@@ -733,9 +835,7 @@ namespace rythe::rendering
 			init.callback = &callback;
 #endif
 			bgfx::init(init);
-
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Width, Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
@@ -752,7 +852,7 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
-	}
+		}
 
 		virtual void update(RenderInterface* api) override
 		{
@@ -773,7 +873,7 @@ namespace rythe::rendering
 					bgfx::submit(0, shader);
 				}
 			}
-
+			bgfx::frame();
 			bgfx::frame();
 		}
 
@@ -782,7 +882,7 @@ namespace rythe::rendering
 			bgfx::shutdown();
 			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
 		}
-};
+	};
 
 	struct BGFX_DrawArraysInstancedTest : public rendering_test
 	{
@@ -834,7 +934,6 @@ namespace rythe::rendering
 			bgfx::init(init);
 
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Width, Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
@@ -851,7 +950,7 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
-	}
+		}
 
 		virtual void update(RenderInterface* api) override
 		{
@@ -885,6 +984,7 @@ namespace rythe::rendering
 			bgfx::setState(state);
 			bgfx::submit(0, shader);
 
+			bgfx::frame();
 			bgfx::frame();
 		}
 
@@ -986,6 +1086,7 @@ namespace rythe::rendering
 			}
 
 			bgfx::frame();
+			bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -1065,7 +1166,7 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
-	}
+		}
 
 		virtual void update(RenderInterface* api) override
 		{
@@ -1079,9 +1180,9 @@ namespace rythe::rendering
 
 			uint8_t* data = instanceBuffer.data;
 			math::mat4* mtx = (math::mat4*)data;
-			for (float x = -1.0f; x < 1.0f; x += instanceStep)
+			for (float x = min; x < max; x += instanceStep)
 			{
-				for (float y = -1.0f; y < 1.0f; y += instanceStep)
+				for (float y = min; y < max; y += instanceStep)
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					mtx[index] = math::translate(math::mat4(1.0f), pos);
@@ -1100,6 +1201,7 @@ namespace rythe::rendering
 			bgfx::setState(state);
 			bgfx::submit(0, shader);
 
+			bgfx::frame();
 			bgfx::frame();
 		}
 
@@ -1353,7 +1455,7 @@ namespace rythe::rendering
 					auto model = math::translate(math::mat4(1.0f), pos);
 					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
-					glDrawElements(GL_TRIANGLES, sizeof(indVerticies) / sizeof(math::vec3), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
+					glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 				}
 			}
 
@@ -1460,7 +1562,7 @@ namespace rythe::rendering
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(math::mat4), models.data(), static_cast<GLenum>(UsageType::STATICDRAW));
-			glDrawElementsInstanced(GL_TRIANGLES, sizeof(instance_indVerticies) / sizeof(math::vec3), GL_UNSIGNED_INT, reinterpret_cast <void*>(0), instanceCount);
+			glDrawElementsInstanced(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0), instanceCount);
 
 		}
 
@@ -1860,7 +1962,7 @@ namespace rythe::rendering
 					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
-					deviceContext->DrawIndexed(sizeof(indVerticies) / sizeof(math::vec3), 0, 0);
+					deviceContext->DrawIndexed(sizeof(indicies) / sizeof(unsigned int), 0, 0);
 				}
 			}
 		}
@@ -2041,7 +2143,7 @@ namespace rythe::rendering
 			unsigned int stride = sizeof(math::mat4);
 			unsigned int offset = 0;
 			deviceContext->IASetVertexBuffers(1, 1, &matrixBuffer, &stride, &offset);
-			deviceContext->DrawIndexedInstanced(sizeof(instance_indVerticies) / sizeof(math::vec3), instanceCount, 0, 0, 0);
+			deviceContext->DrawIndexedInstanced(sizeof(indicies) / sizeof(unsigned int), instanceCount, 0, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -2052,7 +2154,7 @@ namespace rythe::rendering
 			if (vertexShader) vertexShader->Release();
 			if (pixelShader) pixelShader->Release();
 		}
-	};
+};
 #endif
 #pragma endregion
 }

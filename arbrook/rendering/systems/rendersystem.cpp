@@ -75,6 +75,9 @@ namespace rythe::rendering
 
 		if (stopTest)
 		{
+			writer.writeNumObjects(m_testScenes[lastScene]->name, m_testScenes[lastScene]->type, testCount);
+			testCount = 0;
+
 			m_testScenes[lastScene]->destroy(m_api);
 			stopTest = false;
 		}
@@ -89,7 +92,7 @@ namespace rythe::rendering
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->setup(m_api);
 			auto end = std::chrono::high_resolution_clock::now();
-			writer.writeSetupTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f);
+			writer.writeSetupTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 			initializeTest = false;
 			updateTest = true;
 
@@ -103,13 +106,10 @@ namespace rythe::rendering
 			auto start = std::chrono::high_resolution_clock::now();
 			m_testScenes[currentScene]->update(m_api);
 			auto end = std::chrono::high_resolution_clock::now();
-			timeSum += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() / 1000000.0f;
+			writer.writeFrameTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 
 			if (enableTesting && testCount >= maxTests)
 			{
-				writer.writeFrameTime(m_testScenes[currentScene]->name, m_testScenes[currentScene]->type, timeSum / maxTests);
-				testCount = 0;
-				timeSum = 0;
 				nextScene();
 			}
 			testCount++;
