@@ -570,6 +570,7 @@
     <None Include="resources\shaders\instance_cube.shader" />
     <None Include="resources\shaders\instance_testFS.sc" />
     <None Include="resources\shaders\instance_testVS.sc" />
+    <None Include="resources\shaders\texture.shader" />
     <None Include="resources\shaders\varying.def.sc" />
     <None Include="resources\shaders\fluid.shader" />
     <None Include="resources\shaders\instance_test.shader" />

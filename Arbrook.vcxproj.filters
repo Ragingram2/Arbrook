@@ -359,5 +359,6 @@
     <None Include="resources\shaders\instance_cube.shader" />
     <None Include="resources\shaders\instance_testFS.sc" />
     <None Include="resources\shaders\instance_testVS.sc" />
+    <None Include="resources\shaders\texture.shader" />
   </ItemGroup>
 </Project>

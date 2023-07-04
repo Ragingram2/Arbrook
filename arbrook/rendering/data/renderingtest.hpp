@@ -62,7 +62,13 @@ namespace rythe::rendering
 	struct vtx
 	{
 		math::vec3 position;
-		math::vec3 normal;
+		math::vec2 uv;
+	};
+
+	struct tex_vtx
+	{
+		math::vec3 position;
+		math::vec2 uv;
 	};
 
 	struct rendering_test
@@ -79,8 +85,8 @@ namespace rythe::rendering
 	{
 		inputlayout layout;
 		buffer_handle vBuffer;
-		buffer_handle cBuffer;
 		shader_handle shader;
+		texture_handle texture;
 
 		virtual void setup(RenderInterface* api) override
 		{
@@ -88,28 +94,32 @@ namespace rythe::rendering
 			name = "";
 			log::debug("Initializing", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), "Initializing");
-			math::vec3 verticies[] =
+			tex_vtx verticies[] =
 			{	//positions						
-				{  -0.1f, 0.1f, 0.0f  },//0
-				{ 	-0.1f,-0.1f, 0.0f  },//1
-				{  0.1f,-0.1f, 0.0f  },//2
-				{  -0.1f, 0.1f, 0.0f  },//0
-				{  0.1f,-0.1f, 0.0f },//2
-				{  0.1f, 0.1f, 0.0f }//3
+				{ { -1.f, 1.0f, 0.0f  },	{ 0, 1 } },//0
+				{ {-1.f,-1.0f, 0.0f  },	{ 0, 0 } },//1
+				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
+				{ { -1.0f, 1.0f, 0.0f },		{ 0, 1 } },//0
+				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
+				{ {  1.0f, 1.0f, 0.0f },		{ 1, 1 } }//3
 			};
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/test.shader");
-			vBuffer = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
+			shader = ShaderCache::createShader(*api, "test", "resources/shaders/texture.shader");
+			texture = TextureCache::createTexture2D(*api, "test", "resources/textures/Rythe.png");
+			vBuffer = BufferCache::createBuffer<tex_vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(tex_vtx));
 			shader->bind();
-
+			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
+			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
 			vBuffer->bind();
 			layout.bind();
 		}
+
 		virtual void update(RenderInterface* api) override
 		{
 			api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
 		}
+
 		virtual void destroy(RenderInterface* api) override
 		{
 			BufferCache::deleteBuffer("Vertex Buffer");
@@ -130,50 +140,128 @@ namespace rythe::rendering
 	inline float step = (max - min) / math::floor(math::sqrt(count));
 	inline float instanceStep = (max - min) / math::floor(math::sqrt(instanceCount));
 
-	static vtx vertexList[36] =
+
+
+
+	static vtx vertexList[30] =
 	{
-		{{ -0.1f, -0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
-		{{0.1f, -0.1f, -0.1f },		{ 0.0f, 0.0f, -1.0f}},
-		{{0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
-		{{0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
-		{{-0.1f,  0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
-		{{-0.1f, -0.1f, -0.1f},		{ 0.0f, 0.0f, -1.0f}},
+		//Back
+		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
+		{ { -0.1f, -0.1f, -0.1f },	{	1.0f, 0.0f	} },//1
 
-		{{ -0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
-		{{0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
-		{{0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
-		{{0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
-		{{-0.1f,  0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
-		{{-0.1f, -0.1f,  0.1f},{ 0.0f, 0.0f, 1.0f}},
+		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f,  0.1f, -0.1f	},	{	0.0f, 1.0f	} },//3
+		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
 
-		{{ -0.1f,  0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
-		{{-0.1f,  0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
-		{{-0.1f, -0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
-		{{-0.1f, -0.1f, -0.1f},		{ -1.0f,  0.0f,  0.0f}},
-		{{-0.1f, -0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
-		{{-0.1f,  0.1f,  0.1f},		{ -1.0f,  0.0f,  0.0f}},
+		//Front
+		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, 0.1f	},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
 
-		{{0.1f,  0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
-		{{0.1f,  0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
-		{{0.1f, -0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
-		{{0.1f, -0.1f, -0.1f},	{ 1.0f,  0.0f,  0.0f}},
-		{{0.1f, -0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
-		{{0.1f,  0.1f,  0.1f},	{ 1.0f,  0.0f,  0.0f}},
+		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f,  0.1f, 0.1f	},	{	1.0f, 1.0f	} },//3
 
-		{{-0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
-		{{0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
-		{{0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
-		{{0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
-		{{-0.1f, -0.1f,  0.1f},		{0.0f, -1.0f, 0.0f}},
-		{{-0.1f, -0.1f, -0.1f},		{0.0f, -1.0f, 0.0f}},
+		//Left
+		{ {	0.1f, 0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, -0.1f, 0.1f  },	{	0.0f, 0.0f	} },//2
+		{ {	0.1f, -0.1f,-0.1f	},	{	1.0f, 0.0f	} },//1
 
-		{{-0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}},
-		{{0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}},
-		{{0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
-		{{0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
-		{{-0.1f,  0.1f,  0.1f},		{0.0f, 1.0f, 0.0f}},
-		{{-0.1f,  0.1f, -0.1f},		{0.0f, 1.0f, 0.0f}}
+		{ {	0.1f, 0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, 0.1f,  0.1f	},	{	0.0f, 1.0f	} },//3
+		{ {0.1f, -0.1f, 0.1f	},	{	0.0f, 0.0f } },//2
+
+		//Right
+		{ {	-0.1f, 0.1f, -0.1f	},	{	0.0f, 1.0f	} },//0
+		{ {	-0.1f, -0.1f,-0.1f	},	{	0.0f, 0.0f	} },//1
+		{ {	-0.1f, -0.1f, 0.1f  },	{	1.0f, 0.0f	} },//2
+
+		{ {	-0.1f, 0.1f, -0.1f	},	{	0.0f, 1.0f	} },//0
+		{ {-0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f } },//2
+		{ {	-0.1f, 0.1f,  0.1f	},	{	1.0f, 1.0f	} },//3
+
+		//Bottom
+		{ { -0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//0
+		{ { -0.1f, -0.1f, -0.1f	},  {	0.0f, 1.0f	} },//2
+		{ { 0.1f, -0.1f,  -0.1f	},	{	1.0f, 1.0f	} },//1
+
+		{ { -0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//0
+		{ {-0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f } },//3
+		{ { -0.1f, -0.1f,  -0.1f	},  {	0.0f, 1.0f	} },//2
+
+		////Top
+		//{ {-0.1f,  0.1f, -0.1f	},	{	0.0f, 0.0f	} },//0
+		//{ { 0.1f,  0.1f, -0.1f	},	{	1.0f, 0.0f	} },//1
+		//{ { 0.1f,  0.1f,  0.1f	},	{	1.0f, 1.0f	} },//2
+
+		//{ { 0.1f,  0.1f,  0.1f	},	{	1.0f, 1.0f	} },//0
+		//{ {-0.1f,  0.1f,  0.1f	},	{	0.0f, 1.0f	} },//2
+		//{ {-0.1f,  0.1f, -0.1f	},	{	0.0f, 0.0f } } //3
 	};
+
+	////Back
+	//{ { -0.1f, 0.1f, -0.1f	}, { 1.0f, 1.0f } },//0
+	//{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
+	//{ { -0.1f, -0.1f, -0.1f },	{	1.0f, 0.0f	} },//1
+
+	//{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
+	//{ {  0.1f,  0.1f, -0.1f	},	{	0.0f, 1.0f	} },//3
+	//{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
+
+	//	//Front
+	//{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
+	//{ { -0.1f, -0.1f, 0.1f	},	{	0.0f, 0.0f	} },//1
+	//{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
+
+	//{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
+	//{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
+	//{ {  0.1f,  0.1f, 0.1f	},	{	1.0f, 1.0f	} },//3
+
+	/*static vtx vertexList[36] =
+	{
+		{ { -0.1f, -0.1f, -0.1f },	{	0.0f, 0.0f	} },
+		{ {  0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f	} },
+		{ {  0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },
+		{ {  0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },
+		{ { -0.1f,  0.1f, -0.1f	},	{	0.0f, 1.0f	} },
+		{ { -0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f } },
+
+		{ {	-0.1f, -0.1f,  0.1f	},	{	0.0f, 0.0f	} },
+		{ {	 0.1f, -0.1f,  0.1f  },	{	1.0f, 0.0f	} },
+		{ {	 0.1f,  0.1f,  0.1f	},	{	1.0f, 1.0f	} },
+		{ {	 0.1f,  0.1f,  0.1f	},	{	1.0f, 1.0f	} },
+		{ {	-0.1f,  0.1f,  0.1f	},	{	0.0f, 1.0f	} },
+		{ {-0.1f, -0.1f,  0.1f	},	{	0.0f, 0.0f } },
+
+		{ { -0.1f,  0.1f,  0.1f	},	{	0.0f, 0.0f	} },
+		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 0.0f	} },
+		{ { -0.1f, -0.1f, -0.1f	},	{	1.0f, 1.0f	} },
+		{ { -0.1f, -0.1f, -0.1f	},	{	1.0f, 1.0f	} },
+		{ { -0.1f, -0.1f,  0.1f	},	{	0.0f, 1.0f	} },
+		{ { -0.1f,  0.1f,  0.1f	},	{	0.0f, 0.0f } },
+
+		{{0.1f,  0.1f,  0.1f},	{	0.0f, 0.0f	} },
+		{{0.1f,  0.1f, -0.1f},	{	1.0f, 0.0f	} },
+		{{0.1f, -0.1f, -0.1f},	{	1.0f, 1.0f	} },
+		{{0.1f, -0.1f, -0.1f},	{	1.0f, 1.0f	} },
+		{{0.1f, -0.1f,  0.1f},	{	0.0f, 1.0f	} },
+		{{0.1f,  0.1f,  0.1f},	{	0.0f, 0.0f } },
+
+		{{-0.1f, -0.1f, -0.1f},		{	0.0f, 0.0f	} },
+		{{0.1f, -0.1f, -0.1f},		{	1.0f, 0.0f	} },
+		{{0.1f, -0.1f,  0.1f},		{	1.0f, 1.0f	} },
+		{{0.1f, -0.1f,  0.1f},		{	1.0f, 1.0f	} },
+		{{-0.1f, -0.1f,  0.1f},		{	0.0f, 1.0f	} },
+		{{-0.1f, -0.1f, -0.1f},		{	0.0f, 0.0f } },
+
+		{{-0.1f,  0.1f, -0.1f},		{	0.0f, 0.0f	} },
+		{{0.1f,  0.1f, -0.1f},		{	1.0f, 0.0f	} },
+		{{0.1f,  0.1f,  0.1f},		{	1.0f, 1.0f	} },
+		{{0.1f,  0.1f,  0.1f},		{	1.0f, 1.0f	} },
+		{{-0.1f,  0.1f,  0.1f},		{	0.0f, 1.0f	} },
+		{{-0.1f,  0.1f, -0.1f},		{	0.0f, 0.0f } }
+	};*/
 
 	static math::vec3 verticies[36] =
 	{
@@ -369,6 +457,7 @@ namespace rythe::rendering
 		buffer_handle vBuffer;
 		buffer_handle nBuffer;
 		buffer_handle cBuffer;
+		texture_handle texture;
 		shader_handle shader;
 		uniformData data;
 
@@ -384,7 +473,6 @@ namespace rythe::rendering
 			for (auto& vert : vertexList)
 			{
 				vert.position *= (step * 2.f);
-				//vert.normal *= -1.f;
 			}
 
 			for (auto& vert : indVerticies)
@@ -406,15 +494,20 @@ namespace rythe::rendering
 			name = "DrawArrays";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CCW);
+			shader = ShaderCache::createShader(*api, "test", "resources/shaders/texture_cube.shader");
+			texture = TextureCache::createTexture2D(*api, "test", "resources/textures/Rythe.png");
 			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertexList, sizeof(vertexList) / sizeof(vtx));
 			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
+			texture->bind();
 			vBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr("NORMAL", 1, FormatType::RGB32F, 0, sizeof(vtx), sizeof(math::vec3));
+			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
 			layout.bind();
 		}
 
@@ -2154,7 +2247,7 @@ namespace rythe::rendering
 			if (vertexShader) vertexShader->Release();
 			if (pixelShader) pixelShader->Release();
 		}
-};
+	};
 #endif
 #pragma endregion
 }
