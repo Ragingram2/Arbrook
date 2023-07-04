@@ -48,6 +48,10 @@ namespace rythe::rendering::internal
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CCW);
+
 			if (GLEW_AMD_debug_output)
 				glDebugMessageCallbackAMD(&RenderInterface::debugCallbackAMD, nullptr);
 			else if (GLEW_KHR_debug)
