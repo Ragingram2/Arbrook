@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <set>
+#include <algorithm>
 
 #include <GL/glew.h>
 
@@ -24,6 +26,8 @@ namespace rythe::rendering::internal
 	private:
 		window m_hwnd;
 		std::vector<vertexattribute> m_vertexAttribs;
+		std::unordered_map<int, std::set<int>> m_flatIndeces;
+		std::vector<buffer_handle> m_buffers;
 	public:
 
 		void initialize(window& hwnd, unsigned int numBuffers, shader_handle shader)
@@ -39,43 +43,45 @@ namespace rythe::rendering::internal
 
 			if (m_vertexAttribs.size() > 0)
 			{
+
+				int bufId;
+				glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &bufId);
+				glBindVertexBuffer(m_vertexAttribs[0].inputSlot, bufId, 0, m_vertexAttribs[0].stride);
 				for (auto& attrib : m_vertexAttribs)
 				{
-					int bufId;
-					glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &bufId);
-					glBindVertexBuffer(attrib.inputSlot + attrib.index, bufId, attrib.offset, attrib.stride);
-					glVertexAttribBinding(attrib.inputSlot + attrib.index, attrib.inputSlot);
-					glEnableVertexAttribArray(attrib.inputSlot + attrib.index);
-
+					int idx = (attrib.inputSlot > 0 ? m_flatIndeces[attrib.inputSlot-1].size(): 0) + attrib.index;
 					switch (attrib.format)
 					{
 					case FormatType::RGB32F:
-						glVertexAttribFormat(attrib.inputSlot + attrib.index, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
+						glVertexAttribFormat(idx, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 						break;
 					case FormatType::RGBA32F:
-						glVertexAttribFormat(attrib.inputSlot + attrib.index, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
+						glVertexAttribFormat(idx, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 						break;
 					case FormatType::R32U:
-						glVertexAttribFormat(attrib.inputSlot + attrib.index, 1, static_cast<GLenum>(DataType::UINT), false, attrib.offset);
+						glVertexAttribFormat(idx, 1, static_cast<GLenum>(DataType::UINT), false, attrib.offset);
 						break;
 					case FormatType::RG32F:
-						glVertexAttribFormat(attrib.inputSlot + attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
+						glVertexAttribFormat(idx, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 						break;
 					default:
 						log::warn("Format is not supported for vertex attributes");
 						break;
 					}
 
+					glVertexAttribBinding(idx, attrib.inputSlot);
+					glEnableVertexAttribArray(idx);
 					switch (attrib.inputClass)
 					{
 					case InputClass::PER_VERTEX:
-						glVertexBindingDivisor(attrib.inputSlot + attrib.index, 0);
+						glVertexBindingDivisor(idx, 0);
 						break;
 					case InputClass::PER_INSTANCE:
-						glVertexBindingDivisor(attrib.inputSlot + attrib.index, attrib.step);
+						glVertexBindingDivisor(idx, attrib.step);
 						break;
 					}
 				}
+
 				clearAttributes();
 			}
 		}
@@ -83,6 +89,7 @@ namespace rythe::rendering::internal
 		void setAttributePtr(const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
 			m_vertexAttribs.emplace_back(vertexattribute{ attribName.c_str(), index, components, inputSlot,stride, offset, inputClass, instancedStep });
+			m_flatIndeces[inputSlot].insert(index);
 		}
 
 		void clearAttributes()
@@ -92,7 +99,7 @@ namespace rythe::rendering::internal
 
 		void release()
 		{
-			glDeleteVertexArrays(1,&id);
+			glDeleteVertexArrays(1, &id);
 			clearAttributes();
 		}
 	};

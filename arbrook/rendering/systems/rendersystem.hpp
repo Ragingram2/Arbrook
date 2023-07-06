@@ -185,7 +185,7 @@ namespace rythe::rendering
 		static bool updateTest;
 		static bool stopTest;
 
-		bool enableTesting = false;
+		bool enableTesting = true;
 
 #if RenderingAPI == RenderingAPI_OGL
 		CSVWriter writer = CSVWriter("resources/logs/ogldata.csv");

@@ -2,8 +2,7 @@
 #include <chrono>
 #include <ctime>
 
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+#include <GLFW/glfw3.h>
 
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
@@ -134,6 +133,7 @@ namespace rythe::rendering
 	inline math::mat4 projView = projection * view;
 	inline float count = 64.f;
 	inline float instanceCount = 65536.f / 2.f;
+	//inline float instanceCount = 16.f;
 	inline float min = -2.f;
 	inline float max = 2.f;
 
@@ -143,58 +143,58 @@ namespace rythe::rendering
 	static vtx vertices[36] =
 	{
 		//Back
-		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
-		{ { -0.1f, -0.1f, -0.1f },	{	1.0f, 0.0f	} },//1
+		{ { -0.1f,  0.1f, -0.1f,1.0f	},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//2
+		{ { -0.1f, -0.1f, -0.1f,1.0f	 },	{	1.0f, 0.0f	} },//1
 
-		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f,  0.1f, -0.1f	},	{	0.0f, 1.0f	} },//3
-		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
+		{ { -0.1f,  0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f,  0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//3
+		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//2
 
 		//Front
-		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, 0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
+		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, 0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
 
-		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f,  0.1f, 0.1f	},	{	1.0f, 1.0f	} },//3
+		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f,  0.1f, 0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
 
 		//Left
-		{ {	0.1f, 0.1f, -0.1f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, -0.1f, 0.1f		},	{	0.0f, 0.0f	} },//2
-		{ {	0.1f, -0.1f,-0.1f		},	{	1.0f, 0.0f	} },//1
+		{ {	0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f	} },//2
+		{ {	0.1f, -0.1f,-0.1f,1.0f		},	{	1.0f, 0.0f	} },//1
 
-		{ {	0.1f, 0.1f, -0.1f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, 0.1f,  0.1f		},	{	0.0f, 1.0f	} },//3
-		{ {0.1f, -0.1f, 0.1f		},	{	0.0f, 0.0f } },//2
+		{ {	0.1f, 0.1f, -0.1f	,1.0f		},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, 0.1f,  0.1f	,1.0f		},	{	0.0f, 1.0f	} },//3
+		{ {0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f } },//2
 
 		//Right
-		{ {	-0.1f,0.1f, -0.1f		},	{	0.0f, 1.0f	} },//0
-		{ {	-0.1f, -0.1f,-0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {	-0.1f, -0.1f, 0.1f   },	{	1.0f, 0.0f	} },//2
+		{ {	-0.1f,0.1f, -0.1f	,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {	-0.1f, -0.1f,-0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
+		{ {	-0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
 
-		{ {	-0.1f, 0.1f, -0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {-0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f } },//2
-		{ {	-0.1f, 0.1f,  0.1f	},	{	1.0f, 1.0f	} },//3
+		{ {	-0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {-0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f } },//2
+		{ {	-0.1f, 0.1f,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
 
 		//Bottom
-		{ { -0.1f, -0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
+		{ { -0.1f, -0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
 
-		{ { -0.1f, -0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f, -0.1f,  0.1f	},	{	1.0f, 1.0f	} },//3
+		{ { -0.1f, -0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f, -0.1f,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
 
 		//Top
-		{ { -0.1f, 0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
-		{ { -0.1f, 0.1f, -0.1f	},	{	0.0f, 0.0f	} },//1
+		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ { -0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
 
-		{ { -0.1f, 0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f	,  0.1f	},	{	1.0f, 1.0f	} },//3
-		{ {  0.1f, 0.1f, -0.1f	},	{	1.0f, 0.0f	} }//2
+		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, 0.1f	,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
+		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
 	};
 
 	static math::vec3 normals[36] =
@@ -245,82 +245,82 @@ namespace rythe::rendering
 	static vtx instance_vertices[36] =
 	{
 		//Back
-		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
-		{ { -0.1f, -0.1f, -0.1f },	{	1.0f, 0.0f	} },//1
-
-		{ { -0.1f,  0.1f, -0.1f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f,  0.1f, -0.1f	},	{	0.0f, 1.0f	} },//3
-		{ {  0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//2
-
-		//Front
-		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, 0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f,  0.1f, 0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f,  0.1f, 0.1f	},	{	1.0f, 1.0f	} },//3
-
-		//Left
-		{ {	0.1f, 0.1f, -0.1f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, -0.1f, 0.1f		},	{	0.0f, 0.0f	} },//2
-		{ {	0.1f, -0.1f,-0.1f		},	{	1.0f, 0.0f	} },//1
-
-		{ {	0.1f, 0.1f, -0.1f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, 0.1f,  0.1f		},	{	0.0f, 1.0f	} },//3
-		{ {0.1f, -0.1f, 0.1f		},	{	0.0f, 0.0f } },//2
-
-		//Right
-		{ {	-0.1f,0.1f, -0.1f		},	{	0.0f, 1.0f	} },//0
-		{ {	-0.1f, -0.1f,-0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {	-0.1f, -0.1f, 0.1f   },	{	1.0f, 0.0f	} },//2
-
-		{ {	-0.1f, 0.1f, -0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {-0.1f, -0.1f, 0.1f	},	{	1.0f, 0.0f } },//2
-		{ {	-0.1f, 0.1f,  0.1f	},	{	1.0f, 1.0f	} },//3
-
-		//Bottom
-		{ { -0.1f, -0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, -0.1f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f, -0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f, -0.1f,  0.1f	},	{	1.0f, 1.0f	} },//3
-
-		//Top
-		{ { -0.1f, 0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f, -0.1f	},	{	1.0f, 0.0f	} },//2
-		{ { -0.1f, 0.1f, -0.1f	},	{	0.0f, 0.0f	} },//1
-
-		{ { -0.1f, 0.1f,  0.1f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f	,  0.1f	},	{	1.0f, 1.0f	} },//3
-		{ {  0.1f, 0.1f, -0.1f	},	{	1.0f, 0.0f	} }//2
+		{ { -0.1f,  0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
+		{ { -0.1f, -0.1f, -0.1,1.0f	 },	{	1.0f, 0.0f	} },//1
+									 	
+		{ { -0.1f,  0.1f, -0.1,1.0f		},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f,  0.1f, -0.1,1.0f		},	{	0.0f, 1.0f	} },//3
+		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
+										
+		//Front					,1.0f	
+		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+										
+		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f,  0.1f, 0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
+								
+		//Left					 ,1.0f	
+		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f	} },//2
+		{ {	0.1f, -0.1f,-0.1f	,1.0f	},	{	1.0f, 0.0f	} },//1
+								
+		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
+		{ {	0.1f, 0.1f,  0.1f	,1.0f	},	{	0.0f, 1.0f	} },//3
+		{ {0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f } },//2
+					
+		//Right					
+		{ {	-0.1f,0.1f, -0.1f	,1.0f	},	{	0.0f, 1.0f	} },//0
+		{ {	-0.1f, -0.1f,-0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
+		{ {	-0.1f, -0.1f, 0.1f,1.0f	  },	{	1.0f, 0.0f	} },//2
+							
+		{ {	-0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {-0.1f, -0.1f, 0.1f,1.0f	},	{	1.0f, 0.0f } },//2
+		{ {	-0.1f, 0.1f,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
+						
+		//Bottom				
+		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
+									 	
+		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f, -0.1f,  0.1,1.0f		},	{	1.0f, 1.0f	} },//3
+									
+		//Top					 
+		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ { -0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
+									
+		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, 0.1f	,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
+		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
 	};
 
 	static vtx indVertices[8] =
 	{
-		{{ -.1f, -.1f,  0.1f},		{0,0}	}, //0
-		{{	 .1f, -.1f,  0.1f},		{1,0}	}, //1
-		{{	-.1f,  .1f,  0.1f},		{0,1}	}, //2
-		{{	 .1f,  .1f,  0.1f},		{1,1}	}, //3
-		{{	-.1f, -.1f, -0.1f},	{0,0}	}, //4
-		{{	 .1f, -.1f, -0.1f},		{1,0}	},//5
-		{{	-.1f,  .1f, -0.1f},		{0,1}	}, //6
-		{{	 .1f,  .1f, -0.1f},		{1,1}	}  //7
+		{{ -.1f, -.1f,  0.1f,1.0f	},		{0,0}	}, //0
+		{{	 .1f, -.1f,  0.1f,1.0f	},		{1,0}	}, //1
+		{{	-.1f,  .1f,  0.1f,1.0f	},		{0,1}	}, //2
+		{{	 .1f,  .1f,  0.1f,1.0f	},		{1,1}	}, //3
+		{{	-.1f, -.1f, -0.1f,1.0f	},	{0,0}	}, //4
+		{{	 .1f, -.1f, -0.1f,1.0f	},		{1,0}	},//5
+		{{	-.1f,  .1f, -0.1f,1.0f	},		{0,1}	}, //6
+		{{	 .1f,  .1f, -0.1f,1.0f	},		{1,1}	}  //7
 	};
 
 	static vtx instance_indVertices[8] =
 	{
-		{{ -.1f, -.1f,  0.1f},		{0,0}	}, //0
-		{{	 .1f, -.1f,  0.1f},		{1,0}	}, //1
-		{{	-.1f,  .1f,  0.1f},		{0,1}	}, //2
-		{{	 .1f,  .1f,  0.1f},		{1,1}	}, //3
-		{{	-.1f, -.1f, -0.1f},	{0,0}	}, //4
-		{{	 .1f, -.1f, -0.1f},		{1,0}	}, //5
-		{{	-.1f,  .1f, -0.1f},		{0,1}	}, //6
-		{{	 .1f,  .1f, -0.1f},		{1,1}	}  //7
+		{{ -.1f, -.1f,  0.1f,1.0f	},		{0,0}	}, //0
+		{{	 .1f, -.1f,  0.1f,1.0f	},		{1,0}	}, //1
+		{{	-.1f,  .1f,  0.1f,1.0f	},		{0,1}	}, //2
+		{{	 .1f,  .1f,  0.1f,1.0f	},		{1,1}	}, //3
+		{{	-.1f, -.1f, -0.1f,1.0f	},	{0,0}	}, //4
+		{{	 .1f, -.1f, -0.1f,1.0f	},		{1,0}	}, //5
+		{{	-.1f,  .1f, -0.1f,1.0f	},		{0,1}	}, //6
+		{{	 .1f,  .1f, -0.1f,1.0f	},		{1,1}	}  //7
 	};
 
 	static unsigned int indicies[36] =
@@ -368,28 +368,32 @@ namespace rythe::rendering
 			for (auto& vert : vertices)
 			{
 				vert.position *= (step * 2.f);
-			}
-
-			for (auto& vert : indVertices)
-			{
-				vert.position *= (step * 2.f);
+				vert.position.w = 1;
 			}
 
 			for (auto& vert : instance_vertices)
 			{
 				vert.position *= (instanceStep * 4.f);
+				vert.position.w = 1;
+			}
+
+			for (auto& vert : indVertices)
+			{
+				vert.position *= (step * 2.f);
+				vert.position.w = 1;
 			}
 
 			for (auto& vert : instance_indVertices)
 			{
 				vert.position *= (instanceStep * 4.f);
+				vert.position.w = 1;
 			}
 
 			type = Arbrook;
 			name = "DrawArrays";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/texture_cube.shader");
+			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
 			texture = TextureCache::getTexture2D("test");
 			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertices, sizeof(vertices) / sizeof(vtx));
 			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
@@ -398,15 +402,14 @@ namespace rythe::rendering
 			texture->bind();
 			vBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			layout.setAttributePtr("POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
 			layout.bind();
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
 			i += .1f;
-
 			for (float x = min; x < max; x += step)
 			{
 				for (float y = min; y < max; y += step)
@@ -462,10 +465,9 @@ namespace rythe::rendering
 			buffer->bind();
 			matrixBuffer->bind(1);
 
-
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			layout.setAttributePtr("POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
 #if RenderingAPI == RenderingAPI_OGL
 			buffer->bind();
 			layout.bind();
@@ -506,8 +508,9 @@ namespace rythe::rendering
 					break;
 			}
 
+			texture->bind();
 			matrixBuffer->bufferData(models.data(), models.size());
-			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, sizeof(instance_vertices) / sizeof(vtx), instanceCount, 0, 0);
+			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 36, instanceCount, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -526,6 +529,7 @@ namespace rythe::rendering
 		buffer_handle vBuffer;
 		buffer_handle cBuffer;
 		buffer_handle idxBuffer;
+		texture_handle texture;
 		shader_handle shader;
 		uniformData data;
 
@@ -538,6 +542,7 @@ namespace rythe::rendering
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
+			texture = TextureCache::getTexture2D("test");
 			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, indVertices, sizeof(indVertices) / sizeof(vtx));
 			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
 			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
@@ -548,7 +553,7 @@ namespace rythe::rendering
 			idxBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
 			layout.bind();
 		}
 
@@ -590,6 +595,7 @@ namespace rythe::rendering
 		buffer_handle idxBuffer;
 		buffer_handle constantBuffer;
 		buffer_handle matrixBuffer;
+		texture_handle texture;
 		shader_handle shader;
 		uniformData data;
 
@@ -604,6 +610,7 @@ namespace rythe::rendering
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 
 			shader = ShaderCache::createShader(*api, "test", "resources/shaders/instance_cube.shader");
+			texture = TextureCache::getTexture2D("test");
 			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_indVertices, sizeof(instance_indVertices) / sizeof(vtx));
 			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
 			constantBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
@@ -616,7 +623,7 @@ namespace rythe::rendering
 
 			layout.initialize(api->getHwnd(), 2, shader);
 			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
 #if RenderingAPI == RenderingAPI_OGL
 			vBuffer->bind();
 			layout.bind();
@@ -823,7 +830,7 @@ namespace rythe::rendering
 			init.resolution.width = api->getHwnd().m_resolution.x;
 			init.resolution.height = api->getHwnd().m_resolution.y;
 #ifdef _DEBUG
-			init.callback = &callback;
+			//init.callback = &callback;
 #endif
 			bgfx::init(init);
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
@@ -916,20 +923,19 @@ namespace rythe::rendering
 			init.platformData.backBuffer = api->getHwnd().backbuffer;
 			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
 #endif
-
 			init.resolution.width = api->getHwnd().m_resolution.x;
 			init.resolution.height = api->getHwnd().m_resolution.y;
 #ifdef _DEBUG
-			init.callback = &callback;
+			//init.callback = &callback;
 #endif
 			bgfx::init(init);
 
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
 			bgfx::setViewRect(0, 0, 0, Width, Height);
 
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_verticies, sizeof(instance_verticies)), inputLayout);
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_vertices, sizeof(instance_vertices)), inputLayout);
 
 #if RenderingAPI == RenderingAPI_OGL
 			shader = loadShader("test", "resources/shaders/ogl/instance_testFS.shader", "resources/shaders/ogl/instance_testVS.shader");
@@ -1036,9 +1042,9 @@ namespace rythe::rendering
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Width, Height);
 
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(indVerticies, sizeof(indVerticies)), inputLayout);
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(indVertices, sizeof(indVertices)), inputLayout);
 
 			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(indicies, sizeof(indicies)));
 
@@ -1140,9 +1146,9 @@ namespace rythe::rendering
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Width, Height);
 
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).end();
+			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_indVerticies, sizeof(instance_indVerticies)), inputLayout);
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_indVertices, sizeof(instance_indVertices)), inputLayout);
 
 			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(indicies, sizeof(indicies)));
 
@@ -1236,15 +1242,19 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &bufferId);
 			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 			glUseProgram(shaderId);
 			glGenVertexArrays(1, &vaoId);
 			glBindVertexArray(vaoId);
 			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
 			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+			glVertexAttribPointer(0, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec4), reinterpret_cast<void*>(0));
 			glVertexAttribDivisor(0, 0);
+
+			//glEnableVertexAttribArray(1);
+			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
+			//glVertexAttribDivisor(1, 0);
 
 		}
 
@@ -1260,7 +1270,7 @@ namespace rythe::rendering
 					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
 					glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
-					glDrawArrays(GL_TRIANGLES, 0, sizeof(verticies) / sizeof(math::vec3));
+					glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(vtx));
 				}
 			}
 		}
@@ -1305,7 +1315,7 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &bufferId);
 			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_verticies), instance_verticies, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_vertices), instance_vertices, static_cast<GLenum>(UsageType::STATICDRAW));
 
 			glUseProgram(shaderId);
 			glGenVertexArrays(1, &vaoId);
@@ -1315,23 +1325,27 @@ namespace rythe::rendering
 			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
 			glVertexAttribDivisor(0, 0);
 
+			//glEnableVertexAttribArray(1);
+			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
+			//glVertexAttribDivisor(1, 0);
+
 			glGenBuffers(1, &matrixBufferId);
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4), nullptr, static_cast<GLenum>(UsageType::STATICDRAW));
-			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 			glEnableVertexAttribArray(3);
 			glEnableVertexAttribArray(4);
+			glEnableVertexAttribArray(5);
 
-			glVertexAttribPointer(1, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
-			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
-			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
-			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
+			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
+			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
+			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
+			glVertexAttribPointer(5, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
 
-			glVertexAttribDivisor(1, 1);
 			glVertexAttribDivisor(2, 1);
 			glVertexAttribDivisor(3, 1);
 			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
 
 			data.mvp = projView;
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
@@ -1359,7 +1373,7 @@ namespace rythe::rendering
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(math::mat4), models.data(), static_cast<GLenum>(UsageType::STATICDRAW));
-			glDrawArraysInstanced(GL_TRIANGLES, 0, sizeof(instance_verticies) / sizeof(math::vec3), instanceCount);
+			glDrawArraysInstanced(GL_TRIANGLES, 0, sizeof(instance_vertices) / sizeof(vtx), instanceCount);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -1401,7 +1415,7 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &vboId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(indVerticies), indVerticies, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ARRAY_BUFFER, sizeof(indVertices), indVertices, static_cast<GLenum>(UsageType::STATICDRAW));
 			glGenBuffers(1, &eboId);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, static_cast<GLenum>(UsageType::STATICDRAW));
@@ -1411,25 +1425,29 @@ namespace rythe::rendering
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+			glVertexAttribDivisor(0, 0);
 
+			//glEnableVertexAttribArray(1);
+			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
+			//glVertexAttribDivisor(1, 0);
 
 			glGenBuffers(1, &matrixBufferId);
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4), nullptr, static_cast<GLenum>(UsageType::STATICDRAW));
-			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 			glEnableVertexAttribArray(3);
 			glEnableVertexAttribArray(4);
+			glEnableVertexAttribArray(5);
 
-			glVertexAttribPointer(1, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
-			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
-			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
-			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
+			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
+			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
+			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
+			glVertexAttribPointer(5, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
 
-			glVertexAttribDivisor(1, 1);
 			glVertexAttribDivisor(2, 1);
 			glVertexAttribDivisor(3, 1);
 			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
@@ -1494,7 +1512,7 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &vboId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_indVerticies), instance_indVerticies, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_indVertices), instance_indVertices, static_cast<GLenum>(UsageType::STATICDRAW));
 			glGenBuffers(1, &eboId);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, static_cast<GLenum>(UsageType::STATICDRAW));
@@ -1506,23 +1524,27 @@ namespace rythe::rendering
 			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
 			glVertexAttribDivisor(0, 0);
 
+			//glEnableVertexAttribArray(1);
+			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
+			//glVertexAttribDivisor(1, 0);
+
 			glGenBuffers(1, &matrixBufferId);
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4), nullptr, static_cast<GLenum>(UsageType::STATICDRAW));
-			glEnableVertexAttribArray(1);
 			glEnableVertexAttribArray(2);
 			glEnableVertexAttribArray(3);
 			glEnableVertexAttribArray(4);
+			glEnableVertexAttribArray(5);
 
-			glVertexAttribPointer(1, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
-			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
-			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
-			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
+			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
+			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
+			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
+			glVertexAttribPointer(5, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
 
-			glVertexAttribDivisor(1, 1);
 			glVertexAttribDivisor(2, 1);
 			glVertexAttribDivisor(3, 1);
 			glVertexAttribDivisor(4, 1);
+			glVertexAttribDivisor(5, 1);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
@@ -1601,7 +1623,8 @@ namespace rythe::rendering
 
 		D3D11_INPUT_ELEMENT_DESC layout[] =
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }//,
+			//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 		};
 
 		device->CreateInputLayout(layout, sizeof(layout) / sizeof(layout[0]), vtxBlob->GetBufferPointer(), vtxBlob->GetBufferSize(), &inputLayout);
@@ -1642,15 +1665,15 @@ namespace rythe::rendering
 			// Create the vertex buffer
 			D3D11_BUFFER_DESC bd = {};
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(verticies);
+			bd.ByteWidth = sizeof(vertices);
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			D3D11_SUBRESOURCE_DATA initData = {};
-			initData.pSysMem = verticies;
+			initData.pSysMem = vertices;
 			device->CreateBuffer(&bd, &initData, &vertexBuffer);
 
 			// Set the vertex buffer
-			UINT stride = sizeof(math::vec3);
+			UINT stride = sizeof(vtx);
 			UINT offset = 0;
 			deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 
@@ -1687,7 +1710,7 @@ namespace rythe::rendering
 
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
-					deviceContext->Draw(sizeof(verticies) / sizeof(math::vec3), 0);
+					deviceContext->Draw(sizeof(vertices) / sizeof(vtx), 0);
 				}
 			}
 		}
@@ -1736,15 +1759,15 @@ namespace rythe::rendering
 			// Create the vertex buffer
 			D3D11_BUFFER_DESC bd = {};
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(instance_verticies);
+			bd.ByteWidth = sizeof(instance_vertices);
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			D3D11_SUBRESOURCE_DATA initData = {};
-			initData.pSysMem = instance_verticies;
+			initData.pSysMem = instance_vertices;
 			CHECKERROR(device->CreateBuffer(&bd, &initData, &vertexBuffer), "Failed Vertex Buffer Create", api->checkError());
 
 			// Set the vertex buffer
-			UINT stride = sizeof(math::vec3);
+			UINT stride = sizeof(vtx);
 			UINT offset = 0;
 			deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 
@@ -1811,6 +1834,7 @@ namespace rythe::rendering
 			D3D11_INPUT_ELEMENT_DESC layout[] =
 			{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
 				{ "MODEL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 				{ "MODEL", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
@@ -1818,7 +1842,7 @@ namespace rythe::rendering
 				{ "MODEL", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
 			};
 
-			device->CreateInputLayout(layout, 5, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
+			device->CreateInputLayout(layout, 6, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
 
 			// Set the input layout
 			deviceContext->IASetInputLayout(inputLayout);
@@ -1854,7 +1878,7 @@ namespace rythe::rendering
 			unsigned int stride = sizeof(math::mat4);
 			unsigned int offset = 0;
 			deviceContext->IASetVertexBuffers(1, 1, &matrixBuffer, &stride, &offset);
-			deviceContext->DrawInstanced(sizeof(instance_verticies) / sizeof(math::vec3), instanceCount, 0, 0);
+			deviceContext->DrawInstanced(sizeof(instance_vertices) / sizeof(vtx), instanceCount, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -1897,15 +1921,15 @@ namespace rythe::rendering
 			// Create the vertex buffer
 			D3D11_BUFFER_DESC bd = {};
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(indVerticies);
+			bd.ByteWidth = sizeof(indVertices);
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			D3D11_SUBRESOURCE_DATA initData = {};
-			initData.pSysMem = indVerticies;
+			initData.pSysMem = indVertices;
 			device->CreateBuffer(&bd, &initData, &vertexBuffer);
 
 			// Set the vertex buffer
-			UINT stride = sizeof(math::vec3);
+			UINT stride = sizeof(vtx);
 			UINT offset = 0;
 			deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 
@@ -2002,15 +2026,15 @@ namespace rythe::rendering
 			// Create the vertex buffer
 			D3D11_BUFFER_DESC bd = {};
 			bd.Usage = D3D11_USAGE_DEFAULT;
-			bd.ByteWidth = sizeof(instance_indVerticies);
+			bd.ByteWidth = sizeof(instance_indVertices);
 			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 			bd.CPUAccessFlags = 0;
 			D3D11_SUBRESOURCE_DATA initData = {};
-			initData.pSysMem = instance_indVerticies;
+			initData.pSysMem = instance_indVertices;
 			CHECKERROR(device->CreateBuffer(&bd, &initData, &vertexBuffer), "Failed Vertex Buffer Create", api->checkError());
 
 			// Set the vertex buffer
-			UINT stride = sizeof(math::vec3);
+			UINT stride = sizeof(vtx);
 			UINT offset = 0;
 			deviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 
@@ -2089,6 +2113,7 @@ namespace rythe::rendering
 			D3D11_INPUT_ELEMENT_DESC layout[] =
 			{
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				//{ "TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
 				{ "MODEL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
 				{ "MODEL", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 },
@@ -2096,7 +2121,7 @@ namespace rythe::rendering
 				{ "MODEL", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_INSTANCE_DATA, 1 }
 			};
 
-			device->CreateInputLayout(layout, 5, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
+			device->CreateInputLayout(layout, 6, vertexBlob->GetBufferPointer(), vertexBlob->GetBufferSize(), &inputLayout);
 
 			// Set the input layout
 			deviceContext->IASetInputLayout(inputLayout);

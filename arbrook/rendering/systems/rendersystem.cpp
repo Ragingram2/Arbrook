@@ -33,6 +33,7 @@ namespace rythe::rendering
 #pragma region Abstracted API
 
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
+
 		////DrawArrays
 		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
@@ -128,72 +129,3 @@ namespace rythe::rendering
 		m_api->close();
 	}
 }
-
-////TestStencilTest
-//m_testScenes.emplace_back(rendering_test
-//	{
-//		[](inputlayout* layout, RenderInterface* api)
-//			{
-//				log::debug("Initializing TestStencilTest");
-//				glfwSetWindowTitle(api->getWindow(), "TestStencilTest");
-//				math::vec3 verticies[6] =
-//				{	//positions					//colors	
-//					{  -0.1f, 0.1f, 0.0f },//0
-//					{ 	-0.1f,-0.1f, 0.0f },//1
-//					{  0.1f,-0.1f, 0.0f },//2
-//					{  -0.1f, 0.1f, 0.0f },//0
-//					{  0.1f,-0.1f, 0.0f },//2
-//					{  0.1f, 0.1f, 0.0f }//3
-//				};
-
-//				auto vertexHandle = BufferCache::createBuffer<math::vec3>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(math::vec3));
-//				auto shader1Handle = ShaderCache::createShader(*api, "color", "resources/shaders/color.shader");
-//				ShaderCache::createShader(*api, "scaled_color", "resources/shaders/scaled_color.shader");
-//				shader1Handle->bind();
-//				layout->addBuffer(vertexHandle);
-//				layout->bind(api->getHwnd(), shader1Handle);
-//				layout->setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-//				layout->submitAttributes();
-//				api->depthTest(true);
-//				api->setDepthFunction(DepthFuncs::LESS);
-//				api->stencilTest(true);
-//				api->setStencilFunction(Face::FRONT,DepthFuncs::NOT_EQUAL,1,0xFF);
-//				api->setStencilOp(Face::FRONT,StencilOp::KEEP,StencilOp::KEEP,StencilOp::REPLACE);
-//			},
-//		[](inputlayout* layout, RenderInterface* api)
-//			{
-//				auto shader1Handle = ShaderCache::getShader("color");
-//				shader1Handle->bind();
-//				layout->bind(api->getHwnd(), shader1Handle);
-//				api->clear(ClearBit::COLOR_DEPTH_STENCIL);
-
-//				api->setStencilFunction(Face::FRONT, DepthFuncs::ALWAYS, 1, 0xFF);
-//				api->setStencilMask(0xFF);
-//				api->updateDepthStencil();
-//				api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
-
-//				auto shader2Handle = ShaderCache::getShader("scaled_color");
-//				shader2Handle->bind();
-//				api->setStencilFunction(Face::FRONT, DepthFuncs::NOT_EQUAL, 1, 0xFF);
-//				api->setStencilMask(0x00);
-//				api->depthTest(false);
-//				api->updateDepthStencil();
-//				api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
-
-//				api->setStencilMask(0xFF);
-//				api->setStencilFunction(Face::FRONT, DepthFuncs::ALWAYS, 0, 0xFF);
-//				api->depthTest(true);
-//				api->updateDepthStencil();
-//			},
-//		[](inputlayout* layout, RenderInterface* api)
-//			{
-//				BufferCache::deleteBuffer("Vertex Buffer");
-//				ShaderCache::deleteShader("color");
-//				ShaderCache::deleteShader("scaled_color");
-//				layout->release();
-
-//				api->depthTest(false);
-//				api->stencilTest(false);
-//				api->updateDepthStencil();
-//			}
-//	});
