@@ -458,7 +458,7 @@
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\core\scheduler\scheduler.cpp" />
-    <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp" />
+    <ClCompile Include="arbrook\rendering\systems\rendertestsystem.cpp" />
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
     <ClCompile Include="arbrook\core\engine\program.cpp" />
@@ -492,6 +492,7 @@
     <ClInclude Include="arbrook\input\input.hpp" />
     <ClInclude Include="arbrook\input\modules\inputmodule.hpp" />
     <ClInclude Include="arbrook\rendering\components\camera.hpp" />
+    <ClInclude Include="arbrook\rendering\components\mesh_renderer.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\data\buffercache.hpp" />
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp" />
@@ -508,6 +509,7 @@
     <ClInclude Include="arbrook\rendering\data\interface\iinputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp" />
     <ClInclude Include="arbrook\rendering\data\interface\itexture.hpp" />
+    <ClInclude Include="arbrook\rendering\data\mesh.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\enumtypes.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\inputlayout.hpp" />
     <ClInclude Include="arbrook\rendering\data\OpenGL\texture.hpp" />
@@ -530,12 +532,14 @@
     <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp" />
     <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\renderstage.hpp" />
     <ClInclude Include="arbrook\rendering\rendering.hpp" />
+    <ClInclude Include="arbrook\rendering\systems\renderpipeline.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\rendering\modules\rendermodule.hpp" />
     <ClInclude Include="arbrook\core\platform\platform.hpp" />
     <ClInclude Include="arbrook\core\scheduler\scheduler.hpp" />
-    <ClInclude Include="arbrook\rendering\systems\rendersystem.hpp" />
+    <ClInclude Include="arbrook\rendering\systems\rendertestsystem.hpp" />
     <ClInclude Include="arbrook\core\systems\system.hpp" />
     <ClInclude Include="arbrook\sandbox\systems\testsystem.hpp" />
     <ClInclude Include="arbrook\core\types\meta.hpp" />

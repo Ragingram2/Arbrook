@@ -51,7 +51,7 @@
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\systems\rendersystem.cpp">
+    <ClCompile Include="arbrook\rendering\systems\rendertestsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp">
@@ -173,7 +173,7 @@
     <ClInclude Include="arbrook\core\events\defaults\component_event.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\systems\rendersystem.hpp">
+    <ClInclude Include="arbrook\rendering\systems\rendertestsystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\core.hpp">
@@ -309,6 +309,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\components\camera.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\pipeline\renderstage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\systems\renderpipeline.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\components\mesh_renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\data\mesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
