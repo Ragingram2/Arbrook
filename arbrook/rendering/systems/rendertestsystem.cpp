@@ -1,16 +1,16 @@
-#include "rendering/systems/rendersystem.hpp"
+#include "rendering/systems/rendertestsystem.hpp"
 #include <GLFW/glfw3.h>
 namespace rythe::rendering
 {
 	//a fucntion that will generate vertex buffers with given paramters
-	std::vector<std::unique_ptr<rendering_test>> Renderer::m_testScenes;
-	int Renderer::currentScene = 0;
-	int Renderer::lastScene = 0;
-	bool Renderer::initializeTest = true;
-	bool Renderer::updateTest = false;
-	bool Renderer::stopTest = false;
+	std::vector<std::unique_ptr<rendering_test>> TestRenderer::m_testScenes;
+	int TestRenderer::currentScene = 0;
+	int TestRenderer::lastScene = 0;
+	bool TestRenderer::initializeTest = true;
+	bool TestRenderer::updateTest = false;
+	bool TestRenderer::stopTest = false;
 
-	void Renderer::setup()
+	void TestRenderer::setup()
 	{
 		log::info("Initializing Render System");
 		if (!glfwInit())
@@ -58,7 +58,7 @@ namespace rythe::rendering
 #pragma endregion
 	}
 
-	void Renderer::update()
+	void TestRenderer::update()
 	{
 		m_api->makeCurrent();
 		m_api->setSwapInterval(0);
@@ -123,7 +123,7 @@ namespace rythe::rendering
 		m_api->checkError();
 	}
 
-	void Renderer::shutdown()
+	void TestRenderer::shutdown()
 	{
 		glfwTerminate();
 		m_api->close();

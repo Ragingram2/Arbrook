@@ -172,7 +172,7 @@ namespace rythe::rendering
 		}
 	};
 
-	class Renderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
+	class TestRenderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
 	{
 	public:
 		RenderInterface* m_api;
@@ -200,8 +200,8 @@ namespace rythe::rendering
 #endif
 		float timeSum = 0.0f;
 
-		Renderer() = default;
-		virtual ~Renderer() = default;
+		TestRenderer() = default;
+		virtual ~TestRenderer() = default;
 
 		void setup() override;
 		void update() override;

@@ -2,7 +2,8 @@
 #include "core/modules/module.hpp"
 #include "core/logging/logging.hpp"
 
-#include "rendering/systems/rendersystem.hpp"
+#include "rendering/systems/rendertestsystem.hpp"
+#include "rendering/systems/renderpipeline.hpp"
 
 namespace rythe::rendering
 {

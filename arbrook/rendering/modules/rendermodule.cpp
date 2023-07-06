@@ -5,6 +5,7 @@ namespace rythe::rendering
 	void RenderModule::setup()
 	{
 		log::info("Initializing Rendering Module");
-		reportSystem<Renderer>();
+		//reportSystem<TestRenderer>();
+		reportSystem<RendererPipeline>();
 	}
 }
