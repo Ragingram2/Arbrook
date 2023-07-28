@@ -2,9 +2,9 @@
 #include <unordered_map>
 #include <memory>
 
-#include <rythe/delegate>
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/delegate>
+#include <rsl/primitives>
+#include <rsl/hash>
 
 #include "core/engine/services/service.hpp"
 #include "core/logging/logging.hpp"

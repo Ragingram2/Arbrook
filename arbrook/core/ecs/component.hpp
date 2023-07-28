@@ -1,9 +1,8 @@
 #pragma once
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
-#include "core/platform/platform.hpp"
 #include "core/containers/pointer.hpp"
 #include "core/ecs/component_base.hpp"
 #include "core/ecs/entity.hpp"

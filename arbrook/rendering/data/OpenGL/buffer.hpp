@@ -4,7 +4,7 @@
 
 #include <GL/glew.h>
 
-#include <rythe/primitives>
+#include <rsl/primitives>
 
 #include "core/core.hpp"
 

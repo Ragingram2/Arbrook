@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <any>
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
 #include "core/containers/pointer.hpp"
 #include "core/ecs/entity.hpp"

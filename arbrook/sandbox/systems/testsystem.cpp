@@ -69,7 +69,7 @@ namespace rythe::core
 		m_api->clear(gfx::ClearBit::COLOR);
 
 
-		int N = SIZE;
+		//int N = SIZE;
 
 		//addDensity((SIZE / 2), (SIZE / 2), 10.f);
 		//addVelocity(SIZE / 2, SIZE / 2, 0.f, 1.f);

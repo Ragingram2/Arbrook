@@ -1,5 +1,6 @@
 #pragma once
-#include "core/platform/platform.hpp"
+#include <rsl/primitives>
+
 #include "core/ecs/registry.hpp"
 #include "core/engine/program.hpp"
 #include "core/ecs/component_container.hpp"
@@ -52,9 +53,9 @@ namespace rythe::core
 		virtual ~System() = default;
 	public:
 
-		virtual void setup() RYTHE_PURE;
-		virtual void update() RYTHE_PURE;
-		virtual void shutdown() RYTHE_PURE;
+		//virtual void setup() RYTHE_PURE;
+		//virtual void update() RYTHE_PURE;
+		//virtual void shutdown() RYTHE_PURE;
 
 		ecs::entity& createEntity();
 		ecs::entity& createEntity(std::string name);
@@ -67,8 +68,8 @@ namespace rythe::core
 		template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
 		void bindEvent();
 
-		template<typename event_type,  typename ownerType = System<componentTypes...>, void(ownerType::* func_type)(event_type&)>
-		void setKeyBind();
+		//template<typename event_type,  typename ownerType = System<componentTypes...>, void(ownerType::* func_type)(event_type&)>
+		//void setKeyBind();
 	};
 }
 

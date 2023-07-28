@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <string>
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
 #include "core/engine/services/service.hpp"
 #include "core/containers/pointer.hpp"

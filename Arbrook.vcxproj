@@ -455,6 +455,10 @@
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp" />
     <ClCompile Include="arbrook\rendering\data\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\data\shadercache.cpp" />
+    <ClCompile Include="arbrook\rendering\pipeline\pipeline.cpp" />
+    <ClCompile Include="arbrook\rendering\pipeline\pipelineprovider.cpp" />
+    <ClCompile Include="arbrook\rendering\pipeline\renderstage.cpp" />
+    <ClCompile Include="arbrook\rendering\systems\renderer.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp" />
     <ClCompile Include="arbrook\core\scheduler\scheduler.cpp" />
@@ -462,7 +466,6 @@
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
     <ClCompile Include="arbrook\core\engine\program.cpp" />
-    <ClCompile Include="external_include\rsl\src\rythe\delete_me.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\common\string_extra.hpp" />
@@ -531,18 +534,20 @@
     <ClInclude Include="arbrook\rendering\data\vertex.hpp" />
     <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp" />
     <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\pipeline.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\pipelinebase.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\pipelineprovider.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\renderstage.hpp" />
     <ClInclude Include="arbrook\rendering\rendering.hpp" />
-    <ClInclude Include="arbrook\rendering\systems\renderpipeline.hpp" />
+    <ClInclude Include="arbrook\rendering\systems\renderer.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
     <ClInclude Include="arbrook\rendering\modules\rendermodule.hpp" />
-    <ClInclude Include="arbrook\core\platform\platform.hpp" />
     <ClInclude Include="arbrook\core\scheduler\scheduler.hpp" />
     <ClInclude Include="arbrook\rendering\systems\rendertestsystem.hpp" />
     <ClInclude Include="arbrook\core\systems\system.hpp" />
+    <ClInclude Include="arbrook\sandbox\systems\game.hpp" />
     <ClInclude Include="arbrook\sandbox\systems\testsystem.hpp" />
-    <ClInclude Include="arbrook\core\types\meta.hpp" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\concepts.hpp" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\delegate.hpp" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\delegate_base.hpp" />
@@ -562,6 +567,7 @@
     <None Include="arbrook\core\modules\module.inl" />
     <None Include="arbrook\core\scheduler\scheduler.inl" />
     <None Include="arbrook\core\systems\system.inl" />
+    <None Include="arbrook\rendering\pipeline\pipelineprovider.inl" />
     <None Include="external_include\rsl\src\rythe\concepts" />
     <None Include="external_include\rsl\src\rythe\delegate" />
     <None Include="external_include\rsl\src\rythe\hash" />

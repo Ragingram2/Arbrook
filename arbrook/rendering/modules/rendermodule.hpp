@@ -3,7 +3,7 @@
 #include "core/logging/logging.hpp"
 
 #include "rendering/systems/rendertestsystem.hpp"
-#include "rendering/systems/renderpipeline.hpp"
+#include "rendering/systems/renderer.hpp"
 
 namespace rythe::rendering
 {

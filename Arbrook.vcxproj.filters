@@ -45,9 +45,6 @@
     <ClCompile Include="arbrook\core\modules\module.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="external_include\rsl\src\rythe\delete_me.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,12 +60,21 @@
     <ClCompile Include="arbrook\rendering\data\buffercache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="arbrook\rendering\pipeline\pipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\rendering\systems\renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\rendering\pipeline\renderstage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="arbrook\rendering\pipeline\pipelineprovider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\ecs\entity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\core\platform\platform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\ecs\registry.hpp">
@@ -81,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\common\string_extra.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\core\types\meta.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\common\string_literal.hpp">
@@ -314,13 +317,25 @@
     <ClInclude Include="arbrook\rendering\pipeline\renderstage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\systems\renderpipeline.hpp">
+    <ClInclude Include="arbrook\rendering\systems\renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\components\mesh_renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\mesh.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\pipeline\pipeline.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\pipeline\pipelinebase.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\pipeline\pipelineprovider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\sandbox\systems\game.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -372,5 +387,8 @@
     <None Include="resources\shaders\instance_testFS.sc" />
     <None Include="resources\shaders\instance_testVS.sc" />
     <None Include="resources\shaders\texture.shader" />
+    <None Include="arbrook\rendering\pipeline\pipelineprovider.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

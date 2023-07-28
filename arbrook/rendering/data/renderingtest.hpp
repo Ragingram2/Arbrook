@@ -10,7 +10,7 @@
 #include <bx/allocator.h>
 #include <bx/file.h>
 
-#include <rythe/delegate>
+#include <rsl/delegate>
 
 #include "core/ecs/ecs.hpp"
 #include "rendering/data/definitions.hpp"
@@ -19,6 +19,7 @@
 #include "rendering/data/texturecache.hpp"
 #include "rendering/data/buffercache.hpp"
 #include "rendering/components/spriterenderer.hpp"
+#include "rendering/components/mesh_renderer.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/components/camera.hpp"
 
@@ -60,13 +61,7 @@ namespace rythe::rendering
 
 	struct vtx
 	{
-		math::vec3 position;
-		math::vec2 uv;
-	};
-
-	struct tex_vtx
-	{
-		math::vec3 position;
+		math::vec4 position;
 		math::vec2 uv;
 	};
 
@@ -686,7 +681,7 @@ namespace rythe::rendering
 	{
 		char* data = new char[2048];
 		std::ifstream file;
-		size_t fileSize;
+		size_t fileSize = 0;
 		file.open(fsPath, std::ifstream::in | std::ifstream::binary);
 		if (file.is_open()) {
 			file.seekg(0, std::ios::end);

@@ -5,6 +5,8 @@
 #include "rendering/data/buffercache.hpp"
 #include "rendering/data/interface/enumtypes.hpp"
 #include "rendering/components/spriterenderer.hpp"
+#include "rendering/components/mesh_renderer.hpp"
+#include "rendering/components/camera.hpp"
 #include "rendering/data/vertex.hpp"
 
 namespace rythe

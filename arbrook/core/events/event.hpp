@@ -1,11 +1,10 @@
 #pragma once
 #include <unordered_map>
 
-#include <rythe/delegate>
-#include <rythe/primitives>
-#include <rythe/hash>
-
-#include "core/platform/platform.hpp"
+#include <rsl/delegate>
+#include <rsl/primitives>
+#include <rsl/hash>
+#include <rsl/utilities>
 
 /**
  * @file event.hpp

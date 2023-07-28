@@ -1,10 +1,9 @@
 #pragma once
 #include <format>
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
-#include "core/platform/platform.hpp"
 #include "core/containers/pointer.hpp"
 
 namespace rythe::core::ecs

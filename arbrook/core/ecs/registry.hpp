@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <queue>
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
 #include "core/ecs/entity.hpp"
 #include "core/ecs/component.hpp"

@@ -1,7 +1,6 @@
 #pragma once
-#include <rythe/primitives>
-
-#include "core/platform/platform.hpp"
+#include <rsl/primitives>
+#include <rsl/utilities>
 
 /**
  * @file pointer.hpp

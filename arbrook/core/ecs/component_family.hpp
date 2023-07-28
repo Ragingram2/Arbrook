@@ -4,8 +4,8 @@
 #include <queue>
 #include <any>
 
-#include <rythe/primitives>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/hash>
 
 #include "core/ecs/component_container.hpp"
 #include "core/ecs/component_family_base.hpp"

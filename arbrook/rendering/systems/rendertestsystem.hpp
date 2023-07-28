@@ -203,9 +203,9 @@ namespace rythe::rendering
 		TestRenderer() = default;
 		virtual ~TestRenderer() = default;
 
-		void setup() override;
-		void update() override;
-		void shutdown() override;
+		void setup();
+		void update();
+		void shutdown();
 
 		static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 		{

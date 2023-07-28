@@ -2,7 +2,8 @@
 #include <memory>
 #include <iostream>
 
-#include "core/platform/platform.hpp"
+#include <rsl/primitives>
+#include <rsl/utilities>
 
 namespace rythe::core
 {

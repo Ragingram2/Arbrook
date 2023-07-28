@@ -7,7 +7,7 @@
 #include <iterator>
 #include <cstring>
 
-#include <rythe/primitives>
+#include <rsl/primitives>
 
 /**
  * @file string_extra.hpp

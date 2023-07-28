@@ -1,9 +1,8 @@
 #pragma once
-#include <rythe/primitives>
-#include <rythe/delegate>
-#include <rythe/hash>
+#include <rsl/primitives>
+#include <rsl/delegate>
+#include <rsl/hash>
 
-#include "core/platform/platform.hpp"
 #include "core/systems/system.hpp"
 
 namespace rythe::core

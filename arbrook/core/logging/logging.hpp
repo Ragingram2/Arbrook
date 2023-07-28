@@ -11,9 +11,9 @@
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/pattern_formatter.h>
 
-#include <rythe/primitives>
+#include <rsl/primitives>
+#include <rsl/utilities>
 
-#include "core/platform/platform.hpp"
 #include "core/math/math.hpp"
 //#include "common/exception.hpp"
 //#include "async/rw_spinlock.hpp"
@@ -558,7 +558,7 @@ namespace rythe::core::log
 
     namespace detail
     {
-        inline byte _setup_impl()
+        inline rsl::byte _setup_impl()
         {
             auto& inst = impl::get();
 

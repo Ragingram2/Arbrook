@@ -19,7 +19,7 @@ namespace rythe::rendering
 	{
 	private:
 		static std::unordered_map<std::string, std::unique_ptr<shader>> m_shaders;
-		static std::unordered_map<ShaderName, FilePath> ShaderCache::m_filePaths;
+		static std::unordered_map<ShaderName, FilePath> m_filePaths;
 		static RenderInterface* m_api;
 	public:
 		static shader_handle createShader(RenderInterface& api, const ShaderName& name,const FilePath& filepath);

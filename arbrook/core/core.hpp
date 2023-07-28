@@ -8,7 +8,7 @@
 #include "core/ecs/ecs.hpp"
 #include "core/containers/pointer.hpp"
 #include "core/events/events.hpp"
-#include "core/platform/platform.hpp"
+#include <rsl/utilities>
 
 namespace rythe::rendering
 {

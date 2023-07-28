@@ -4,12 +4,11 @@
 #include <unordered_map>
 #include <functional>
 
-#include <rythe/delegate>
-#include <rythe/primitives>
+#include <rsl/delegate>
+#include <rsl/primitives>
 
 #include "core/engine/services/service.hpp"
 #include "core/logging/logging.hpp"
-#include "core/platform/platform.hpp"
 #include "core/events/event.hpp"
 
 namespace rythe::core::events

@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 
-#include <rythe/primitives>
+#include <rsl/primitives>
 
 namespace rythe::core
 {

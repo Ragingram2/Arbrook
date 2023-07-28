@@ -3,9 +3,9 @@
 #include <utility>
 #include <algorithm>
 
-#include <rythe/primitives>
+#include <rsl/primitives>
 
-#include "core/platform/platform.hpp"
+#include <rsl/utilities>
 #include "core/ecs/entity.hpp"
 #include "core/ecs/component_container.hpp"
 #include "core/ecs/component_family.hpp"
