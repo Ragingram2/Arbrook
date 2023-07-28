@@ -51,13 +51,13 @@
     <ClCompile Include="arbrook\rendering\systems\rendertestsystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\shadercache.cpp">
+    <ClCompile Include="arbrook\rendering\cache\shadercache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\texturecache.cpp">
+    <ClCompile Include="arbrook\rendering\cache\texturecache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\rendering\data\buffercache.cpp">
+    <ClCompile Include="arbrook\rendering\cache\buffercache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="arbrook\rendering\pipeline\pipeline.cpp">
@@ -191,7 +191,7 @@
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\buffer.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp">
@@ -200,31 +200,31 @@
     <ClInclude Include="arbrook\rendering\rendering.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\irenderinterface.hpp">
+    <ClInclude Include="arbrook\rendering\interface\irenderinterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\renderinterface.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\renderinterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\config.hpp">
+    <ClInclude Include="arbrook\rendering\interface\config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\definitions.hpp">
+    <ClInclude Include="arbrook\rendering\interface\definitions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\shader.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\shadercache.hpp">
+    <ClInclude Include="arbrook\rendering\cache\shadercache.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\shadersource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\texturecache.hpp">
+    <ClInclude Include="arbrook\rendering\cache\texturecache.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\renderinterface.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\renderinterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\texturehandle.hpp">
@@ -233,40 +233,40 @@
     <ClInclude Include="arbrook\rendering\data\shaderhandle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\window.hpp">
+    <ClInclude Include="arbrook\rendering\interface\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\ishader.hpp">
+    <ClInclude Include="arbrook\rendering\interface\ishader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\textureparameters.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\ibuffer.hpp">
+    <ClInclude Include="arbrook\rendering\interface\ibuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\shader.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\buffer.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\buffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\window.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\window.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\enumtypes.hpp">
+    <ClInclude Include="arbrook\rendering\interface\enumtypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\enumtypes.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\enumtypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\enumtypes.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\enumtypes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\buffercache.hpp">
+    <ClInclude Include="arbrook\rendering\cache\buffercache.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\rendering\data\bufferhandle.hpp">
@@ -278,25 +278,25 @@
     <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\iinputlayout.hpp">
+    <ClInclude Include="arbrook\rendering\interface\iinputlayout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\inputlayout.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\inputlayout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\inputlayout.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\inputlayout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\dx11includes.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\dx11includes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\interface\itexture.hpp">
+    <ClInclude Include="arbrook\rendering\interface\itexture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\OpenGL\texture.hpp">
+    <ClInclude Include="arbrook\rendering\interface\OpenGL\texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="arbrook\rendering\data\DirectX\texture.hpp">
+    <ClInclude Include="arbrook\rendering\interface\DirectX\texture.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp">

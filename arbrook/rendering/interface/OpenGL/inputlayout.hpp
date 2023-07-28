@@ -12,7 +12,7 @@
 #include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/data/vertexattribute.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include Buffer_HPP_PATH
 #include EnumTypes_HPP_PATH
 #include Window_HPP_PATH

@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering

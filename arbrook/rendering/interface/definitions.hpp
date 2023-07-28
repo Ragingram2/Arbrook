@@ -1,10 +1,11 @@
 #pragma once
-#include "rendering/data/interface/irenderinterface.hpp"
-#include "rendering/data/interface/iinputlayout.hpp"
-#include "rendering/data/interface/ishader.hpp"
-#include "rendering/data/interface/ibuffer.hpp"
-#include "rendering/data/interface/window.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/irenderinterface.hpp"
+#include "rendering/interface/iinputlayout.hpp"
+#include "rendering/interface/ishader.hpp"
+#include "rendering/interface/ibuffer.hpp"
+#include "rendering/interface/itexture.hpp"
+#include "rendering/interface/window.hpp"
+#include "rendering/interface/config.hpp"
 #include RenderInterface_HPP_PATH
 #include EnumTypes_HPP_PATH
 #include InputLayout_HPP_PATH 

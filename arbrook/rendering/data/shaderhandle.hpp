@@ -1,6 +1,6 @@
 #pragma once
-#include "rendering/data/interface/ishader.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/ishader.hpp"
+#include "rendering/interface/config.hpp"
 #include Shader_HPP_PATH
 
 namespace rythe::rendering

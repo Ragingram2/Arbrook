@@ -1,7 +1,7 @@
 #pragma once
 #include <rsl/utilities>
 
-#include "rendering/data/definitions.hpp"
+#include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering
 {

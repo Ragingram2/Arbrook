@@ -2,7 +2,7 @@
 #include <string>
 
 #include "core/math/math.hpp"
-#include "rendering/data/interface/enumtypes.hpp"
+#include "rendering/interface/enumtypes.hpp"
 
 namespace rythe::rendering
 {

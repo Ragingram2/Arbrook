@@ -1,6 +1,6 @@
 #pragma once
-#include "rendering/data/interface/itexture.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/itexture.hpp"
+#include "rendering/interface/config.hpp"
 #include Texture_HPP_PATH
 
 namespace rythe::rendering

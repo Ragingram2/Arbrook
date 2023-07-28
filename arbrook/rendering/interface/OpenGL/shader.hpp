@@ -6,7 +6,7 @@
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/bufferhandle.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering::internal

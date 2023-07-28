@@ -10,7 +10,7 @@
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 
 #include Window_HPP_PATH
 #include Shader_HPP_PATH

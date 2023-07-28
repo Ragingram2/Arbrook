@@ -13,11 +13,11 @@
 #include <rsl/delegate>
 
 #include "core/ecs/ecs.hpp"
-#include "rendering/data/definitions.hpp"
+#include "rendering/interface/definitions.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/shadercache.hpp"
-#include "rendering/data/texturecache.hpp"
-#include "rendering/data/buffercache.hpp"
+#include "rendering/cache/shadercache.hpp"
+#include "rendering/cache/texturecache.hpp"
+#include "rendering/cache/buffercache.hpp"
 #include "rendering/components/spriterenderer.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 #include "rendering/data/vertex.hpp"

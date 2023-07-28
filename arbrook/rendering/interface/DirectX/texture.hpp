@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#include "rendering/data/DirectX/dx11includes.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/data/textureparameters.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
 
 #include <stb/stb_image.h>

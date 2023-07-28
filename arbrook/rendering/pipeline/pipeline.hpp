@@ -8,7 +8,7 @@
 
 #include "rendering/pipeline/pipelinebase.hpp"
 #include "rendering/pipeline/renderstage.hpp"
-#include "rendering/data/definitions.hpp"
+#include "rendering/interface/definitions.hpp"
 
 
 namespace rythe::rendering

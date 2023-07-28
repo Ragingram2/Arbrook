@@ -4,10 +4,10 @@
 
 #include "core/logging/logging.hpp"
 
-#include "rendering/data/definitions.hpp"
-#include "rendering/data/shadercache.hpp"
-#include "rendering/data/texturecache.hpp"
-#include "rendering/data/buffercache.hpp"
+#include "rendering/interface/definitions.hpp"
+#include "rendering/cache/shadercache.hpp"
+#include "rendering/cache/texturecache.hpp"
+#include "rendering/cache/buffercache.hpp"
 #include "rendering/pipeline/pipelinebase.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 
@@ -52,7 +52,6 @@ namespace rythe::rendering
 	{
 		virtual void setup() override
 		{
-			log::debug("Clear Stage");
 			RI->setSwapInterval(0);
 			RI->setViewport(1, 0, 0, Width, Height, 0, 1);
 			RI->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
@@ -73,7 +72,6 @@ namespace rythe::rendering
 	{
 		virtual void setup() override
 		{
-			log::debug("Render Stage");
 			tex_vtx verticies[] =
 			{	//positions						
 				{ { -1.f, 1.0f, 0.0f  },	{ 0, 1 } },//0

@@ -5,7 +5,7 @@
 
 #include "core/core.hpp"
 #include "rendering/data/bufferhandle.hpp"
-#include "rendering/data/definitions.hpp"
+#include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering
 {

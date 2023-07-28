@@ -6,9 +6,9 @@
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/interface/enumtypes.hpp"
-#include "rendering/data/interface/ishader.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/enumtypes.hpp"
+#include "rendering/interface/ishader.hpp"
+#include "rendering/interface/config.hpp"
 #include Shader_HPP_PATH
 #include Texture_HPP_PATH
 #include Buffer_HPP_PATH

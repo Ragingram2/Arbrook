@@ -5,7 +5,7 @@
 
 #include "core/logging/logging.hpp"
 
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 #include Window_HPP_PATH
 

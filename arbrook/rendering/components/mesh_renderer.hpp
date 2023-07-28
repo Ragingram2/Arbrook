@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/data/definitions.hpp"
+#include "rendering/interface/definitions.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/bufferhandle.hpp"

@@ -1,6 +1,6 @@
 #pragma once
-#include "rendering/data/interface/ibuffer.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/ibuffer.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 #include Buffer_HPP_PATH
 

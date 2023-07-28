@@ -2,9 +2,9 @@
 #include <string>
 
 #include "rendering/data/textureparameters.hpp"
-#include "rendering/data/interface/enumtypes.hpp"
+#include "rendering/interface/enumtypes.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering

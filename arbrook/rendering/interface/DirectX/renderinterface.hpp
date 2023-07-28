@@ -11,10 +11,10 @@
 
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
-#include "rendering/data/DirectX/dx11includes.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH

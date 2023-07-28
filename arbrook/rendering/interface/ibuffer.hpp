@@ -5,8 +5,8 @@
 #include <rsl/primitives>
 
 #include "core/core.hpp"
-#include "rendering/data/interface/enumtypes.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/enumtypes.hpp"
+#include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering

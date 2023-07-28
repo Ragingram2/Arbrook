@@ -13,7 +13,7 @@
 
 #include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/config.hpp"
+#include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
 #include EnumTypes_HPP_PATH
 

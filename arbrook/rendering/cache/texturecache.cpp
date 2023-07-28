@@ -1,4 +1,4 @@
-#include "rendering/data/texturecache.hpp"
+#include "rendering/cache/texturecache.hpp"
 #include <stb/stb_image.h>
 
 namespace rythe::rendering
