@@ -301,7 +301,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -341,7 +341,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -361,7 +361,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -382,7 +382,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -405,7 +405,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -432,7 +432,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vcpkg\installed\x64-windows-static\include;$(SolutionDir)arbrook;$(SolutionDir)external_include;$(SolutionDir)external_include\rsl\src;$(SolutionDir)external_include\glm\glm;$(SolutionDir)external_include\GLFW;$(SolutionDir)external_include\imgui;$(SolutionDir)external_include\GL;$(SolutionDir)external_include\bgfx;$(SolutionDir)external_include\bimg;$(SolutionDir)external_include\gainput\lib\include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>-Wno-nonportable-include-path %(AdditionalOptions)</AdditionalOptions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -455,9 +455,8 @@
     <ClCompile Include="arbrook\rendering\cache\buffercache.cpp" />
     <ClCompile Include="arbrook\rendering\cache\texturecache.cpp" />
     <ClCompile Include="arbrook\rendering\cache\shadercache.cpp" />
-    <ClCompile Include="arbrook\rendering\pipeline\pipeline.cpp" />
-    <ClCompile Include="arbrook\rendering\pipeline\pipelineprovider.cpp" />
-    <ClCompile Include="arbrook\rendering\pipeline\renderstage.cpp" />
+    <ClCompile Include="arbrook\rendering\pipeline\base\pipeline.cpp" />
+    <ClCompile Include="arbrook\rendering\pipeline\base\graphicsstage.cpp" />
     <ClCompile Include="arbrook\rendering\systems\renderer.cpp" />
     <ClCompile Include="arbrook\sandbox\modules\testmodule.cpp" />
     <ClCompile Include="arbrook\rendering\modules\rendermodule.cpp" />
@@ -466,6 +465,15 @@
     <ClCompile Include="arbrook\sandbox\systems\testsystem.cpp" />
     <ClCompile Include="arbrook\Arbrook.cpp" />
     <ClCompile Include="arbrook\core\engine\program.cpp" />
+    <ClCompile Include="external_include\imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="external_include\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="external_include\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="external_include\imgui\imgui.cpp" />
+    <ClCompile Include="external_include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="external_include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="external_include\imgui\imgui_tables.cpp" />
+    <ClCompile Include="external_include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="external_include\imgui\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="arbrook\core\common\string_extra.hpp" />
@@ -494,6 +502,7 @@
     <ClInclude Include="arbrook\core\modules\module.hpp" />
     <ClInclude Include="arbrook\input\input.hpp" />
     <ClInclude Include="arbrook\input\modules\inputmodule.hpp" />
+    <ClInclude Include="arbrook\rendering\cache\cache.hpp" />
     <ClInclude Include="arbrook\rendering\components\camera.hpp" />
     <ClInclude Include="arbrook\rendering\components\mesh_renderer.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
@@ -534,11 +543,16 @@
     <ClInclude Include="arbrook\rendering\data\vertex.hpp" />
     <ClInclude Include="arbrook\rendering\data\vertexattribute.hpp" />
     <ClInclude Include="arbrook\core\events\defaults\windowevents.hpp" />
-    <ClInclude Include="arbrook\rendering\pipeline\pipeline.hpp" />
-    <ClInclude Include="arbrook\rendering\pipeline\pipelinebase.hpp" />
-    <ClInclude Include="arbrook\rendering\pipeline\pipelineprovider.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\base\pipeline.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\base\pipelinebase.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\base\pipelineprovider.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\base\graphicsstagebase.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\defaultpipeline.hpp" />
     <ClInclude Include="arbrook\rendering\pipeline\pipeline_base.hpp" />
-    <ClInclude Include="arbrook\rendering\pipeline\renderstage.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\base\graphicsstage.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\stages\clearstage.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\stages\guistage.hpp" />
+    <ClInclude Include="arbrook\rendering\pipeline\stages\renderstage.hpp" />
     <ClInclude Include="arbrook\rendering\rendering.hpp" />
     <ClInclude Include="arbrook\rendering\systems\renderer.hpp" />
     <ClInclude Include="arbrook\sandbox\modules\testmodule.hpp" />
@@ -548,6 +562,16 @@
     <ClInclude Include="arbrook\core\systems\system.hpp" />
     <ClInclude Include="arbrook\sandbox\systems\game.hpp" />
     <ClInclude Include="arbrook\sandbox\systems\testsystem.hpp" />
+    <ClInclude Include="external_include\imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="external_include\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="external_include\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="external_include\imgui\imconfig.h" />
+    <ClInclude Include="external_include\imgui\imgui.h" />
+    <ClInclude Include="external_include\imgui\imgui_internal.h" />
+    <ClInclude Include="external_include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="external_include\imgui\imstb_textedit.h" />
+    <ClInclude Include="external_include\imgui\imstb_truetype.h" />
+    <ClInclude Include="external_include\imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\concepts.hpp" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\delegate.hpp" />
     <ClInclude Include="external_include\rsl\src\rythe\impl\delegate_base.hpp" />
@@ -567,7 +591,7 @@
     <None Include="arbrook\core\modules\module.inl" />
     <None Include="arbrook\core\scheduler\scheduler.inl" />
     <None Include="arbrook\core\systems\system.inl" />
-    <None Include="arbrook\rendering\pipeline\pipelineprovider.inl" />
+    <None Include="arbrook\rendering\pipeline\base\pipelineprovider.inl" />
     <None Include="external_include\rsl\src\rythe\concepts" />
     <None Include="external_include\rsl\src\rythe\delegate" />
     <None Include="external_include\rsl\src\rythe\hash" />

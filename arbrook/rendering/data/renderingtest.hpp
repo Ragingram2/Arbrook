@@ -123,7 +123,7 @@ namespace rythe::rendering
 	};
 
 	inline camera cam;
-	inline math::mat4 projection = math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f);
+	inline math::mat4 projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
 	inline math::mat4 view = math::lookAt(cam.pos, cam.pos + cam.front, cam.up);
 	inline math::mat4 projView = projection * view;
 	inline float count = 64.f;
@@ -829,7 +829,7 @@ namespace rythe::rendering
 #endif
 			bgfx::init(init);
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewRect(0, 0, 0, Width, Height);
+			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
@@ -844,7 +844,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -926,7 +926,7 @@ namespace rythe::rendering
 			bgfx::init(init);
 
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewRect(0, 0, 0, Width, Height);
+			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
@@ -941,7 +941,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1035,7 +1035,7 @@ namespace rythe::rendering
 
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
-			bgfx::setViewRect(0, 0, 0, Width, Height);
+			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
@@ -1053,7 +1053,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1139,7 +1139,7 @@ namespace rythe::rendering
 
 			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
-			bgfx::setViewRect(0, 0, 0, Width, Height);
+			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
 			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
@@ -1157,7 +1157,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Width / Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
 		}
 
 		virtual void update(RenderInterface* api) override

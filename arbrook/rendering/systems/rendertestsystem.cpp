@@ -19,7 +19,7 @@ namespace rythe::rendering
 		auto wId = registry->m_worldId;
 		m_api = &registry->m_entities[wId].addComponent<RenderInterface>();
 
-		m_api->initialize(math::ivec2(Width, Height), "Arbrook");
+		m_api->initialize(math::ivec2(Screen_Width, Screen_Height), "Arbrook");
 
 		if (!m_api->getWindow())
 		{
@@ -63,7 +63,7 @@ namespace rythe::rendering
 		m_api->makeCurrent();
 		m_api->setSwapInterval(0);
 
-		m_api->setViewport(1, 0, 0, Width, Height, 0, 1);
+		m_api->setViewport(1, 0, 0, Screen_Width, Screen_Height, 0, 1);
 		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
 		m_api->clear(ClearBit::COLOR);
 

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <imgui/backends/imgui_impl_glfw.h>
+
 #if RenderingAPI == RenderingAPI_OGL
+#include <imgui/backends/imgui_impl_opengl3.h>
 #define Texture_HPP_PATH "rendering/interface/OpenGL/texture.hpp"
 #define TextureParams_HPP_PATH "rendering/interface/OpenGL/textureparameters.hpp"
 #define RenderInterface_HPP_PATH "rendering/interface/OpenGL/renderinterface.hpp"
@@ -13,6 +16,7 @@
 #endif
 
 #if RenderingAPI == RenderingAPI_DX11
+#include <imgui/backends/imgui_impl_dx11.h>
 #define Texture_HPP_PATH "rendering/interface/DirectX/texture.hpp"
 #define TextureParams_HPP_PATH "rendering/interface/DirectX/textureparameters.hpp"
 #define RenderInterface_HPP_PATH "rendering/interface/DirectX/renderinterface.hpp"

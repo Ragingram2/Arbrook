@@ -2,9 +2,10 @@
 #include <memory>
 
 #include "core/systems/system.hpp"
-#include "rendering/pipeline/renderstage.hpp"
-#include "rendering/pipeline/pipelineprovider.hpp"
-#include "rendering/pipeline/pipeline.hpp"
+#include "rendering/pipeline/base/graphicsstage.hpp"
+#include "rendering/pipeline/base/pipelineprovider.hpp"
+#include "rendering/pipeline/base/pipeline.hpp"
+#include "rendering/pipeline/defaultpipeline.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 
 

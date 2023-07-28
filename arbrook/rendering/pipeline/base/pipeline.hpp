@@ -6,9 +6,10 @@
 
 #include <rsl/utilities>
 
-#include "rendering/pipeline/pipelinebase.hpp"
-#include "rendering/pipeline/renderstage.hpp"
 #include "rendering/interface/definitions.hpp"
+#include "rendering/pipeline/base/pipelinebase.hpp"
+#include "rendering/pipeline/base/graphicsstage.hpp"
+
 
 
 namespace rythe::rendering
@@ -35,7 +36,6 @@ namespace rythe::rendering
 			{
 				stage->RI = &RI;
 				stage->pipeline = this;
-				//stage->init();
 			}
 		}
 
@@ -73,15 +73,4 @@ namespace rythe::rendering
 
 	template<typename Self>
 	std::map<rsl::priority_type, std::unique_ptr<graphics_stage_base>> Pipeline<Self>::m_stages;
-
-	class DefaultPipeline : public Pipeline<DefaultPipeline>
-	{
-		virtual void setup() override
-		{
-			attachStage<render_stage>();
-			attachStage<clear_stage>();
-
-			RI.initialize(math::vec2(Width, Height), "Arbrook");
-		}
-	};
 }

@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 
-#include "rendering/pipeline/pipelinebase.hpp"
+#include "rendering/pipeline/base/pipelinebase.hpp"
 
 namespace rythe::rendering
 {
@@ -36,4 +36,4 @@ namespace rythe::rendering
 	};
 }
 
-#include "rendering/pipeline/pipelineprovider.inl"
+#include "rendering/pipeline/base/pipelineprovider.inl"

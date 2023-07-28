@@ -23,5 +23,5 @@ namespace rythe::rendering
 	typedef Itexture<internal::texture> texture;
 }
 
-#define Width 600.f
-#define Height 600.f
+#define Screen_Width 1280.f
+#define Screen_Height 720.f

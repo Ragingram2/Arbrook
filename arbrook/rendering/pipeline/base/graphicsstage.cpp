@@ -1,4 +1,4 @@
-#include "rendering/pipeline/renderstage.hpp"
+#include "rendering/pipeline/base/graphicsstage.hpp"
 
 namespace rythe::rendering
 {

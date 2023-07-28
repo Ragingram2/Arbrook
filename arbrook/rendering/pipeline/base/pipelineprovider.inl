@@ -1,4 +1,4 @@
-#include "rendering/pipeline/pipelineprovider.hpp"
+#include "rendering/pipeline/base/pipelineprovider.hpp"
 #pragma once
 
 namespace rythe::rendering
