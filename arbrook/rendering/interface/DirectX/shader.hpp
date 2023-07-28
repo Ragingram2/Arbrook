@@ -11,7 +11,7 @@
 #pragma comment (lib, "d3dx10.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/handles/bufferhandle.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/interface/config.hpp"
 #include Window_HPP_PATH

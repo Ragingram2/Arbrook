@@ -1,7 +1,7 @@
 #pragma once
 #include "rendering/interface/definitions.hpp"
-#include "rendering/data/texturehandle.hpp"
-#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/handles/texturehandle.hpp"
+#include "rendering/data/handles/shaderhandle.hpp"
 #include "rendering/data/vertex.hpp"
 
 namespace rythe::rendering

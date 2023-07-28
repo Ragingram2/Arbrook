@@ -8,8 +8,8 @@
 #include <rsl/primitives>
 
 #include "core/logging/logging.hpp"
-#include "rendering/data/shaderhandle.hpp"
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/handles/shaderhandle.hpp"
+#include "rendering/data/handles/bufferhandle.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/data/vertexattribute.hpp"
 #include "rendering/interface/config.hpp"

@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #include "core/core.hpp"
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/handles/bufferhandle.hpp"
 #include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering
@@ -26,7 +26,6 @@ namespace rythe::rendering
 	{
 		if (m_buffers.contains(name))
 		{
-			//log::warn("Buffer {} already exists, ignoring new buffer, and returning existing one", name);
 			return m_buffers[name].get();
 		}
 

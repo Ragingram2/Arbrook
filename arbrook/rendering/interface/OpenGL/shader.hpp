@@ -5,7 +5,7 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/handles/bufferhandle.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 

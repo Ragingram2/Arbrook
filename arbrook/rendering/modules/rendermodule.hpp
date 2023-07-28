@@ -12,6 +12,10 @@ namespace rythe::rendering
 	class RenderModule : public core::Module
 	{
 	public:
-		void setup() override;
+		void setup()
+		{
+			log::info("Initializing Rendering Module");
+			reportSystem<Renderer>();
+		}
 	};
 }

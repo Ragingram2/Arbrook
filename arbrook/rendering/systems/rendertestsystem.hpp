@@ -172,7 +172,7 @@ namespace rythe::rendering
 		}
 	};
 
-	class TestRenderer : public core::System<core::transform, sprite_renderer, core::exampleComp>
+	class TestRenderer : public core::System<core::transform, sprite_renderer>
 	{
 	public:
 		RenderInterface* m_api;

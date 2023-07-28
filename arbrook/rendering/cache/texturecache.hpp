@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "core/core.hpp"
-#include "rendering/data/texturehandle.hpp"
+#include "rendering/data/handles/texturehandle.hpp"
 #include "rendering/interface/definitions.hpp"
 
 

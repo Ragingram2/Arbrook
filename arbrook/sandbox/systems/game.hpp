@@ -11,7 +11,6 @@ namespace rythe::game
 	public:
 		void setup()
 		{
-			log::debug("Game Setup");
 			ent = createEntity();
 			ent.addComponent<core::transform>();
 			ent.addComponent<gfx::mesh_renderer>();

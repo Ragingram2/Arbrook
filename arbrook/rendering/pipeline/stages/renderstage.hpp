@@ -56,7 +56,7 @@ namespace rythe::rendering
 
 		virtual rsl::priority_type priority() override
 		{
-			return 2;
+			return OPAQUE;
 		}
 	};
 }

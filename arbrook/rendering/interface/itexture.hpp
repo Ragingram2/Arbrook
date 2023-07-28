@@ -3,7 +3,7 @@
 
 #include "rendering/data/textureparameters.hpp"
 #include "rendering/interface/enumtypes.hpp"
-#include "rendering/data/texturehandle.hpp"
+#include "rendering/data/handles/texturehandle.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 

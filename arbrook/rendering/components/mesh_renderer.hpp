@@ -1,8 +1,6 @@
 #pragma once
 #include "rendering/interface/definitions.hpp"
-#include "rendering/data/texturehandle.hpp"
-#include "rendering/data/shaderhandle.hpp"
-#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/handles/handles.hpp"
 #include "rendering/data/mesh.hpp"
 
 namespace rythe::rendering
@@ -15,6 +13,7 @@ namespace rythe::rendering
 
 	struct mesh_renderer
 	{
+		model_handle model;
 		mesh mesh;
 		inputlayout layout;
 		texture_handle texture;

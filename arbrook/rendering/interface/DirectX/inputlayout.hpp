@@ -5,7 +5,7 @@
 
 #include "core/logging/logging.hpp"
 
-#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/handles/shaderhandle.hpp"
 #include "rendering/data/vertexattribute.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
