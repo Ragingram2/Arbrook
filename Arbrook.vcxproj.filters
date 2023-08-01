@@ -24,9 +24,6 @@
     <ClCompile Include="arbrook\core\engine\program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="arbrook\core\logging\logging.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="arbrook\core\logging\loggingservice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,9 +114,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\containers\pointer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="arbrook\core\logging\logging.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\math\math.hpp">
@@ -432,6 +426,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="arbrook\core\components\components.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\rendering\components\components.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="arbrook\core\logging\logging.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

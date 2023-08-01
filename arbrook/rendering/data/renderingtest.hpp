@@ -243,52 +243,52 @@ namespace rythe::rendering
 		{ { -0.1f,  0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
 		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
 		{ { -0.1f, -0.1f, -0.1,1.0f	 },	{	1.0f, 0.0f	} },//1
-									 	
+
 		{ { -0.1f,  0.1f, -0.1,1.0f		},	{	1.0f, 1.0f	} },//0
 		{ {  0.1f,  0.1f, -0.1,1.0f		},	{	0.0f, 1.0f	} },//3
 		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
-										
+
 		//Front					,1.0f	
 		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ { -0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
 		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-										
+
 		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
 		{ {  0.1f,  0.1f, 0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-								
+
 		//Left					 ,1.0f	
 		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
 		{ {	0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f	} },//2
 		{ {	0.1f, -0.1f,-0.1f	,1.0f	},	{	1.0f, 0.0f	} },//1
-								
+
 		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
 		{ {	0.1f, 0.1f,  0.1f	,1.0f	},	{	0.0f, 1.0f	} },//3
 		{ {0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f } },//2
-					
+
 		//Right					
 		{ {	-0.1f,0.1f, -0.1f	,1.0f	},	{	0.0f, 1.0f	} },//0
 		{ {	-0.1f, -0.1f,-0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
 		{ {	-0.1f, -0.1f, 0.1f,1.0f	  },	{	1.0f, 0.0f	} },//2
-							
+
 		{ {	-0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {-0.1f, -0.1f, 0.1f,1.0f	},	{	1.0f, 0.0f } },//2
 		{ {	-0.1f, 0.1f,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-						
+
 		//Bottom				
 		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ { -0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//1
 		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
-									 	
+
 		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
 		{ {  0.1f, -0.1f,  0.1,1.0f		},	{	1.0f, 1.0f	} },//3
-									
+
 		//Top					 
 		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
 		{ { -0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
-									
+
 		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {  0.1f, 0.1f	,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
 		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
@@ -411,7 +411,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
 					api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, sizeof(vertices) / sizeof(vtx));
 				}
@@ -493,7 +493,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 
 					if (index >= instanceCount)
@@ -561,7 +561,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
 					vBuffer->bind();
 					idxBuffer->bind();
@@ -649,7 +649,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -844,7 +844,8 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
+
+			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -858,8 +859,8 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					model = math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
-					bgfx::setTransform(math::value_ptr(model));
+					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					bgfx::setTransform(model.data);
 
 					bgfx::setVertexBuffer(0, vertexBuffer);
 					bgfx::setState(state);
@@ -941,7 +942,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -962,7 +963,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					mtx[index] = math::translate(math::mat4(1.0f), pos);
-					mtx[index] = math::rotate(mtx[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					mtx[index] = math::rotate(mtx[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -1053,7 +1054,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1067,8 +1068,8 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					model = math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
-					bgfx::setTransform(math::value_ptr(model));
+					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					bgfx::setTransform(model.data);
 
 					bgfx::setVertexBuffer(0, vertexBuffer);
 					bgfx::setIndexBuffer(indexBuffer);
@@ -1157,7 +1158,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::value_ptr(math::lookAt(cam.pos, cam.pos + cam.front, cam.up)), math::value_ptr(math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)));
+			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1178,7 +1179,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					mtx[index] = math::translate(math::mat4(1.0f), pos);
-					mtx[index] = math::rotate(mtx[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					mtx[index] = math::rotate(mtx[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -1262,7 +1263,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(vtx));
@@ -1358,7 +1359,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -1457,7 +1458,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 				}
@@ -1560,7 +1561,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -1701,7 +1702,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
@@ -1856,7 +1857,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;
@@ -1969,7 +1970,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
 					deviceContext->DrawIndexed(sizeof(indicies) / sizeof(unsigned int), 0, 0);
@@ -2137,7 +2138,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], glm::radians(i), glm::vec3(0.0f, 1.0f, 0.0f));
+					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
 					if (index >= instanceCount)
 						break;

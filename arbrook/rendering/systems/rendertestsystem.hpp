@@ -5,6 +5,9 @@
 #include <iostream>
 #include <filesystem>
 
+#include <rsl/logging>
+#include <rsl/math>
+
 #include "core/core.hpp"
 #include "core/events/defaults/exit_event.hpp"
 #include "rendering/interface/definitions.hpp"
@@ -18,9 +21,6 @@
 
 namespace rythe::rendering
 {
-	namespace log = core::log;
-	namespace math = core::math;
-
 	struct result_times
 	{
 		std::int64_t setupTime;

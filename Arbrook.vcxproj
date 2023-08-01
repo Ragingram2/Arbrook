@@ -450,7 +450,6 @@
     <ClCompile Include="arbrook\core\ecs\registry.cpp" />
     <ClCompile Include="arbrook\core\events\eventbus.cpp" />
     <ClCompile Include="arbrook\core\logging\loggingservice.cpp" />
-    <ClCompile Include="arbrook\core\logging\logging.cpp" />
     <ClCompile Include="arbrook\core\modules\module.cpp" />
     <ClCompile Include="arbrook\rendering\cache\buffercache.cpp" />
     <ClCompile Include="arbrook\rendering\cache\modelcache.cpp" />
@@ -496,10 +495,10 @@
     <ClInclude Include="arbrook\core\events\event.hpp" />
     <ClInclude Include="arbrook\core\events\eventbus.hpp" />
     <ClInclude Include="arbrook\core\events\events.hpp" />
+    <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\logging\loggingservice.hpp" />
     <ClInclude Include="arbrook\core\engine\services\service.hpp" />
     <ClInclude Include="arbrook\core\engine\services\serviceregistry.hpp" />
-    <ClInclude Include="arbrook\core\logging\logging.hpp" />
     <ClInclude Include="arbrook\core\math\math.hpp" />
     <ClInclude Include="arbrook\core\modules\coremodule.hpp" />
     <ClInclude Include="arbrook\core\modules\module.hpp" />
@@ -509,6 +508,7 @@
     <ClInclude Include="arbrook\rendering\cache\cache.hpp" />
     <ClInclude Include="arbrook\rendering\cache\modelcache.hpp" />
     <ClInclude Include="arbrook\rendering\components\camera.hpp" />
+    <ClInclude Include="arbrook\rendering\components\components.hpp" />
     <ClInclude Include="arbrook\rendering\components\mesh_renderer.hpp" />
     <ClInclude Include="arbrook\rendering\components\spriterenderer.hpp" />
     <ClInclude Include="arbrook\rendering\cache\buffercache.hpp" />

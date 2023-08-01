@@ -19,7 +19,7 @@ namespace rythe::rendering
 		return api.createShader(shad, name, loadShader(filepath));
 	}
 
-	shader_handle ShaderCache::getShader(const ShaderName& name)
+	shader_handle ShaderCache::getShader(const std::string& name)
 	{
 		if (m_shaders.contains(name))
 		{

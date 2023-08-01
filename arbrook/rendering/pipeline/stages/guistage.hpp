@@ -38,6 +38,6 @@ namespace rythe::rendering
 			ImGui_ImplOpenGL3_RenderDrawData(draw_data);
 		}
 
-		virtual rsl::priority_type priority() override { return UI; }
+		virtual rsl::priority_type priority() override { return UI_PRIORITY; }
 	};
 }

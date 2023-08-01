@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-#include "core/math/math.hpp"
 #include "rendering/interface/enumtypes.hpp"
 #include "rendering/data/handles/bufferhandle.hpp"
 #include "rendering/interface/config.hpp"

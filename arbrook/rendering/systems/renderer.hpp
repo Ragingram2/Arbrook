@@ -1,5 +1,7 @@
 #pragma once
 #include <memory>
+#include <rsl/logging>
+#include <rsl/math>
 
 #include "core/systems/system.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
@@ -11,9 +13,6 @@
 
 namespace rythe::rendering
 {
-	namespace log = core::log;
-	namespace math = core::math;
-
 	class Renderer : public core::System<mesh_renderer>
 	{
 	public:

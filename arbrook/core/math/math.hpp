@@ -1,11 +1,10 @@
 #pragma once
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#include <rsl/math>
 
-namespace rythe::core
-{
-	namespace math = glm;
-} 
+//#include <glm.hpp>
+//#include <gtc/matrix_transform.hpp>
+//#include <gtc/type_ptr.hpp>
 
-namespace math = rythe::core::math;
+//namespace math = glm;
+
+namespace math = rsl::math;

@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "core/math/math.hpp"
+#include <rsl/math>
 
 namespace rythe::rendering
 {

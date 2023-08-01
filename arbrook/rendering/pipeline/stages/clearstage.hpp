@@ -19,7 +19,7 @@ namespace rythe::rendering
 
 		virtual rsl::priority_type priority() override
 		{
-			return CLEAR;
+			return CLEAR_PRIORITY;
 		}
 	};
 }

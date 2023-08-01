@@ -7,6 +7,7 @@ namespace rythe::game
 	class Game : public core::System<core::transform, gfx::mesh_renderer>
 	{
 	private:
+		core::ecs::entity camera;
 		core::ecs::entity ent;
 	public:
 		void setup()
@@ -14,6 +15,10 @@ namespace rythe::game
 			ent = createEntity();
 			ent.addComponent<core::transform>();
 			ent.addComponent<gfx::mesh_renderer>();
+
+			camera = createEntity();
+			camera.addComponent<core::transform>();
+			camera.addComponent<gfx::camera>();
 		}
 	};
 }
