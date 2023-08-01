@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{AEFEE3F6-9AA0-0ECD-835B-22216F9C951D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="components">
+      <UniqueIdentifier>{8BA12798-7759-69E5-E060-4241CC3704D6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers">
+      <UniqueIdentifier>{FB7E5497-E736-96E4-503E-6F403C1531D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ecs">
+      <UniqueIdentifier>{C06D880B-2C77-887C-B5F2-9E7C21FB937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine">
+      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\services">
+      <UniqueIdentifier>{4E889F58-BA13-0D1D-C324-90112F2F691D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="events">
+      <UniqueIdentifier>{5A9D08FC-463F-33D2-2FFA-46261B3BBA22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="events\defaults">
+      <UniqueIdentifier>{019E15EC-6D29-83B0-763A-06A5E244DFB0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logging">
+      <UniqueIdentifier>{CC00C087-38E0-3E23-41F8-C9F9AD56A584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{CF809A7C-BBB7-9B0D-64A4-811050BA170F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="modules">
+      <UniqueIdentifier>{FEAC8BD4-6A8C-0A70-73A4-9546DF0271D1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scheduler">
+      <UniqueIdentifier>{A4EA0DDC-1055-C252-5993-73F8C53CA0A7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems">
+      <UniqueIdentifier>{3D76CBBA-A955-4A56-B26D-D52C1ECCB0B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="systems\hierarchy">
+      <UniqueIdentifier>{2B936EDE-97A9-6C74-E020-F8954C763DFC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\string_extra.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\string_literal.hpp">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="components\components.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="components\transform.hpp">
+      <Filter>components</Filter>
+    </ClInclude>
+    <ClInclude Include="containers\pointer.hpp">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="core.hpp" />
+    <ClInclude Include="ecs\component.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component.inl">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_base.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_container.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_family.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_family.inl">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_family_base.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecs.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity.inl">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\filter.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\filter.inl">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\registry.hpp">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\registry.inl">
+      <Filter>ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\program.hpp">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\services\service.hpp">
+      <Filter>engine\services</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\services\serviceregistry.hpp">
+      <Filter>engine\services</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\services\serviceregistry.inl">
+      <Filter>engine\services</Filter>
+    </ClInclude>
+    <ClInclude Include="events\defaults\component_event.hpp">
+      <Filter>events\defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="events\defaults\exit_event.hpp">
+      <Filter>events\defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="events\defaults\windowevents.hpp">
+      <Filter>events\defaults</Filter>
+    </ClInclude>
+    <ClInclude Include="events\event.hpp">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="events\eventbus.hpp">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="events\eventbus.inl">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="events\events.hpp">
+      <Filter>events</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\logging.hpp">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="logging\loggingservice.hpp">
+      <Filter>logging</Filter>
+    </ClInclude>
+    <ClInclude Include="math\math.hpp">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\coremodule.hpp">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\module.hpp">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\module.inl">
+      <Filter>modules</Filter>
+    </ClInclude>
+    <ClInclude Include="scheduler\scheduler.hpp">
+      <Filter>scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="scheduler\scheduler.inl">
+      <Filter>scheduler</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\hierarchy\hierarchysystem.hpp">
+      <Filter>systems\hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\system.hpp">
+      <Filter>systems</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\system.inl">
+      <Filter>systems</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ecs\registry.cpp">
+      <Filter>ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\Arbrook.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\program.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="events\eventbus.cpp">
+      <Filter>events</Filter>
+    </ClCompile>
+    <ClCompile Include="logging\loggingservice.cpp">
+      <Filter>logging</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\module.cpp">
+      <Filter>modules</Filter>
+    </ClCompile>
+    <ClCompile Include="scheduler\scheduler.cpp">
+      <Filter>scheduler</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

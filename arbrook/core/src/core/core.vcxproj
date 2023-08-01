@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugOGL Win64|x64">
+      <Configuration>DebugOGL Win64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugDX11 Win64|x64">
+      <Configuration>DebugDX11 Win64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseOGL Win64|x64">
+      <Configuration>ReleaseOGL Win64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDX11 Win64|x64">
+      <Configuration>ReleaseDX11 Win64</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4E40957C-3A77-960D-E363-7C10CF79120F}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>core</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugOGL Win64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDX11 Win64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseOGL Win64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDX11 Win64|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>ClangCL</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='DebugOGL Win64|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='DebugDX11 Win64|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='ReleaseOGL Win64|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='ReleaseDX11 Win64|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugOGL Win64|x64'">
+    <OutDir>bin\Win64\DebugOGL\</OutDir>
+    <IntDir>obj\Win64\DebugOGL\</IntDir>
+    <TargetName>core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDX11 Win64|x64'">
+    <OutDir>bin\Win64\DebugDX11\</OutDir>
+    <IntDir>obj\Win64\DebugDX11\</IntDir>
+    <TargetName>core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseOGL Win64|x64'">
+    <OutDir>bin\Win64\ReleaseOGL\</OutDir>
+    <IntDir>obj\Win64\ReleaseOGL\</IntDir>
+    <TargetName>core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDX11 Win64|x64'">
+    <OutDir>bin\Win64\ReleaseDX11\</OutDir>
+    <IntDir>obj\Win64\ReleaseDX11\</IntDir>
+    <TargetName>core</TargetName>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugOGL Win64|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=core;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDX11 Win64|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=core;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseOGL Win64|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=core;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDX11 Win64|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=core;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="common\string_extra.hpp" />
+    <ClInclude Include="common\string_literal.hpp" />
+    <ClInclude Include="components\components.hpp" />
+    <ClInclude Include="components\transform.hpp" />
+    <ClInclude Include="containers\pointer.hpp" />
+    <ClInclude Include="core.hpp" />
+    <ClInclude Include="ecs\component.hpp" />
+    <ClInclude Include="ecs\component.inl" />
+    <ClInclude Include="ecs\component_base.hpp" />
+    <ClInclude Include="ecs\component_container.hpp" />
+    <ClInclude Include="ecs\component_family.hpp" />
+    <ClInclude Include="ecs\component_family.inl" />
+    <ClInclude Include="ecs\component_family_base.hpp" />
+    <ClInclude Include="ecs\ecs.hpp" />
+    <ClInclude Include="ecs\entity.hpp" />
+    <ClInclude Include="ecs\entity.inl" />
+    <ClInclude Include="ecs\filter.hpp" />
+    <ClInclude Include="ecs\filter.inl" />
+    <ClInclude Include="ecs\registry.hpp" />
+    <ClInclude Include="ecs\registry.inl" />
+    <ClInclude Include="engine\program.hpp" />
+    <ClInclude Include="engine\services\service.hpp" />
+    <ClInclude Include="engine\services\serviceregistry.hpp" />
+    <ClInclude Include="engine\services\serviceregistry.inl" />
+    <ClInclude Include="events\defaults\component_event.hpp" />
+    <ClInclude Include="events\defaults\exit_event.hpp" />
+    <ClInclude Include="events\defaults\windowevents.hpp" />
+    <ClInclude Include="events\event.hpp" />
+    <ClInclude Include="events\eventbus.hpp" />
+    <ClInclude Include="events\eventbus.inl" />
+    <ClInclude Include="events\events.hpp" />
+    <ClInclude Include="logging\logging.hpp" />
+    <ClInclude Include="logging\loggingservice.hpp" />
+    <ClInclude Include="math\math.hpp" />
+    <ClInclude Include="modules\coremodule.hpp" />
+    <ClInclude Include="modules\module.hpp" />
+    <ClInclude Include="modules\module.inl" />
+    <ClInclude Include="scheduler\scheduler.hpp" />
+    <ClInclude Include="scheduler\scheduler.inl" />
+    <ClInclude Include="systems\hierarchy\hierarchysystem.hpp" />
+    <ClInclude Include="systems\system.hpp" />
+    <ClInclude Include="systems\system.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ecs\registry.cpp" />
+    <ClCompile Include="engine\Arbrook.cpp" />
+    <ClCompile Include="engine\program.cpp" />
+    <ClCompile Include="events\eventbus.cpp" />
+    <ClCompile Include="logging\loggingservice.cpp" />
+    <ClCompile Include="modules\module.cpp" />
+    <ClCompile Include="scheduler\scheduler.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

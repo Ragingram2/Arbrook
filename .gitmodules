@@ -1,5 +1,5 @@
-[submodule "external_include/rsl"]
-	path = external_include/rsl
+[submodule "include/rsl2"]
+	path = include/rsl2
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
 [submodule "external_include/glm"]
 	path = external_include/glm
