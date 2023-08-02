@@ -18,16 +18,12 @@
     <ClInclude Include="systems\game.hpp">
       <Filter>systems</Filter>
     </ClInclude>
-    <ClInclude Include="systems\testsystem.hpp">
-      <Filter>systems</Filter>
-    </ClInclude>
+    <ClInclude Include="systems\testsystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\arbrook\Arbrook.cpp">
       <Filter>arbrook</Filter>
     </ClCompile>
-    <ClCompile Include="systems\testsystem.cpp">
-      <Filter>systems</Filter>
-    </ClCompile>
+    <ClCompile Include="systems\testsystem.cpp" />
   </ItemGroup>
 </Project>

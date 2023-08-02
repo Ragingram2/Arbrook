@@ -5,7 +5,7 @@ includedirs {
     "$(SolutionDir)arbrook/core/src/",
     "$(SolutionDir)include/rsl/src/"
 }
-dependson { "core" }
+dependson { "core", "rsl"}
 filter "configurations:Debug*"
     links {"core-d"}
 

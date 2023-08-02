@@ -1,7 +1,7 @@
 #pragma once
 #include "core/logging/logging.hpp"
 #include "core/modules/module.hpp"
-#include "sandbox/systems/testsystem.hpp"
+//#include "sandbox/systems/testsystem.hpp"
 #include "sandbox/systems/game.hpp"
 
 namespace rythe::core
