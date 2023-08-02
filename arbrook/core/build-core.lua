@@ -1,10 +1,17 @@
-
--- group "engine"
--- project "core"
---     location "src/core"
---     kind "StaticLib"
 createProject("engine","core","StaticLib")
-includedirs {"core/include/"}    
-defines { "ARBROOK_INTERNAL", "PROJECT_NAME=core" }
-files { "src/%{prj.name}/**.h", "src/%{prj.name}/**.hpp" ,"src/%{prj.name}/**.inl","src/%{prj.name}/**.c", "src/%{prj.name}/**.cpp" }
---group ""
+includedirs {
+    "$(SolutionDir)include/",
+    "$(SolutionDir)include/rsl/src/",
+    "$(SolutionDir)arbrook/core/include/",
+    "$(SolutionDir)arbrook/core/src/"
+}   
+ 
+files { 
+    "src/core/**.h",
+    "src/core/**.hpp",
+    "src/core/**.inl",
+    "src/core/**.c",
+    "src/core/**.cpp" 
+}
+
+

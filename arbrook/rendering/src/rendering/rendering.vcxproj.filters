@@ -13,6 +13,15 @@
     <Filter Include="data\handles">
       <UniqueIdentifier>{4DDFC687-3942-562C-E2C7-8EE2CE0922AF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\imgui">
+      <UniqueIdentifier>{B37F74A5-1F40-F0DB-E87A-395954FA34B8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\imgui\backends">
+      <UniqueIdentifier>{3D53EC06-294D-1559-12BA-AB69FE527BC5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="interface">
       <UniqueIdentifier>{966DB512-02D8-6989-4B16-1B2FB7BF47DE}</UniqueIdentifier>
     </Filter>
@@ -39,6 +48,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\imgui\backends\imgui_impl_dx11.h">
+      <Filter>include\imgui\backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\imgui\backends\imgui_impl_opengl3.h">
+      <Filter>include\imgui\backends</Filter>
+    </ClInclude>
     <ClInclude Include="cache\buffercache.hpp">
       <Filter>cache</Filter>
     </ClInclude>
@@ -216,6 +231,30 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\imgui\backends\imgui_impl_dx11.cpp">
+      <Filter>include\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>include\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\backends\imgui_impl_opengl3.cpp">
+      <Filter>include\imgui\backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\imgui.cpp">
+      <Filter>include\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\imgui_demo.cpp">
+      <Filter>include\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\imgui_draw.cpp">
+      <Filter>include\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\imgui_tables.cpp">
+      <Filter>include\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\imgui\imgui_widgets.cpp">
+      <Filter>include\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="cache\buffercache.cpp">
       <Filter>cache</Filter>
     </ClCompile>

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="arbrook">
+      <UniqueIdentifier>{B585AA3F-2165-29DB-2A7D-B4B196DB8F3C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="modules">
       <UniqueIdentifier>{FEAC8BD4-6A8C-0A70-73A4-9546DF0271D1}</UniqueIdentifier>
     </Filter>
@@ -20,6 +23,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\arbrook\Arbrook.cpp">
+      <Filter>arbrook</Filter>
+    </ClCompile>
     <ClCompile Include="systems\testsystem.cpp">
       <Filter>systems</Filter>
     </ClCompile>

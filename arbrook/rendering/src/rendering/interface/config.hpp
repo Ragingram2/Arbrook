@@ -1,8 +1,7 @@
 #pragma once
-
 #include <imgui/backends/imgui_impl_glfw.h>
 
-#if RenderingAPI == RenderingAPI_OGL
+#ifdef RenderingAPI_OGL
 #include <imgui/backends/imgui_impl_opengl3.h>
 #define Texture_HPP_PATH "rendering/interface/OpenGL/texture.hpp"
 #define TextureParams_HPP_PATH "rendering/interface/OpenGL/textureparameters.hpp"
@@ -15,7 +14,7 @@
 #define ShaderLanguage "GLSL"
 #endif
 
-#if RenderingAPI == RenderingAPI_DX11
+#ifdef RenderingAPI_DX11
 #include <imgui/backends/imgui_impl_dx11.h>
 #define Texture_HPP_PATH "rendering/interface/DirectX/texture.hpp"
 #define TextureParams_HPP_PATH "rendering/interface/DirectX/textureparameters.hpp"
@@ -26,6 +25,7 @@
 #define Window_HPP_PATH "rendering/interface/DirectX/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/interface/DirectX/enumtypes.hpp"
 #define ShaderLanguage "HLSL"
+
 
 #ifdef _DEBUG
 #define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;__debugbreak();}

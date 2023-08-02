@@ -5,8 +5,8 @@ namespace rythe::core
 	void TestSystem::setup()
 	{
 		log::info("Initializing Test System");
-		if (!glfwInit())
-			return;
+		//if (!glfwInit())
+		//	return;
 
 		auto wId = registry->m_worldId;
 		m_api = &registry->m_entities[wId].addComponent<gfx::RenderInterface>();
@@ -14,7 +14,7 @@ namespace rythe::core
 
 		if (!m_api->getWindow())
 		{
-			glfwTerminate();
+			//glfwTerminate();
 			log::error("Window initialization failed");
 			return;
 		}

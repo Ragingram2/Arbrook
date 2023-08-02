@@ -2,6 +2,7 @@
 #include <chrono>
 #include <ctime>
 
+#include <GLFW/glfw3native.h>
 #include <GLFW/glfw3.h>
 
 #include <bgfx/bgfx.h>

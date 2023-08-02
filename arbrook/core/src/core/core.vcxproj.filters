@@ -174,9 +174,6 @@
     <ClCompile Include="ecs\registry.cpp">
       <Filter>ecs</Filter>
     </ClCompile>
-    <ClCompile Include="engine\Arbrook.cpp">
-      <Filter>engine</Filter>
-    </ClCompile>
     <ClCompile Include="engine\program.cpp">
       <Filter>engine</Filter>
     </ClCompile>

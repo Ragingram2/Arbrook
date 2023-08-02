@@ -1,5 +1,4 @@
 #pragma once
-#include <GL/glew.h>
 
 #include "core/core.hpp"
 #include "rendering/rendering.hpp"
