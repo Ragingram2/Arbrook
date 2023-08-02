@@ -18,14 +18,12 @@ files {
 dofile "arbrook/core/include-core.lua"
 
 filter "configurations:*OGL"
-    defines {"RenderingAPI_OGL=0","RenderingAPI=0"}
     files {
         "include/imgui/backends/imgui_impl_opengl3.cpp",
         "include/imgui/backends/imgui_impl_opengl3.h"
     }
 
 filter "configurations:*DX11"
-    defines {"RenderingAPI_DX11=1","RenderingAPI=1"}  
     files {
         "include/imgui/backends/imgui_impl_dx11.cpp",
         "include/imgui/backends/imgui_impl_dx11.h"

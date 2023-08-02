@@ -93,7 +93,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;DEBUG;GLEW_STATIC;RenderingAPI_OGL=0;RenderingAPI=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;DEBUG;RenderingAPI_OGL=0;RenderingAPI=0;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)arbrook\rendering\include;$(SolutionDir)arbrook\rendering\include\imgui;$(SolutionDir)arbrook\rendering\src;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(SolutionDir)include;$(SolutionDir)arbrook\core\src;$(SolutionDir)include\rsl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -116,7 +116,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;DEBUG;GLEW_STATIC;RenderingAPI_DX11=1;RenderingAPI=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;DEBUG;RenderingAPI_DX11=1;RenderingAPI=1;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)arbrook\rendering\include;$(SolutionDir)arbrook\rendering\include\imgui;$(SolutionDir)arbrook\rendering\src;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(SolutionDir)include;$(SolutionDir)arbrook\core\src;$(SolutionDir)include\rsl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -139,7 +139,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;NDEBUG;GLEW_STATIC;RenderingAPI_OGL=0;RenderingAPI=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;NDEBUG;RenderingAPI_OGL=0;RenderingAPI=0;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)arbrook\rendering\include;$(SolutionDir)arbrook\rendering\include\imgui;$(SolutionDir)arbrook\rendering\src;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(SolutionDir)include;$(SolutionDir)arbrook\core\src;$(SolutionDir)include\rsl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -162,7 +162,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;NDEBUG;GLEW_STATIC;RenderingAPI_DX11=1;RenderingAPI=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARBROOK_INTERNAL;PROJECT_NAME=rendering;NDEBUG;RenderingAPI_DX11=1;RenderingAPI=1;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)arbrook\rendering\include;$(SolutionDir)arbrook\rendering\include\imgui;$(SolutionDir)arbrook\rendering\src;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(SolutionDir)include;$(SolutionDir)arbrook\core\src;$(SolutionDir)include\rsl\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

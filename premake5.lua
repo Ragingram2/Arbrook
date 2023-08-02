@@ -71,6 +71,11 @@ function createProject(groupName,projectName,kindName)
         filter "configurations:Release*"
             defines {"NDEBUG"}
             optimize "On"
+        filter "configurations:*OGL"
+            defines {"RenderingAPI_OGL=0","RenderingAPI=0"}
+        
+        filter "configurations:*DX11"
+            defines {"RenderingAPI_DX11=1","RenderingAPI=1"}  
 
         filter {}
     group ""

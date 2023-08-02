@@ -6,9 +6,9 @@ includedirs {
 }  
 dependson { "rendering" }
 filter "configurations:Debug*"
-    links {"rendering-d","glfw3_mt","bgfx-d","bimg-d","bx-d","glew32s","opengl32"}
+    links {"rendering-d","glfw3_mt","bgfx-d","bimg-d","bx-d","glew32s","opengl32","libpng16"}
 
 filter "configurations:Release*"
-    links {"rendering","glfw3_mt","bgfx","bimg","bx","glew32s","opengl32"}
+    links {"rendering","glfw3_mt","bgfx","bimg","bx","glew32s","opengl32","libpng16"}
 
 filter {}
