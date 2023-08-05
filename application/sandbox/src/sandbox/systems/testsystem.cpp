@@ -28,8 +28,6 @@ namespace rythe::core
 			{{  1.f, 1.f, 0.0f },{1,1}}//3
 		};
 
-
-
 		shader = gfx::ShaderCache::createShader(*m_api, "test", "resources/shaders/fluid.shader");
 		vertexHandle = gfx::BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
 		constantHandle = gfx::BufferCache::createBuffer<math::vec4>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
@@ -38,8 +36,8 @@ namespace rythe::core
 
 		layout.initialize(m_api->getHwnd(), 1, shader);
 		vertexHandle->bind();
-		layout.setAttributePtr("POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
-		layout.setAttributePtr("TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
+		layout.setAttributePtr(vertexHandle, "POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
+		layout.setAttributePtr(vertexHandle,"TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
 		layout.bind();
 
 		for (int x = 0; x < SIZE; x++)

@@ -58,7 +58,7 @@ namespace rythe::rendering
 			RI.swapBuffers();
 		}
 
-		template<typename Type> requires StageType<Type>
+		template<typename Type>
 		static void attachStage()
 		{
 			auto ptr = new Type();

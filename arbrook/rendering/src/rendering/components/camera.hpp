@@ -1,22 +1,37 @@
 #pragma once
 #include <rsl/math>
 
+#include "core/components/property.hpp"
+#include "rendering/interface/definitions.hpp"
+
 namespace rythe::rendering
 {
 	struct camera
 	{
-		math::vec3 pos = math::vec3(0, 0, 5.f);
-		math::vec3 front = math::vec3(0.0f, 0.0f, -1.0f);
+	private:
+		float m_nearZ;
+		float m_farZ;
+		float m_fov;
 
-		math::vec3 target = math::vec3(0, 0, 0);
-		math::vec3 direction = math::normalize(pos - target);
+		void set_nearZ(float val) {}
+		void set_farZ(float val) {}
+		void set_fov(float val) {}
 
-		math::vec3 g_up = math::vec3(0, 1, 0);
-		math::vec3 right = math::normalize(math::cross(g_up, direction));
-		math::vec3 up = math::cross(direction, right);
-		
-		math::mat4 projection/* = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f)*/;
-		math::mat4 view/* = math::lookAt(cam.pos, cam.pos + cam.front, cam.up)*/;
-		//math::mat4 projView = projection * view;
+		float get_nearZ() { return m_nearZ; }
+		float get_farZ() { return m_farZ; }
+		float get_fov() { return m_fov; }
+
+	public:
+		camera() : nearZ(this, &m_nearZ, &camera::set_nearZ, &camera::get_nearZ), farZ(this, &m_farZ, &camera::set_farZ, &camera::get_farZ), fov(this, &m_fov, &camera::set_fov, &camera::get_fov) {}
+
+		core::Property<camera, float> nearZ;
+		core::Property<camera, float> farZ;
+		core::Property<camera, float> fov;
+		math::mat4 projection;
+		math::mat4 view;
+
+		math::vec3 pos;
+		math::vec3 front;
+		math::vec3 up;
 	};
 }

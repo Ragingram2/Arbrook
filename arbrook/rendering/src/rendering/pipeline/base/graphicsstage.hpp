@@ -10,12 +10,12 @@
 #include "rendering/cache/buffercache.hpp"
 #include "rendering/pipeline/base/pipelinebase.hpp"
 #include "rendering/pipeline/base/graphicsstagebase.hpp"
-#include "rendering/components/mesh_renderer.hpp"
+#include "rendering/components/components.hpp"
 
 namespace rythe::rendering
 {
-	template<typename Self>
-	struct graphics_stage : public graphics_stage_base, protected core::System<mesh_renderer>
+	template<typename Self, typename... componentTypes>
+	struct graphics_stage : public graphics_stage_base, protected core::System<componentTypes...>
 	{
 		void shutdown_impl() override
 		{
@@ -26,6 +26,6 @@ namespace rythe::rendering
 		}
 	};
 
-	template<typename T>
-	concept StageType = std::derived_from<T, graphics_stage<T>>;
+	//template<typename T>
+	//concept StageType = std::derived_from<T, graphics_stage<T>;
 }

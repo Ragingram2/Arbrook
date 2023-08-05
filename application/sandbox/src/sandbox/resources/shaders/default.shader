@@ -3,30 +3,20 @@
 #version 420 core
 
 layout(location = 0) in vec3 v_position;
-layout(location = 1) in vec4 v_color;
-layout(location = 2) in vec2 v_texCoord;
+layout(location = 1) in vec2 v_texCoord;
+layout(location = 2) in mat4 v_worldMat;
 
-layout(std140, binding = 0) uniform ConstantBuffer
-{
-	vec3 u_position;
-	float u_time;
-};
-
-out vec4 aColor;
 out vec2 TexCoord;
 
 void main()
 {
-	vec3 offset = vec3(0, sin(u_time), 0);
-	gl_Position = vec4(v_position + u_position + offset, 1);
-	aColor = v_color;
+	gl_Position = v_worldMat * vec4(v_position, 1);
 	TexCoord = v_texCoord;
 }
 
 #shader fragment
 #version 420 core
 
-in vec4 aColor;
 in vec2 TexCoord;
 out vec4 FragColor;
 

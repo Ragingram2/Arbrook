@@ -6,39 +6,47 @@
 #include "rendering/cache/cache.hpp"
 #include "rendering/interface/definitions.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
-#include "rendering/components/mesh_renderer.hpp"
+#include "rendering/components/components.hpp"
 
 namespace rythe::rendering
 {
-	struct render_stage : public graphics_stage<render_stage>
+	struct render_stage : public graphics_stage<render_stage, mesh_renderer, core::transform>
 	{
+		math::mat4 projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
+		math::mat4 view;
 		virtual void setup() override
 		{
-			tex_vtx verticies[] =
+			math::vec4 positions[] =
 			{	//positions						
-				{ { -1.f, 1.0f, 0.0f  },	{ 0, 1 } },//0
-				{ {-1.f,-1.0f, 0.0f  },	{ 0, 0 } },//1
-				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
-				{ { -1.0f, 1.0f, 0.0f },		{ 0, 1 } },//0
-				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
-				{ {  1.0f, 1.0f, 0.0f },		{ 1, 1 } }//3
+				{ -1.f, 1.0f, 0.0f,1.0f },//0
+				{-1.f,-1.0f, 0.0f,1.0f  },//1
+				{  1.0f,-1.0f, 0.0f,1.0f },//2
+				{ -1.0f, 1.0f, 0.0f ,1.0f},//0
+				{  1.0f,-1.0f, 0.0f,1.0f },//2
+				{  1.0f, 1.0f, 0.0f,1.0f }//3
+			};
+			math::vec2 uvs[] =
+			{
+					{ 0, 1 },
+					{ 0, 0 },
+					{ 1, 0 },
+					{ 0, 1 },
+					{ 1, 0 },
+					{ 1, 1 }
 			};
 
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				auto& shader = renderer.shader = ShaderCache::createShader(*RI, "default", "resources/shaders/texture.shader");
-				auto& texture = renderer.texture = TextureCache::createTexture2D(*RI, "Rythe", "resources/textures/Rythe.png");
-				auto& vBuffer = renderer.vertexBuffer = BufferCache::createBuffer<tex_vtx>(*RI, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(tex_vtx));
-				auto& layout = renderer.layout;
-
-				shader->bind();
-				texture->bind();
-				layout.initialize(RI->getHwnd(), 1, shader);
-				layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
-				layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
-				vBuffer->bind();
-				layout.bind();
+				auto& transf = ent.getComponent<core::transform>();
+				view = math::lookAt((math::vec3)transf.position, ((math::vec3)transf.position) + transf.forward(), transf.up());
+				math::mat4 mat = { projection * view * ((math::mat4)transf.localMatrix) };
+				renderer.shader = ShaderCache::createShader(*RI, "default", "resources/shaders/default.shader");
+				renderer.texture = TextureCache::createTexture2D(*RI, "Rythe", "resources/textures/Rythe.png");
+				renderer.vertexBuffer = BufferCache::createBuffer<math::vec4>(*RI, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, positions, sizeof(positions) / sizeof(math::vec4));
+				renderer.uvBuffer = BufferCache::createBuffer<math::vec2>(*RI, "UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, uvs, sizeof(uvs) / sizeof(math::vec2));
+				renderer.matrixBuffer = BufferCache::createBuffer<math::mat4>(*RI, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
+				renderer.initialize(RI->getHwnd());
 			}
 			RI->checkError();
 		}
@@ -48,6 +56,11 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
+				auto& transf = ent.getComponent<core::transform>();
+				view = math::lookAt(((math::vec3)transf.position), (transf.position + transf.forward()), transf.up());
+				math::mat4 mat = { projection * view * ((math::mat4)transf.localMatrix) };
+				buffer_handle buff = renderer.matrixBuffer;
+				buff->bufferData(&mat, 1);
 				renderer.bind();
 				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
 			}

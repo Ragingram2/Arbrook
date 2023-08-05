@@ -4,8 +4,9 @@
 #include <algorithm>
 
 #include <rsl/primitives>
-
 #include <rsl/utilities>
+#include <rsl/hash>
+
 #include "core/ecs/entity.hpp"
 #include "core/ecs/component_container.hpp"
 #include "core/ecs/component_family.hpp"
@@ -34,7 +35,24 @@ namespace rythe::core::ecs
 					, ...);
 			}, t);
 		}
+
+	private:
+
+		template<typename componentType>
+		static constexpr rsl::id_type generateId()
+		{
+			return rsl::typeHash<componentType>();
+		}
+
+		template<typename componentType0, typename componentType1, typename... componentTypeN>
+		static constexpr rsl::id_type generateId()
+		{
+			return rsl::combine_hash(rsl::make_hash<componentType0>(), generateId<componentType1, componentTypeN...>());
+		}
 	public:
+		static constexpr rsl::id_type filter_id = generateId<componentTypes...>();
+		static constexpr std::array<rsl::id_type, sizeof...(componentTypes)> composition = { rsl::make_hash<componentTypes>()... };
+
 		entity_set::iterator begin() noexcept;
 		entity_set::iterator end() noexcept;
 		entity_set::reverse_iterator rbegin() noexcept;
@@ -57,6 +75,19 @@ namespace rythe::core::ecs
 
 		template<typename componentType>
 		void removeEntity(events::component_destruction<componentType>& evnt);
+
+		bool containsComp(rsl::id_type id)
+		{
+			for (int i = 0; i < composition.size(); i++)
+				if (composition[i] == id)
+					return true;
+			return false;
+		}
+
+		rsl::id_type id()
+		{
+			return filter_id;
+		}
 	};
 }
 

@@ -3,7 +3,7 @@
 
 namespace rythe::rendering
 {
-	struct clear_stage : public graphics_stage<clear_stage>
+	struct clear_stage : public graphics_stage<clear_stage,camera, core::transform>
 	{
 		virtual void setup() override
 		{

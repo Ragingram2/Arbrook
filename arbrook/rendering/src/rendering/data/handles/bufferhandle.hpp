@@ -11,6 +11,7 @@ namespace rythe::rendering
 		Ibuffer<internal::buffer>* buffer = nullptr;
 		buffer_handle() = default;
 		buffer_handle(Ibuffer<internal::buffer>* buf) : buffer(buf) { }
+		buffer_handle(buffer_handle& buf) : buffer(buf.buffer) { }
 
 		Ibuffer<internal::buffer>* operator->() { return buffer; }
 		operator Ibuffer<internal::buffer>& () const { return *buffer; }

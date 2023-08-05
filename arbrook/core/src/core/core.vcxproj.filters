@@ -160,6 +160,7 @@
     <ClInclude Include="systems\system.inl">
       <Filter>systems</Filter>
     </ClInclude>
+    <ClInclude Include="components\property.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\registry.cpp">

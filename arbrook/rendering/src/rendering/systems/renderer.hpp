@@ -8,19 +8,19 @@
 #include "rendering/pipeline/base/pipelineprovider.hpp"
 #include "rendering/pipeline/base/pipeline.hpp"
 #include "rendering/pipeline/defaultpipeline.hpp"
-#include "rendering/components/mesh_renderer.hpp"
+#include "rendering/components/components.hpp"
 
 
 namespace rythe::rendering
 {
-	class Renderer : public core::System<mesh_renderer>
+	class Renderer : public core::System<camera>
 	{
 	public:
 		static std::unique_ptr<pipeline_provider_base> m_provider;
 		static PipelineBase* m_pipeline;
 		RenderInterface* RI;
 
-		Renderer() : System<mesh_renderer>()
+		Renderer() : System<camera>()
 		{
 			setPipeline<DefaultPipeline>();
 		}

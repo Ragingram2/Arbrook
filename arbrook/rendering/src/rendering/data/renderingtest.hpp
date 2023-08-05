@@ -14,6 +14,8 @@
 #include <rsl/delegate>
 
 #include "core/ecs/ecs.hpp"
+#include "core/components/components.hpp"
+
 #include "rendering/interface/definitions.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/cache/shadercache.hpp"
@@ -22,7 +24,8 @@
 #include "rendering/components/spriterenderer.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 #include "rendering/data/vertex.hpp"
-#include "rendering/components/camera.hpp"
+#include "rendering/components/components.hpp"
+
 
 
 namespace rythe::rendering
@@ -66,6 +69,12 @@ namespace rythe::rendering
 		math::vec2 uv;
 	};
 
+	struct tex_vtx
+	{
+		math::vec4 position;
+		math::vec2 uv;
+	};
+
 	struct rendering_test
 	{
 		APIType type;
@@ -104,9 +113,9 @@ namespace rythe::rendering
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
-			layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
-			vBuffer->bind();
+			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
+			layout.setAttributePtr(vBuffer,"TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
+			layout.submitAttributes();
 			layout.bind();
 		}
 
@@ -124,8 +133,9 @@ namespace rythe::rendering
 	};
 
 	inline camera cam;
-	inline math::mat4 projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-	inline math::mat4 view = math::lookAt(cam.pos, cam.pos + cam.front, cam.up);
+	inline core::transform transf;
+	inline math::mat4 projection = cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
+	inline math::mat4 view = cam.view = math::lookAt((math::vec3)transf.position, transf.position + transf.forward(), transf.up());
 	inline math::mat4 projView = projection * view;
 	inline float count = 64.f;
 	inline float instanceCount = 65536.f / 2.f;
@@ -396,11 +406,10 @@ namespace rythe::rendering
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			texture->bind();
-			vBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.submitAttributes();
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
-			layout.bind();
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -458,26 +467,15 @@ namespace rythe::rendering
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
 			texture->bind();
-			buffer->bind();
-			matrixBuffer->bind(1);
 
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(buffer,"POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
-#if RenderingAPI == RenderingAPI_OGL
-			buffer->bind();
-			layout.bind();
-#elif RenderingAPI == RenderingAPI_DX11
-#endif
-			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-#if RenderingAPI == RenderingAPI_OGL
-			matrixBuffer->bind(1);
-#elif RenderingAPI == RenderingAPI_DX11
-#endif
-			layout.bind();
+			layout.setAttributePtr(matrixBuffer,"MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.submitAttributes();
 
 			data.mvp = projView;
 			shader->setData("ConstantBuffer", &data);
@@ -544,13 +542,12 @@ namespace rythe::rendering
 			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
-
-			vBuffer->bind();
+			
 			idxBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
-			layout.bind();
+			layout.submitAttributes();
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -613,27 +610,16 @@ namespace rythe::rendering
 			matrixBuffer = BufferCache::createBuffer<math::mat4>(*api, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
-			vBuffer->bind();
-			matrixBuffer->bind(1);
 			idxBuffer->bind();
 
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr("POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
-#if RenderingAPI == RenderingAPI_OGL
-			vBuffer->bind();
-			layout.bind();
-#elif RenderingAPI == RenderingAPI_DX11
-#endif
-			layout.setAttributePtr("MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr("MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-#if RenderingAPI == RenderingAPI_OGL
-			matrixBuffer->bind(1);
-#elif RenderingAPI == RenderingAPI_DX11
-#endif
-			layout.bind();
+			layout.setAttributePtr(matrixBuffer,"MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer,"MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.submitAttributes();
 
 			data.mvp = projView;
 			shader->setData("ConstantBuffer", &data);

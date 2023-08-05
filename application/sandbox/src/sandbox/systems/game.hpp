@@ -12,13 +12,15 @@ namespace rythe::game
 	public:
 		void setup()
 		{
-			ent = createEntity();
-			ent.addComponent<core::transform>();
+			ent = createEntity("Cube");
+			auto& transf = ent.addComponent<core::transform>();
 			ent.addComponent<gfx::mesh_renderer>();
 
-			camera = createEntity();
-			camera.addComponent<core::transform>();
-			camera.addComponent<gfx::camera>();
+			transf.position = math::vec3(0, 0, -5.f);
+			//camera = createEntity();
+			//auto& transf = camera.addComponent<core::transform>();
+			//transf.position = math::vec3(1.0);
+			//camera.addComponent<gfx::camera>();
 		}
 	};
 }

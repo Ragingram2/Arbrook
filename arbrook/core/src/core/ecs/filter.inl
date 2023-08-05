@@ -75,7 +75,7 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline void filter<componentTypes...>::addEntity(events::component_creation<componentType>& evnt)
 	{
-		if (!contains(evnt.entity))
+		if (!contains(evnt.entity) && containsComp(rsl::make_hash<componentType>()))
 			m_entities.push_back(evnt.entity);
 	}
 

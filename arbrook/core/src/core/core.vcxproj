@@ -175,6 +175,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="components\components.hpp" />
+    <ClInclude Include="components\property.hpp" />
     <ClInclude Include="components\transform.hpp" />
     <ClInclude Include="containers\pointer.hpp" />
     <ClInclude Include="core.hpp" />
