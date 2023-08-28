@@ -19,28 +19,28 @@ namespace rythe::core::events
 		using listenerFunc = void(events::event_base&);
 		using listenerDelegate = rsl::delegate<listenerFunc>;
 	private:
-		std::unordered_map<rsl::id_type, rsl::multicast_delegate<listenerFunc>> m_callbacks;
-		std::stack<std::pair<rsl::multicast_delegate<listenerFunc>, event_base*>> m_eventQueue;
+		static std::unordered_map<rsl::id_type, rsl::multicast_delegate<listenerFunc>> m_callbacks;
+		static std::stack<std::pair<rsl::multicast_delegate<listenerFunc>, event_base*>> m_eventQueue;
 	public:
 		void initialize() override;
 		void update() override;
 		void shutdown() override;
 
-		void raiseEvent(event_base& value, bool immediate = false);
+		static void raiseEvent(event_base& value, bool immediate = false);
 
 		template <typename event_type, typename owner_type, void(owner_type::* func_type)(event_type&)>
-		void bind(owner_type& instance);
+		static void bind(owner_type& instance);
 		template <typename event_type>
-		void bind(const rsl::delegate<void(event_type&)>& func);
+		static void bind(const rsl::delegate<void(event_type&)>& func);
 		template <typename event_type>
-		void bind(rsl::delegate<void(event_type&)>&& func);
+		static void bind(rsl::delegate<void(event_type&)>&& func);
 		template<typename event_type>
-		void unbind(const rsl::delegate<void(event_type&)>& func);
+		static void unbind(const rsl::delegate<void(event_type&)>& func);
 		template<typename event_type>
-		void unbind(rsl::delegate<void(event_type&)>&& func);
+		static void unbind(rsl::delegate<void(event_type&)>&& func);
 
 		template<typename event_type, typename... Args>
-		void raiseEvent(Args&&... args);
+		static void raiseEvent(Args&&... args);
 	};
 }
 

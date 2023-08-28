@@ -7,22 +7,21 @@ namespace rythe::core
 	class Property
 	{
 	public:
-		//Property(void(func_ptr)(T), T* data_ptr) : m_data(data_ptr), m_callback(func_ptr) {}
-		Property(Self* obj_ptr, T* data_ptr, void(Self::* setfunc_ptr)(T), T(Self::* getfunc_ptr)(void)) : /*T(*data_ptr),*/
+		Property(T* data_ptr) :
 			m_data(*data_ptr),
-			m_setCallback(std::bind(setfunc_ptr, obj_ptr, std::placeholders::_1)),
-			m_getCallback(std::bind(getfunc_ptr, obj_ptr)), m_callbacks(true) {}
-
-		Property(T* data_ptr, void(setfunc_ptr)(T), T(getfunc_ptr)(void)) : /*T(*data_ptr),*/
+			m_setCallback(),
+			m_getCallback(),
+			m_callbacks(false) {}
+		Property(T* data_ptr, void(setfunc_ptr)(T), T(getfunc_ptr)(void)) : 
 			m_data(*data_ptr),
 			m_setCallback(&setfunc_ptr),
-			m_getCallback(&getfunc_ptr), m_callbacks(true) {}
-
-		Property(T* data_ptr) :
-			m_data(*data_ptr), /*T(*data_ptr),*/
-			m_setCallback(),
-			m_getCallback(), m_callbacks(false) {}
-
+			m_getCallback(&getfunc_ptr),
+			m_callbacks(true) {}
+		Property(Self* obj_ptr, T* data_ptr, void(Self::* setfunc_ptr)(T), T(Self::* getfunc_ptr)(void)) :
+			m_data(*data_ptr),
+			m_setCallback(std::bind(setfunc_ptr, obj_ptr, std::placeholders::_1)),
+			m_getCallback(std::bind(getfunc_ptr, obj_ptr)), 
+			m_callbacks(true) {}
 
 		T operator+(const T& rhs)
 		{

@@ -14,10 +14,13 @@ namespace rythe::rendering
 	class ShaderCache;
 	template<typename APIType>
 	class IRenderInterface;
+	template<typename dataType>
+	struct data_handle;
 	namespace internal
 	{
 		struct inputlayout;
 		struct shader;
+		struct buffer;
 		class RenderInterface;
 	}
 }
@@ -35,14 +38,15 @@ namespace rythe::rendering
 		friend class IRenderInterface<internal::RenderInterface>;
 		friend struct internal::inputlayout;
 		friend struct internal::shader;
-		friend struct buffer_handle;
+		friend struct data_handle<Ibuffer<internal::buffer>>;
 	private:
 		APIType m_impl;
 	public:
-		void initialize(TargetType target, UsageType usage) { m_impl.initialize(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage)); }
+		template<typename elementType>
+		void initialize(TargetType target, UsageType usage, int size) { m_impl.template initialize<elementType>(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), size); }
 		void bind(int slot = 0, int offset = 0) { m_impl.bind(slot, offset); }
 		template<typename elementType>
-		void bufferData(elementType data[], int size = 0) { m_impl.bufferData(data, size); }
+		void bufferData(elementType data[], int size = 1) { m_impl.bufferData(data, size); }
 
 		std::string getName() { return m_impl.name; }
 		void setName(std::string name) { m_impl.name = name; }

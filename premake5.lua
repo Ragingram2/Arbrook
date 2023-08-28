@@ -90,7 +90,7 @@ workspace "arbrook"
 include(formatEngineModulePath("core"))
 include(formatEngineModulePath("rendering"))
 include(formatApplicationPath("sandbox"))
-include "include/rsl/build-rsl.lua"
+include "include/rythe-standard-library/build-rythe-standard-library.lua"
 
 
 newaction

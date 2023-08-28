@@ -2,11 +2,10 @@
 
 namespace rythe::rendering
 {
-	std::unordered_map<ShaderName, std::unique_ptr<shader>> ShaderCache::m_shaders;
-	std::unordered_map<ShaderName, FilePath> ShaderCache::m_filePaths;
-	RenderInterface* ShaderCache::m_api;
+	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
+	std::unordered_map<std::string, std::string> ShaderCache::m_filePaths;
 
-	shader_handle ShaderCache::createShader(RenderInterface& api, const ShaderName& name, const FilePath& filepath)
+	shader_handle ShaderCache::createShader(const std::string& name, const std::string& filepath)
 	{
 		if (m_shaders.contains(name))
 		{
@@ -14,9 +13,9 @@ namespace rythe::rendering
 		}
 		m_filePaths.emplace(name, filepath);
 		auto shad = m_shaders.emplace(name, std::make_unique<shader>()).first->second.get();
-		m_api = &api;
 
-		return api.createShader(shad, name, loadShader(filepath));
+		shad->m_impl.initialize(name, loadShader(filepath));
+		return { shad };
 	}
 
 	shader_handle ShaderCache::getShader(const std::string& name)
@@ -46,8 +45,9 @@ namespace rythe::rendering
 	{
 		for (auto& [name, shader] : m_shaders)
 		{
+			//Make sure to delete the previous shader on the gpu
 			log::debug("reloading {} at path {} ", name, m_filePaths[name]);
-			m_api->createShader(shader.get(), name, loadShader(m_filePaths[name]));
+			shader->m_impl.initialize(name, loadShader(m_filePaths[name]));
 		}
 		log::debug("Done!");
 	}

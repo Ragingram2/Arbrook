@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/data/handles/bufferhandle.hpp"
+#include "rendering/data/handles/handles.hpp"
 
 namespace rythe::rendering
 {

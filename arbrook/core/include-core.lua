@@ -3,7 +3,7 @@ print("including core")
 includedirs {
     "$(SolutionDir)include/",
     "$(SolutionDir)arbrook/core/src/",
-    "$(SolutionDir)include/rsl/src/"
+    "$(SolutionDir)include/rythe-standard-library/src/",
 }
 dependson { "core", "rsl"}
 filter "configurations:Debug*"

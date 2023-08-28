@@ -6,17 +6,18 @@
 
 namespace rythe::rendering
 {
-	struct buffer_handle
-	{
-		Ibuffer<internal::buffer>* buffer = nullptr;
-		buffer_handle() = default;
-		buffer_handle(Ibuffer<internal::buffer>* buf) : buffer(buf) { }
-		buffer_handle(buffer_handle& buf) : buffer(buf.buffer) { }
+	//struct buffer_handle
+	//{
+	//	Ibuffer<internal::buffer>* m_buffer = nullptr;
+	//	buffer_handle() = default;
+	//	buffer_handle(std::nullptr_t null_ptr) : m_buffer(null_ptr) {}
+	//	buffer_handle(Ibuffer<internal::buffer>* buf) : m_buffer(buf) { }
+	//	buffer_handle(buffer_handle& buf) : m_buffer(buf.m_buffer) { }
 
-		Ibuffer<internal::buffer>* operator->() { return buffer; }
-		operator Ibuffer<internal::buffer>& () const { return *buffer; }
-		operator unsigned int() const { return buffer->getId(); }
+	//	Ibuffer<internal::buffer>* operator->() { return m_buffer; }
+	//	operator Ibuffer<internal::buffer>& () const { return *m_buffer; }
+	//	operator unsigned int() const { return m_buffer->getId(); }
 
-		TargetType getTargetType() { return buffer->getTargetType(); }
-	};
+	//	TargetType getTargetType() { return m_buffer->getTargetType(); }
+	//};
 }

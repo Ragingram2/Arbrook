@@ -2,6 +2,8 @@
 
 namespace rythe::core::events
 {
+	std::unordered_map<rsl::id_type, rsl::multicast_delegate<EventBus::listenerFunc>> EventBus::m_callbacks;
+	std::stack<std::pair<rsl::multicast_delegate<EventBus::listenerFunc>, event_base*>> EventBus::m_eventQueue;
 	void EventBus::initialize()
 	{
 		log::info("Initializing Eventbus");

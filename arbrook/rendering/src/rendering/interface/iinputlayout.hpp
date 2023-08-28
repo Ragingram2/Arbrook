@@ -1,7 +1,6 @@
 #pragma once
 #include "rendering/data/vertex.hpp"
-#include "rendering/data/handles/bufferhandle.hpp"
-#include "rendering/data/handles/shaderhandle.hpp"
+#include "rendering/data/handles/handles.hpp"
 #include "rendering/interface/enumtypes.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
@@ -15,6 +14,7 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
+
 		void initialize(internal::window& hwnd, unsigned int numBuffers, shader_handle shader) { m_impl.initialize(hwnd, numBuffers, shader); }
 
 		void bind() { m_impl.bind(); }

@@ -5,7 +5,7 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles/bufferhandle.hpp"
+#include "rendering/data/handles/handles.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
@@ -67,7 +67,7 @@ namespace rythe::rendering::internal
 
 		void addBuffer(ShaderType type, buffer_handle handle)
 		{
-			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
+			if (static_cast<internal::TargetType>(handle->getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;

@@ -57,14 +57,6 @@ namespace rythe::rendering
 		//void setScissorTest();
 		//void setBlend(bool blend);
 		//void setBlendParam()
-
-		shader_handle createShader(Ishader<internal::shader>* shader, const std::string& name, const shader_source& source) { m_impl.createShader(&shader->getImpl(), name, source); return shader; };
-		texture_handle createTexture2D(Itexture<internal::texture>* texture, const std::string& name, const std::string& filepath) { m_impl.createTexture2D(&texture->getImpl(), name, filepath); return texture; }
-		//texture_handle createTexture1D(texture1D* texture1d, const std::string& name,const std::string& filepath);
-		//texture_handle createTexture3D(texture3D* texture3d, const std::string& name,const std::string& filepath);
-		//texture_handle createCubeTexture();
-		template<typename elementType>
-		buffer_handle createBuffer(Ibuffer<internal::buffer>* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1) { m_impl.createBuffer(&buffer->getImpl(), static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), data, size); return buffer; }
 		//void createRenderTarget()
 
 		void checkError() { m_impl.checkError(); }

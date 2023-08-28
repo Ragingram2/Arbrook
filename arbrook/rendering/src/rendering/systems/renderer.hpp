@@ -13,6 +13,12 @@
 
 namespace rythe::rendering
 {
+	inline void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		core::events::key_input input{ key,scancode,action,mods };
+		core::events::EventBus::raiseEvent<core::events::key_input>(input);
+	}
+
 	class Renderer : public core::System<camera>
 	{
 	public:
@@ -41,6 +47,8 @@ namespace rythe::rendering
 				log::error("Window initialization failed");
 				return;
 			}
+
+			glfwSetKeyCallback(RI->getWindow(), key_callback);
 		}
 
 		void update()

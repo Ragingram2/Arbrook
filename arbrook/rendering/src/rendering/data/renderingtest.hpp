@@ -2,7 +2,7 @@
 #include <chrono>
 #include <ctime>
 
-#include <GLFW/glfw3native.h>
+//#include <GLFW/glfw3native.h>
 #include <GLFW/glfw3.h>
 
 #include <bgfx/bgfx.h>
@@ -18,12 +18,13 @@
 
 #include "rendering/interface/definitions.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/data/vertex.hpp"
+#include "rendering/data/handles/handles.hpp"
 #include "rendering/cache/shadercache.hpp"
 #include "rendering/cache/texturecache.hpp"
 #include "rendering/cache/buffercache.hpp"
 #include "rendering/components/spriterenderer.hpp"
 #include "rendering/components/mesh_renderer.hpp"
-#include "rendering/data/vertex.hpp"
 #include "rendering/components/components.hpp"
 
 
@@ -107,9 +108,9 @@ namespace rythe::rendering
 				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
 				{ {  1.0f, 1.0f, 0.0f },		{ 1, 1 } }//3
 			};
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/texture.shader");
-			texture = TextureCache::createTexture2D(*api, "test", "resources/textures/Rythe.png");
-			vBuffer = BufferCache::createBuffer<tex_vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(tex_vtx));
+			shader = ShaderCache::createShader("test", "resources/shaders/texture.shader");
+			texture = TextureCache::createTexture2D("test", "resources/textures/Rythe.png");
+			vBuffer = BufferCache::createBuffer<tex_vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, verticies);
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
@@ -399,10 +400,10 @@ namespace rythe::rendering
 			name = "DrawArrays";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
+			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertices, sizeof(vertices) / sizeof(vtx));
-			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertices);
+			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			texture->bind();
@@ -459,10 +460,10 @@ namespace rythe::rendering
 
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/instance_cube.shader");
-			buffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_vertices, sizeof(instance_vertices) / sizeof(vtx));
-			matrixBuffer = BufferCache::createBuffer<math::mat4>(*api, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
-			constantBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
+			buffer = BufferCache::createBuffer<vtx>( "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_vertices);
+			matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
+			constantBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			texture = TextureCache::getTexture2D("test");
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
@@ -535,11 +536,11 @@ namespace rythe::rendering
 			name = "DrawIndexed";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
+			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, indVertices, sizeof(indVertices) / sizeof(vtx));
-			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
-			cBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, indVertices);
+			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies);
+			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			
@@ -602,12 +603,12 @@ namespace rythe::rendering
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/instance_cube.shader");
+			shader = ShaderCache::createShader( "test", "resources/shaders/instance_cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>(*api, "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_indVertices, sizeof(instance_indVertices) / sizeof(vtx));
-			idxBuffer = BufferCache::createBuffer<unsigned int>(*api, "Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies, sizeof(indicies) / sizeof(unsigned int));
-			constantBuffer = BufferCache::createBuffer<uniformData>(*api, "ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
-			matrixBuffer = BufferCache::createBuffer<math::mat4>(*api, "Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
+			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_indVertices);
+			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies);
+			constantBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
 			shader->bind();
 			idxBuffer->bind();
@@ -1213,8 +1214,8 @@ namespace rythe::rendering
 			name = "DrawArrays";
 			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
-			shaderId = shader;
+			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
+			shaderId = shader->getId();
 
 			glGenBuffers(1, &constantBufferId);
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
@@ -1286,8 +1287,8 @@ namespace rythe::rendering
 			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/instance_cube.shader");
-			shaderId = shader;
+			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
+			shaderId = shader->getId();
 
 			glGenBuffers(1, &constantBufferId);
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
@@ -1386,8 +1387,8 @@ namespace rythe::rendering
 			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/cube.shader");
-			shaderId = shader;
+			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
+			shaderId = shader->getId();
 
 			glGenBuffers(1, &constantBufferId);
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
@@ -1483,8 +1484,8 @@ namespace rythe::rendering
 			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
 
-			shader = ShaderCache::createShader(*api, "test", "resources/shaders/instance_cube.shader");
-			shaderId = shader;
+			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
+			shaderId = shader->getId();
 
 			glGenBuffers(1, &constantBufferId);
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);

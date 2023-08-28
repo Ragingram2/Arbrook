@@ -1,7 +1,7 @@
 createProject("engine","core","StaticLib")
 includedirs {
     "$(SolutionDir)include/",
-    "$(SolutionDir)include/rsl/src/",
+    "$(SolutionDir)include/rythe-standard-library/src/",
     "$(SolutionDir)arbrook/core/include/",
     "$(SolutionDir)arbrook/core/src/"
 }   

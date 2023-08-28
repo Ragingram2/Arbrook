@@ -2,7 +2,7 @@
 #shader vertex
 #version 420 core
 
-layout(location = 0) in vec3 v_position;
+layout(location = 0) in vec4 v_position;
 layout(location = 1) in vec2 v_texCoord;
 layout(location = 2) in mat4 v_worldMat;
 
@@ -10,7 +10,7 @@ out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = v_worldMat * vec4(v_position, 1);
+	gl_Position = v_worldMat * v_position;
 	TexCoord = v_texCoord;
 }
 

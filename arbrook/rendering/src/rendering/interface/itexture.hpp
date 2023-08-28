@@ -12,9 +12,12 @@ namespace rythe::rendering
 	class TextureCache;
 	template<typename APIType>
 	class IRenderInterface;
+	template<typename dataType>
+	struct data_handle;
 	namespace internal
 	{
 		struct inputlayout;
+		struct texture;
 		class RenderInterface;
 	}
 }
@@ -27,7 +30,7 @@ namespace rythe::rendering
 		friend class TextureCache;
 		friend class IRenderInterface<internal::RenderInterface>;
 		friend struct internal::inputlayout;
-		friend struct texture_handle;
+		friend struct data_handle<Itexture<internal::texture>>;
 	private:
 		APIType m_impl;
 	public:

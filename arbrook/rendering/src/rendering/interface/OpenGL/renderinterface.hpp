@@ -196,30 +196,6 @@ namespace rythe::rendering::internal
 
 		}
 
-		//createVAO();
-
-		void createShader(shader* shader, const std::string& name, const shader_source& source)
-		{
-			shader->initialize(name, source);
-		}
-
-		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR, rendering::FormatType::RGBA8UN, 1 }, bool generateMipMaps = false)
-		{
-			texture->name = name;
-			texture->initialize(TargetType::TEXTURE2D, params, generateMipMaps);
-			texture->loadData(filepath);
-		}
-
-		template<typename elementType>
-		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1)
-		{
-			buffer->initialize<elementType>(target, usage, size);
-			if (data)
-			{
-				buffer->bufferData<elementType>(data, size);
-			}
-		}
-
 		void checkError()
 		{
 

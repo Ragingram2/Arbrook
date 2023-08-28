@@ -28,9 +28,9 @@ namespace rythe::core
 			{{  1.f, 1.f, 0.0f },{1,1}}//3
 		};
 
-		shader = gfx::ShaderCache::createShader(*m_api, "test", "resources/shaders/fluid.shader");
-		vertexHandle = gfx::BufferCache::createBuffer<vertex>(*m_api, "Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
-		constantHandle = gfx::BufferCache::createBuffer<math::vec4>(*m_api, "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
+		shader = gfx::ShaderCache::createShader("test", "resources/shaders/fluid.shader");
+		vertexHandle = gfx::BufferCache::createBuffer<vertex>("Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
+		constantHandle = gfx::BufferCache::createBuffer<math::vec4>( "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
 		shader->addBuffer(gfx::ShaderType::FRAGMENT, constantHandle);
 		shader->bind();
 

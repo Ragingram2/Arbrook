@@ -32,8 +32,8 @@ namespace rythe::core
 		Property<transform, math::quat> rotation;
 		Property<transform, math::mat4> localMatrix;
 
-		math::vec3 up() { return m_localMatrix.row1; }
-		math::vec3 right() { return m_localMatrix.row0; }
-		math::vec3 forward() { return m_localMatrix.row2; }
+		math::vec3 up() { return m_localMatrix[1]; }
+		math::vec3 right() { return m_localMatrix[0]; }
+		math::vec3 forward() { return m_localMatrix[2]; }
 	};
 }

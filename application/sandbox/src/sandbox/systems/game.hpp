@@ -4,23 +4,29 @@
 
 namespace rythe::game
 {
+	using namespace rythe::core::events;
 	class Game : public core::System<core::transform, gfx::mesh_renderer>
 	{
 	private:
 		core::ecs::entity camera;
 		core::ecs::entity ent;
-	public:
-		void setup()
-		{
-			ent = createEntity("Cube");
-			auto& transf = ent.addComponent<core::transform>();
-			ent.addComponent<gfx::mesh_renderer>();
+		gfx::material mat;
+		gfx::mesh msh;
 
-			transf.position = math::vec3(0, 0, -5.f);
-			//camera = createEntity();
-			//auto& transf = camera.addComponent<core::transform>();
-			//transf.position = math::vec3(1.0);
-			//camera.addComponent<gfx::camera>();
+	public:
+		void setup();
+
+		void reloadShaders(core::events::key_input& input)
+		{
+			if (input.action == GLFW_PRESS)
+			{
+				switch (input.key)
+				{
+				case GLFW_KEY_1:
+					gfx::ShaderCache::reloadShaders();
+					break;
+				}
+			}
 		}
 	};
 }
