@@ -1,6 +1,3 @@
-[submodule "external_include/glm"]
-	path = include/glm
-	url = https://github.com/g-truc/glm.git
 [submodule "external_include/imgui"]
 	path = include/imgui
 	url = https://github.com/ocornut/imgui.git
