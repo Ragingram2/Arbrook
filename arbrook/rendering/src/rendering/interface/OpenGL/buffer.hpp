@@ -13,8 +13,6 @@
 
 namespace rythe::rendering
 {
-	template<typename dataType>
-	struct data_handle;
 	template<typename APIType>
 	struct Ibuffer;
 
@@ -28,8 +26,9 @@ namespace rythe::rendering::internal
 {
 	struct buffer
 	{
-		friend struct rendering::data_handle<Ibuffer<internal::buffer>>;
+		//friend struct rendering::data_handle<Ibuffer<internal::buffer>>;
 		friend struct Ibuffer<internal::buffer>;
+		friend struct buffer_handle;
 		friend struct internal::inputlayout;
 	public:
 		unsigned int id;

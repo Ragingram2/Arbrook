@@ -14,8 +14,8 @@ namespace rythe::rendering
 	class ShaderCache;
 	template<typename APIType>
 	class IRenderInterface;
-	template<typename dataType>
-	struct data_handle;
+	//template<typename dataType>
+	//struct data_handle;
 	namespace internal
 	{
 		struct inputlayout;
@@ -38,7 +38,8 @@ namespace rythe::rendering
 		friend class IRenderInterface<internal::RenderInterface>;
 		friend struct internal::inputlayout;
 		friend struct internal::shader;
-		friend struct data_handle<Ibuffer<internal::buffer>>;
+		//friend struct data_handle<Ibuffer<internal::buffer>>;
+		friend struct buffer_handle;
 	private:
 		APIType m_impl;
 	public:

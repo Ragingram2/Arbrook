@@ -8,8 +8,7 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles/shaderhandle.hpp"
-#include "rendering/data/handles/texturehandle.hpp"
+#include "rendering/data/handles.hpp"
 #include "rendering/interface/config.hpp"
 
 #include Window_HPP_PATH

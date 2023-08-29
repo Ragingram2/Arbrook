@@ -1,5 +1,7 @@
 #pragma once
-#include "rendering/data/handles/handles.hpp"
+#include "rendering/data/handles.hpp"
+#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/texturehandle.hpp"
 namespace rythe::rendering
 {
 	struct material

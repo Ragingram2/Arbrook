@@ -7,7 +7,7 @@
 
 #include "core/core.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles/handles.hpp"
+#include "rendering/data/handles.hpp"
 #include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering

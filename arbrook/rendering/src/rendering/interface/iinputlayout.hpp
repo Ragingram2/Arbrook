@@ -1,6 +1,6 @@
 #pragma once
 #include "rendering/data/vertex.hpp"
-#include "rendering/data/handles/handles.hpp"
+#include "rendering/data/handles.hpp"
 #include "rendering/interface/enumtypes.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH

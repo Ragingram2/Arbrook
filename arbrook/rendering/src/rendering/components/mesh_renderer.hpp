@@ -1,8 +1,8 @@
 #pragma once
 #include "core/components/property.hpp"
+#include "rendering/data/model.hpp"
 #include "rendering/interface/definitions.hpp"
 #include "rendering/cache/buffercache.hpp"
-#include "rendering/data/handles/handles.hpp"
 #include "rendering/data/mesh.hpp"
 #include "rendering/data/material.hpp"
 
@@ -59,10 +59,10 @@ namespace rythe::rendering
 
 		void bind()
 		{
-			layout.bind();
-			//m_model.bind();
 			m_material.bind();
 			m_model.vertexBuffer->bind();
+			layout.bind();
+			//m_model.bind();
 		}
 	};
 }

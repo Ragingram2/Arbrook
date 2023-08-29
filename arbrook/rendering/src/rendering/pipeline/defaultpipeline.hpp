@@ -13,7 +13,7 @@ namespace rythe::rendering
 		{
 			attachStage<render_stage>();
 			attachStage<clear_stage>();
-			attachStage<gui_stage>();
+			//attachStage<gui_stage>();
 
 			RI.initialize(math::vec2(Screen_Width, Screen_Height), "Arbrook");
 		}

@@ -3,7 +3,8 @@
 #include <memory>
 #include <unordered_map>
 
-#include "rendering/data/handles/modelhandle.hpp"
+#include "rendering/data/model.hpp"
+#include "rendering/data/modelhandle.hpp"
 #include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering

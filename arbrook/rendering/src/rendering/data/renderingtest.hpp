@@ -19,7 +19,7 @@
 #include "rendering/interface/definitions.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/vertex.hpp"
-#include "rendering/data/handles/handles.hpp"
+#include "rendering/data/handles.hpp"
 #include "rendering/cache/shadercache.hpp"
 #include "rendering/cache/texturecache.hpp"
 #include "rendering/cache/buffercache.hpp"

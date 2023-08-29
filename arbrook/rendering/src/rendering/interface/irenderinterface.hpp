@@ -2,9 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "rendering/data/handles/bufferhandle.hpp"
-#include "rendering/data/handles/texturehandle.hpp"
-#include "rendering/data/handles/shaderhandle.hpp"
+#include "rendering/data/handles.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/interface/enumtypes.hpp"
 #include "rendering/interface/ishader.hpp"

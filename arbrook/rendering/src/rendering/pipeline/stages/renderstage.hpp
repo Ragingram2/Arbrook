@@ -22,7 +22,7 @@ namespace rythe::rendering
 				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
-				view = math::lookAt(((math::vec3)transf.position), (((math::vec3)transf.position) + transf.forward()), math::vec3(0.0f,1.0f,0.0f));
+				view = math::lookAt((math::vec3)transf.position, (((math::vec3)transf.position) + transf.forward()), math::vec3(0.0f, 1.0f, 0.0f));
 				math::mat4 mat = { projection * view * (math::mat4)(transf.localMatrix)};
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
@@ -41,7 +41,7 @@ namespace rythe::rendering
 				//buffer_handle buff = renderer.m_model.matrixBuffer;
 				//buff->bufferData(&mat, 1);
 				renderer.bind();
-				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+				RI->drawArrays(PrimitiveType::TRIANGLESTRIP, 0, 6);
 			}
 			RI->checkError();
 		}

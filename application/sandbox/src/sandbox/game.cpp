@@ -31,9 +31,9 @@ namespace rythe::game
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
-		transf.position = math::vec3(0, 0, 1.f);
+		transf.position = math::vec3(.5f, 0, .2f);
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
-		//renderer.set_material(mat);
+		renderer.set_material(mat);
 		renderer.set_mesh(msh);
 
 		//camera = createEntity();
