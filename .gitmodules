@@ -1,9 +1,3 @@
-[submodule "external_include/glm"]
-	path = include/glm
-	url = https://github.com/g-truc/glm.git
-[submodule "external_include/imgui"]
-	path = include/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "include/rythe-standard-library"]
 	path = include/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
