@@ -1,10 +1,11 @@
 #pragma once
-#include <D3D11.h>
-#include <D3DX11.h>
-#include <D3DX10.h>
+//#include <D3D11.h>
+//#include <D3DX11.h>
+//#include <D3DX10.h>
 
 #include "core/logging/logging.hpp"
 
+#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 #include Window_HPP_PATH

@@ -5,8 +5,8 @@
 
 #include "core/logging/logging.hpp"
 
-#include "rendering/data/handles/shaderhandle.hpp"
-#include "rendering/data/handles/bufferhandle.hpp"
+#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/vertexattribute.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
@@ -50,7 +50,7 @@ namespace rythe::rendering::internal
 
 		void setAttributePtr(buffer* buf,const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
-			m_vertexAttribs.emplace(buf,vertexattribute{ std::move(attribName), index, components, inputSlot, stride, offset, inputClass, instancedStep });
+			m_vertexAttribs.emplace(buf,vertexattribute{ attribName.c_str(), index, components, inputSlot, stride, offset, inputClass, instancedStep});
 		}
 
 		void submitAttributes()
@@ -59,7 +59,7 @@ namespace rythe::rendering::internal
 			{
 				for (auto& attrib : m_vertexAttribs)
 				{
-					elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), attrib.index, static_cast<DXGI_FORMAT>(attrib.format), attrib.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
+					elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.second.name.c_str(), attrib.second.index, static_cast<DXGI_FORMAT>(attrib.second.format), attrib.second.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.second.inputClass),attrib.second.step });
 				}
 				CHECKERROR(m_hwnd.dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout), "Failed creating input layout", m_hwnd.checkError());
 

@@ -1,17 +1,18 @@
 #pragma once
 #include <unordered_map>
 
-#include <D3D11.h>
-#include <D3DX11.h>
-#include <D3DX10.h>
-#include <D3Dcompiler.h>
+//#include <D3D11.h>
+//#include <D3DX11.h>
+//#include <D3DX10.h>
+//#include <D3Dcompiler.h>
+//
+//#pragma comment (lib, "d3d11.lib")
+//#pragma comment (lib, "d3dx11.lib")
+//#pragma comment (lib, "d3dx10.lib")
+//#pragma comment(lib, "D3DCompiler.lib")
 
-#pragma comment (lib, "d3d11.lib")
-#pragma comment (lib, "d3dx11.lib")
-#pragma comment (lib, "d3dx10.lib")
-#pragma comment(lib, "D3DCompiler.lib")
-
-#include "rendering/data/handles/bufferhandle.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
+#include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
@@ -69,20 +70,20 @@ namespace rythe::rendering::internal
 			std::vector<ID3D11Buffer*> buffers;
 			for (auto& [name, handle] : m_vsConstBuffers)
 			{
-				buffers.push_back(handle.buffer->m_impl);
+				buffers.push_back(handle.m_data->m_impl);
 			}
 			m_hwnd.devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
 			for (auto& [name, handle] : m_psConstBuffers)
 			{
-				buffers.push_back(handle.buffer->m_impl);
+				buffers.push_back(handle.m_data->m_impl);
 			}
 			m_hwnd.devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)
 		{
-			if (static_cast<internal::TargetType>(handle.getTargetType()) != TargetType::CONSTANT_BUFFER)
+			if (static_cast<internal::TargetType>(handle->getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;

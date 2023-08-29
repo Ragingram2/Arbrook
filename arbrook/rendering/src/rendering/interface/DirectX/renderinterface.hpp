@@ -13,7 +13,7 @@
 #include "core/logging/logging.hpp"
 #include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles/texturehandle.hpp"
+#include "rendering/data/texturehandle.hpp"
 #include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
 #include Shader_HPP_PATH
