@@ -36,11 +36,10 @@ namespace rythe::game
 		renderer.set_material(mat);
 		renderer.set_mesh(msh);
 
-		//camera = createEntity();
-		//auto& transf = camera.addComponent<core::transform>();
-		//transf.position = math::vec3(1.0);
-		//camera.addComponent<gfx::camera>();
+		camera = createEntity("Camera");
+		auto& camTransf = camera.addComponent<core::transform>();
+		camTransf.position = math::vec3(0.0f,0.0f,-1.0f);
+		camera.addComponent<gfx::camera>();
 	}
-
 
 }

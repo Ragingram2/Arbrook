@@ -3,6 +3,7 @@
 #include <rsl/logging>
 #include <rsl/math>
 
+#include "core/ecs/ecs.hpp"
 #include "core/systems/system.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
 #include "rendering/pipeline/base/pipelineprovider.hpp"
@@ -15,7 +16,7 @@ namespace rythe::rendering
 {
 	inline void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		core::events::key_input input{ key,scancode,action,mods };
+		core::events::key_input input{ key, scancode, action, mods };
 		core::events::EventBus::raiseEvent<core::events::key_input>(input);
 	}
 
@@ -60,7 +61,9 @@ namespace rythe::rendering
 				return;
 			}
 
-			m_pipeline->render();
+			auto& camEnt = getCameraEntity();
+			auto& transf = camEnt.getComponent<core::transform>();
+			m_pipeline->render(transf, getCamera());
 
 			RI->pollEvents();
 		}
@@ -70,6 +73,15 @@ namespace rythe::rendering
 			m_pipeline->shutdown();
 		}
 
+		core::ecs::entity& getCameraEntity()
+		{
+			return m_filter[0];
+		}
+
+		camera& getCamera()
+		{
+			return m_filter[0].getComponent<camera>();
+		}
 
 		template<typename Type>
 		static void setPipeline()

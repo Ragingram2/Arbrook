@@ -6,16 +6,18 @@
 #include <rsl/utilities>
 
 #include "core/logging/logging.hpp"
+#include "core/components/transform.hpp"
 #include "rendering/cache/cache.hpp"
 #include "rendering/interface/definitions.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
 #include "rendering/components/mesh_renderer.hpp"
+#include "rendering/components/camera.hpp"
 
 namespace rythe::rendering
 {
 	struct gui_stage : public graphics_stage<gui_stage>
 	{
-		virtual void setup() override
+		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			RI->makeCurrent();
 			auto* ctx = ImGui::CreateContext();
@@ -25,7 +27,7 @@ namespace rythe::rendering
 			ImGui_ImplOpenGL3_Init("#version 420");
 		}
 
-		virtual void render() override
+		virtual void render(core::transform camTransf, camera& cam) override
 		{
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();

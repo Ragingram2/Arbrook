@@ -1,7 +1,10 @@
 #pragma once
 #include <rsl/utilities>
+#include <rsl/math>
 
+#include "core/components/transform.hpp"
 #include "rendering/interface/definitions.hpp"
+#include "rendering/components/camera.hpp"
 
 namespace rythe::rendering
 {
@@ -12,7 +15,7 @@ namespace rythe::rendering
 	public:
 		RenderInterface RI;//This should be the only real version
 		virtual void init() RYTHE_PURE;
-		virtual void render() RYTHE_PURE;
+		virtual void render(core::transform camTransf, camera& cam) RYTHE_PURE;
 		virtual void shutdown() RYTHE_IMPURE
 
 		void abort()

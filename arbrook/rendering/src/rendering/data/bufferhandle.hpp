@@ -14,7 +14,7 @@ namespace rythe::rendering
 		Ibuffer<internal::buffer>* operator->() { return m_data; }
 		operator Ibuffer<internal::buffer>& () const { return *m_data; }
 
-		//bool operator ==(Ibuffer<internal::buffer>* data) { return m_data == data; }
-		//bool operator !=(Ibuffer<internal::buffer>* data) { return m_data != data; }
+		bool operator ==(Ibuffer<internal::buffer>* data) { return m_data == data; }
+		bool operator !=(Ibuffer<internal::buffer>* data) { return m_data != data; }
 	};
 }

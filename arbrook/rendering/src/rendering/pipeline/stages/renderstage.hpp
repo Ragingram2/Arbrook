@@ -1,8 +1,10 @@
 #pragma once
 #include <rsl/primitives>
 #include <rsl/utilities>
+#include <rsl/math>
 
 #include "core/logging/logging.hpp"
+#include "core/components/transform.hpp"
 #include "rendering/cache/cache.hpp"
 #include "rendering/interface/definitions.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
@@ -14,7 +16,7 @@ namespace rythe::rendering
 	{
 		math::mat4 projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
 		math::mat4 view;
-		virtual void setup() override
+		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			for (auto& ent : m_filter)
 			{
@@ -22,26 +24,26 @@ namespace rythe::rendering
 				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
-				view = math::lookAt((math::vec3)transf.position, (((math::vec3)transf.position) + transf.forward()), math::vec3(0.0f, 1.0f, 0.0f));
-				math::mat4 mat = { projection * view * (math::mat4)(transf.localMatrix)};
+				cam.view = math::lookAt(static_cast<math::vec3>(camTransf.position), static_cast<math::vec3>(camTransf.position + camTransf.forward()), camTransf.up());
+				math::mat4 mat = { projection * cam.view * static_cast<math::mat4>(transf.localMatrix)};
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
 			}
 			RI->checkError();
 		}
 
-		virtual void render() override
+		virtual void render(core::transform camTransf, camera& cam) override
 		{
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				auto& transf = ent.getComponent<core::transform>();
+				//auto& transf = ent.getComponent<core::transform>();
 				//view = math::lookAt(((math::vec3)transf.position), (((math::vec3)transf.position) + transf.forward()), transf.up());
 				//math::mat4 mat = { projection * view * ((math::mat4)transf.localMatrix) };
 				//buffer_handle buff = renderer.m_model.matrixBuffer;
 				//buff->bufferData(&mat, 1);
 				renderer.bind();
-				RI->drawArrays(PrimitiveType::TRIANGLESTRIP, 0, 6);
+				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
 			}
 			RI->checkError();
 		}

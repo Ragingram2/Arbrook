@@ -13,9 +13,9 @@ namespace rythe::rendering
 		float m_farZ;
 		float m_fov;
 
-		void set_nearZ(float val) {}
-		void set_farZ(float val) {}
-		void set_fov(float val) {}
+		void set_nearZ(float val) { m_nearZ = val; }
+		void set_farZ(float val) { m_farZ = val; }
+		void set_fov(float val) { m_fov = val; }
 
 		float get_nearZ() { return m_nearZ; }
 		float get_farZ() { return m_farZ; }

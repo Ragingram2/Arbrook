@@ -5,10 +5,12 @@
 #include <concepts>
 
 #include <rsl/utilities>
+#include <rsl/math>
 
 #include "rendering/interface/definitions.hpp"
 #include "rendering/pipeline/base/pipelinebase.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
+#include "rendering/components/camera.hpp"
 
 
 
@@ -39,7 +41,7 @@ namespace rythe::rendering
 			}
 		}
 
-		void render() override
+		void render(core::transform camTransf, camera& cam) override
 		{
 			m_abort = false;
 			RI.makeCurrent();
@@ -47,10 +49,10 @@ namespace rythe::rendering
 			{
 				if (!stage->isInitialized())
 				{
-					stage->init();
+					stage->init(camTransf, cam);
 				}
 
-				stage->render();
+				stage->render(camTransf, cam);
 
 				if (m_abort)
 					break;

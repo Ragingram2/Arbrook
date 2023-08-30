@@ -1,11 +1,13 @@
 #pragma once
 #include <tuple>
+#include <map>
 #include <utility>
 #include <algorithm>
 
 #include <rsl/primitives>
 #include <rsl/utilities>
 #include <rsl/hash>
+#include <rsl/containers>
 
 #include "core/ecs/entity.hpp"
 #include "core/ecs/component_container.hpp"
@@ -13,8 +15,9 @@
 
 namespace rythe::core::ecs
 {
-	//using entity_set = std::unordered_map<rsl::id_type, ecs::entity>;
-	using entity_set = std::vector<ecs::entity>;
+	//using entity_set = std::map<rsl::id_type, ecs::entity>;
+	//using entity_set = std::vector<ecs::entity>;
+	using entity_set = rsl::hashed_sparse_set<ecs::entity>;
 	template<typename... componentTypes>
 	struct filter
 	{

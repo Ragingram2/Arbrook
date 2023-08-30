@@ -15,15 +15,13 @@ namespace rythe::rendering
 	//{
 	//	dataType* m_data = nullptr;
 	//	data_handle() = default;
-	//	data_handle(std::nullptr_t null_ptr) : m_data(null_ptr) {}
 	//	data_handle(dataType* data) : m_data(data) {}
-	//	data_handle(dataType& data) : m_data(&data) {}
 
 	//	dataType* operator->() { return m_data; }
 	//	operator dataType& () const { return *m_data; }
 
-	//	bool operator ==(std::nullptr_t null_ptr) { return m_data == nullptr; }
-	//	bool operator !=(std::nullptr_t null_ptr) { return m_data != nullptr; }
+	//bool operator ==(dataType* data) { return m_data == data; }
+	//bool operator !=(dataType* data) { return m_data != data; }
 	//};
 
 	//template<>

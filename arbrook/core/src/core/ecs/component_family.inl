@@ -21,8 +21,9 @@ namespace rythe::core::ecs
 	inline pointer<void> component_family<componentType>::createComponent(entityId id)
 	{
 		events::component_creation<componentType> compCreate{ id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
-
+		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
+		
 		m_components.try_emplace(id);
 		return { &m_components.at(id) };
 	}
@@ -31,7 +32,8 @@ namespace rythe::core::ecs
 	inline pointer<void> component_family<componentType>::createComponent(entity& ent)
 	{
 		events::component_creation<componentType> compCreate{ ent.m_id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
+		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
 
 		m_components.try_emplace(ent.m_id);
 		return { &m_components.at(ent.m_id) };
@@ -53,7 +55,8 @@ namespace rythe::core::ecs
 	inline void component_family<componentType>::destroyComponent(entity& ent)
 	{
 		events::component_destruction<componentType> compDestruct{ ent.m_id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
+		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
+		events::EventBus::raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
 		m_components.erase(ent.m_id);
 	}
@@ -62,7 +65,8 @@ namespace rythe::core::ecs
 	inline void component_family<componentType>::destroyComponent(entityId id)
 	{
 		events::component_destruction<componentType> compDestruct{ id };
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
+		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
+		events::EventBus::raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
 		m_components.erase(id);
 	}

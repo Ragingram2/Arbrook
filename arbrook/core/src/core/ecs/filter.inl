@@ -85,7 +85,7 @@ namespace rythe::core::ecs
 	{
 		auto position = find(evnt.entity);
 		if (position != m_entities.end())
-			m_entities.erase(position);
+			m_entities.erase(position-m_entities.begin());
 	}
 
 	//template<typename... componentTypes>
