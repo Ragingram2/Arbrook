@@ -5,55 +5,81 @@ namespace rythe::core::ecs
 	using entityId = rsl::id_type;
 	using componentId = rsl::id_type;
 
-	std::unordered_map<entityId, ecs::entity> Registry::m_entities;
-	std::unordered_map<entityId, std::vector<rsl::id_type>> Registry::m_entityCompositions;
-	std::unordered_map<componentId, std::unique_ptr<component_family_base>> Registry::m_componentFamilies;
+	std::unordered_map<entityId, ecs::entity_data> Registry::entities;
+	std::unordered_map<entityId, std::unordered_set<rsl::id_type>> Registry::entityCompositions;
+	std::unordered_map<componentId, std::unique_ptr<component_family_base>> Registry::componentFamilies;
 
-	ecs::entity& Registry::createEntity()
+	ecs::entity Registry::createEntity()
 	{
-		m_lastId++;
-		m_entities.try_emplace(m_lastId, ecs::entity{ m_lastId });
-		return m_entities.at(m_lastId);
+		lastId++;
+		auto& [_, data] = *entities.try_emplace(lastId).first;
+		data.alive = true;
+		data.id = lastId;
+		data.name = std::format("Entity {}", lastId);
+		data.parent = ecs::entity{ world };
+
+		entityCompositions.try_emplace(ecs::entity{ &data });
+		return ecs::entity{ &data };
 	}
 
-	ecs::entity& Registry::createEntity(const std::string& name)
+	ecs::entity Registry::createEntity(ecs::entity parent)
 	{
-		m_lastId++;
-		m_entities.try_emplace(m_lastId, ecs::entity{ m_lastId, name });
-		return m_entities.at(m_lastId);
+		lastId++;
+		auto& [_, data] = *entities.try_emplace(lastId).first;
+		data.alive = true;
+		data.id = lastId;
+		data.name = std::format("Entity {}", lastId);
+		data.parent = parent;
+
+		if (parent)
+			parent->children.insert(ecs::entity{ &data });
+
+		entityCompositions.try_emplace(ecs::entity{ &data });
+		return ecs::entity{ &data };
+	}
+
+	ecs::entity Registry::createEntity(const std::string& name)
+	{
+		lastId++;
+		auto& [_, data] = *entities.try_emplace(lastId).first;
+		data.alive = true;
+		data.id = lastId;
+		data.name = name;
+		data.parent = ecs::entity{ world };
+		return ecs::entity{ &data };
 	}
 
 	void Registry::destroyEntity(ecs::entity& ent)
 	{
-		for (auto typeId : m_entityCompositions[ent.m_id])
+		for (auto typeId : entityCompositions[ent->id])
 		{
 			destroyComponent(ent, typeId);
 		}
 
-		m_entityCompositions.erase(ent.m_id);
-		m_entities.erase(ent.m_id);
+		entityCompositions.erase(ent->id);
+		entities.erase(ent->id);
 	}
 
 	void Registry::destroyEntity(rsl::id_type id)
 	{
-		for (auto typeId : m_entityCompositions[id])
+		for (auto typeId : entityCompositions[id])
 		{
 			destroyComponent(id, typeId);
 		}
 
-		m_entityCompositions.erase(id);
-		m_entities.erase(id);
+		entityCompositions.erase(id);
+		entities.erase(id);
 	}
 
 	void Registry::destroyComponent(ecs::entity& ent, rsl::id_type componentId)
 	{
-		auto family = m_componentFamilies[componentId].get();
-		family->destroyComponent(ent.m_id);
+		auto family = componentFamilies[componentId].get();
+		family->destroyComponent(ent->id);
 	}
 
 	void Registry::destroyComponent(rsl::id_type id, rsl::id_type componentId)
 	{
-		auto family = m_componentFamilies[componentId].get();
+		auto family = componentFamilies[componentId].get();
 		family->destroyComponent(id);
 	}
 

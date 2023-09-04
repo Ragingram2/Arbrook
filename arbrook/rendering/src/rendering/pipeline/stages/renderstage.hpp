@@ -14,8 +14,6 @@ namespace rythe::rendering
 {
 	struct render_stage : public graphics_stage<render_stage, mesh_renderer, core::transform>
 	{
-		math::mat4 projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-		math::mat4 view;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			for (auto& ent : m_filter)
@@ -24,8 +22,9 @@ namespace rythe::rendering
 				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
+				cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
 				cam.view = math::lookAt(static_cast<math::vec3>(camTransf.position), static_cast<math::vec3>(camTransf.position + camTransf.forward()), camTransf.up());
-				math::mat4 mat = { projection * cam.view * static_cast<math::mat4>(transf.localMatrix)};
+				math::mat4 mat = { cam.projection * cam.view * static_cast<math::mat4>(transf.localMatrix)};
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
 			}
@@ -38,8 +37,7 @@ namespace rythe::rendering
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				//auto& transf = ent.getComponent<core::transform>();
-				//view = math::lookAt(((math::vec3)transf.position), (((math::vec3)transf.position) + transf.forward()), transf.up());
-				//math::mat4 mat = { projection * view * ((math::mat4)transf.localMatrix) };
+				//math::mat4 mat = { cam.projection * cam.view * static_cast<math::mat4>(transf.localMatrix) };
 				//buffer_handle buff = renderer.m_model.matrixBuffer;
 				//buff->bufferData(&mat, 1);
 				renderer.bind();

@@ -16,6 +16,7 @@ namespace rythe::rendering
 	template<typename APIType>
 	struct Ibuffer;
 
+	struct buffer_handle;
 	namespace internal
 	{
 		struct inputlayout;

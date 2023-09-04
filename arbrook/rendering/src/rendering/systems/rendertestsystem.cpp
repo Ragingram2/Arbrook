@@ -16,8 +16,7 @@ namespace rythe::rendering
 		if (!glfwInit())
 			return;
 
-		auto wId = registry->m_worldId;
-		m_api = &registry->m_entities[wId].addComponent<RenderInterface>();
+		m_api = &registry->world.addComponent<RenderInterface>();
 
 		m_api->initialize(math::ivec2(Screen_Width, Screen_Height), "Arbrook");
 

@@ -28,8 +28,8 @@ namespace rythe::core
 
 		virtual ~System() = default;
 	public:
-		ecs::entity& createEntity();
-		ecs::entity& createEntity(std::string name);
+		ecs::entity createEntity();
+		ecs::entity createEntity(std::string name);
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);
 

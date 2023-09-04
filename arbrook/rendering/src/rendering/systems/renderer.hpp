@@ -20,14 +20,14 @@ namespace rythe::rendering
 		core::events::EventBus::raiseEvent<core::events::key_input>(input);
 	}
 
-	class Renderer : public core::System<camera>
+	class Renderer : public core::System<core::transform,camera>
 	{
 	public:
 		static std::unique_ptr<pipeline_provider_base> m_provider;
 		static PipelineBase* m_pipeline;
 		RenderInterface* RI;
 
-		Renderer() : System<camera>()
+		Renderer() : System<core::transform,camera>()
 		{
 			setPipeline<DefaultPipeline>();
 		}

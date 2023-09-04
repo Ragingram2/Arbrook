@@ -47,16 +47,30 @@ namespace rythe::core::ecs
 	}
 
 	template<typename... ComponentTypes>
-	inline bool filter<ComponentTypes...>::contains(entity val)
+	inline bool filter<ComponentTypes...>::containsEntity(entity val)
 	{
 		auto position = std::find(m_entities.begin(), m_entities.end(), val);
 		return position != m_entities.end();
 	}
 
 	template<typename... ComponentTypes>
+	inline bool filter<ComponentTypes...>::containsEntity(rsl::id_type val)
+	{
+		auto position = std::find(m_entities.begin(), m_entities.end(), ecs::Registry::entities[val]);
+		return position != m_entities.end();
+	}
+
+
+	template<typename... ComponentTypes>
 	inline entity_set::iterator filter<ComponentTypes...>::find(entity val)
 	{
 		return std::find(m_entities.begin(), m_entities.end(), val);
+	}
+
+	template<typename... ComponentTypes>
+	inline entity_set::iterator filter<ComponentTypes...>::find(rsl::id_type val)
+	{
+		return std::find(m_entities.begin(), m_entities.end(), ecs::Registry::entities[val]);
 	}
 
 	template<typename... ComponentTypes>
@@ -75,17 +89,22 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline void filter<componentTypes...>::addEntity(events::component_creation<componentType>& evnt)
 	{
-		if (!contains(evnt.entity) && containsComp(rsl::make_hash<componentType>()))
-			m_entities.push_back(evnt.entity);
+		if (!containsEntity(evnt.entId) && contains(ecs::Registry::entityCompositions[evnt.entId]))
+		{
+			m_entities.emplace(entity{ &ecs::Registry::entities[evnt.entId] });
+		}
 	}
 
 	template<typename... componentTypes>
 	template<typename componentType>
 	inline void filter<componentTypes...>::removeEntity(events::component_destruction<componentType>& evnt)
 	{
-		auto position = find(evnt.entity);
+		auto position = find(evnt.entId);
 		if (position != m_entities.end())
-			m_entities.erase(position-m_entities.begin());
+		{
+			auto id = position - m_entities.begin();
+			m_entities.erase(m_entities[id]);
+		}
 	}
 
 	//template<typename... componentTypes>

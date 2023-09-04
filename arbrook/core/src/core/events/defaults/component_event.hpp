@@ -7,20 +7,32 @@ namespace rythe::core::events
 	template<typename componentType>
 	struct component_creation : public event<component_creation<componentType>>
 	{
-		ecs::entity entity;
+		rsl::id_type entId;
 
 		component_creation() = default;
-		component_creation(ecs::entity entity) : entity(entity) {}
-		component_creation(rsl::id_type entId) : entity(entId) {}
+		component_creation(ecs::entity ent)
+		{
+			entId = ent->id;
+		}
+		component_creation(rsl::id_type id) 
+		{
+			entId = id;
+		}
 	};
 
 	template<typename componentType>
 	struct component_destruction : public event<component_destruction<componentType>>
 	{
-		ecs::entity entity;
+		rsl::id_type entId;
 
 		component_destruction() = default;
-		component_destruction(ecs::entity entity) : entity(entity) {}
-		component_destruction(rsl::id_type entId) : entity(entId) {}
+		component_destruction(ecs::entity ent) 
+		{
+			entId = ent->id;
+		}
+		component_destruction(rsl::id_type id)
+		{
+			entId = id;
+		}
 	};
 }

@@ -7,13 +7,13 @@ namespace rythe::core
 	ecs::Registry* System<componentTypes...>::registry = 0;
 
 	template<typename... componentTypes>
-	inline ecs::entity& System<componentTypes...>::createEntity()
+	inline ecs::entity System<componentTypes...>::createEntity()
 	{
 		return registry->createEntity();
 	}
 
 	template<typename... componentTypes>
-	inline ecs::entity& System<componentTypes...>::createEntity(std::string name)
+	inline ecs::entity System<componentTypes...>::createEntity(std::string name)
 	{
 		return registry->createEntity(name);
 	}

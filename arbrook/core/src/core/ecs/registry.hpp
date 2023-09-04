@@ -6,6 +6,7 @@
 #include <rsl/primitives>
 
 #include "core/ecs/entity.hpp"
+#include "core/ecs/entity_data.hpp"
 #include "core/ecs/component.hpp"
 #include "core/ecs/component_family_base.hpp"
 #include "core/ecs/component_family.hpp"
@@ -17,24 +18,35 @@ namespace rythe::core::ecs
 	class Registry : public Service
 	{
 	public:
-		rsl::id_type m_lastId = 0;
-		const static rsl::id_type m_worldId = 0;
+		rsl::id_type lastId = 1;
+		const static rsl::id_type worldId = 1;
+		entity world;
 		using entityId = rsl::id_type;
 		using componentId = rsl::id_type;
 
-		static std::unordered_map<entityId, ecs::entity> m_entities;
-		static std::unordered_map<entityId, std::vector<rsl::id_type>> m_entityCompositions;
-		static std::unordered_map<componentId, std::unique_ptr<component_family_base>> m_componentFamilies;
+		static std::unordered_map<entityId, ecs::entity_data> entities;
+		static std::unordered_map<entityId, std::unordered_set<rsl::id_type>> entityCompositions;
+		static std::unordered_map<componentId, std::unique_ptr<component_family_base>> componentFamilies;
 
 		Registry() = default;
 		virtual ~Registry() = default;
 
-		void initialize() override { m_entities.try_emplace(m_worldId, ecs::entity{ m_worldId }); }
+		void initialize() override
+		{
+			auto& [_,data] = *entities.try_emplace(worldId).first;
+			data.alive = true;
+			data.id = worldId;
+			data.name = "World";
+			data.parent = entity{ nullptr };
+			entityCompositions.try_emplace(worldId);
+			world = entity{ &data };
+		}
 		void update() override {}
 		void shutdown() override {}
 
-		ecs::entity& createEntity();
-		ecs::entity& createEntity(const std::string& name);
+		ecs::entity createEntity();
+		ecs::entity createEntity(ecs::entity parent);
+		ecs::entity createEntity(const std::string& name);
 
 		void destroyEntity(ecs::entity& ent);
 		void destroyEntity(rsl::id_type id);

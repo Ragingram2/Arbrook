@@ -5,6 +5,7 @@ namespace rythe::game
 	void Game::setup()
 	{
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
+		EventBus::bind<key_input, Game, &Game::move>(*this);
 		std::vector<math::vec4> positions
 		{	//positions						
 			{ -1.f, 1.0f, 0.0f,1.0f },//0
@@ -31,15 +32,23 @@ namespace rythe::game
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
-		transf.position = math::vec3(.5f, 0, .2f);
+		transf.position = math::vec3(0.0f, 0, .1f);
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 		renderer.set_material(mat);
 		renderer.set_mesh(msh);
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
-		camTransf.position = math::vec3(0.0f,0.0f,-1.0f);
+		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);
 		camera.addComponent<gfx::camera>();
+	}
+
+	void Game::update()
+	{
+		/*auto& transf = ent.getComponent<core::transform>();
+		transf.position += inputVec;*/
+		//math::vec3 pos = static_cast<math::vec3>(transf.position);
+		//log::debug("Entity Position: X{},Y{},Z{}", pos.x, pos.y, pos.z);
 	}
 
 }

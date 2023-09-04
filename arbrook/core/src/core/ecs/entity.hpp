@@ -1,26 +1,152 @@
 #pragma once
 #include <format>
+#include <unordered_map>
+#include <unordered_set>
 
 #include <rsl/primitives>
 #include <rsl/hash>
+#include <rsl/containers>
 
 #include "core/containers/pointer.hpp"
 
 namespace rythe::core::ecs
 {
-	struct entity
+    struct entity;
+}
+
+namespace std
+{
+	template<> struct hash<rythe::core::ecs::entity>
 	{
-		//ecs::entity parent;
-		rsl::id_type m_id = -1;
-		std::string m_name = "";
+		std::size_t operator()(rythe::core::ecs::entity const& handle) const noexcept;
+	};
+}
 
-		entity() = default;
-		entity(const ecs::entity& ent) : m_id(ent.m_id), m_name(ent.m_name) {}
-		entity(rsl::id_type id) : m_id(id), m_name("Entity") {}
-		entity(rsl::id_type id, std::string name) : m_id(id), m_name(name) {}
-		~entity() = default;
+namespace rythe::core::ecs
+{
+	struct entity_data;
+	using entity_set = rsl::hashed_sparse_set<entity>;
 
-		operator rsl::id_type& () { return m_id; }
+    struct child_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        child_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const child_iterator& lhs, const child_iterator& rhs);
+
+        friend bool operator!=(const child_iterator& lhs, const child_iterator& rhs) { return !(lhs == rhs); }
+
+        entity& operator*();
+
+        entity* operator->();
+
+        child_iterator& operator++();
+        child_iterator& operator--();
+        child_iterator operator++(int);
+        child_iterator operator--(int);
+
+    };
+
+    struct const_child_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        const_child_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const const_child_iterator& lhs, const const_child_iterator& rhs);
+
+        friend bool operator!=(const const_child_iterator& lhs, const const_child_iterator& rhs) { return !(lhs == rhs); }
+
+        const entity& operator*();
+
+        const entity* operator->();
+
+        const_child_iterator& operator++();
+        const_child_iterator& operator--();
+        const_child_iterator operator++(int);
+        const_child_iterator operator--(int);
+
+    };
+
+    struct child_reverse_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        child_reverse_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const child_reverse_iterator& lhs, const child_reverse_iterator& rhs);
+
+        friend bool operator!=(const child_reverse_iterator& lhs, const child_reverse_iterator& rhs) { return !(lhs == rhs); }
+
+        entity& operator*();
+
+        entity* operator->();
+
+        child_reverse_iterator& operator++();
+        child_reverse_iterator& operator--();
+        child_reverse_iterator operator++(int);
+        child_reverse_iterator operator--(int);
+
+    };
+
+    struct const_child_reverse_iterator
+    {
+        friend struct entity;
+    private:
+        struct impl;
+
+        std::shared_ptr<impl> m_pimpl;
+        const_child_reverse_iterator(impl* implptr);
+
+    public:
+
+        friend bool operator==(const const_child_reverse_iterator& lhs, const const_child_reverse_iterator& rhs);
+
+        friend bool operator!=(const const_child_reverse_iterator& lhs, const const_child_reverse_iterator& rhs) { return !(lhs == rhs); }
+
+        const entity& operator*();
+
+        const entity* operator->();
+
+        const_child_reverse_iterator& operator++();
+        const_child_reverse_iterator& operator--();
+        const_child_reverse_iterator operator++(int);
+        const_child_reverse_iterator operator--(int);
+
+    };
+
+    struct entity
+    {
+        entity_data* data;
+
+        template<typename T>
+        R_NODISCARD bool operator==(T val) const;
+        template<typename T>
+        R_NODISCARD bool operator!=(T val) const;
+
+        R_NODISCARD operator rsl::id_type () const noexcept;
+
+        R_NODISCARD entity_data* operator->() noexcept;
+        R_NODISCARD const entity_data* operator->() const noexcept;
+
+		//R_NODISCARD std::unordered_set<rsl::id_type>& component_composition() { return std::unordered_set<rsl::id_type>(); }
+		//R_NODISCARD const std::unordered_set<rsl::id_type>& component_composition() const { return std::unordered_set<rsl::id_type>(); }
 
 		template<typename componentType>
 		componentType& addComponent();
@@ -34,16 +160,33 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		void destroyComponent();
 
-		bool operator==(const entity& other) {
-			return m_id == other.m_id;
-		}
+
+		///**@brief Gets iterator to the first child.
+		// */
+		//R_NODISCARD child_iterator begin();
+		//R_NODISCARD const_child_iterator begin() const;
+		//R_NODISCARD const_child_iterator cbegin() const;
+
+		///**@brief Gets reverse iterator to the last child.
+		// */
+		//R_NODISCARD child_reverse_iterator rbegin();
+		//R_NODISCARD const_child_reverse_iterator rbegin() const;
+		//R_NODISCARD const_child_reverse_iterator crbegin() const;
+
+		///**@brief Gets iterator to the last child.
+		// */
+		//R_NODISCARD child_iterator end();
+		//R_NODISCARD const_child_iterator end() const;
+		//R_NODISCARD const_child_iterator cend() const;
+
+		///**@brief Gets reverse iterator to the first child.
+		// */
+		//R_NODISCARD child_reverse_iterator rend();
+		//R_NODISCARD const_child_reverse_iterator rend() const;
+		//R_NODISCARD const_child_reverse_iterator crend() const;
 
 
-		entity& operator=(const entity & other) {
-			m_id = other.m_id;
-			m_name = other.m_name;
-			return *this;
-		}
+        //entity& operator=(const entity& other);
 	};
 }
 

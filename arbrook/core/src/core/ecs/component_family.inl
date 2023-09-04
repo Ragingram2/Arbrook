@@ -21,9 +21,8 @@ namespace rythe::core::ecs
 	inline pointer<void> component_family<componentType>::createComponent(entityId id)
 	{
 		events::component_creation<componentType> compCreate{ id };
-		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
 		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
-		
+
 		m_components.try_emplace(id);
 		return { &m_components.at(id) };
 	}
@@ -31,18 +30,17 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline pointer<void> component_family<componentType>::createComponent(entity& ent)
 	{
-		events::component_creation<componentType> compCreate{ ent.m_id };
-		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_creation<componentType>>(compCreate);
+		events::component_creation<componentType> compCreate{ ent->id };
 		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
 
-		m_components.try_emplace(ent.m_id);
-		return { &m_components.at(ent.m_id) };
+		m_components.try_emplace(ent->id);
+		return { &m_components.at(ent->id) };
 	}
 
 	template<typename componentType>
 	inline pointer<void> component_family<componentType>::getComponent(entity& ent)
 	{
-		return { &m_components.at(ent.m_id) };
+		return { &m_components.at(ent->id) };
 	}
 
 	template<typename componentType>
@@ -54,18 +52,16 @@ namespace rythe::core::ecs
 	template<typename componentType>
 	inline void component_family<componentType>::destroyComponent(entity& ent)
 	{
-		events::component_destruction<componentType> compDestruct{ ent.m_id };
-		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
+		events::component_destruction<componentType> compDestruct{ ent->id };
 		events::EventBus::raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
-		m_components.erase(ent.m_id);
+		m_components.erase(ent->id);
 	}
 
 	template<typename componentType>
 	inline void component_family<componentType>::destroyComponent(entityId id)
 	{
 		events::component_destruction<componentType> compDestruct{ id };
-		//Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent<events::component_destruction<componentType>>(compDestruct);
 		events::EventBus::raiseEvent<events::component_destruction<componentType>>(compDestruct);
 
 		m_components.erase(id);

@@ -15,8 +15,6 @@
 
 namespace rythe::core::ecs
 {
-	//using entity_set = std::map<rsl::id_type, ecs::entity>;
-	//using entity_set = std::vector<ecs::entity>;
 	using entity_set = rsl::hashed_sparse_set<ecs::entity>;
 	template<typename... componentTypes>
 	struct filter
@@ -32,8 +30,8 @@ namespace rythe::core::ecs
 			{
 				(
 					(
-						Program::Instance().m_registry->get_service<events::EventBus>()->bind<events::component_creation<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::addEntity>(*this),
-						Program::Instance().m_registry->get_service<events::EventBus>()->bind<events::component_destruction<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::removeEntity>(*this)
+						events::EventBus::bind<events::component_creation<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::addEntity>(*this),
+						events::EventBus::bind<events::component_destruction<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::removeEntity>(*this)
 						)
 					, ...);
 			}, t);
@@ -54,7 +52,7 @@ namespace rythe::core::ecs
 		}
 	public:
 		static constexpr rsl::id_type filter_id = generateId<componentTypes...>();
-		static constexpr std::array<rsl::id_type, sizeof...(componentTypes)> composition = { rsl::make_hash<componentTypes>()... };
+		static constexpr std::array<rsl::id_type, sizeof...(componentTypes)> composition = { rsl::typeHash<componentTypes>()... };
 
 		entity_set::iterator begin() noexcept;
 		entity_set::iterator end() noexcept;
@@ -66,9 +64,11 @@ namespace rythe::core::ecs
 		bool empty() noexcept;
 
 		rsl::size_type count(ecs::entity val);
-		bool contains(ecs::entity val);
+		bool containsEntity(ecs::entity val);
+		bool containsEntity(rsl::id_type val);
 
 		entity_set::iterator find(ecs::entity val);
+		entity_set::iterator find(rsl::id_type val);
 
 		ecs::entity& at(rsl::size_type index);
 		ecs::entity& operator[](rsl::size_type index);
@@ -79,12 +79,18 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		void removeEntity(events::component_destruction<componentType>& evnt);
 
-		bool containsComp(rsl::id_type id)
+		bool contains(const std::unordered_set<rsl::id_type>& comp)
 		{
-			for (int i = 0; i < composition.size(); i++)
-				if (composition[i] == id)
-					return true;
-			return false;
+			if (!comp.size())
+				return false;
+
+			if (!composition.size())
+				return true;
+
+			for (auto& typeId : composition)
+				if (!comp.count(typeId))
+					return false;
+			return true;
 		}
 
 		rsl::id_type id()
