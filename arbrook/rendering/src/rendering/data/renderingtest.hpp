@@ -152,11 +152,11 @@ namespace rythe::rendering
 		//Back
 		{ { -0.1f,  0.1f, -0.1f,1.0f	},	{	1.0f, 1.0f	} },//0
 		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//2
-		{ { -0.1f, -0.1f, -0.1f,1.0f	 },	{	1.0f, 0.0f	} },//1
+		{ { -0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//1
 
-		{ { -0.1f,  0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f,  0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//3
-		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//2
+		{ { -0.1f,  0.1f, -0.1f,1.0f	},	{	1.0f, 1.0f	} },//0
+		{ {  0.1f,  0.1f, -0.1f,1.0f	},	{	0.0f, 1.0f	} },//3
+		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//2
 
 		//Front
 		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
@@ -186,21 +186,21 @@ namespace rythe::rendering
 		{ {	-0.1f, 0.1f,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
 
 		//Bottom
-		{ { -0.1f, -0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
+		{ { -0.1f, -0.1f,  0.1f,1.0f	},	{	0.0f, 1.0f	} },//0
+		{ { -0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
+		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//2
 
-		{ { -0.1f, -0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f, -0.1f,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
+		{ { -0.1f, -0.1f,  0.1f,1.0f	},	{	0.0f, 1.0f	} },//0
+		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//2
+		{ {  0.1f, -0.1f,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
 
 		//Top
 		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
 		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ { -0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
+		{ { -0.1f, 0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
 
 		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f	,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
+		{ {  0.1f, 0.1f	,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
 		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
 	};
 
@@ -324,7 +324,7 @@ namespace rythe::rendering
 		{{	 .1f, -.1f,  0.1f,1.0f	},		{1,0}	}, //1
 		{{	-.1f,  .1f,  0.1f,1.0f	},		{0,1}	}, //2
 		{{	 .1f,  .1f,  0.1f,1.0f	},		{1,1}	}, //3
-		{{	-.1f, -.1f, -0.1f,1.0f	},	{0,0}	}, //4
+		{{	-.1f, -.1f, -0.1f,1.0f	},		{0,0}	}, //4
 		{{	 .1f, -.1f, -0.1f,1.0f	},		{1,0}	}, //5
 		{{	-.1f,  .1f, -0.1f,1.0f	},		{0,1}	}, //6
 		{{	 .1f,  .1f, -0.1f,1.0f	},		{1,1}	}  //7
@@ -833,7 +833,7 @@ namespace rythe::rendering
 				log::error("Shader failed to compile");
 
 
-			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -930,7 +930,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1042,7 +1042,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -1146,7 +1146,7 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
 		}
 
 		virtual void update(RenderInterface* api) override

@@ -10,7 +10,7 @@ out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = v_worldMat *v_position;
+	gl_Position = v_worldMat * v_position;
 	TexCoord = v_texCoord;
 }
 

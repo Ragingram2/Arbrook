@@ -22,9 +22,7 @@ namespace rythe::rendering
 				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
-				cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-				cam.view = math::lookAt(static_cast<math::vec3>(camTransf.position), static_cast<math::vec3>(camTransf.position + camTransf.forward()), camTransf.up());
-				math::mat4 mat = { cam.projection * cam.view * static_cast<math::mat4>(transf.localMatrix)};
+				math::mat4 mat = { cam.projection * cam.view * transf.localMatrix.get()};
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
 			}
@@ -36,12 +34,13 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				//auto& transf = ent.getComponent<core::transform>();
-				//math::mat4 mat = { cam.projection * cam.view * static_cast<math::mat4>(transf.localMatrix) };
-				//buffer_handle buff = renderer.m_model.matrixBuffer;
-				//buff->bufferData(&mat, 1);
+				auto& transf = ent.getComponent<core::transform>();
+				cam.view = math::lookAt(camTransf.position.get(), math::normalize(camTransf.position + camTransf.forward()), camTransf.up());
+				math::mat4 mat = { cam.projection * cam.view * transf.localMatrix.get()};
+				buffer_handle buff = renderer.m_model.matrixBuffer;
+				buff->bufferData(&mat, 1);
 				renderer.bind();
-				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, 6);
+				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.m_mesh.vertices.size());
 			}
 			RI->checkError();
 		}

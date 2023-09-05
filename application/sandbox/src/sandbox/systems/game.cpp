@@ -6,23 +6,136 @@ namespace rythe::game
 	{
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
 		EventBus::bind<key_input, Game, &Game::move>(*this);
+
+		//std::vector<math::vec4> positions
+		//{	//positions						
+		//	{ -1.0f, 1.0f, 0.0f, 1.0f },//0
+		//	{ -1.0f,-1.0f, 0.0f, 1.0f  },//1
+		//	{  1.0f,-1.0f, 0.0f, 1.0f },//2
+		//	{ -1.0f, 1.0f, 0.0f, 1.0f},//0
+		//	{  1.0f,-1.0f, 0.0f, 1.0f },//2
+		//	{  1.0f, 1.0f, 0.0f, 1.0f }//3
+		//};
+		//std::vector<math::vec2> uvs
+		//{
+		//		{ 0, 1 },
+		//		{ 0, 0 },
+		//		{ 1, 0 },
+		//		{ 0, 1 },
+		//		{ 1, 0 },
+		//		{ 1, 1 }
+		//};
+
 		std::vector<math::vec4> positions
-		{	//positions						
-			{ -1.f, 1.0f, 0.0f,1.0f },//0
-			{-1.f,-1.0f, 0.0f,1.0f  },//1
-			{  1.0f,-1.0f, 0.0f,1.0f },//2
-			{ -1.0f, 1.0f, 0.0f ,1.0f},//0
-			{  1.0f,-1.0f, 0.0f,1.0f },//2
-			{  1.0f, 1.0f, 0.0f,1.0f }//3
+		{
+			//Back
+			 { -0.1f,  0.1f, -0.1f,1.0f	},//0
+			 {  0.1f, -0.1f, -0.1f,1.0f	},
+			 { -0.1f, -0.1f, -0.1f,1.0f	 },
+
+			 { -0.1f,  0.1f, -0.1f,1.0f	},
+			 {  0.1f,  0.1f, -0.1f,1.0f		},
+			 {  0.1f, -0.1f, -0.1f,1.0f	},
+
+			 //Front
+			  { -0.1f,  0.1f, 0.1f,1.0f		},
+			  { -0.1f, -0.1f, 0.1f,1.0f	},
+			  {  0.1f, -0.1f, 0.1f,1.0f		},
+
+			  { -0.1f,  0.1f, 0.1f,1.0f		},
+			  {  0.1f, -0.1f, 0.1f,1.0f		},
+			  {  0.1f,  0.1f, 0.1f,1.0f		},
+
+			  //Left
+			   {	0.1f, 0.1f, -0.1f,1.0f		},
+			   {	0.1f, -0.1f, 0.1f,1.0f		},
+			   {	0.1f, -0.1f,-0.1f,1.0f		},
+
+			   {	0.1f, 0.1f, -0.1f	,1.0f		},
+			   {	0.1f, 0.1f,  0.1f	,1.0f		},
+			   {0.1f, -0.1f, 0.1f,1.0f		},
+
+			   //Right
+				{	-0.1f,0.1f, -0.1f	,1.0f		},
+				{	-0.1f, -0.1f,-0.1f,1.0f	},
+				{	-0.1f, -0.1f, 0.1f,1.0f		},
+
+				{	-0.1f, 0.1f, -0.1f,1.0f		},
+				{-0.1f, -0.1f, 0.1f,1.0f		},
+				{	-0.1f, 0.1f,  0.1f,1.0f		},
+
+				//Bottom
+				 { -0.1f, -0.1f,  0.1f,1.0f	},
+				 { -0.1f, -0.1f, -0.1f,1.0f	},
+				 {  0.1f, -0.1f, -0.1f,1.0f	},
+
+				 { -0.1f, -0.1f,  0.1f,1.0f	},
+				 {  0.1f, -0.1f, -0.1f,1.0f	},
+				 {  0.1f, -0.1f,  0.1f,1.0f		},
+
+				 //Top
+				  { -0.1f, 0.1f,  0.1f,1.0f		},
+				  {  0.1f, 0.1f, -0.1f,1.0f		},
+				  { -0.1f, 0.1f, -0.1f,1.0f		},
+
+				  { -0.1f, 0.1f,  0.1f,1.0f		},
+				  {  0.1f, 0.1f	,  0.1f,1.0f	},
+				  {  0.1f, 0.1f, -0.1f,1.0f		}
 		};
+
 		std::vector<math::vec2> uvs
 		{
-				{ 0, 1 },
-				{ 0, 0 },
-				{ 1, 0 },
-				{ 0, 1 },
-				{ 1, 0 },
-				{ 1, 1 }
+			{	1.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+			{	1.0f, 0.0f	},
+
+			{	1.0f, 1.0f	},
+			{	0.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+
+
+			{	0.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+			{	1.0f, 0.0f	},
+
+			{	0.0f, 1.0f	},
+			{	1.0f, 0.0f	},
+			{	1.0f, 1.0f	},
+
+
+			{	1.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+			{	1.0f, 0.0f	},
+
+			{	1.0f, 1.0f	},
+			{	0.0f, 1.0f	},
+			{	0.0f, 0.0f },
+
+
+			{	0.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+			{	1.0f, 0.0f	},
+
+			{	0.0f, 1.0f	},
+			{	1.0f, 0.0f },
+			{	1.0f, 1.0f	},
+
+			{	0.0f, 1.0f	},
+			{	0.0f, 0.0f	},
+			{	1.0f, 0.0f	},
+
+			{	0.0f, 1.0f	},
+			{	1.0f, 0.0f	},
+			{	1.0f, 1.0f	},
+
+
+			{	0.0f, 1.0f	},
+			{	1.0f, 0.0f	},
+			{	0.0f, 0.0f	},
+
+			{	0.0f, 1.0f	},
+			{	1.0f, 1.0f	},
+			{	1.0f, 0.0f	}
 		};
 
 		mat.m_shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
@@ -32,23 +145,32 @@ namespace rythe::game
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
-		transf.position = math::vec3(0.0f, 0, .1f);
+		transf.scale = math::vec3(1.0f, 1.0f, 1.0f);
+		transf.position = math::vec3(0.0f, 0, -.5f);
+
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 		renderer.set_material(mat);
 		renderer.set_mesh(msh);
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
-		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);
-		camera.addComponent<gfx::camera>();
+		camTransf.position = math::vec3(0.0f, 0.0f, .8f);
+		auto& cam = camera.addComponent<gfx::camera>();
+		cam.farZ = 100.f;
+		cam.nearZ = .1f;
+		cam.fov = 60.f;
 	}
 
 	void Game::update()
 	{
-		/*auto& transf = ent.getComponent<core::transform>();
-		transf.position += inputVec;*/
-		//math::vec3 pos = static_cast<math::vec3>(transf.position);
-		//log::debug("Entity Position: X{},Y{},Z{}", pos.x, pos.y, pos.z);
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		auto& transf = camera.getComponent<core::transform>();
+		transf.position += deltaTime * inputVec;
+		auto& cam = camera.getComponent<gfx::camera>();
+		cam.calculate_view(transf.position.get(), transf.forward());
 	}
 
 }

@@ -7,6 +7,11 @@ namespace rythe::core
 	class Property
 	{
 	public:
+		//Property(T data) :
+		//	m_data(&data),
+		//	m_setCallback(),
+		//	m_getCallback(),
+		//	m_callbacks(false) {}
 		Property(T* data_ptr) :
 			m_data(*data_ptr),
 			m_setCallback(),
@@ -28,9 +33,19 @@ namespace rythe::core
 			return m_data + rhs;
 		}
 
+		T operator+(const Property& rhs)
+		{
+			return m_data + rhs.m_data;
+		}
+
 		T operator-(const T& rhs)
 		{
 			return m_data - rhs;
+		}
+
+		T operator-(const Property& rhs)
+		{
+			return m_data - rhs.m_data;
 		}
 
 		T operator*(const T& rhs)
@@ -38,49 +53,60 @@ namespace rythe::core
 			return m_data * rhs;
 		}
 
+		T operator*(const Property& rhs)
+		{
+			return m_data * rhs.m_data;
+		}
+
 		T operator/(const T& rhs)
 		{
 			return m_data / rhs;
 		}
 
-		Property& operator=(const T& newvalue)
+		T operator/(const Property& rhs)
+		{
+			return m_data / rhs.data;
+		}
+
+		T& operator=(const T& newvalue)
 		{
 			m_data = newvalue;
 			if (m_callbacks)
 				m_setCallback(m_data);
-			return *this;
+			return m_data;
 		}
-		Property& operator+=(const T& newvalue)
+
+		T& operator+=(const T& newvalue)
 		{
 			m_data += newvalue;
 			if (m_callbacks)
 				m_setCallback(m_data);
 
-			return *this;
+			return m_data;
 		}
-		Property& operator-=(const T& newvalue)
+		T& operator-=(const T& newvalue)
 		{
 			m_data -= newvalue;
 			if (m_callbacks)
 				m_setCallback(m_data);
 
-			return *this;
+			return m_data;
 		}
-		Property& operator*=(const T& newvalue)
+		T& operator*=(const T& newvalue)
 		{
 			m_data *= newvalue;
 			if (m_callbacks)
 				m_setCallback(m_data);
 
-			return *this;
+			return m_data;
 		}
-		Property& operator/=(const T& newvalue)
+		T& operator/=(const T& newvalue)
 		{
 			m_data /= newvalue;
 			if (m_callbacks)
 				m_setCallback(m_data);
 
-			return *this;
+			return m_data;
 		}
 		bool operator==(const T& newvalue)
 		{
@@ -98,10 +124,29 @@ namespace rythe::core
 			return m_data;
 		}
 
+		operator T&() const
+		{
+			if (m_callbacks)
+				return m_getCallback();
+			return m_data;
+		}
+
 		operator T()
 		{
 			if (m_callbacks)
 				return m_getCallback();
+			return m_data;
+		}
+
+		operator T&()
+		{
+			if (m_callbacks)
+				return m_getCallback();
+			return m_data;
+		}
+
+		T& get()
+		{
 			return m_data;
 		}
 

@@ -20,14 +20,14 @@ namespace rythe::rendering
 		core::events::EventBus::raiseEvent<core::events::key_input>(input);
 	}
 
-	class Renderer : public core::System<core::transform,camera>
+	class Renderer : public core::System<core::transform, camera>
 	{
 	public:
 		static std::unique_ptr<pipeline_provider_base> m_provider;
 		static PipelineBase* m_pipeline;
 		RenderInterface* RI;
 
-		Renderer() : System<core::transform,camera>()
+		Renderer() : System<core::transform, camera>()
 		{
 			setPipeline<DefaultPipeline>();
 		}
@@ -63,6 +63,8 @@ namespace rythe::rendering
 
 			auto& camEnt = getCameraEntity();
 			auto& transf = camEnt.getComponent<core::transform>();
+			auto& cam = camEnt.getComponent<camera>();
+			cam.calculate_projection();
 			m_pipeline->render(transf, getCamera());
 
 			RI->pollEvents();

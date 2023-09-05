@@ -30,8 +30,16 @@ namespace rythe::rendering
 		math::mat4 projection;
 		math::mat4 view;
 
-		math::vec3 pos;
-		math::vec3 front;
-		math::vec3 up;
+		math::mat4 calculate_view(math::vec3 position, math::vec3 direction, math::vec3 up = math::vec3::up)
+		{
+			view = math::lookAt(position, math::normalize(direction), up);
+			return view;
+		}
+
+		math::mat4 calculate_projection()
+		{
+			projection = math::perspective(math::radians(m_fov), Screen_Width / Screen_Height, m_nearZ, m_farZ);
+			return projection;
+		}
 	};
 }
