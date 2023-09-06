@@ -15,8 +15,8 @@ namespace rythe::game
 
 		math::vec3 inputVec;
 		float speed = .1f;
-		float angularSpeed = .01f;
-		float degrees = 1.0f;
+		float angularSpeed = 1.f;
+		float degrees = 0.0f;
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
@@ -42,9 +42,8 @@ namespace rythe::game
 		void move(core::events::key_input& input)
 		{
 			inputVec = math::vec3(0.0f);
-			if (input.action == GLFW_PRESS)
+			if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
 			{
-				log::debug("Key Pressed");
 				switch (input.key)
 				{
 				case GLFW_KEY_D:

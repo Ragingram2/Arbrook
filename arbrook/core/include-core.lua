@@ -4,6 +4,7 @@ includedirs {
     "$(SolutionDir)include/",
     "$(SolutionDir)arbrook/core/src/",
     "$(SolutionDir)include/rythe-standard-library/src/",
+    "$(SolutionDir)include/rythe-standard-library/third_party/spdlog/include/"
 }
 dependson { "core", "rsl"}
 filter "configurations:Debug*"

@@ -145,8 +145,8 @@ namespace rythe::game
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
-		transf.scale = math::vec3(1.0f, 1.0f, 1.0f);
-		transf.position = math::vec3(0.0f, 0, -.5f);
+		transf.scale = math::vec3(0.7f, 0.7f, 0.7f);
+		transf.position = math::vec3(0.0f, 0.0f, .5f);
 
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 		renderer.set_material(mat);
@@ -154,11 +154,17 @@ namespace rythe::game
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
-		camTransf.position = math::vec3(0.0f, 0.0f, .8f);
+		camTransf.position = math::vec3(0.0f, 0.0f, -0.2f);
 		auto& cam = camera.addComponent<gfx::camera>();
-		cam.farZ = 100.f;
-		cam.nearZ = .1f;
-		cam.fov = 60.f;
+		cam.farZ = 1000.f;
+		cam.nearZ = .01f;
+		cam.fov = 90.f;
+		cam.calculate_projection();
+		cam.calculate_view(camTransf.position.get(), math::normalize(camTransf.position + camTransf.forward()), camTransf.up());
+		//log::debug("Perspective Matrix\n{}", cam.projection);
+		//log::debug("View Matrix\n{}", cam.view);
+		//log::debug("ProjeView\n{}", cam.projection * cam.view);
+		//log::debug("MVP\n{}", cam.projection * cam.view * transf.localMatrix.get());
 	}
 
 	void Game::update()
@@ -167,10 +173,14 @@ namespace rythe::game
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+
 		auto& transf = camera.getComponent<core::transform>();
 		transf.position += deltaTime * inputVec;
+		transf.rotation = math::quat(math::rotate(transf.localMatrix.get(), math::deg2rad(degrees), transf.up()));
 		auto& cam = camera.getComponent<gfx::camera>();
-		cam.calculate_view(transf.position.get(), transf.forward());
+		cam.calculate_view(transf.position.get(), math::normalize(transf.position + transf.forward()));
+		//log::debug("Degrees {}", degrees);
+		//log::debug("Forward {}", transf.forward());
 	}
 
 }

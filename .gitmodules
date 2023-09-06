@@ -10,3 +10,6 @@
 [submodule "include/glew"]
 	path = include/glew
 	url = https://github.com/nigels-com/glew.git
+[submodule "include/gainput"]
+	path = include/gainput
+	url = https://github.com/jkuhlmann/gainput.git

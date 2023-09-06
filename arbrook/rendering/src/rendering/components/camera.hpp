@@ -38,7 +38,17 @@ namespace rythe::rendering
 
 		math::mat4 calculate_projection()
 		{
-			projection = math::perspective(math::radians(m_fov), Screen_Width / Screen_Height, m_nearZ, m_farZ);
+			const auto fovx = math::deg2rad(m_fov);
+			const auto invTanHalfFovx = 1.f / math::tan(fovx * 0.5f);
+			const auto depthScale = m_farZ / (m_farZ - m_nearZ);
+			const auto ratio = Screen_Width / Screen_Height;
+			projection = math::transpose(math::mat4{
+				invTanHalfFovx, 0.f, 0.f, 0.f,
+				0.f, invTanHalfFovx * ratio, 0.f, 0.f,
+				0.f, 0.f, depthScale, 1.f,
+				0.f, 0.f, -m_nearZ * depthScale, 1.f
+			});
+			//projection = math::perspective(math::radians(m_fov), Screen_Width / Screen_Height, m_nearZ, m_farZ);
 			return projection;
 		}
 	};
