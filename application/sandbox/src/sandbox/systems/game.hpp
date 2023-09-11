@@ -14,6 +14,7 @@ namespace rythe::game
 		gfx::mesh msh;
 
 		math::vec3 inputVec;
+		math::vec3 cameraFront;
 		float speed = .1f;
 		float angularSpeed = 1.f;
 		float degrees = 0.0f;
@@ -22,69 +23,21 @@ namespace rythe::game
 		float lastFrame = 0.0f;
 		float currentFrame = 0.0f;
 
+		double lastX = 0;
+		double lastY = 0;
+
+		double yaw = 0;
+		double pitch = 0;
+
+		bool firstMouse = true;
+
 	public:
 		void setup();
 		void update();
 
-		void reloadShaders(core::events::key_input& input)
-		{
-			if (input.action == GLFW_PRESS)
-			{
-				switch (input.key)
-				{
-				case GLFW_KEY_1:
-					gfx::ShaderCache::reloadShaders();
-					break;
-				}
-			}
-		}
-
-		void move(core::events::key_input& input)
-		{
-			inputVec = math::vec3(0.0f);
-			if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
-			{
-				switch (input.key)
-				{
-				case GLFW_KEY_D:
-				case GLFW_KEY_RIGHT:
-					inputVec.x = -speed;
-					break;
-				case GLFW_KEY_A:
-				case GLFW_KEY_LEFT:
-					inputVec.x = speed;
-					break;
-				case GLFW_KEY_W:
-				case GLFW_KEY_UP:
-					inputVec.z = -speed;
-					break;
-				case GLFW_KEY_S:
-				case GLFW_KEY_DOWN:
-					inputVec.z = speed;
-					break;
-				case GLFW_KEY_E:
-					degrees -= angularSpeed;
-					break;
-				case GLFW_KEY_Q:
-					degrees += angularSpeed;
-					break;
-				}
-			}
-
-			//if (input.action == GLFW_RELEASE)
-			//{
-			//	switch (input.key)
-			//	{
-			//	case GLFW_KEY_RIGHT:
-			//	case GLFW_KEY_LEFT:
-			//		inputVec.x = 0;
-			//		break;
-			//	case GLFW_KEY_UP:
-			//	case GLFW_KEY_DOWN:
-			//		inputVec.z = 0;
-			//		break;
-			//	}
-			//}
-		}
+		void reloadShaders(core::events::key_input& input);
+		void move(core::events::key_input& input);
+		void mouselook(core::events::mouse_input& input);
+		void debugInfo(core::events::key_input& input);
 	};
 }

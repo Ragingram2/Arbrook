@@ -6,25 +6,8 @@ namespace rythe::game
 	{
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
 		EventBus::bind<key_input, Game, &Game::move>(*this);
-
-		//std::vector<math::vec4> positions
-		//{	//positions						
-		//	{ -1.0f, 1.0f, 0.0f, 1.0f },//0
-		//	{ -1.0f,-1.0f, 0.0f, 1.0f  },//1
-		//	{  1.0f,-1.0f, 0.0f, 1.0f },//2
-		//	{ -1.0f, 1.0f, 0.0f, 1.0f},//0
-		//	{  1.0f,-1.0f, 0.0f, 1.0f },//2
-		//	{  1.0f, 1.0f, 0.0f, 1.0f }//3
-		//};
-		//std::vector<math::vec2> uvs
-		//{
-		//		{ 0, 1 },
-		//		{ 0, 0 },
-		//		{ 1, 0 },
-		//		{ 0, 1 },
-		//		{ 1, 0 },
-		//		{ 1, 1 }
-		//};
+		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
+		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
 
 		std::vector<math::vec4> positions
 		{
@@ -160,11 +143,7 @@ namespace rythe::game
 		cam.nearZ = .01f;
 		cam.fov = 90.f;
 		cam.calculate_projection();
-		cam.calculate_view(camTransf.position.get(), math::normalize(camTransf.position + camTransf.forward()), camTransf.up());
-		//log::debug("Perspective Matrix\n{}", cam.projection);
-		//log::debug("View Matrix\n{}", cam.view);
-		//log::debug("ProjeView\n{}", cam.projection * cam.view);
-		//log::debug("MVP\n{}", cam.projection * cam.view * transf.localMatrix.get());
+		cam.calculate_view(camTransf.position.get(), camTransf.position + cameraFront, camTransf.up());
 	}
 
 	void Game::update()
@@ -176,11 +155,109 @@ namespace rythe::game
 
 		auto& transf = camera.getComponent<core::transform>();
 		transf.position += deltaTime * inputVec;
-		transf.rotation = math::quat(math::rotate(transf.localMatrix.get(), math::deg2rad(degrees), transf.up()));
+		//transf.rotation = math::quat(math::lookAt(transf.position.get(), transf.position + cameraFront, transf.up()));
 		auto& cam = camera.getComponent<gfx::camera>();
-		cam.calculate_view(transf.position.get(), math::normalize(transf.position + transf.forward()));
+		cam.calculate_view(transf.position.get(), transf.position + cameraFront, transf.up());
 		//log::debug("Degrees {}", degrees);
 		//log::debug("Forward {}", transf.forward());
 	}
 
+	void Game::reloadShaders(core::events::key_input& input)
+	{
+		if (input.action == GLFW_PRESS)
+		{
+			switch (input.key)
+			{
+			case GLFW_KEY_1:
+				gfx::ShaderCache::reloadShaders();
+				break;
+			}
+		}
+	}
+
+	void Game::move(core::events::key_input& input)
+	{
+		inputVec = math::vec3(0.0f);
+		if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
+		{
+			switch (input.key)
+			{
+			case GLFW_KEY_D:
+			case GLFW_KEY_RIGHT:
+				inputVec.x = -speed;
+				break;
+			case GLFW_KEY_A:
+			case GLFW_KEY_LEFT:
+				inputVec.x = speed;
+				break;
+			case GLFW_KEY_W:
+			case GLFW_KEY_UP:
+				inputVec.z = -speed;
+				break;
+			case GLFW_KEY_S:
+			case GLFW_KEY_DOWN:
+				inputVec.z = speed;
+				break;
+			case GLFW_KEY_E:
+				degrees -= angularSpeed;
+				break;
+			case GLFW_KEY_Q:
+				degrees += angularSpeed;
+				break;
+			}
+		}
+	}
+
+	void Game::mouselook(core::events::mouse_input& input)
+	{
+		if (firstMouse)
+		{
+			lastX = input.xpos;
+			lastY = input.ypos;
+			firstMouse = false;
+		}
+
+		float xoffset = input.xpos - lastX;
+		float yoffset = lastY - input.ypos;
+		lastX = input.xpos;
+		lastY = input.ypos;
+
+		float sensitivity = 0.1f;
+		xoffset *= sensitivity;
+		yoffset *= sensitivity;
+
+		yaw += xoffset;
+		pitch += yoffset;
+
+		if (pitch > 89.0f)
+			pitch = 89.0f;
+		if (pitch < -89.0f)
+			pitch = -89.0f;
+
+		math::vec3 direction;
+		direction.x = cos(math::radians(yaw)) * cos(math::radians(pitch));
+		direction.y = sin(math::radians(pitch));
+		direction.z = sin(math::radians(yaw)) * cos(math::radians(pitch));
+		cameraFront = math::normalize(direction);
+	}
+
+	void Game::debugInfo(core::events::key_input& input)
+	{
+		auto& cam = camera.getComponent<gfx::camera>();
+		auto& transf = camera.getComponent<core::transform>();
+		auto& entTransf = ent.getComponent<core::transform>();
+
+		if (input.action == GLFW_PRESS)
+		{
+			switch (input.key)
+			{
+			case GLFW_KEY_T:
+				log::debug("Perspective Matrix\n{}", cam.projection);
+				log::debug("View Matrix\n{}", cam.view);
+				log::debug("ProjeView\n{}", cam.projection * cam.view);
+				log::debug("MVP\n{}", cam.projection * cam.view * entTransf.localMatrix.get());
+				break;
+			}
+		}
+	}
 }

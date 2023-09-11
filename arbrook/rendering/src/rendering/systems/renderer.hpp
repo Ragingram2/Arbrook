@@ -20,6 +20,12 @@ namespace rythe::rendering
 		core::events::EventBus::raiseEvent<core::events::key_input>(input);
 	}
 
+	inline void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+	{
+		core::events::mouse_input input{ xpos, ypos };
+		core::events::EventBus::raiseEvent<core::events::mouse_input>(input);
+	}
+
 	class Renderer : public core::System<core::transform, camera>
 	{
 	public:
@@ -50,6 +56,8 @@ namespace rythe::rendering
 			}
 
 			glfwSetKeyCallback(RI->getWindow(), key_callback);
+			glfwSetCursorPosCallback(RI->getWindow(), mouse_callback);
+			glfwSetInputMode(RI->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
 		void update()
