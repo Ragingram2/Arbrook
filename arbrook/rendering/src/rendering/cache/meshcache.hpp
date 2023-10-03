@@ -1,4 +1,6 @@
 #pragma once
+
+#pragma once
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -7,22 +9,21 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "rendering/data/model.hpp"
-#include "rendering/data/modelhandle.hpp"
+#include "rendering/data/mesh.hpp"
 #include "rendering/data/meshhandle.hpp"
 #include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering
 {
-	class ModelCache
+	class MeshCache
 	{
 	private:
 		static Assimp::Importer m_importer;
-		static std::unordered_map<std::string, std::unique_ptr<model>> m_models;
+		static std::unordered_map<std::string, std::unique_ptr<mesh>> m_meshes;
 	public:
 		//needs import settings
-		static model_handle createModel(const std::string& name, mesh_handle handle);
-		static model_handle getModel(const std::string& name);
-		static void deleteModel(const std::string& name);
+		static mesh_handle loadMesh(const std::string& name, const std::string& filePath);
+		static mesh_handle getMesh(const std::string& name);
+		static void deleteMesh(const std::string& name);
 	};
 }

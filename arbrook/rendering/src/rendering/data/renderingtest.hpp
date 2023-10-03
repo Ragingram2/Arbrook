@@ -85,6 +85,9 @@ namespace rythe::rendering
 		virtual void update(RenderInterface* api) = 0;
 		virtual void destroy(RenderInterface* api) = 0;
 	};
+	inline camera cam;
+	inline core::transform transf;
+
 
 	struct dummy_test : public rendering_test
 	{
@@ -95,6 +98,10 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
+			//cam.calculate_projection();
+
+			cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
+			cam.calculate_view(math::vec3(0, 0, 3), math::vec3(0, 0, 3) - transf.forward());
 			type = None;
 			name = "";
 			log::debug("Initializing", stringify(type), name);
@@ -114,8 +121,8 @@ namespace rythe::rendering
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
-			layout.setAttributePtr(vBuffer,"TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
+			layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
 			layout.submitAttributes();
 			layout.bind();
 		}
@@ -133,11 +140,10 @@ namespace rythe::rendering
 		}
 	};
 
-	inline camera cam;
-	inline core::transform transf;
-	inline math::mat4 projection = cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-	inline math::mat4 view = cam.view = math::lookAt((math::vec3)transf.position, transf.position + transf.forward(), transf.up());
-	inline math::mat4 projView = projection * view;
+
+	//inline math::mat4 projection = cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
+	//inline math::mat4 view = cam.view = math::lookAt(transf.position, transf.position + transf.forward(), transf.up());
+	//inline math::mat4 projView = projection * view;
 	inline float count = 64.f;
 	inline float instanceCount = 65536.f / 2.f;
 	//inline float instanceCount = 16.f;
@@ -408,9 +414,9 @@ namespace rythe::rendering
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
 			layout.submitAttributes();
-			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
+			layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
 		}
 
 		virtual void update(RenderInterface* api) override
@@ -422,7 +428,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
 					api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, sizeof(vertices) / sizeof(vtx));
 				}
@@ -461,7 +467,7 @@ namespace rythe::rendering
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
-			buffer = BufferCache::createBuffer<vtx>( "Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_vertices);
+			buffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_vertices);
 			matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			constantBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			texture = TextureCache::getTexture2D("test");
@@ -470,15 +476,15 @@ namespace rythe::rendering
 			texture->bind();
 
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr(buffer,"POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
-			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
-			layout.setAttributePtr(matrixBuffer,"MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(buffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(buffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
+			layout.setAttributePtr(matrixBuffer, "MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.submitAttributes();
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			shader->setData("ConstantBuffer", &data);
 			models.resize(instanceCount);
 		}
@@ -543,10 +549,10 @@ namespace rythe::rendering
 			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
-			
+
 			idxBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
 			layout.submitAttributes();
 		}
@@ -560,7 +566,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
 					vBuffer->bind();
 					idxBuffer->bind();
@@ -603,7 +609,7 @@ namespace rythe::rendering
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 
-			shader = ShaderCache::createShader( "test", "resources/shaders/instance_cube.shader");
+			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
 			texture = TextureCache::getTexture2D("test");
 			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_indVertices);
 			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies);
@@ -614,15 +620,15 @@ namespace rythe::rendering
 			idxBuffer->bind();
 
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr(vBuffer,"POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
 			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
-			layout.setAttributePtr(matrixBuffer,"MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer,"MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.submitAttributes();
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			shader->setData("ConstantBuffer", &data);
 			models.resize(instanceCount);
 		}
@@ -1251,7 +1257,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(vtx));
@@ -1331,7 +1337,7 @@ namespace rythe::rendering
 			glVertexAttribDivisor(4, 1);
 			glVertexAttribDivisor(5, 1);
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 			models.resize(instanceCount);
@@ -1446,7 +1452,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 				}
@@ -1532,7 +1538,7 @@ namespace rythe::rendering
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
@@ -1690,7 +1696,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
@@ -1768,7 +1774,7 @@ namespace rythe::rendering
 			offset = 0;
 			deviceContext->IASetVertexBuffers(1, 1, &matrixBuffer, &stride, &offset);
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			bd.Usage = D3D11_USAGE_DEFAULT;
 			bd.ByteWidth = sizeof(uniformData);
 			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -1929,7 +1935,7 @@ namespace rythe::rendering
 			// Set the index buffer
 			deviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			bd.Usage = D3D11_USAGE_DEFAULT;
 			bd.ByteWidth = sizeof(uniformData);
 			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -1958,7 +1964,7 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = projView * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					deviceContext->UpdateSubresource(constantBuffer, 0, nullptr, &data, 0, 0);
 					deviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
 					deviceContext->DrawIndexed(sizeof(indicies) / sizeof(unsigned int), 0, 0);
@@ -2046,7 +2052,7 @@ namespace rythe::rendering
 			offset = 0;
 			deviceContext->IASetVertexBuffers(1, 1, &matrixBuffer, &stride, &offset);
 
-			data.mvp = projView;
+			data.mvp = cam.projection * cam.view;
 			bd.Usage = D3D11_USAGE_DEFAULT;
 			bd.ByteWidth = sizeof(uniformData);
 			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

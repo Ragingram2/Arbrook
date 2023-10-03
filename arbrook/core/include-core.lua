@@ -1,16 +1,31 @@
 --This is only used to include the neccesary stuff for this module
 print("including core")
 includedirs {
-    "$(SolutionDir)include/",
-    "$(SolutionDir)arbrook/core/src/",
-    "$(SolutionDir)include/rythe-standard-library/src/",
-    "$(SolutionDir)include/rythe-standard-library/third_party/spdlog/include/"
+    "src/",
+    "include/",
+    "include/*/",
+    "include/*/src/",
+    "include/*/include/",
+    "../../include/",
+    "../../include/*/",
+    "../../include/*/src/",
+    "../../include/*/include/",
+    "../../include/*/third_party/",
+    "../../include/*/third_party/*/",
+    "../../include/*/third_party/*/src/",
+    "../../include/*/third_party/*/include/"
+    -- "../../include/rythe-standard-library/src/",
+    -- "../../include/rythe-standard-library/third_party/",
+    -- "../../include/rythe-standard-library/third_party/*/",
+    -- "../../include/rythe-standard-library/third_party/*/src/",
+    -- "../../include/rythe-standard-library/third_party/*/include/"
 }
+
 dependson { "core", "rsl"}
 filter "configurations:Debug*"
-    links {"core-d"}
+    links {"core-d", "assimp-d","zlibstatic-d"}
 
 filter "configurations:Release*"
-    links {"core"}
+    links {"core","assimp","zlibstatic"}
 
     filter {}

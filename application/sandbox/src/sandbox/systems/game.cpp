@@ -128,8 +128,8 @@ namespace rythe::game
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
-		transf.scale = math::vec3(0.7f, 0.7f, 0.7f);
-		transf.position = math::vec3(0.0f, 0.0f, .5f);
+		transf.scale = math::vec3(1.0f, 1.0f, 1.0f);
+		transf.position = math::vec3(0.0f, 0.0f, .6f);
 
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 		renderer.set_material(mat);
@@ -137,13 +137,11 @@ namespace rythe::game
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
-		camTransf.position = math::vec3(0.0f, 0.0f, -0.2f);
+		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);
 		auto& cam = camera.addComponent<gfx::camera>();
 		cam.farZ = 1000.f;
-		cam.nearZ = .01f;
-		cam.fov = 90.f;
-		cam.calculate_projection();
-		cam.calculate_view(camTransf.position.get(), camTransf.position + cameraFront, camTransf.up());
+		cam.nearZ = .001f;
+		cam.fov = 60.f;
 	}
 
 	void Game::update()
@@ -152,14 +150,10 @@ namespace rythe::game
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
 		auto& transf = camera.getComponent<core::transform>();
-		transf.position += deltaTime * inputVec;
-		//transf.rotation = math::quat(math::lookAt(transf.position.get(), transf.position + cameraFront, transf.up()));
-		auto& cam = camera.getComponent<gfx::camera>();
-		cam.calculate_view(transf.position.get(), transf.position + cameraFront, transf.up());
-		//log::debug("Degrees {}", degrees);
-		//log::debug("Forward {}", transf.forward());
+		cameraUp = transf.up();
+		transf.position = camPos;
+		transf.rotation = math::quat(math::lookAt(camPos, camPos + cameraFront, cameraUp));
 	}
 
 	void Game::reloadShaders(core::events::key_input& input)
@@ -177,32 +171,30 @@ namespace rythe::game
 
 	void Game::move(core::events::key_input& input)
 	{
-		inputVec = math::vec3(0.0f);
+		//inputVec = math::vec3(0.0f);
 		if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
 		{
 			switch (input.key)
 			{
 			case GLFW_KEY_D:
 			case GLFW_KEY_RIGHT:
-				inputVec.x = -speed;
+				//inputVec.x = -speed;
+				camPos += math::normalize(math::cross(cameraFront, cameraUp)) * speed*deltaTime;
 				break;
 			case GLFW_KEY_A:
 			case GLFW_KEY_LEFT:
-				inputVec.x = speed;
+				//inputVec.x = speed;
+				camPos -= math::normalize(math::cross(cameraFront, cameraUp)) * speed * deltaTime;
 				break;
 			case GLFW_KEY_W:
 			case GLFW_KEY_UP:
-				inputVec.z = -speed;
+				//inputVec.z = -speed;
+				camPos += speed * cameraFront * deltaTime;
 				break;
 			case GLFW_KEY_S:
 			case GLFW_KEY_DOWN:
-				inputVec.z = speed;
-				break;
-			case GLFW_KEY_E:
-				degrees -= angularSpeed;
-				break;
-			case GLFW_KEY_Q:
-				degrees += angularSpeed;
+				//inputVec.z = speed;
+				camPos -= speed * cameraFront * deltaTime;
 				break;
 			}
 		}
@@ -222,7 +214,7 @@ namespace rythe::game
 		lastX = input.xpos;
 		lastY = input.ypos;
 
-		float sensitivity = 0.1f;
+		float sensitivity = .1f;
 		xoffset *= sensitivity;
 		yoffset *= sensitivity;
 
@@ -255,7 +247,7 @@ namespace rythe::game
 				log::debug("Perspective Matrix\n{}", cam.projection);
 				log::debug("View Matrix\n{}", cam.view);
 				log::debug("ProjeView\n{}", cam.projection * cam.view);
-				log::debug("MVP\n{}", cam.projection * cam.view * entTransf.localMatrix.get());
+				log::debug("MVP\n{}", cam.projection * cam.view * entTransf.to_world());
 				break;
 			}
 		}

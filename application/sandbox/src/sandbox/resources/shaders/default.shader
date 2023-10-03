@@ -4,13 +4,13 @@
 
 layout(location = 0) in vec4 v_position;
 layout(location = 1) in vec2 v_texCoord;
-layout(location = 2) in mat4 v_worldMat;
+layout(location = 2) in mat4 v_mvp;
 
 out vec2 TexCoord;
 
 void main()
 {
-	gl_Position = v_worldMat * v_position;
+	gl_Position = v_mvp * v_position;
 	TexCoord = v_texCoord;
 }
 

@@ -13,3 +13,6 @@
 [submodule "include/gainput"]
 	path = include/gainput
 	url = https://github.com/jkuhlmann/gainput.git
+[submodule "include/assimp"]
+	path = include/assimp
+	url = https://github.com/assimp/assimp.git

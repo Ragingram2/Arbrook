@@ -1,8 +1,9 @@
 --This is only used to include the neccesary stuff for this module
 print("including rendering")
 includedirs {
-    "$(SolutionDir)arbrook/rendering/include/",
-    "$(SolutionDir)arbrook/rendering/src/"
+    "src/",
+    "include/",
+    "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"
 }  
 dependson { "rendering" }
 filter "configurations:Debug*"

@@ -1,8 +1,11 @@
 createProject("applications","sandbox","ConsoleApp")
 targetdir "$(SolutionDir)bin\\build\\"
 includedirs {
-    "$(SolutionDir)application/sandbox/include/",
-    "$(SolutionDir)application/sandbox/src/"
+    "src/",
+    "include/",
+    "include/*/",
+    "include/*/src/",
+    "include/*/include/"
 }   
 
 files { 

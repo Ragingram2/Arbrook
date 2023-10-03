@@ -1,8 +1,8 @@
 #include "rendering/systems/rendertestsystem.hpp"
 #include <GLFW/glfw3.h>
+
 namespace rythe::rendering
 {
-	//a fucntion that will generate vertex buffers with given paramters
 	std::vector<std::unique_ptr<rendering_test>> TestRenderer::m_testScenes;
 	int TestRenderer::currentScene = 0;
 	int TestRenderer::lastScene = 0;
@@ -29,7 +29,21 @@ namespace rythe::rendering
 
 		glfwSetKeyCallback(m_api->getWindow(), key_callback);
 
-#pragma region Abstracted API
+
+		//Assimp::Importer importer;
+
+		//const aiScene* scene = importer.ReadFile("resources/meshes/teapot.obj", aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+
+		//if (scene == nullptr)
+		//{
+		//	log::error(importer.GetErrorString());
+		//	return;
+		//}
+
+		//log::debug(scene->mMeshes[0]->mVertices[0].Length());
+
+		auto handle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
+
 
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 
@@ -53,8 +67,6 @@ namespace rythe::rendering
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
 		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
 		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
-
-#pragma endregion
 	}
 
 	void TestRenderer::update()

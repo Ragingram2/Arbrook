@@ -16,14 +16,16 @@ namespace rythe::rendering
 	{
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
+			RI->depthTest(true);
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
-				cam.calculate_view(camTransf.position.get(), math::normalize(camTransf.position + camTransf.forward()));
-				math::mat4 mat = { cam.projection * cam.view * transf.localMatrix.get()};
+				cam.calculate_view(camTransf.position, camTransf.position + camTransf.forward(), camTransf.up());
+				//cam.view = math::inverse(transf.localMatrix.get());
+				math::mat4 mat = { cam.projection * cam.view * transf.to_world() };
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
 			}
@@ -36,9 +38,9 @@ namespace rythe::rendering
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				auto& transf = ent.getComponent<core::transform>();
-				cam.calculate_view(camTransf.position.get(),math::normalize(camTransf.position+ camTransf.forward()));
-				//cam.view = math::lookAt(camTransf.position.get(), math::normalize(camTransf.position + camTransf.forward()), camTransf.up());
-				math::mat4 mat = { cam.projection * cam.view * transf.localMatrix.get()};
+				cam.calculate_view(camTransf.position, camTransf.position + camTransf.forward(), camTransf.up());
+				//cam.view = math::inverse(transf.localMatrix.get());
+				math::mat4 mat = { cam.projection * cam.view * transf.to_world()};
 				buffer_handle buff = renderer.m_model.matrixBuffer;
 				buff->bufferData(&mat, 1);
 				renderer.bind();

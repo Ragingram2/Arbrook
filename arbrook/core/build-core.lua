@@ -1,13 +1,18 @@
 createProject("engine","core","StaticLib")
 includedirs {
-    "$(SolutionDir)include/",
-    "$(SolutionDir)include/rythe-standard-library/src/",
-    "$(SolutionDir)include/rythe-standard-library/third_party/spdlog/include/",
-    "$(SolutionDir)arbrook/core/include/",
-    "$(SolutionDir)arbrook/core/src/",
-    "include/rythe-standard-library/src/",
-    "include/rythe-standard-library/third_party/*/include/",
-    "include/rythe-standard-library/third_party/*/src/"
+    "src/",
+    "include/",
+    "include/*/",
+    "include/*/src/",
+    "include/*/include/",
+    "../../include/",
+    "../../include/*/",
+    "../../include/*/src/",
+    "../../include/*/include/",
+    "../../include/*/third_party/",
+    "../../include/*/third_party/*/",
+    "../../include/*/third_party/*/src/",
+    "../../include/*/third_party/*/include/"
 }   
  
 files { 

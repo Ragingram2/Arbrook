@@ -13,9 +13,12 @@ namespace rythe::game
 		gfx::material mat;
 		gfx::mesh msh;
 
+		math::vec3 camPos = math::vec3::zero;
+
 		math::vec3 inputVec;
-		math::vec3 cameraFront;
-		float speed = .1f;
+		math::vec3 cameraUp = math::vec3::up;
+		math::vec3 cameraFront = math::vec3::forward;
+		float speed = 2.5f;
 		float angularSpeed = 1.f;
 		float degrees = 0.0f;
 
@@ -23,10 +26,10 @@ namespace rythe::game
 		float lastFrame = 0.0f;
 		float currentFrame = 0.0f;
 
-		double lastX = 0;
-		double lastY = 0;
+		double lastX = Screen_Width/2.f;
+		double lastY = Screen_Height/2.f;
 
-		double yaw = 0;
+		double yaw = -90.f;
 		double pitch = 0;
 
 		bool firstMouse = true;

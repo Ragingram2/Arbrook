@@ -16,7 +16,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
-			RI->clear(ClearBit::COLOR);
+			RI->clear(ClearBit::COLOR_DEPTH);
 		}
 
 		virtual rsl::priority_type priority() override

@@ -45,5 +45,6 @@ namespace rythe::core::ecs
 		//virtual void fillContainer(component_container<componentType>& container, std::vector<entity> entities);
 	};
 }
+HAS_MEMBER(m_owner)
 
 #include "core/ecs/component_family.inl"

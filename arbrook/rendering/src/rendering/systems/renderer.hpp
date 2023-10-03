@@ -57,7 +57,7 @@ namespace rythe::rendering
 
 			glfwSetKeyCallback(RI->getWindow(), key_callback);
 			glfwSetCursorPosCallback(RI->getWindow(), mouse_callback);
-			glfwSetInputMode(RI->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(RI->getWindow(), GLFW_CURSOR, GLFW_CURSOR);
 		}
 
 		void update()

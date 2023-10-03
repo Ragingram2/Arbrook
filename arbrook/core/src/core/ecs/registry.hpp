@@ -12,6 +12,7 @@
 #include "core/ecs/component_family.hpp"
 #include "core/engine/services/service.hpp"
 #include "core/containers/pointer.hpp"
+#include "core/components/transform.hpp"
 
 namespace rythe::core::ecs
 {
@@ -33,6 +34,7 @@ namespace rythe::core::ecs
 
 		void initialize() override
 		{
+			log::debug("Initializeing world entity");
 			auto& [_,data] = *entities.try_emplace(worldId).first;
 			data.alive = true;
 			data.id = worldId;
@@ -40,6 +42,7 @@ namespace rythe::core::ecs
 			data.parent = entity{ nullptr };
 			entityCompositions.try_emplace(worldId);
 			world = entity{ &data };
+			world.addComponent<transform>();
 		}
 		void update() override {}
 		void shutdown() override {}

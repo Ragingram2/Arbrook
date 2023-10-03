@@ -1,8 +1,8 @@
 createProject("engine","rendering","StaticLib")
 includedirs {
-    "$(SolutionDir)arbrook/rendering/include/",
-    "$(SolutionDir)arbrook/rendering/include/imgui/",
-    "$(SolutionDir)arbrook/rendering/src/",
+    "src/",
+    "include/",
+    "include/imgui/",
     "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"
 }  
 defines {"GLEW_STATIC"}

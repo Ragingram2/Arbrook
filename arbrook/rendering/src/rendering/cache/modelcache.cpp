@@ -2,11 +2,20 @@
 
 namespace rythe::rendering
 {
+	Assimp::Importer ModelCache::m_importer;
+
 	std::unordered_map<std::string, std::unique_ptr<model>> ModelCache::m_models;
 
-	model_handle ModelCache::createModel(const std::string& name, const std::string& filePath)
+	model_handle ModelCache::createModel(const std::string& name, mesh_handle handle)
 	{
-		return  model_handle{};
+		if (m_models.contains(name))
+		{
+			log::warn("Model {} already exists, ignoring new model, and returning existing one", name);
+			return m_models[name].get();
+		}
+		auto mod = m_models.emplace(name, std::make_unique<model>()).first->second.get();
+		mod->initialize(handle);
+		return {mod};
 	}
 
 	model_handle ModelCache::getModel(const std::string& name)
