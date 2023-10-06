@@ -19,22 +19,22 @@ namespace rythe::core::ecs
         component& operator=(const componentType& src);
         component& operator=(componentType&& src);
 
-        R_NODISCARD operator componentType& ();
-        R_NODISCARD operator const componentType& () const;
+        [[nodiscard]] operator componentType& ();
+        [[nodiscard]] operator const componentType& () const;
 
-        R_NODISCARD bool valid() const noexcept;
-        R_NODISCARD operator bool() const noexcept;
+        [[nodiscard]] bool valid() const noexcept;
+        [[nodiscard]] operator bool() const noexcept;
 
-        R_NODISCARD componentType& operator*();
-        R_NODISCARD const componentType& operator*() const;
+        [[nodiscard]] componentType& operator*();
+        [[nodiscard]] const componentType& operator*() const;
 
-        R_NODISCARD pointer<componentType> operator->();
-        R_NODISCARD const pointer<componentType> operator->() const;
+        [[nodiscard]] pointer<componentType> operator->();
+        [[nodiscard]] const pointer<componentType> operator->() const;
 
         bool operator==(const component& other) const noexcept;
 
-        R_NODISCARD componentType& get();
-        R_NODISCARD const componentType& get() const;
+        [[nodiscard]] componentType& get();
+        [[nodiscard]] const componentType& get() const;
 
         void destroy();
     };

@@ -24,7 +24,7 @@ namespace rythe::rendering
 		friend class Renderer;
 		friend struct graphics_stage_base;
 	private:
-		virtual void setup() RYTHE_PURE;
+		virtual void setup() =0;
 	protected:
 		static std::map<rsl::priority_type, std::unique_ptr<graphics_stage_base>> m_stages;
 

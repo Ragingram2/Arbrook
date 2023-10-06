@@ -23,6 +23,7 @@
 #include "rendering/cache/shadercache.hpp"
 #include "rendering/cache/texturecache.hpp"
 #include "rendering/cache/buffercache.hpp"
+#include "rendering/cache/meshcache.hpp"
 #include "rendering/components/spriterenderer.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 #include "rendering/components/components.hpp"
@@ -85,8 +86,7 @@ namespace rythe::rendering
 		virtual void update(RenderInterface* api) = 0;
 		virtual void destroy(RenderInterface* api) = 0;
 	};
-	inline camera cam;
-	inline core::transform transf;
+
 
 
 	struct dummy_test : public rendering_test
@@ -98,10 +98,6 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
-			//cam.calculate_projection();
-
-			cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-			cam.calculate_view(math::vec3(0, 0, 3), math::vec3(0, 0, 3) - transf.forward());
 			type = None;
 			name = "";
 			log::debug("Initializing", stringify(type), name);
@@ -140,15 +136,17 @@ namespace rythe::rendering
 		}
 	};
 
+	inline camera cam;
+	inline core::transform transf;
 
-	//inline math::mat4 projection = cam.projection = math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f);
-	//inline math::mat4 view = cam.view = math::lookAt(transf.position, transf.position + transf.forward(), transf.up());
-	//inline math::mat4 projView = projection * view;
-	inline float count = 64.f;
+	inline math::mat4 projection = cam.calculate_projection();
+	inline math::mat4 view = cam.calculate_view(transf.scale, transf.rotation, transf.position);
+	inline math::mat4 projView = projection * view;
+	inline float count = 2.f;
 	inline float instanceCount = 65536.f / 2.f;
 	//inline float instanceCount = 16.f;
-	inline float min = -2.f;
-	inline float max = 2.f;
+	inline float min = 0.f;
+	inline float max = 1.f;
 
 	inline float step = (max - min) / math::floor(math::sqrt(count));
 	inline float instanceStep = (max - min) / math::floor(math::sqrt(instanceCount));
@@ -374,33 +372,19 @@ namespace rythe::rendering
 		shader_handle shader;
 		uniformData data;
 
+		mesh_handle meshHandle;
+
 		float i = 0;
 
 		virtual void setup(RenderInterface* api) override
 		{
-			for (auto& vert : vertices)
-			{
-				vert.position *= (step * 2.f);
-				vert.position.w = 1;
-			}
-
-			for (auto& vert : instance_vertices)
-			{
-				vert.position *= (instanceStep * 4.f);
-				vert.position.w = 1;
-			}
-
-			for (auto& vert : indVertices)
-			{
-				vert.position *= (step * 2.f);
-				vert.position.w = 1;
-			}
-
-			for (auto& vert : instance_indVertices)
-			{
-				vert.position *= (instanceStep * 4.f);
-				vert.position.w = 1;
-			}
+			cam.fov = 90.f;
+			cam.nearZ = .1f;
+			cam.farZ = 100.f;
+			transf.position = math::vec3(0, 0, -10);
+			cam.calculate_projection();
+			cam.calculate_view(transf.scale, transf.rotation, transf.position);
+			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
 
 			type = Arbrook;
 			name = "DrawArrays";
@@ -408,19 +392,21 @@ namespace rythe::rendering
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, vertices);
+			vBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
 			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 			layout.submitAttributes();
-			layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
+			//layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			vBuffer->bind();
+			layout.bind();
 			i += .1f;
 			for (float x = min; x < max; x += step)
 			{
@@ -430,7 +416,7 @@ namespace rythe::rendering
 					auto model = math::translate(math::mat4(1.0f), pos);
 					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
-					api->drawArrays(PrimitiveType::TRIANGLESLIST, 0, sizeof(vertices) / sizeof(vtx));
+					api->drawArrays(PrimitiveType::TRIANGLESTRIP, 0, meshHandle->vertices.size());
 				}
 			}
 		}
@@ -440,6 +426,7 @@ namespace rythe::rendering
 			BufferCache::deleteBuffer("Vertex Buffer");
 			BufferCache::deleteBuffer("ConstantBuffer");
 			ShaderCache::deleteShader("test");
+			MeshCache::deleteMesh("Teapot");
 			layout.release();
 		}
 	};
@@ -461,6 +448,7 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
+
 			type = Arbrook;
 			name = "DrawArraysInstanced";
 
@@ -534,45 +522,65 @@ namespace rythe::rendering
 		shader_handle shader;
 		uniformData data;
 
+		mesh_handle meshHandle;
+
 		float i = 0;
 
 		virtual void setup(RenderInterface* api) override
 		{
+			cam.fov = 110.f;
+			cam.nearZ = .01f;
+			cam.farZ = 100.f;
+			transf.rotation = math::quat(math::lookAt(math::vec3(0, 0, 5.f), math::vec3::forward, math::vec3::up));
+			transf.position = math::vec3(0, 0, 5.f);
+			cam.calculate_projection();
+			cam.calculate_view(transf.scale, transf.rotation, transf.position);
+			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
+
 			type = Arbrook;
 			name = "DrawIndexed";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
 			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, indVertices);
-			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies);
+			vBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
+			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, meshHandle->indices);
 			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cBuffer);
 			shader->bind();
 
 			idxBuffer->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 			layout.submitAttributes();
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			layout.bind();
 			i += .1f;
-			for (float x = min; x < max; x += step)
-			{
-				for (float y = min; y < max; y += step)
-				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
-					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					shader->setData("ConstantBuffer", &data);
-					vBuffer->bind();
-					idxBuffer->bind();
-					api->drawIndexed(PrimitiveType::TRIANGLESLIST, sizeof(indicies) / sizeof(unsigned int), 0, 0);
-				}
-			}
+			//for (float x = min; x < max; x += step)
+			//{
+			//	for (float y = min; y < max; y += step)
+			//	{
+			//		math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
+			//		auto model = math::translate(math::mat4(1.0f), pos);
+			//		data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+			//		shader->setData("ConstantBuffer", &data);
+			//		vBuffer->bind();
+			//		idxBuffer->bind();
+			//		api->drawIndexed(PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 0, 0);
+			//	}
+			//}
+
+			math::vec3 pos = { 0.0f, 0.0f, 0.0f };
+			auto model = math::translate(math::mat4(1.0f), pos);
+			model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+			data.mvp = cam.projection * cam.view * model;
+			shader->setData("ConstantBuffer", &data);
+			vBuffer->bind();
+			idxBuffer->bind();
+			api->drawIndexed(PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override

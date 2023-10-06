@@ -98,7 +98,7 @@ namespace rythe::rendering::internal
 				m_psConstBuffers.emplace(handle->getName(), handle);
 				break;
 			default:
-				log::error("Adding a constant buffer to shader type {} is not supported", STRINGIFY(type));
+				log::error("Adding a constant buffer to shader type {} is not supported", RYTHE_STRINGIFY(type));
 				break;
 			}
 		}

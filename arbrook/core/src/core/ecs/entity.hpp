@@ -136,17 +136,17 @@ namespace rythe::core::ecs
         entity_data* data;
 
         template<typename T>
-        R_NODISCARD bool operator==(T val) const;
+        [[nodiscard]] bool operator==(T val) const;
         template<typename T>
-        R_NODISCARD bool operator!=(T val) const;
+        [[nodiscard]] bool operator!=(T val) const;
 
-        R_NODISCARD operator rsl::id_type () const noexcept;
+        [[nodiscard]] operator rsl::id_type () const noexcept;
 
-        R_NODISCARD entity_data* operator->() noexcept;
-        R_NODISCARD const entity_data* operator->() const noexcept;
+        [[nodiscard]] entity_data* operator->() noexcept;
+        [[nodiscard]] const entity_data* operator->() const noexcept;
 
-		//R_NODISCARD std::unordered_set<rsl::id_type>& component_composition() { return std::unordered_set<rsl::id_type>(); }
-		//R_NODISCARD const std::unordered_set<rsl::id_type>& component_composition() const { return std::unordered_set<rsl::id_type>(); }
+		//[[nodiscard]] std::unordered_set<rsl::id_type>& component_composition() { return std::unordered_set<rsl::id_type>(); }
+		//[[nodiscard]] const std::unordered_set<rsl::id_type>& component_composition() const { return std::unordered_set<rsl::id_type>(); }
 
 		template<typename componentType>
 		componentType& addComponent();
@@ -163,27 +163,27 @@ namespace rythe::core::ecs
 
 		///**@brief Gets iterator to the first child.
 		// */
-		//R_NODISCARD child_iterator begin();
-		//R_NODISCARD const_child_iterator begin() const;
-		//R_NODISCARD const_child_iterator cbegin() const;
+		//[[nodiscard]] child_iterator begin();
+		//[[nodiscard]] const_child_iterator begin() const;
+		//[[nodiscard]] const_child_iterator cbegin() const;
 
 		///**@brief Gets reverse iterator to the last child.
 		// */
-		//R_NODISCARD child_reverse_iterator rbegin();
-		//R_NODISCARD const_child_reverse_iterator rbegin() const;
-		//R_NODISCARD const_child_reverse_iterator crbegin() const;
+		//[[nodiscard]] child_reverse_iterator rbegin();
+		//[[nodiscard]] const_child_reverse_iterator rbegin() const;
+		//[[nodiscard]] const_child_reverse_iterator crbegin() const;
 
 		///**@brief Gets iterator to the last child.
 		// */
-		//R_NODISCARD child_iterator end();
-		//R_NODISCARD const_child_iterator end() const;
-		//R_NODISCARD const_child_iterator cend() const;
+		//[[nodiscard]] child_iterator end();
+		//[[nodiscard]] const_child_iterator end() const;
+		//[[nodiscard]] const_child_iterator cend() const;
 
 		///**@brief Gets reverse iterator to the first child.
 		// */
-		//R_NODISCARD child_reverse_iterator rend();
-		//R_NODISCARD const_child_reverse_iterator rend() const;
-		//R_NODISCARD const_child_reverse_iterator crend() const;
+		//[[nodiscard]] child_reverse_iterator rend();
+		//[[nodiscard]] const_child_reverse_iterator rend() const;
+		//[[nodiscard]] const_child_reverse_iterator crend() const;
 
 
         //entity& operator=(const entity& other);

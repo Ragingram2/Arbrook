@@ -57,25 +57,19 @@ namespace rythe::rendering::internal
 				{
 					for (auto& attrib : attribs)
 					{
-						//glBindVertexBuffer(m_vertexAttribs.begin()->second.inputSlot, id, 0, m_vertexAttribs.begin()->second.stride);
 						glBindBuffer(GL_ARRAY_BUFFER, bufId);
-						//int idx = (attrib.inputSlot > 0 ? m_flatIndeces[attrib.inputSlot - 1].size() : 0) + attrib.index;
 						switch (attrib.format)
 						{
 						case FormatType::RGB32F:
-							//glVertexAttribFormat(idx, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 							glVertexAttribPointer(attrib.index, 3, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 							break;
 						case FormatType::RGBA32F:
-							//glVertexAttribFormat(idx, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 							glVertexAttribPointer(attrib.index, 4, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 							break;
 						case FormatType::R32U:
-							//glVertexAttribFormat(idx, 1, static_cast<GLenum>(DataType::UINT), false, attrib.offset);
 							glVertexAttribPointer(attrib.index, 1, static_cast<GLenum>(DataType::UINT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 							break;
 						case FormatType::RG32F:
-							//glVertexAttribFormat(idx, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.offset);
 							glVertexAttribPointer(attrib.index, 2, static_cast<GLenum>(DataType::FLOAT), false, attrib.stride, reinterpret_cast<void*>(attrib.offset));
 							break;
 						default:
@@ -84,16 +78,13 @@ namespace rythe::rendering::internal
 							break;
 						}
 
-						//glVertexAttribBinding(idx, attrib.inputSlot);
 						glEnableVertexAttribArray(attrib.index);
 						switch (attrib.inputClass)
 						{
 						case InputClass::PER_VERTEX:
-							//glVertexBindingDivisor(idx, 0);
 							glVertexAttribDivisor(attrib.index, 0);
 							break;
 						case InputClass::PER_INSTANCE:
-							//glVertexBindingDivisor(idx, attrib.step);
 							glVertexAttribDivisor(attrib.index, attrib.step);
 							break;
 						}

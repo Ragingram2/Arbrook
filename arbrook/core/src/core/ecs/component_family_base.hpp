@@ -17,17 +17,17 @@ namespace rythe::core::ecs
 
 		component_family_base(rsl::id_type id) : m_typeId(id) {}
 
-		virtual void reserve(rsl::size_type amount) RYTHE_PURE;
+		virtual void reserve(rsl::size_type amount) =0;
 
-		virtual void clear() RYTHE_PURE;
+		virtual void clear() =0;
 
-		virtual pointer<void> createComponent(entity& ent) RYTHE_PURE;
-		virtual pointer<void> createComponent(entityId id) RYTHE_PURE;
+		virtual pointer<void> createComponent(entity& ent) =0;
+		virtual pointer<void> createComponent(entityId id) =0;
 
-		virtual pointer<void> getComponent(entity& ent) RYTHE_PURE;
-		virtual pointer<void> getComponent(entityId id) RYTHE_PURE;
+		virtual pointer<void> getComponent(entity& ent) =0;
+		virtual pointer<void> getComponent(entityId id) =0;
 
-		virtual void destroyComponent(entityId id) RYTHE_PURE;
+		virtual void destroyComponent(entityId id) =0;
 
 		virtual ~component_family_base() = default;
 	};

@@ -18,12 +18,12 @@ namespace rythe::rendering
 		RenderInterface* RI;
 
 	protected:
-		virtual void setup(core::transform camTransf, camera& cam) RYTHE_PURE;
-		virtual void shutdown_impl() RYTHE_PURE;
+		virtual void setup(core::transform camTransf, camera& cam) = 0;
+		virtual void shutdown_impl() = 0;
 	public:
 		virtual ~graphics_stage_base() = default;
-		virtual void render(core::transform camTransf, camera& cam) RYTHE_PURE;
-		virtual rsl::priority_type priority() RYTHE_IMPURE_RETURN(0);
+		virtual void render(core::transform camTransf, camera& cam) = 0;
+		virtual rsl::priority_type priority() { return 0; };
 
 		bool isInitialized() { return m_initialized; }
 		void init(core::transform camTransf, camera& cam)

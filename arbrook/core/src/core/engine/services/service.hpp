@@ -16,8 +16,8 @@ namespace rythe::core
 		MOVE_FUNCS(Service)
 		virtual ~Service() = default;
 
-		virtual void initialize() RYTHE_PURE;
-		virtual void update() RYTHE_PURE;
-		virtual void shutdown() RYTHE_PURE;
+		virtual void initialize() =0;
+		virtual void update() =0;
+		virtual void shutdown() =0;
 	};
 }

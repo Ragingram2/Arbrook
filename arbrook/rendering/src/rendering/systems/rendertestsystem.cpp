@@ -29,44 +29,28 @@ namespace rythe::rendering
 
 		glfwSetKeyCallback(m_api->getWindow(), key_callback);
 
-
-		//Assimp::Importer importer;
-
-		//const aiScene* scene = importer.ReadFile("resources/meshes/teapot.obj", aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
-
-		//if (scene == nullptr)
-		//{
-		//	log::error(importer.GetErrorString());
-		//	return;
-		//}
-
-		//log::debug(scene->mMeshes[0]->mVertices[0].Length());
-
-		auto handle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
-
-
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 
-		////DrawArrays
-		m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
-		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
-		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
+		//////DrawArrays
+		//m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
+		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
+		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
 
-		//DrawArraysInstanced
-		m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
-		m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
-		m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysInstancedTest>());
+		////DrawArraysInstanced
+		//m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
+		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
+		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysInstancedTest>());
 
 
-		////DrawIndexed
+		//////DrawIndexed
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedTest>());
-		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
-		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedTest>());
+		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
+		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedTest>());
 
-		////DrawIndexedInstanced
-		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
-		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
-		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
+		//////DrawIndexedInstanced
+		//m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
+		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
+		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
 	}
 
 	void TestRenderer::update()

@@ -45,21 +45,22 @@ namespace rythe::rendering
 			}
 			//Currently only supporting single meshes, i'll figure out how to do submeshes later
 			auto mesh = scene->mMeshes[0];
+			log::debug("Mesh Count:{}", scene->mNumMeshes);
 
 			if (mesh->HasPositions())
 			{
 				auto s_vertices = mesh->mVertices;
 				auto posCount = mesh->mNumVertices;
 
-				for (int i =0; i< posCount;i++)
+				for (int i = 0; i < posCount; i++)
 				{
-					vertices.push_back(math::vec4(s_vertices[i].x, s_vertices[i].y, s_vertices[i].z,0.0f));
+					vertices.push_back(math::vec4(s_vertices[i].x, s_vertices[i].y, s_vertices[i].z, 1.0f));
 				}
 			}
 			else
 				log::error("The mesh we tried to load does not contain any vertices, curious");
 
-			if (mesh->HasVertexColors())
+			if (mesh->HasVertexColors(0))
 			{
 				auto s_colors = mesh->mColors[0];
 				auto posCount = mesh->mNumVertices;
@@ -70,23 +71,23 @@ namespace rythe::rendering
 					colors.push_back(math::vec4(s_colors[i].r, s_colors[i].g, s_colors[i].b, s_colors[i].a));
 				}
 			}
-			else
-				log::error("The mesh we tried to load does not contain any vertex colors, curious");
 
 
 			if (mesh->HasFaces())
 			{
-				auto s_indices = mesh->mFaces->mIndices;
-				auto indexCount = mesh->mFaces->mNumIndices;
 
+				auto numFaces = mesh->mNumFaces;
 
-				for (int i = 0; i < indexCount; i++)
+				for (int i = 0; i < numFaces; i++)
 				{
-					indices.push_back(s_indices[i]);
+					auto indexCount = mesh->mFaces[i].mNumIndices;
+					auto s_indices = mesh->mFaces[i].mIndices;
+					for (int j = 0; j < indexCount; j++)
+					{
+						indices.push_back(s_indices[j]);
+					}
 				}
 			}
-			else
-				log::error("The mesh we tried to load does not contain any indices, curious");
 
 
 		}

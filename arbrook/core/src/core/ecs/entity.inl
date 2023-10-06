@@ -4,7 +4,7 @@
 
 namespace std
 {
-    inline R_ALWAYS_INLINE size_t hash<rythe::core::ecs::entity>::operator()(rythe::core::ecs::entity const& handle) const noexcept
+    inline rythe_always_inline size_t hash<rythe::core::ecs::entity>::operator()(rythe::core::ecs::entity const& handle) const noexcept
     {
         return handle.data != nullptr ? handle->id : invalid_id;
     }
@@ -38,61 +38,61 @@ namespace rythe::core::ecs
 	}
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator==<std::nullptr_t>(std::nullptr_t) const
+    inline rythe_always_inline bool entity::operator==<std::nullptr_t>(std::nullptr_t) const
     {
         return !(data && data->alive);
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator!=<std::nullptr_t>(std::nullptr_t) const
+    inline rythe_always_inline bool entity::operator!=<std::nullptr_t>(std::nullptr_t) const
     {
         return data && data->alive;
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator==<rsl::id_type>(rsl::id_type id) const
+    inline rythe_always_inline bool entity::operator==<rsl::id_type>(rsl::id_type id) const
     {
         return data && data->alive ? data->id == id : id == invalid_id;
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator!=<rsl::id_type>(rsl::id_type id) const
+    inline rythe_always_inline bool entity::operator!=<rsl::id_type>(rsl::id_type id) const
     {
         return data && data->alive && (data->id != id || id == invalid_id);
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator==<entity>(entity other) const
+    inline rythe_always_inline bool entity::operator==<entity>(entity other) const
     {
         return data && data->alive && other && data->id == other->id;
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator!=<entity>(entity other) const
+    inline rythe_always_inline bool entity::operator!=<entity>(entity other) const
     {
         return data && data->alive && other && data->id != other->id;
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator==<entity_data>(entity_data other) const
+    inline rythe_always_inline bool entity::operator==<entity_data>(entity_data other) const
     {
         return data && data->alive && data->id == other.id;
     }
 
     template<>
-    inline R_ALWAYS_INLINE bool entity::operator!=<entity_data>(entity_data other) const
+    inline rythe_always_inline bool entity::operator!=<entity_data>(entity_data other) const
     {
         return data && data->alive && data->id != other.id;
     }
 
     template<typename T>
-    inline R_ALWAYS_INLINE bool entity::operator==(T val) const
+    inline rythe_always_inline bool entity::operator==(T val) const
     {
         return data && data->alive ? data->id == val : val == invalid_id;
     }
 
     template<typename T>
-    inline R_ALWAYS_INLINE bool entity::operator!=(T val) const
+    inline rythe_always_inline bool entity::operator!=(T val) const
     {
         return data && data->alive && (data->id != val || val == invalid_id);
     }

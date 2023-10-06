@@ -25,15 +25,15 @@ namespace rythe::core::ecs
 
 		m_components.try_emplace(id);
 
-		if constexpr (has_m_owner<componentType>)
-		{
-			log::debug("Setting Owner to Entity with ID {}",id);
-			m_components.at(id).m_owner = ecs::entity{ &Registry::entities[id] };
-		}
-		else
-		{
-			log::debug("Component does not have member");
-		}
+		//if constexpr (has_m_owner<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}",id);
+		//	m_components.at(id).m_owner = ecs::entity{ &Registry::entities[id] };
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
 		return { &m_components.at(id) };
 	}
 
@@ -45,15 +45,15 @@ namespace rythe::core::ecs
 
 		m_components.try_emplace(ent->id);
 
-		if constexpr (has_m_owner<componentType>)
-		{
-			log::debug("Setting Owner to Entity with ID {}", ent->id);
-			m_components.at(ent->id).m_owner = ent;
-		}
-		else
-		{
-			log::debug("Component does not have member");
-		}
+		//if constexpr (has_m_owner<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}", ent->id);
+		//	m_components.at(ent->id).m_owner = ent;
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
 		return { &m_components.at(ent->id) };
 	}
 

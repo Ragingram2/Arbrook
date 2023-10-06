@@ -31,31 +31,31 @@ namespace rythe::rendering
 		//core::Property<camera, float> nearZ;
 		//core::Property<camera, float> farZ;
 		//core::Property<camera, float> fov;
-		float nearZ;
-		float farZ;
-		float fov;
+		float nearZ = 0.01f;
+		float farZ = 100.f;
+		float fov = 60;
 		math::mat4 projection;
 		math::mat4 view;
 
-		math::mat4 calculate_view(math::vec3 position, math::vec3 direction, math::vec3 up = math::vec3::up)
+		math::mat4 calculate_view(math::vec3 scale, math::quat orientation, math::vec3 position)
 		{
-			view = math::lookAt(position, math::normalize(direction), up);
+			math::mat4 view(1.f);
+			view = math::compose(scale, orientation, position);
+			view = math::inverse(view);
 			return view;
 		}
 
 		math::mat4 calculate_projection()
 		{
-			//const auto fovx = math::deg2rad(m_fov);
-			//const auto invTanHalfFovx = 1.f / math::tan(fovx * 0.5f);
-			//const auto depthScale = m_farZ / (m_farZ - m_nearZ);
-			//const auto ratio = Screen_Width / Screen_Height;
-			////projection = math::transpose(math::mat4{
-			////	invTanHalfFovx, 0.f, 0.f, 0.f,
-			////	0.f, invTanHalfFovx * ratio, 0.f, 0.f,
-			////	0.f, 0.f, depthScale, 1.f,
-			////	0.f, 0.f, -m_nearZ * depthScale, 0.f
-			////});
-			projection = math::perspective(math::radians(fov), Screen_Width / Screen_Height, nearZ, farZ);
+			auto ratio = ((float)Screen_Width) / Screen_Height;
+			auto fovx = math::deg2rad(fov);
+			auto invTanHalfFovx = 1.f / math::tan(fovx * 0.5f);
+			auto depthScale = farZ / (farZ - nearZ);
+			projection = math::float4x4(
+				invTanHalfFovx, 0.f, 0.f, 0.f,
+				0.f, invTanHalfFovx * ratio, 0.f, 0.f,
+				0.f, 0.f, depthScale, 1.f,
+				0.f, 0.f, -nearZ * depthScale, 1.f);
 			return projection;
 		}
 	};

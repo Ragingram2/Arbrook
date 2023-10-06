@@ -42,13 +42,13 @@ namespace rythe::core::ecs
     }
 
     template<typename componentType>
-    R_NODISCARD componentType& component<componentType>::operator*()
+    [[nodiscard]] componentType& component<componentType>::operator*()
     {
         return owner.getComponent<componentType>();
     }
 
     template<typename componentType>
-    R_NODISCARD const componentType& component<componentType>::operator*() const
+    [[nodiscard]] const componentType& component<componentType>::operator*() const
     {
         return owner.getComponent<componentType>();
     }

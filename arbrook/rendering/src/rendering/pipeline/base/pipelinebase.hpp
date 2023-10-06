@@ -14,9 +14,9 @@ namespace rythe::rendering
 		bool m_abort = false;
 	public:
 		RenderInterface RI;//This should be the only real version
-		virtual void init() RYTHE_PURE;
-		virtual void render(core::transform camTransf, camera& cam) RYTHE_PURE;
-		virtual void shutdown() RYTHE_IMPURE
+		virtual void init() =0;
+		virtual void render(core::transform camTransf, camera& cam) =0;
+		virtual void shutdown() {}
 
 		void abort()
 		{

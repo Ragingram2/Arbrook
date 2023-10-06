@@ -33,7 +33,7 @@ namespace rythe::rendering
 				if (t == APIType::None)
 					continue;
 
-				times.append(std::format("{},Setup,NumObjects,", stringify(t)));
+				times.append(std::format("{},Setup,NumObjects,", RYTHE_STRINGIFY(t)));
 			}
 
 			size_t max = 0;
