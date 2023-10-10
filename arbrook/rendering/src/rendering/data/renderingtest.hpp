@@ -62,7 +62,9 @@ namespace rythe::rendering
 
 	struct uniformData
 	{
-		math::mat4 mvp;
+		math::mat4 projection;
+		math::mat4 view;
+		math::mat4 model;
 	};
 
 	struct vtx
@@ -408,13 +410,15 @@ namespace rythe::rendering
 			vBuffer->bind();
 			layout.bind();
 			i += .1f;
+			data.projection = cam.projection;
+			data.view = cam.view;
 			for (float x = min; x < max; x += step)
 			{
 				for (float y = min; y < max; y += step)
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					shader->setData("ConstantBuffer", &data);
 					api->drawArrays(PrimitiveType::TRIANGLESTRIP, 0, meshHandle->vertices.size());
 				}
@@ -472,7 +476,8 @@ namespace rythe::rendering
 			layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.submitAttributes();
 
-			data.mvp = cam.projection * cam.view;
+			data.projection = cam.projection;
+			data.view = cam.view;
 			shader->setData("ConstantBuffer", &data);
 			models.resize(instanceCount);
 		}
@@ -528,13 +533,14 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
-			cam.fov = 110.f;
-			cam.nearZ = .01f;
-			cam.farZ = 100.f;
-			transf.rotation = math::quat(math::lookAt(math::vec3(0, 0, 5.f), math::vec3::forward, math::vec3::up));
-			transf.position = math::vec3(0, 0, 5.f);
+			cam.fov = 90.f;
+			cam.nearZ = 0.1f;
+			cam.farZ = 100.0f;
+			auto pos = math::vec3(0.0f, 0.0f, 0.0f);
+			transf.rotation = math::quat(math::lookAt(pos, pos + math::vec3::forward, math::vec3::up));
+			transf.position = pos;
 			cam.calculate_projection();
-			cam.calculate_view(transf.scale, transf.rotation, transf.position);
+			cam.view = transf.from_world();
 			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
 
 			type = Arbrook;
@@ -558,7 +564,7 @@ namespace rythe::rendering
 		virtual void update(RenderInterface* api) override
 		{
 			layout.bind();
-			i += .1f;
+			//i += .1f;
 			//for (float x = min; x < max; x += step)
 			//{
 			//	for (float y = min; y < max; y += step)
@@ -573,10 +579,13 @@ namespace rythe::rendering
 			//	}
 			//}
 
-			math::vec3 pos = { 0.0f, 0.0f, 0.0f };
+			math::vec3 pos = { 0.0f, 0.0f, -80.0f };
 			auto model = math::translate(math::mat4(1.0f), pos);
 			model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-			data.mvp = cam.projection * cam.view * model;
+			model = math::scale(model, math::vec3(.1f, .1f, .1f));
+			data.projection = cam.projection;
+			data.view = cam.view;
+			data.model = model;
 			shader->setData("ConstantBuffer", &data);
 			vBuffer->bind();
 			idxBuffer->bind();
@@ -636,7 +645,8 @@ namespace rythe::rendering
 			layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.submitAttributes();
 
-			data.mvp = cam.projection * cam.view;
+			data.projection = cam.projection;
+			data.view = cam.view;
 			shader->setData("ConstantBuffer", &data);
 			models.resize(instanceCount);
 		}
@@ -1265,7 +1275,9 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.projection = cam.projection;
+					data.view = cam.view;
+					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(vtx));
@@ -1345,7 +1357,8 @@ namespace rythe::rendering
 			glVertexAttribDivisor(4, 1);
 			glVertexAttribDivisor(5, 1);
 
-			data.mvp = cam.projection * cam.view;
+			data.projection = cam.projection;
+			data.view = cam.view;
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 			models.resize(instanceCount);
@@ -1460,7 +1473,10 @@ namespace rythe::rendering
 				{
 					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-					data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+
+					data.projection = cam.projection;
+					data.view = cam.view;
+					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
 					glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 				}
@@ -1546,7 +1562,8 @@ namespace rythe::rendering
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
-			data.mvp = cam.projection * cam.view;
+			data.projection = cam.projection;
+			data.view = cam.view;
 
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);

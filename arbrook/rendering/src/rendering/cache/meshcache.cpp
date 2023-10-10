@@ -13,6 +13,7 @@ namespace rythe::rendering
 			log::warn("Mesh {} already loaded, ignoring new load request, and returning existing one", name);
 			return m_meshes[name].get();
 		}
+
 		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
 		auto mes = m_meshes.emplace(name, std::make_unique<mesh>(scene)).first->second.get();
 		return { mes };

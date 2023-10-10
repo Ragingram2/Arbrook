@@ -123,7 +123,7 @@ namespace rythe::game
 
 		mat.m_shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
 		mat.m_texture = gfx::TextureCache::createTexture2D("Rythe", "resources/textures/Rythe.png");
-		msh.vertices = positions;
+		//msh.vertices = positions;
 		msh.texCoords = uvs;
 
 		ent = createEntity("Cube");

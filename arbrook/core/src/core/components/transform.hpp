@@ -34,12 +34,14 @@ namespace rythe::core
 
 		math::mat4 from_world()
 		{
-			return math::inverse(to_world());
+			auto world = to_world();
+			auto mat = math::inverse(world);
+			return mat;
 		}
 
 		math::mat4 to_world()
 		{
-			if (m_owner->parent)
+			if (m_owner && m_owner->parent)
 			{
 				transform parentTransf = m_owner->parent.getComponent<transform>();
 				return parentTransf.to_world() * to_parent();

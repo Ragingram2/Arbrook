@@ -54,8 +54,8 @@ namespace rythe::rendering
 			projection = math::float4x4(
 				invTanHalfFovx, 0.f, 0.f, 0.f,
 				0.f, invTanHalfFovx * ratio, 0.f, 0.f,
-				0.f, 0.f, depthScale, 1.f,
-				0.f, 0.f, -nearZ * depthScale, 1.f);
+				0.f, 0.f, -depthScale, 1.f,
+				0.f, 0.f, -nearZ * depthScale, 0.f);
 			return projection;
 		}
 	};

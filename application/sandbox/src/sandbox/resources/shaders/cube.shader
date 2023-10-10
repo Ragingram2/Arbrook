@@ -6,16 +6,18 @@ layout(location = 0) in vec4 v_position;
 //layout(location = 1) in vec3 v_normal;
 
 //out vec3 f_normal;
-out vec3 f_pos;
+//out vec3 f_pos;
 
 layout(std140, binding = 0) uniform ConstantBuffer
 {
-	mat4 u_mvp;
+	mat4 u_projection;
+	mat4 u_view;
+	mat4 u_model;
 };
 
 void main()
 {
-	gl_Position = u_mvp * (v_position);
+	gl_Position = ((u_projection * u_view) * u_model) * v_position;
 	//f_normal = v_normal;
 }
 
