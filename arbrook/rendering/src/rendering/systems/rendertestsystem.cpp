@@ -31,26 +31,15 @@ namespace rythe::rendering
 
 		m_testScenes.emplace_back(std::make_unique<dummy_test>());
 
-		//////DrawArrays
-		//m_testScenes.emplace_back(std::make_unique<API_DrawArraysTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysTest>());
-		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysTest>());
-
-		////DrawArraysInstanced
-		//m_testScenes.emplace_back(std::make_unique<API_DrawArraysInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawArraysInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawArraysInstancedTest>());
-
-
-		//////DrawIndexed
+		//DrawIndexed
 		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
-		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedTest>());
 
-		//////DrawIndexedInstanced
-		//m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
-		//m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
+		//DrawIndexedInstanced
+		m_testScenes.emplace_back(std::make_unique<API_DrawIndexedInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<Native_DrawIndexedInstancedTest>());
+		m_testScenes.emplace_back(std::make_unique<BGFX_DrawIndexedInstancedTest>());
 	}
 
 	void TestRenderer::update()

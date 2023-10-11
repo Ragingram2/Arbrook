@@ -36,12 +36,32 @@ namespace rythe::rendering
 		float fov = 60;
 		math::mat4 projection;
 		math::mat4 view;
+		
+		math::mat4 calculate_view(core::transform* parent)
+		{
+			if (parent)
+			{
+				view = parent->from_world();
+				return view;
+			}
+
+			if (m_owner)
+			{
+				if (m_owner.hasComponent<core::transform>())
+				{
+					auto transf = m_owner.getComponent<core::transform>();
+					view = transf.from_world();
+					return view;
+				}
+			}
+
+			log::warn("Camera has no owner or owner doesn't contain a transform component");
+			return math::mat4(1.f);
+		}
 
 		math::mat4 calculate_view(math::vec3 scale, math::quat orientation, math::vec3 position)
 		{
-			math::mat4 view(1.f);
-			view = math::compose(scale, orientation, position);
-			view = math::inverse(view);
+			view = math::inverse(math::compose(scale, orientation, position));
 			return view;
 		}
 
@@ -54,7 +74,7 @@ namespace rythe::rendering
 			projection = math::float4x4(
 				invTanHalfFovx, 0.f, 0.f, 0.f,
 				0.f, invTanHalfFovx * ratio, 0.f, 0.f,
-				0.f, 0.f, -depthScale, 1.f,
+				0.f, 0.f, depthScale, 1.f,
 				0.f, 0.f, -nearZ * depthScale, 0.f);
 			return projection;
 		}

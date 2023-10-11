@@ -14,7 +14,7 @@ namespace rythe::rendering
 			return m_meshes[name].get();
 		}
 
-		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType);
+		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_FlipWindingOrder);
 		auto mes = m_meshes.emplace(name, std::make_unique<mesh>(scene)).first->second.get();
 		return { mes };
 	}

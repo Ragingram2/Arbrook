@@ -32,11 +32,14 @@ namespace rythe::core
 		math::vec3 right() { return m_localMatrix[0]; }
 		math::vec3 forward() { return m_localMatrix[2]; }
 
+		void set_owner(core::ecs::entity ent)
+		{
+			m_owner = ent;
+		}
+
 		math::mat4 from_world()
 		{
-			auto world = to_world();
-			auto mat = math::inverse(world);
-			return mat;
+			return math::inverse(to_world());
 		}
 
 		math::mat4 to_world()

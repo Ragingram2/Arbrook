@@ -5,11 +5,6 @@
 //#include <GLFW/glfw3native.h>
 #include <GLFW/glfw3.h>
 
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
-#include <bx/math.h>
-#include <bx/allocator.h>
-#include <bx/file.h>
 
 #include <rsl/delegate>
 
@@ -27,6 +22,7 @@
 #include "rendering/components/spriterenderer.hpp"
 #include "rendering/components/mesh_renderer.hpp"
 #include "rendering/components/components.hpp"
+#include "rendering/systems/testing/bgfxutils.hpp"
 
 
 
@@ -89,7 +85,17 @@ namespace rythe::rendering
 		virtual void destroy(RenderInterface* api) = 0;
 	};
 
+	inline camera cam;
+	inline core::transform transf;
+	inline mesh_handle meshHandle;
+	inline uniformData data;
 
+	inline math::mat4 projection = cam.calculate_projection();
+	inline math::mat4 view = cam.calculate_view(transf.scale, transf.rotation, transf.position);
+	inline math::mat4 projView = projection * view;
+	inline int instanceCount = 10;
+
+	inline math::vec3 modelPosition = math::vec3(0, 0, 10);
 
 	struct dummy_test : public rendering_test
 	{
@@ -100,18 +106,30 @@ namespace rythe::rendering
 
 		virtual void setup(RenderInterface* api) override
 		{
+
+			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
 			type = None;
 			name = "";
 			log::debug("Initializing", stringify(type), name);
 			glfwSetWindowTitle(api->getWindow(), "Initializing");
+
+			cam.fov = 90.f;
+			cam.nearZ = 1.0f;
+			cam.farZ = 100.0f;
+			auto pos = math::vec3(0.0f, 0.0f, 0.0f);
+			transf.rotation = math::quat(math::lookAt(pos, pos + math::vec3::forward, math::vec3::up));
+			transf.position = pos;
+			cam.calculate_projection();
+			cam.calculate_view(&transf);
+
 			tex_vtx verticies[] =
 			{	//positions						
-				{ { -1.f, 1.0f, 0.0f  },	{ 0, 1 } },//0
-				{ {-1.f,-1.0f, 0.0f  },	{ 0, 0 } },//1
-				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
-				{ { -1.0f, 1.0f, 0.0f },		{ 0, 1 } },//0
-				{ {  1.0f,-1.0f, 0.0f },		{ 1, 0 } },//2
-				{ {  1.0f, 1.0f, 0.0f },		{ 1, 1 } }//3
+				{ { -1.f, 1.0f, 1.0f, 1.0f },	{ 0, 1 } },//0
+				{ {-1.f,-1.0f, 1.0f, 1.0f  },	{ 0, 0 } },//1
+				{ {  1.0f,-1.0f, 1.0f, 1.0f },		{ 1, 0 } },//2
+				{ { -1.0f, 1.0f, 1.0f,1.0f },		{ 0, 1 } },//0
+				{ {  1.0f,-1.0f, 1.0f,1.0f },		{ 1, 0 } },//2
+				{ {  1.0f, 1.0f, 1.0f,1.0f },		{ 1, 1 } }//3
 			};
 			shader = ShaderCache::createShader("test", "resources/shaders/texture.shader");
 			texture = TextureCache::createTexture2D("test", "resources/textures/Rythe.png");
@@ -119,8 +137,8 @@ namespace rythe::rendering
 			shader->bind();
 			texture->bind();
 			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(tex_vtx), 0);
-			layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec3));
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(tex_vtx), 0);
+			layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(tex_vtx), sizeof(math::vec4));
 			layout.submitAttributes();
 			layout.bind();
 		}
@@ -138,384 +156,7 @@ namespace rythe::rendering
 		}
 	};
 
-	inline camera cam;
-	inline core::transform transf;
-
-	inline math::mat4 projection = cam.calculate_projection();
-	inline math::mat4 view = cam.calculate_view(transf.scale, transf.rotation, transf.position);
-	inline math::mat4 projView = projection * view;
-	inline float count = 2.f;
-	inline float instanceCount = 65536.f / 2.f;
-	//inline float instanceCount = 16.f;
-	inline float min = 0.f;
-	inline float max = 1.f;
-
-	inline float step = (max - min) / math::floor(math::sqrt(count));
-	inline float instanceStep = (max - min) / math::floor(math::sqrt(instanceCount));
-
-	static vtx vertices[36] =
-	{
-		//Back
-		{ { -0.1f,  0.1f, -0.1f,1.0f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//2
-		{ { -0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//1
-
-		{ { -0.1f,  0.1f, -0.1f,1.0f	},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f,  0.1f, -0.1f,1.0f	},	{	0.0f, 1.0f	} },//3
-		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//2
-
-		//Front
-		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, 0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f,  0.1f, 0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
-
-		//Left
-		{ {	0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f	} },//2
-		{ {	0.1f, -0.1f,-0.1f,1.0f		},	{	1.0f, 0.0f	} },//1
-
-		{ {	0.1f, 0.1f, -0.1f	,1.0f		},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, 0.1f,  0.1f	,1.0f		},	{	0.0f, 1.0f	} },//3
-		{ {0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f } },//2
-
-		//Right
-		{ {	-0.1f,0.1f, -0.1f	,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {	-0.1f, -0.1f,-0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
-		{ {	-0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-
-		{ {	-0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {-0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f } },//2
-		{ {	-0.1f, 0.1f,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
-
-		//Bottom
-		{ { -0.1f, -0.1f,  0.1f,1.0f	},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f, -0.1f,  0.1f,1.0f	},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1f,1.0f	},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f, -0.1f,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-
-		//Top
-		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ { -0.1f, 0.1f, -0.1f,1.0f	},	{	0.0f, 0.0f	} },//1
-
-		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f	,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
-	};
-
-	static math::vec3 normals[36] =
-	{
-		{ 0.0f, 0.0f, -1.0f},
-		{ 0.0f, 0.0f, -1.0f},
-		{ 0.0f, 0.0f, -1.0f},
-		{ 0.0f, 0.0f, -1.0f},
-		{ 0.0f, 0.0f, -1.0f},
-		{ 0.0f, 0.0f, -1.0f},
-
-		{ 0.0f, 0.0f, 1.0f},
-		{ 0.0f, 0.0f, 1.0f},
-		{ 0.0f, 0.0f, 1.0f},
-		{ 0.0f, 0.0f, 1.0f},
-		{ 0.0f, 0.0f, 1.0f},
-		{ 0.0f, 0.0f, 1.0f},
-
-		{ -1.0f,  0.0f,  0.0f},
-		{ -1.0f,  0.0f,  0.0f},
-		{ -1.0f,  0.0f,  0.0f},
-		{ -1.0f,  0.0f,  0.0f},
-		{ -1.0f,  0.0f,  0.0f},
-		{ -1.0f,  0.0f,  0.0f},
-
-		{ 1.0f,  0.0f,  0.0f},
-		{ 1.0f,  0.0f,  0.0f},
-		{ 1.0f,  0.0f,  0.0f},
-		{ 1.0f,  0.0f,  0.0f},
-		{ 1.0f,  0.0f,  0.0f},
-		{ 1.0f,  0.0f,  0.0f},
-
-		{0.0f, -1.0f, 0.0f},
-		{0.0f, -1.0f, 0.0f},
-		{0.0f, -1.0f, 0.0f},
-		{0.0f, -1.0f, 0.0f},
-		{0.0f, -1.0f, 0.0f},
-		{0.0f, -1.0f, 0.0f},
-
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-		{0.0f, 1.0f, 0.0f},
-	};
-
-	static vtx instance_vertices[36] =
-	{
-		//Back
-		{ { -0.1f,  0.1f, -0.1f,1.0f		},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
-		{ { -0.1f, -0.1f, -0.1,1.0f	 },	{	1.0f, 0.0f	} },//1
-
-		{ { -0.1f,  0.1f, -0.1,1.0f		},	{	1.0f, 1.0f	} },//0
-		{ {  0.1f,  0.1f, -0.1,1.0f		},	{	0.0f, 1.0f	} },//3
-		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//2
-
-		//Front					,1.0f	
-		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, 0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f,  0.1f, 0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, 0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f,  0.1f, 0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-
-		//Left					 ,1.0f	
-		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f	} },//2
-		{ {	0.1f, -0.1f,-0.1f	,1.0f	},	{	1.0f, 0.0f	} },//1
-
-		{ {	0.1f, 0.1f, -0.1f	,1.0f	},	{	1.0f, 1.0f	} },//0
-		{ {	0.1f, 0.1f,  0.1f	,1.0f	},	{	0.0f, 1.0f	} },//3
-		{ {0.1f, -0.1f, 0.1f	,1.0f	},	{	0.0f, 0.0f } },//2
-
-		//Right					
-		{ {	-0.1f,0.1f, -0.1f	,1.0f	},	{	0.0f, 1.0f	} },//0
-		{ {	-0.1f, -0.1f,-0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
-		{ {	-0.1f, -0.1f, 0.1f,1.0f	  },	{	1.0f, 0.0f	} },//2
-
-		{ {	-0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {-0.1f, -0.1f, 0.1f,1.0f	},	{	1.0f, 0.0f } },//2
-		{ {	-0.1f, 0.1f,  0.1f,1.0f	},	{	1.0f, 1.0f	} },//3
-
-		//Bottom				
-		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ { -0.1f, -0.1f, -0.1,1.0f		},	{	0.0f, 0.0f	} },//1
-		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
-
-		{ { -0.1f, -0.1f,  0.1,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, -0.1f, -0.1,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ {  0.1f, -0.1f,  0.1,1.0f		},	{	1.0f, 1.0f	} },//3
-
-		//Top					 
-		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} },//2
-		{ { -0.1f, 0.1f, -0.1f,1.0f		},	{	0.0f, 0.0f	} },//1
-
-		{ { -0.1f, 0.1f,  0.1f,1.0f		},	{	0.0f, 1.0f	} },//0
-		{ {  0.1f, 0.1f	,  0.1f,1.0f		},	{	1.0f, 1.0f	} },//3
-		{ {  0.1f, 0.1f, -0.1f,1.0f		},	{	1.0f, 0.0f	} }//2
-	};
-
-	static vtx indVertices[8] =
-	{
-		{{ -.1f, -.1f,  0.1f,1.0f	},		{0,0}	}, //0
-		{{	 .1f, -.1f,  0.1f,1.0f	},		{1,0}	}, //1
-		{{	-.1f,  .1f,  0.1f,1.0f	},		{0,1}	}, //2
-		{{	 .1f,  .1f,  0.1f,1.0f	},		{1,1}	}, //3
-		{{	-.1f, -.1f, -0.1f,1.0f	},	{0,0}	}, //4
-		{{	 .1f, -.1f, -0.1f,1.0f	},		{1,0}	},//5
-		{{	-.1f,  .1f, -0.1f,1.0f	},		{0,1}	}, //6
-		{{	 .1f,  .1f, -0.1f,1.0f	},		{1,1}	}  //7
-	};
-
-	static vtx instance_indVertices[8] =
-	{
-		{{ -.1f, -.1f,  0.1f,1.0f	},		{0,0}	}, //0
-		{{	 .1f, -.1f,  0.1f,1.0f	},		{1,0}	}, //1
-		{{	-.1f,  .1f,  0.1f,1.0f	},		{0,1}	}, //2
-		{{	 .1f,  .1f,  0.1f,1.0f	},		{1,1}	}, //3
-		{{	-.1f, -.1f, -0.1f,1.0f	},		{0,0}	}, //4
-		{{	 .1f, -.1f, -0.1f,1.0f	},		{1,0}	}, //5
-		{{	-.1f,  .1f, -0.1f,1.0f	},		{0,1}	}, //6
-		{{	 .1f,  .1f, -0.1f,1.0f	},		{1,1}	}  //7
-	};
-
-	static unsigned int indicies[36] =
-	{
-		//Top
-		2, 6, 7,
-		2, 3, 7,
-
-		//Bottom
-		0, 4, 5,
-		0, 1, 5,
-
-		//Left
-		0, 2, 6,
-		0, 4, 6,
-
-		//Right
-		1, 3, 7,
-		1, 5, 7,
-
-		//Front
-		0, 2, 3,
-		0, 1, 3,
-
-		//Back
-		4, 6, 7,
-		4, 5, 7
-	};
-
 #pragma region My API
-	struct API_DrawArraysTest : public rendering_test
-	{
-		inputlayout layout;
-		buffer_handle vBuffer;
-		buffer_handle nBuffer;
-		buffer_handle cBuffer;
-		texture_handle texture;
-		shader_handle shader;
-		uniformData data;
-
-		mesh_handle meshHandle;
-
-		float i = 0;
-
-		virtual void setup(RenderInterface* api) override
-		{
-			cam.fov = 90.f;
-			cam.nearZ = .1f;
-			cam.farZ = 100.f;
-			transf.position = math::vec3(0, 0, -10);
-			cam.calculate_projection();
-			cam.calculate_view(transf.scale, transf.rotation, transf.position);
-			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
-
-			type = Arbrook;
-			name = "DrawArrays";
-			log::debug("Initializing {}_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
-			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
-			cBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
-			shader->addBuffer(ShaderType::VERTEX, cBuffer);
-			shader->bind();
-			texture->bind();
-			layout.initialize(api->getHwnd(), 1, shader);
-			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
-			layout.submitAttributes();
-			//layout.setAttributePtr(vBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			vBuffer->bind();
-			layout.bind();
-			i += .1f;
-			data.projection = cam.projection;
-			data.view = cam.view;
-			for (float x = min; x < max; x += step)
-			{
-				for (float y = min; y < max; y += step)
-				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
-					auto model = math::translate(math::mat4(1.0f), pos);
-					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					shader->setData("ConstantBuffer", &data);
-					api->drawArrays(PrimitiveType::TRIANGLESTRIP, 0, meshHandle->vertices.size());
-				}
-			}
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			BufferCache::deleteBuffer("Vertex Buffer");
-			BufferCache::deleteBuffer("ConstantBuffer");
-			ShaderCache::deleteShader("test");
-			MeshCache::deleteMesh("Teapot");
-			layout.release();
-		}
-	};
-
-	struct API_DrawArraysInstancedTest : public rendering_test
-	{
-		std::vector<math::mat4> models;
-
-		inputlayout layout;
-		buffer_handle buffer;
-		buffer_handle matrixBuffer;
-		buffer_handle constantBuffer;
-		shader_handle shader;
-		texture_handle texture;
-		uniformData data;
-
-		float i = 0;
-		int index = 0;
-
-		virtual void setup(RenderInterface* api) override
-		{
-
-			type = Arbrook;
-			name = "DrawArraysInstanced";
-
-			log::debug("Initializing {}_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
-			buffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_vertices);
-			matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
-			constantBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
-			texture = TextureCache::getTexture2D("test");
-			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
-			shader->bind();
-			texture->bind();
-
-			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr(buffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(vtx), 0);
-			layout.setAttributePtr(buffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec4));
-			layout.setAttributePtr(matrixBuffer, "MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer, "MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.submitAttributes();
-
-			data.projection = cam.projection;
-			data.view = cam.view;
-			shader->setData("ConstantBuffer", &data);
-			models.resize(instanceCount);
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			i += .1f;
-			index = 0;
-			for (float x = min; x < max; x += instanceStep)
-			{
-				for (float y = min; y < max; y += instanceStep)
-				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
-					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					index++;
-
-					if (index >= instanceCount)
-						break;
-				}
-				if (index >= instanceCount)
-					break;
-			}
-
-			texture->bind();
-			matrixBuffer->bufferData(models.data(), models.size());
-			api->drawArraysInstanced(PrimitiveType::TRIANGLESLIST, 36, instanceCount, 0, 0);
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			BufferCache::deleteBuffer("Vertex Buffer");
-			BufferCache::deleteBuffer("Matrix Buffer");
-			BufferCache::deleteBuffer("ConstantBuffer");
-			ShaderCache::deleteShader("test");
-			layout.release();
-		}
-	};
 
 	struct API_DrawIndexedTest : public rendering_test
 	{
@@ -525,24 +166,11 @@ namespace rythe::rendering
 		buffer_handle idxBuffer;
 		texture_handle texture;
 		shader_handle shader;
-		uniformData data;
-
-		mesh_handle meshHandle;
 
 		float i = 0;
 
 		virtual void setup(RenderInterface* api) override
 		{
-			cam.fov = 90.f;
-			cam.nearZ = 1.0f;
-			cam.farZ = 100.0f;
-			auto pos = math::vec3(0.0f, 0.0f, -10.0f);
-			transf.rotation = math::quat(math::lookAt(pos, pos + math::vec3::forward, math::vec3::up));
-			transf.position = pos;
-			cam.calculate_projection();
-			cam.view = transf.from_world();
-			meshHandle = MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
-
 			type = Arbrook;
 			name = "DrawIndexed";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
@@ -559,33 +187,29 @@ namespace rythe::rendering
 			layout.initialize(api->getHwnd(), 1, shader);
 			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 			layout.submitAttributes();
+
+			data.projection = cam.projection;
+			data.view = cam.calculate_view(&transf);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
-			layout.bind();
-			//i += .1f;
-			//for (float x = min; x < max; x += step)
-			//{
-			//	for (float y = min; y < max; y += step)
-			//	{
-			//		math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
-			//		auto model = math::translate(math::mat4(1.0f), pos);
-			//		data.mvp = cam.projection * cam.view * math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-			//		shader->setData("ConstantBuffer", &data);
-			//		vBuffer->bind();
-			//		idxBuffer->bind();
-			//		api->drawIndexed(PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 0, 0);
-			//	}
-			//}
+			data.view = cam.calculate_view(&transf);
 
-			math::vec3 pos = { 0.0f, 0.0f, 0.0f };
-			auto model = math::translate(math::mat4(1.0f), pos);
-			model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-			model = math::scale(model, math::vec3(.1f, .1f, .1f));
-			data.projection = cam.projection;
-			data.view = cam.view;
-			data.model = model;
+			layout.bind();
+			i += .1f;
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
+			{
+				for (float y = 0; y < num; y += 1)
+				{
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0 };
+					auto model = math::translate(math::mat4(1.0f), modelPosition);
+					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					data.model = model;
+				}
+			}
+
 			shader->setData("ConstantBuffer", &data);
 			vBuffer->bind();
 			idxBuffer->bind();
@@ -614,7 +238,6 @@ namespace rythe::rendering
 		buffer_handle matrixBuffer;
 		texture_handle texture;
 		shader_handle shader;
-		uniformData data;
 
 		float i = 0;
 		int index = 0;
@@ -628,8 +251,8 @@ namespace rythe::rendering
 
 			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
 			texture = TextureCache::getTexture2D("test");
-			vBuffer = BufferCache::createBuffer<vtx>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, instance_indVertices);
-			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, indicies);
+			vBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
+			idxBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, meshHandle->indices);
 			constantBuffer = BufferCache::createBuffer<uniformData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, constantBuffer);
@@ -637,8 +260,7 @@ namespace rythe::rendering
 			idxBuffer->bind();
 
 			layout.initialize(api->getHwnd(), 2, shader);
-			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGB32F, 0, sizeof(vtx), 0);
-			//layout.setAttributePtr("TEXCOORD", 1, FormatType::RG32F, 0, sizeof(vtx), sizeof(math::vec3));
+			layout.setAttributePtr(vBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 			layout.setAttributePtr(matrixBuffer, "MODEL", 0, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr(matrixBuffer, "MODEL", 1, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
@@ -646,33 +268,32 @@ namespace rythe::rendering
 			layout.submitAttributes();
 
 			data.projection = cam.projection;
-			data.view = cam.view;
+			data.view = cam.calculate_view(&transf);
 			shader->setData("ConstantBuffer", &data);
 			models.resize(instanceCount);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			data.view = cam.calculate_view(&transf);
+
 			i += .1f;
 			index = 0;
-			for (float x = min; x < max; x += instanceStep)
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
 			{
-				for (float y = min; y < max; y += instanceStep)
+				for (float y = 0; y < num; y += 1)
 				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0 };
 					models[index] = math::translate(math::mat4(1.0f), pos);
 					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
-					if (index >= instanceCount)
-						break;
 				}
-				if (index >= instanceCount)
-					break;
 			}
 			matrixBuffer->bufferData(models.data(), models.size());
 			vBuffer->bind();
 			idxBuffer->bind();
-			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, sizeof(indicies) / sizeof(unsigned int), instanceCount, 0, 0, 0);
+			api->drawIndexedInstanced(PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), instanceCount, 0, 0, 0);
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -688,318 +309,6 @@ namespace rythe::rendering
 #pragma endregion
 
 #pragma region BGFX
-
-	inline bgfx::ProgramHandle loadShader(std::string name, std::string fsPath, std::string vsPath)
-	{
-		char* data = new char[2048];
-		std::ifstream file;
-		size_t fileSize = 0;
-		file.open(fsPath, std::ifstream::in | std::ifstream::binary);
-		if (file.is_open()) {
-			file.seekg(0, std::ios::end);
-			fileSize = file.tellg();
-			file.seekg(0, std::ios::beg);
-			file.read(data, fileSize);
-			file.close();
-		}
-		const bgfx::Memory* mem = bgfx::copy(data, fileSize + 1);
-		mem->data[mem->size - 1] = '\0';
-		bgfx::ShaderHandle fhandle = bgfx::createShader(mem);
-		if (fhandle.idx == bgfx::kInvalidHandle)
-			log::error("Fragment Shader failed compile");
-		bgfx::setName(fhandle, "TestFragment");
-
-		file.open(vsPath, std::ifstream::in | std::ifstream::binary);
-		if (file.is_open()) {
-			file.seekg(0, std::ios::end);
-			fileSize = file.tellg();
-			file.seekg(0, std::ios::beg);
-			file.read(data, fileSize);
-			file.close();
-		}
-
-		mem = bgfx::copy(data, fileSize + 1);
-		mem->data[mem->size - 1] = '\0';
-		bgfx::ShaderHandle vhandle = bgfx::createShader(mem);
-		if (vhandle.idx == bgfx::kInvalidHandle)
-			log::error("Vertex Shader failed compile");
-		bgfx::setName(vhandle, "TestVertex");
-
-		return bgfx::createProgram(vhandle, fhandle, false);
-	}
-
-	struct BgfxCallback : public bgfx::CallbackI
-	{
-		virtual ~BgfxCallback()
-		{
-		}
-
-		virtual void fatal(const char* _filePath, uint16_t _line, bgfx::Fatal::Enum _code, const char* _str) override
-		{
-			//BX_UNUSED(_filePath, _line);
-
-			// Something unexpected happened, inform user and bail out.
-			log::error("Fatal error {}:{} [{}]: {}", _filePath, _line, _code, _str);
-
-			//abort();
-		}
-
-		virtual void traceVargs(const char* _filePath, uint16_t _line, const char* _format, va_list _argList) override
-		{
-			//log::debug("%s (%d): ", _filePath, _line);
-			//log::debug(_format, _argList);
-		}
-
-		virtual void profilerBegin(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) override
-		{
-		}
-
-		virtual void profilerBeginLiteral(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) override
-		{
-		}
-
-		virtual void profilerEnd() override
-		{
-		}
-
-		virtual uint32_t cacheReadSize(uint64_t _id) override
-		{
-			return 0;
-		}
-
-		virtual bool cacheRead(uint64_t _id, void* _data, uint32_t _size) override
-		{
-			return false;
-		}
-
-		virtual void cacheWrite(uint64_t _id, const void* _data, uint32_t _size) override
-		{
-
-		}
-
-		virtual void screenShot(const char* _filePath, uint32_t _width, uint32_t _height, uint32_t _pitch, const void* _data, uint32_t /*_size*/, bool _yflip) override
-		{
-
-		}
-
-		virtual void captureBegin(uint32_t _width, uint32_t _height, uint32_t /*_pitch*/, bgfx::TextureFormat::Enum /*_format*/, bool _yflip) override
-		{
-
-		}
-
-		virtual void captureEnd() override
-		{
-
-		}
-
-		virtual void captureFrame(const void* _data, uint32_t /*_size*/) override
-		{
-		}
-	};
-
-	struct BGFX_DrawArraysTest : public rendering_test
-	{
-		bgfx::PlatformData platformData;
-		bgfx::VertexBufferHandle vertexBuffer;
-		bgfx::IndexBufferHandle indexBuffer;
-		bgfx::ProgramHandle shader;
-		bgfx::VertexLayout inputLayout;
-		BgfxCallback callback;
-		uint64_t state = 0
-			| BGFX_STATE_WRITE_RGB
-			| BGFX_STATE_WRITE_A
-			| BGFX_STATE_WRITE_Z
-			| BGFX_STATE_FRONT_CCW
-			| BGFX_STATE_MSAA
-			| 0;
-
-		uniformData data;
-		float i = 0;
-
-		virtual void setup(RenderInterface* api) override
-		{
-			type = BGFX;
-			name = "DrawArrays";
-			log::debug("Initializing {}_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-			bgfx::Init init;
-			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
-			init.platformData.ndt = nullptr;
-#if RenderingAPI == RenderingAPI_OGL
-			init.type = bgfx::RendererType::OpenGL;
-#elif RenderingAPI == RenderingAPI_DX11
-			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.context = api->getHwnd().dev;
-			init.platformData.backBuffer = api->getHwnd().backbuffer;
-			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
-#endif
-
-			init.resolution.width = api->getHwnd().m_resolution.x;
-			init.resolution.height = api->getHwnd().m_resolution.y;
-#ifdef _DEBUG
-			//init.callback = &callback;
-#endif
-			bgfx::init(init);
-			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
-
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
-
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(vertices, sizeof(vertices)), inputLayout);
-
-#if RenderingAPI == RenderingAPI_OGL
-			shader = loadShader("test", "resources/shaders/ogl/testFS.shader", "resources/shaders/ogl/testVS.shader");
-#elif RenderingAPI == RenderingAPI_DX11
-			shader = loadShader("test", "resources/shaders/dx11/testFS.shader", "resources/shaders/dx11/testVS.shader");
-#endif
-
-			if (shader.idx == bgfx::kInvalidHandle)
-				log::error("Shader failed to compile");
-
-
-			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			i += .1f;
-			bgfx::touch(0);
-
-			for (float x = min; x < max; x += step)
-			{
-				for (float y = min; y < max; y += step)
-				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
-					auto model = math::translate(math::mat4(1.0f), pos);
-					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					bgfx::setTransform(model.data);
-
-					bgfx::setVertexBuffer(0, vertexBuffer);
-					bgfx::setState(state);
-					bgfx::submit(0, shader);
-				}
-			}
-			bgfx::frame();
-			bgfx::frame();
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			bgfx::shutdown();
-			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
-		}
-	};
-
-	struct BGFX_DrawArraysInstancedTest : public rendering_test
-	{
-		std::vector<math::mat4> models;
-
-		bgfx::PlatformData platformData;
-		bgfx::VertexBufferHandle vertexBuffer;
-		bgfx::IndexBufferHandle indexBuffer;
-		bgfx::ProgramHandle shader;
-		bgfx::VertexLayout inputLayout;
-		BgfxCallback callback;
-		uint64_t state = 0
-			| BGFX_STATE_WRITE_RGB
-			| BGFX_STATE_WRITE_A
-			| BGFX_STATE_WRITE_Z
-			| BGFX_STATE_FRONT_CCW
-			| BGFX_STATE_MSAA
-			| 0;
-
-		uniformData data;
-		float i = 0;
-		int index = 0;
-
-
-		virtual void setup(RenderInterface* api) override
-		{
-			type = BGFX;
-			name = "DrawArraysInstanced";
-			log::debug("Initializing {}_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}_Test{}", stringify(type), name).c_str());
-
-			bgfx::Init init;
-			init.platformData.nwh = glfwGetWin32Window(api->getWindow());
-			init.platformData.ndt = nullptr;
-#if RenderingAPI == RenderingAPI_OGL
-			init.type = bgfx::RendererType::OpenGL;
-#elif RenderingAPI == RenderingAPI_DX11
-			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.context = api->getHwnd().dev;
-			init.platformData.backBuffer = api->getHwnd().backbuffer;
-			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
-#endif
-			init.resolution.width = api->getHwnd().m_resolution.x;
-			init.resolution.height = api->getHwnd().m_resolution.y;
-#ifdef _DEBUG
-			//init.callback = &callback;
-#endif
-			bgfx::init(init);
-
-			bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x6495EDff, 1.0f, 0);
-			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
-
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
-
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_vertices, sizeof(instance_vertices)), inputLayout);
-
-#if RenderingAPI == RenderingAPI_OGL
-			shader = loadShader("test", "resources/shaders/ogl/instance_testFS.shader", "resources/shaders/ogl/instance_testVS.shader");
-#elif RenderingAPI == RenderingAPI_DX11
-			shader = loadShader("test", "resources/shaders/dx11/instance_testFS.shader", "resources/shaders/dx11/instance_testVS.shader");
-#endif
-
-			if (shader.idx == bgfx::kInvalidHandle)
-				log::error("Shader failed to compile");
-
-			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			index = 0;
-			i += .1f;
-			bgfx::touch(0);
-
-			uint32_t drawnCubes = bgfx::getAvailInstanceDataBuffer(instanceCount, sizeof(math::mat4));
-			bgfx::InstanceDataBuffer instanceBuffer;
-			bgfx::allocInstanceDataBuffer(&instanceBuffer, drawnCubes, sizeof(math::mat4));
-
-			uint8_t* data = instanceBuffer.data;
-			math::mat4* mtx = (math::mat4*)data;
-			for (float x = min; x < max; x += instanceStep)
-			{
-				for (float y = min; y < max; y += instanceStep)
-				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
-					mtx[index] = math::translate(math::mat4(1.0f), pos);
-					mtx[index] = math::rotate(mtx[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					index++;
-					if (index >= instanceCount)
-						break;
-				}
-				if (index >= instanceCount)
-					break;
-			}
-
-			bgfx::setVertexBuffer(0, vertexBuffer);
-			bgfx::setInstanceDataBuffer(&instanceBuffer);
-			bgfx::setState(state);
-			bgfx::submit(0, shader);
-
-			bgfx::frame();
-			bgfx::frame();
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			bgfx::shutdown();
-			api->initialize(api->getHwnd().m_resolution, "Arbook", api->getWindow());
-		}
-	};
-
 	struct BGFX_DrawIndexedTest : public rendering_test
 	{
 		bgfx::PlatformData platformData;
@@ -1016,11 +325,13 @@ namespace rythe::rendering
 			| BGFX_STATE_MSAA
 			| 0;
 
-		uniformData data;
 		float i = 0;
 
 		virtual void setup(RenderInterface* api) override
 		{
+			data.projection = cam.projection;
+			data.view = cam.calculate_view(&transf);
+
 			type = BGFX;
 			name = "DrawIndexed";
 			log::debug("Initializing {}_Test{}", stringify(type), name);
@@ -1050,11 +361,11 @@ namespace rythe::rendering
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
+			inputLayout.begin().add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(indVertices, sizeof(indVertices)), inputLayout);
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(meshHandle->vertices.data(), meshHandle->vertices.size() * sizeof(math::vec4)), inputLayout);
 
-			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(indicies, sizeof(indicies)));
+			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(meshHandle->indices.data(), meshHandle->indices.size() * sizeof(unsigned int)));
 
 
 #if RenderingAPI == RenderingAPI_OGL
@@ -1066,19 +377,24 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			data.view = cam.calculate_view(&transf);
+			bgfx::setViewTransform(0, data.view.data, data.projection.data);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			data.view = cam.calculate_view(&transf);
+			bgfx::setViewTransform(0, data.view.data, data.projection.data);
+
 			i += .1f;
 			bgfx::touch(0);
 
-			for (float x = min; x < max; x += step)
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
 			{
-				for (float y = min; y < max; y += step)
+				for (float y = 0; y < num; y += 1)
 				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
 					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					bgfx::setTransform(model.data);
@@ -1090,7 +406,6 @@ namespace rythe::rendering
 				}
 			}
 
-			bgfx::frame();
 			bgfx::frame();
 		}
 
@@ -1119,7 +434,6 @@ namespace rythe::rendering
 			| BGFX_STATE_MSAA
 			| 0;
 
-		uniformData data;
 		float i = 0;
 		int index = 0;
 
@@ -1154,11 +468,11 @@ namespace rythe::rendering
 			bgfx::setViewMode(0, bgfx::ViewMode::Default);
 			bgfx::setViewRect(0, 0, 0, Screen_Width, Screen_Height);
 
-			inputLayout.begin().add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
+			inputLayout.begin().add(bgfx::Attrib::Position, 4, bgfx::AttribType::Float).add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float).end();
 
-			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(instance_indVertices, sizeof(instance_indVertices)), inputLayout);
+			vertexBuffer = bgfx::createVertexBuffer(bgfx::makeRef(meshHandle->vertices.data(), meshHandle->vertices.size() * sizeof(math::vec4)), inputLayout);
 
-			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(indicies, sizeof(indicies)));
+			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(meshHandle->indices.data(), meshHandle->indices.size() * sizeof(unsigned int)));
 
 
 #if RenderingAPI == RenderingAPI_OGL
@@ -1170,11 +484,14 @@ namespace rythe::rendering
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
 
-			//bgfx::setViewTransform(0, math::lookAt(cam.pos, cam.pos + cam.front, cam.up).data, math::perspective(math::radians(45.f), Screen_Width / Screen_Height, .1f, 100.0f).data);
+			bgfx::setViewTransform(0, data.view.data, data.projection.data);
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			data.view = cam.calculate_view(&transf);
+			bgfx::setViewTransform(0, data.view.data, data.projection.data);
+
 			index = 0;
 			i += .1f;
 			bgfx::touch(0);
@@ -1185,19 +502,15 @@ namespace rythe::rendering
 
 			uint8_t* data = instanceBuffer.data;
 			math::mat4* mtx = (math::mat4*)data;
-			for (float x = min; x < max; x += instanceStep)
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
 			{
-				for (float y = min; y < max; y += instanceStep)
+				for (float y = 0; y < num; y += 1)
 				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0.0f };
 					mtx[index] = math::translate(math::mat4(1.0f), pos);
 					mtx[index] = math::rotate(mtx[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					index++;
-					if (index >= instanceCount)
-						break;
 				}
-				if (index >= instanceCount)
-					break;
 			}
 
 			bgfx::setVertexBuffer(0, vertexBuffer);
@@ -1207,7 +520,7 @@ namespace rythe::rendering
 			bgfx::submit(0, shader);
 
 			bgfx::frame();
-			bgfx::frame();
+			//bgfx::frame();
 		}
 
 		virtual void destroy(RenderInterface* api) override
@@ -1221,177 +534,6 @@ namespace rythe::rendering
 #pragma region Native API
 
 #if RenderingAPI == RenderingAPI_OGL
-	struct Native_DrawArraysTest : public rendering_test
-	{
-		unsigned int bufferId;
-		unsigned int constantBufferId;
-		unsigned int vaoId;
-		unsigned int shaderId;
-		shader_handle shader;
-		uniformData data;
-
-		float i = 0;
-
-		virtual void setup(RenderInterface* api) override
-		{
-			type = Native;
-			name = "DrawArrays";
-			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
-			shader = ShaderCache::createShader("test", "resources/shaders/cube.shader");
-			shaderId = shader->getId();
-
-			glGenBuffers(1, &constantBufferId);
-			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(uniformData), nullptr, GL_STATIC_DRAW);
-			glBindBufferRange(GL_UNIFORM_BUFFER, 0, constantBufferId, 0, 1);
-			glUseProgram(shaderId);
-			glUniformBlockBinding(shaderId, glGetUniformBlockIndex(shaderId, "ConstantBuffer"), 0);
-
-			glGenBuffers(1, &bufferId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-			glUseProgram(shaderId);
-			glGenVertexArrays(1, &vaoId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec4), reinterpret_cast<void*>(0));
-			glVertexAttribDivisor(0, 0);
-
-			//glEnableVertexAttribArray(1);
-			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
-			//glVertexAttribDivisor(1, 0);
-
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			i += .1f;
-			for (float x = min; x < max; x += step)
-			{
-				for (float y = min; y < max; y += step)
-				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
-					auto model = math::translate(math::mat4(1.0f), pos);
-					data.projection = cam.projection;
-					data.view = cam.view;
-					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
-					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
-					glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / sizeof(vtx));
-				}
-			}
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			ShaderCache::deleteShader("test");
-		}
-	};
-
-	struct Native_DrawArraysInstancedTest : public rendering_test
-	{
-		std::vector<math::mat4> models;
-
-		unsigned int bufferId;
-		unsigned int matrixBufferId;
-		unsigned int constantBufferId;
-		unsigned int vaoId;
-		unsigned int shaderId;
-		shader_handle shader;
-		uniformData data;
-
-		float i = 0;
-		int index = 0;
-
-		virtual void setup(RenderInterface* api) override
-		{
-			type = Native;
-			name = "DrawArraysInstanced";
-			log::debug("Initializing {}OGL_Test{}", stringify(type), name);
-			glfwSetWindowTitle(api->getWindow(), std::format("{}OGL_Test{}", stringify(type), name).c_str());
-
-			shader = ShaderCache::createShader("test", "resources/shaders/instance_cube.shader");
-			shaderId = shader->getId();
-
-			glGenBuffers(1, &constantBufferId);
-			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(uniformData), nullptr, GL_STATIC_DRAW);
-			glBindBufferRange(GL_UNIFORM_BUFFER, 0, constantBufferId, 0, 1);
-			glUseProgram(shaderId);
-			glUniformBlockBinding(shaderId, glGetUniformBlockIndex(shaderId, "ConstantBuffer"), 0);
-
-			glGenBuffers(1, &bufferId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_vertices), instance_vertices, static_cast<GLenum>(UsageType::STATICDRAW));
-
-			glUseProgram(shaderId);
-			glGenVertexArrays(1, &vaoId);
-			glBindVertexArray(vaoId);
-			glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
-			glVertexAttribDivisor(0, 0);
-
-			//glEnableVertexAttribArray(1);
-			//glVertexAttribPointer(1, 2, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec2), reinterpret_cast<void*>(0));
-			//glVertexAttribDivisor(1, 0);
-
-			glGenBuffers(1, &matrixBufferId);
-			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(math::mat4), nullptr, static_cast<GLenum>(UsageType::STATICDRAW));
-			glEnableVertexAttribArray(2);
-			glEnableVertexAttribArray(3);
-			glEnableVertexAttribArray(4);
-			glEnableVertexAttribArray(5);
-
-			glVertexAttribPointer(2, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(0 * sizeof(math::vec4)));
-			glVertexAttribPointer(3, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(1 * sizeof(math::vec4)));
-			glVertexAttribPointer(4, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(2 * sizeof(math::vec4)));
-			glVertexAttribPointer(5, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::mat4), reinterpret_cast<void*>(3 * sizeof(math::vec4)));
-
-			glVertexAttribDivisor(2, 1);
-			glVertexAttribDivisor(3, 1);
-			glVertexAttribDivisor(4, 1);
-			glVertexAttribDivisor(5, 1);
-
-			data.projection = cam.projection;
-			data.view = cam.view;
-			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
-			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
-			models.resize(instanceCount);
-		}
-
-		virtual void update(RenderInterface* api) override
-		{
-			i += .1f;
-			index = 0;
-			for (float x = min; x < max; x += instanceStep)
-			{
-				for (float y = min; y < max; y += instanceStep)
-				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
-					models[index] = math::translate(math::mat4(1.0f), pos);
-					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					index++;
-					if (index >= instanceCount)
-						break;
-				}
-				if (index >= instanceCount)
-					break;
-			}
-			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
-			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(math::mat4), models.data(), static_cast<GLenum>(UsageType::STATICDRAW));
-			glDrawArraysInstanced(GL_TRIANGLES, 0, sizeof(instance_vertices) / sizeof(vtx), instanceCount);
-		}
-
-		virtual void destroy(RenderInterface* api) override
-		{
-			ShaderCache::deleteShader("test");
-		}
-	};
 
 	struct Native_DrawIndexedTest : public rendering_test
 	{
@@ -1402,8 +544,6 @@ namespace rythe::rendering
 		unsigned int constantBufferId;
 		unsigned int shaderId;
 		shader_handle shader;
-		uniformData data;
-		camera cam;
 
 		float i = 0;
 
@@ -1419,23 +559,23 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &constantBufferId);
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(uniformData), nullptr, GL_STATIC_DRAW);
-			glBindBufferRange(GL_UNIFORM_BUFFER, 0, constantBufferId, 0, 1);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(data), &data, GL_STATIC_DRAW);
+			glBindBufferRange(GL_UNIFORM_BUFFER, 0, constantBufferId, 0, sizeof(data));
 			glUseProgram(shaderId);
 			glUniformBlockBinding(shaderId, glGetUniformBlockIndex(shaderId, "ConstantBuffer"), 0);
 
 			glGenBuffers(1, &vboId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(indVertices), indVertices, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ARRAY_BUFFER, meshHandle->vertices.size() * sizeof(math::vec4), meshHandle->vertices.data(), static_cast<GLenum>(UsageType::STATICDRAW));
 			glGenBuffers(1, &eboId);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshHandle->indices.size() * sizeof(unsigned int), meshHandle->indices.data(), static_cast<GLenum>(UsageType::STATICDRAW));
 			glUseProgram(shaderId);
 			glGenVertexArrays(1, &vaoId);
 			glBindVertexArray(vaoId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+			glVertexAttribPointer(0, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec4), reinterpret_cast<void*>(0));
 			glVertexAttribDivisor(0, 0);
 
 			//glEnableVertexAttribArray(1);
@@ -1462,23 +602,25 @@ namespace rythe::rendering
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
+			data.projection = cam.projection;
+			data.view = cam.calculate_view(&transf);
+
 		}
 
 		virtual void update(RenderInterface* api) override
 		{
+			data.view = cam.calculate_view(&transf);
 			i += .1f;
-			for (float x = min; x < max; x += step)
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
 			{
-				for (float y = min; y < max; y += step)
+				for (float y = 0; y < num; y += 1)
 				{
-					math::vec3 pos = { x + (step / 2.f), y + (step / 2.f), 0.0f };
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0.0f };
 					auto model = math::translate(math::mat4(1.0f), pos);
-
-					data.projection = cam.projection;
-					data.view = cam.view;
 					data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
-					glDrawElements(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
+					glDrawElements(GL_TRIANGLES, meshHandle->indices.size(), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
 				}
 			}
 
@@ -1501,8 +643,6 @@ namespace rythe::rendering
 		unsigned int matrixBufferId;
 		unsigned int shaderId;
 		shader_handle shader;
-		uniformData data;
-		camera cam;
 
 		float i = 0;
 		int index = 0;
@@ -1526,16 +666,16 @@ namespace rythe::rendering
 
 			glGenBuffers(1, &vboId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(instance_indVertices), instance_indVertices, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ARRAY_BUFFER, meshHandle->vertices.size() * sizeof(math::vec4), meshHandle->vertices.data(), static_cast<GLenum>(UsageType::STATICDRAW));
 			glGenBuffers(1, &eboId);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, static_cast<GLenum>(UsageType::STATICDRAW));
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshHandle->indices.size() * sizeof(unsigned int), meshHandle->indices.data(), static_cast<GLenum>(UsageType::STATICDRAW));
 			glUseProgram(shaderId);
 			glGenVertexArrays(1, &vaoId);
 			glBindVertexArray(vaoId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glEnableVertexAttribArray(0);
-			glVertexAttribPointer(0, 3, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec3), reinterpret_cast<void*>(0));
+			glVertexAttribPointer(0, 4, static_cast<GLenum>(DataType::FLOAT), false, sizeof(math::vec4), reinterpret_cast<void*>(0));
 			glVertexAttribDivisor(0, 0);
 
 			//glEnableVertexAttribArray(1);
@@ -1563,7 +703,7 @@ namespace rythe::rendering
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
 
 			data.projection = cam.projection;
-			data.view = cam.view;
+
 
 			glBindBuffer(GL_UNIFORM_BUFFER, constantBufferId);
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(uniformData), &data);
@@ -1572,13 +712,16 @@ namespace rythe::rendering
 
 		virtual void update(RenderInterface* api) override
 		{
+			data.view = cam.calculate_view(&transf);
+
 			i += .1f;
 			index = 0;
-			for (float x = min; x < max; x += instanceStep)
+			int num = math::sqrt(instanceCount);
+			for (float x = 0; x < num; x += 1)
 			{
-				for (float y = min; y < max; y += instanceStep)
+				for (float y = 0; y < num; y += 1)
 				{
-					math::vec3 pos = { x + (instanceStep / 2.f), y + (instanceStep / 2.f), 0.0f };
+					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0.0f };
 					models[index] = math::translate(math::mat4(1.0f), pos);
 					models[index] = math::rotate(models[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 					index++;
@@ -1590,7 +733,7 @@ namespace rythe::rendering
 			}
 			glBindBuffer(GL_ARRAY_BUFFER, matrixBufferId);
 			glBufferData(GL_ARRAY_BUFFER, models.size() * sizeof(math::mat4), models.data(), static_cast<GLenum>(UsageType::STATICDRAW));
-			glDrawElementsInstanced(GL_TRIANGLES, sizeof(indicies) / sizeof(unsigned int), GL_UNSIGNED_INT, reinterpret_cast <void*>(0), instanceCount);
+			glDrawElementsInstanced(GL_TRIANGLES, meshHandle->vertices.size(), GL_UNSIGNED_INT, reinterpret_cast <void*>(0), instanceCount);
 
 		}
 
@@ -2184,8 +1327,8 @@ namespace rythe::rendering
 			if (inputLayout) inputLayout->Release();
 			if (vertexShader) vertexShader->Release();
 			if (pixelShader) pixelShader->Release();
-		}
-	};
+	}
+};
 #endif
 #pragma endregion
 }

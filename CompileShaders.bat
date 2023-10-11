@@ -1,0 +1,6 @@
+"tools/resources/shader compiler/shaderc" -f ../../../../application/sandbox/src/sandbox/resources/shaders/ogl/testFS -p 440 --type fragment -o ../../../../application/sandbox/src/sandbox/resources/shaders/testFS.sc --varyingdef ../../../../application/sandbox/src/sandbox/resources/shaders/varying.def.sc
+"tools/resources/shader compiler/shaderc" -f ../../../../application/sandbox/src/sandbox/resources/shaders/ogl/testVS -p 440 --type vertex -o ../../../../application/sandbox/src/sandbox/resources/shaders/testVS.sc --varyingdef ../../../../application/sandbox/src/sandbox/resources/shaders/varying.def.sc
+
+"tools/resources/shader compiler/shaderc" -f ../../../../application/sandbox/src/sandbox/resources/shaders/ogl/instance_testFS -p 440 --type fragment -o ../../../../application/sandbox/src/sandbox/resources/shaders/instance_testFS.sc --varyingdef ../../../../application/sandbox/src/sandbox/resources/shaders/varying.def.sc
+"tools/resources/shader compiler/shaderc" -f ../../../../application/sandbox/src/sandbox/resources/shaders/ogl/instance_testVS -p 440 --type vertex -o ../../../../application/sandbox/src/sandbox/resources/shaders/instance_testVS.sc --varyingdef ../../../../application/sandbox/src/sandbox/resources/shaders/varying.def.sc
+pause

@@ -13,6 +13,7 @@
 #include "core/containers/pointer.hpp"
 #include "core/events/eventbus.hpp"
 #include "core/events/defaults/component_event.hpp"
+#include "core/common/meta.hpp"
 
 namespace rythe::core::ecs
 {

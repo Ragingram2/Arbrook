@@ -54,7 +54,7 @@ namespace rythe::rendering
 
 				for (int i = 0; i < posCount; i++)
 				{
-					vertices.push_back(math::vec4(s_vertices[i].x, s_vertices[i].y, s_vertices[i].z, 0.0f));
+					vertices.push_back(math::vec4(s_vertices[i].x, s_vertices[i].y, s_vertices[i].z, 1.0f));
 				}
 			}
 			else
@@ -64,7 +64,6 @@ namespace rythe::rendering
 			{
 				auto s_colors = mesh->mColors[0];
 				auto posCount = mesh->mNumVertices;
-
 
 				for (int i = 0; i < posCount; i++)
 				{
