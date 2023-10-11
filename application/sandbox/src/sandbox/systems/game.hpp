@@ -11,7 +11,7 @@ namespace rythe::game
 		core::ecs::entity camera;
 		core::ecs::entity ent;
 		gfx::material mat;
-		gfx::mesh msh;
+		gfx::mesh_handle meshHandle;
 
 		math::vec3 camPos = math::vec3::zero;
 

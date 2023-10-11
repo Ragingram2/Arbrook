@@ -9,123 +9,11 @@ namespace rythe::game
 		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
 		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
 
-		std::vector<math::vec4> positions
-		{
-			//Back
-			 { -0.1f,  0.1f, -0.1f,1.0f	},//0
-			 {  0.1f, -0.1f, -0.1f,1.0f	},
-			 { -0.1f, -0.1f, -0.1f,1.0f	 },
-
-			 { -0.1f,  0.1f, -0.1f,1.0f	},
-			 {  0.1f,  0.1f, -0.1f,1.0f		},
-			 {  0.1f, -0.1f, -0.1f,1.0f	},
-
-			 //Front
-			  { -0.1f,  0.1f, 0.1f,1.0f		},
-			  { -0.1f, -0.1f, 0.1f,1.0f	},
-			  {  0.1f, -0.1f, 0.1f,1.0f		},
-
-			  { -0.1f,  0.1f, 0.1f,1.0f		},
-			  {  0.1f, -0.1f, 0.1f,1.0f		},
-			  {  0.1f,  0.1f, 0.1f,1.0f		},
-
-			  //Left
-			   {	0.1f, 0.1f, -0.1f,1.0f		},
-			   {	0.1f, -0.1f, 0.1f,1.0f		},
-			   {	0.1f, -0.1f,-0.1f,1.0f		},
-
-			   {	0.1f, 0.1f, -0.1f	,1.0f		},
-			   {	0.1f, 0.1f,  0.1f	,1.0f		},
-			   {0.1f, -0.1f, 0.1f,1.0f		},
-
-			   //Right
-				{	-0.1f,0.1f, -0.1f	,1.0f		},
-				{	-0.1f, -0.1f,-0.1f,1.0f	},
-				{	-0.1f, -0.1f, 0.1f,1.0f		},
-
-				{	-0.1f, 0.1f, -0.1f,1.0f		},
-				{-0.1f, -0.1f, 0.1f,1.0f		},
-				{	-0.1f, 0.1f,  0.1f,1.0f		},
-
-				//Bottom
-				 { -0.1f, -0.1f,  0.1f,1.0f	},
-				 { -0.1f, -0.1f, -0.1f,1.0f	},
-				 {  0.1f, -0.1f, -0.1f,1.0f	},
-
-				 { -0.1f, -0.1f,  0.1f,1.0f	},
-				 {  0.1f, -0.1f, -0.1f,1.0f	},
-				 {  0.1f, -0.1f,  0.1f,1.0f		},
-
-				 //Top
-				  { -0.1f, 0.1f,  0.1f,1.0f		},
-				  {  0.1f, 0.1f, -0.1f,1.0f		},
-				  { -0.1f, 0.1f, -0.1f,1.0f		},
-
-				  { -0.1f, 0.1f,  0.1f,1.0f		},
-				  {  0.1f, 0.1f	,  0.1f,1.0f	},
-				  {  0.1f, 0.1f, -0.1f,1.0f		}
-		};
-
-		std::vector<math::vec2> uvs
-		{
-			{	1.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-			{	1.0f, 0.0f	},
-
-			{	1.0f, 1.0f	},
-			{	0.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-
-
-			{	0.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-			{	1.0f, 0.0f	},
-
-			{	0.0f, 1.0f	},
-			{	1.0f, 0.0f	},
-			{	1.0f, 1.0f	},
-
-
-			{	1.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-			{	1.0f, 0.0f	},
-
-			{	1.0f, 1.0f	},
-			{	0.0f, 1.0f	},
-			{	0.0f, 0.0f },
-
-
-			{	0.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-			{	1.0f, 0.0f	},
-
-			{	0.0f, 1.0f	},
-			{	1.0f, 0.0f },
-			{	1.0f, 1.0f	},
-
-			{	0.0f, 1.0f	},
-			{	0.0f, 0.0f	},
-			{	1.0f, 0.0f	},
-
-			{	0.0f, 1.0f	},
-			{	1.0f, 0.0f	},
-			{	1.0f, 1.0f	},
-
-
-			{	0.0f, 1.0f	},
-			{	1.0f, 0.0f	},
-			{	0.0f, 0.0f	},
-
-			{	0.0f, 1.0f	},
-			{	1.0f, 1.0f	},
-			{	1.0f, 0.0f	}
-		};
-
 		mat.m_shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
 		mat.m_texture = gfx::TextureCache::createTexture2D("Rythe", "resources/textures/Rythe.png");
-		//msh.vertices = positions;
-		msh.texCoords = uvs;
 
+		meshHandle = gfx::MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
+		
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();
 		transf.scale = math::vec3(1.0f, 1.0f, 1.0f);
@@ -133,7 +21,7 @@ namespace rythe::game
 
 		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 		renderer.set_material(mat);
-		renderer.set_mesh(msh);
+		renderer.set_mesh(meshHandle);
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();

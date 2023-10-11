@@ -60,9 +60,9 @@ namespace rythe::rendering
 		void bind()
 		{
 			m_material.bind();
-			m_model.vertexBuffer->bind();
+			m_model.bind();
 			layout.bind();
-			//m_model.bind();
+
 		}
 	};
 }

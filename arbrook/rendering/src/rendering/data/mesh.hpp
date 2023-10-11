@@ -74,7 +74,6 @@ namespace rythe::rendering
 
 			if (mesh->HasFaces())
 			{
-
 				auto numFaces = mesh->mNumFaces;
 
 				for (int i = 0; i < numFaces; i++)
@@ -88,7 +87,15 @@ namespace rythe::rendering
 				}
 			}
 
-
+			if (mesh->HasTextureCoords(0))
+			{
+				auto coords = mesh->mTextureCoords[0];
+				auto numCoords = mesh->mNumUVComponents[0];
+				for (int i = 0; i < numCoords; i++)
+				{
+					texCoords.push_back(math::vec2(coords[i].x, coords[i].y));
+				}
+			}
 		}
 	};
 }

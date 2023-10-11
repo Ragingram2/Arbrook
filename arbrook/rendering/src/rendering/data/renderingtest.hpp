@@ -322,7 +322,6 @@ namespace rythe::rendering
 			| BGFX_STATE_WRITE_A
 			| BGFX_STATE_WRITE_Z
 			| BGFX_STATE_FRONT_CCW
-			| BGFX_STATE_MSAA
 			| 0;
 
 		float i = 0;
@@ -431,7 +430,6 @@ namespace rythe::rendering
 			| BGFX_STATE_WRITE_A
 			| BGFX_STATE_WRITE_Z
 			| BGFX_STATE_FRONT_CCW
-			| BGFX_STATE_MSAA
 			| 0;
 
 		float i = 0;
@@ -510,6 +508,7 @@ namespace rythe::rendering
 					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0.0f };
 					mtx[index] = math::translate(math::mat4(1.0f), pos);
 					mtx[index] = math::rotate(mtx[index], math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+					index++;
 				}
 			}
 

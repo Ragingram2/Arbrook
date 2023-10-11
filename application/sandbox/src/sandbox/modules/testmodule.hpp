@@ -12,7 +12,7 @@ namespace rythe::core
 		void setup() override
 		{
 			log::info("Initializing Test Module");
-			//reportSystem<game::Game>();
+			reportSystem<game::Game>();
 		}
 	};
 }
