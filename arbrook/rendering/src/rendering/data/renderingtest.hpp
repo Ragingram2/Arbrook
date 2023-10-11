@@ -534,9 +534,9 @@ namespace rythe::rendering
 		virtual void setup(RenderInterface* api) override
 		{
 			cam.fov = 90.f;
-			cam.nearZ = 0.1f;
+			cam.nearZ = 1.0f;
 			cam.farZ = 100.0f;
-			auto pos = math::vec3(0.0f, 0.0f, 0.0f);
+			auto pos = math::vec3(0.0f, 0.0f, -10.0f);
 			transf.rotation = math::quat(math::lookAt(pos, pos + math::vec3::forward, math::vec3::up));
 			transf.position = pos;
 			cam.calculate_projection();
@@ -579,7 +579,7 @@ namespace rythe::rendering
 			//	}
 			//}
 
-			math::vec3 pos = { 0.0f, 0.0f, -80.0f };
+			math::vec3 pos = { 0.0f, 0.0f, 0.0f };
 			auto model = math::translate(math::mat4(1.0f), pos);
 			model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 			model = math::scale(model, math::vec3(.1f, .1f, .1f));
