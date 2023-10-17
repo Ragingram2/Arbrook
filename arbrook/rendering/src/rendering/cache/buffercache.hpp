@@ -3,9 +3,11 @@
 #include <memory>
 #include <unordered_map>
 
-#include "core/core.hpp"
-#include "rendering/data/handles.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "core/logging/logging.hpp"
+
+#include "rendering/data/bufferhandle.hpp"
+#include "rendering/interface/buffer.hpp"
+
 
 namespace rythe::rendering
 {

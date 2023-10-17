@@ -6,8 +6,6 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 
-#include "rendering/data/vertex.hpp"
-
 
 namespace rythe::rendering
 {
@@ -21,6 +19,7 @@ namespace rythe::rendering
 
 	struct mesh
 	{
+		std::string name;
 		std::vector<math::vec4> vertices;
 		std::vector<math::vec4> colors;
 		std::vector<math::vec3> normals;
@@ -30,7 +29,7 @@ namespace rythe::rendering
 		std::vector<sub_mesh> submeshes;
 
 		mesh() = default;
-		mesh(const mesh& msh) : vertices(msh.vertices), colors(msh.colors), normals(msh.normals), texCoords(msh.texCoords), indices(msh.indices), submeshes(msh.submeshes) {}
+		mesh(const mesh& msh) : name(msh.name), vertices(msh.vertices), colors(msh.colors), normals(msh.normals), texCoords(msh.texCoords), indices(msh.indices), submeshes(msh.submeshes) {}
 		mesh(const aiScene* scene)
 		{
 			initialize(scene);
@@ -38,6 +37,7 @@ namespace rythe::rendering
 
 		void initialize(const aiScene* scene)
 		{
+			name = std::string(scene->mName.C_Str());
 			if (!scene->HasMeshes())
 			{
 				log::error("The scene we tried to load did not contain any meshes, curious");

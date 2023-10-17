@@ -9,9 +9,10 @@ namespace rythe::game
 		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
 		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
 
-		mat.m_shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
-		mat.m_texture = gfx::TextureCache::createTexture2D("Rythe", "resources/textures/Rythe.png");
+		//mat.m_shader = gfx::ShaderCache::createShader("default", "resources/shaders/default.shader");
+		//mat.m_texture = gfx::TextureCache::createTexture2D("Rythe", "resources/textures/Rythe.png");
 
+		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/default.shader","resources/textures/Rythe.png");
 		meshHandle = gfx::MeshCache::loadMesh("Teapot", "resources/meshes/teapot.obj");
 		
 		ent = createEntity("Cube");
@@ -27,7 +28,7 @@ namespace rythe::game
 		auto& camTransf = camera.addComponent<core::transform>();
 		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);
 		auto& cam = camera.addComponent<gfx::camera>();
-		cam.farZ = 1000.f;
+		cam.farZ = 100.f;
 		cam.nearZ = .001f;
 		cam.fov = 60.f;
 	}

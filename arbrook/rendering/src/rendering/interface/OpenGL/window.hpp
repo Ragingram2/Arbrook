@@ -19,6 +19,7 @@ namespace rythe::rendering::internal
 
 	public:
 		window() = default;
+		window(window& hwnd) : m_window(hwnd.getWindow()), m_resolution(hwnd.m_resolution), m_windowName(hwnd.m_windowName) { }
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
 
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)

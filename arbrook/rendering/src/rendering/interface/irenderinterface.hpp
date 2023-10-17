@@ -2,14 +2,11 @@
 #include <memory>
 #include <string>
 
-#include "rendering/data/handles.hpp"
-#include "rendering/data/shadersource.hpp"
 #include "rendering/interface/enumtypes.hpp"
-#include "rendering/interface/ishader.hpp"
 #include "rendering/interface/config.hpp"
-#include Shader_HPP_PATH
-#include Texture_HPP_PATH
-#include Buffer_HPP_PATH
+//#include Shader_HPP_PATH
+//#include Texture_HPP_PATH
+//#include Buffer_HPP_PATH
 #include Window_HPP_PATH
 #include EnumTypes_HPP_PATH
 

@@ -10,6 +10,7 @@ namespace rythe::rendering
 		Ibuffer<internal::buffer>* m_data = nullptr;
 		buffer_handle() = default;
 		buffer_handle(Ibuffer<internal::buffer>* data) : m_data(data) {}
+		buffer_handle(Ibuffer<internal::buffer>& data) : m_data(&data) {}
 
 		Ibuffer<internal::buffer>* operator->() { return m_data; }
 		operator Ibuffer<internal::buffer>& () const { return *m_data; }

@@ -3,7 +3,6 @@
 
 #include "rendering/data/textureparameters.hpp"
 #include "rendering/interface/enumtypes.hpp"
-#include "rendering/data/handles.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
@@ -11,14 +10,10 @@ namespace rythe::rendering
 {
 	class TextureCache;
 	template<typename APIType>
-	class IRenderInterface;
-	//template<typename dataType>
-	//struct data_handle;
+	struct Itexture;
 	namespace internal
 	{
-		struct inputlayout;
 		struct texture;
-		class RenderInterface;
 	}
 }
 
@@ -28,10 +23,7 @@ namespace rythe::rendering
 	struct Itexture
 	{
 		friend class TextureCache;
-		friend class IRenderInterface<internal::RenderInterface>;
-		friend struct internal::inputlayout;
-		//friend struct data_handle<Itexture<internal::texture>>;
-		friend struct texture_handle;
+		friend struct Itexture<internal::texture>;
 	private:
 		APIType m_impl;
 	public:

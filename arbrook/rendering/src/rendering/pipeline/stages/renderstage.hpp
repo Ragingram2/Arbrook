@@ -26,7 +26,7 @@ namespace rythe::rendering
 				cam.calculate_view(&camTransf);
 				cam.calculate_projection();
 				math::mat4 mat = { cam.projection * cam.view * transf.to_world()};
-				buffer_handle buff = renderer.m_model.matrixBuffer;
+				buffer_handle buff = renderer.m_model->matrixBuffer;
 				buff->bufferData(&mat, 1);
 			}
 			RI->checkError();
@@ -40,10 +40,10 @@ namespace rythe::rendering
 				auto& transf = ent.getComponent<core::transform>();
 				cam.calculate_view(&camTransf);
 				math::mat4 mat = { cam.projection * cam.view * transf.to_world() };
-				buffer_handle buff = renderer.m_model.matrixBuffer;
+				buffer_handle buff = renderer.m_model->matrixBuffer;
 				buff->bufferData(&mat, 1);
 				renderer.bind();
-				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.m_mesh.vertices.size());
+				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.m_mesh->vertices.size());
 			}
 			RI->checkError();
 		}

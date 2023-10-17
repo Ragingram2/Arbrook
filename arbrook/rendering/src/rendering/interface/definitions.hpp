@@ -21,6 +21,7 @@ namespace rythe::rendering
 	typedef Ibuffer<internal::buffer> buffer;
 	typedef Ishader<internal::shader> shader;
 	typedef Itexture<internal::texture> texture;
+	typedef Iwindow<internal::window> window;
 }
 
 #define Screen_Width 1280.f

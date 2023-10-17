@@ -4,3 +4,5 @@
 #include "shadercache.hpp"
 #include "texturecache.hpp"
 #include "meshcache.hpp"
+#include "materialcache.hpp"
+#include "modelcache.hpp"

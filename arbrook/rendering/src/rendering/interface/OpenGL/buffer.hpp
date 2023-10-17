@@ -6,8 +6,8 @@
 
 #include <rsl/primitives>
 
-#include "core/core.hpp"
-
+//#include "rendering/interface/ibuffer.hpp"
+//#include "rendering/interface/iinputlayout.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
@@ -15,11 +15,9 @@ namespace rythe::rendering
 {
 	template<typename APIType>
 	struct Ibuffer;
-
-	struct buffer_handle;
 	namespace internal
 	{
-		struct inputlayout;
+		struct buffer;
 	}
 }
 
@@ -29,8 +27,8 @@ namespace rythe::rendering::internal
 	{
 		//friend struct rendering::data_handle<Ibuffer<internal::buffer>>;
 		friend struct Ibuffer<internal::buffer>;
-		friend struct buffer_handle;
-		friend struct internal::inputlayout;
+		//friend struct rythe::rendering::buffer_handle;
+		//friend struct internal::inputlayout;
 	public:
 		unsigned int id;
 		std::string name;

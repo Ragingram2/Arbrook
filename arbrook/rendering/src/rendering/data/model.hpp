@@ -1,33 +1,63 @@
 #pragma once
-#include "rendering/data/handles.hpp"
-#include "rendering/data/bufferhandle.hpp"
+
 #include "rendering/data/meshhandle.hpp"
+#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/bufferhandle.hpp"
+
+#include "rendering/interface/buffer.hpp"
+#include "rendering/interface/inputlayout.hpp"
+#include "rendering/cache/buffercache.hpp"
 
 namespace rythe::rendering
 {
 	struct model
 	{
+		inputlayout layout;
 		buffer_handle indexBuffer;
 		buffer_handle vertexBuffer;
 		buffer_handle colorBuffer;
 		buffer_handle normalBuffer;
-		buffer_handle tangenBuffer;
+		buffer_handle tangentBuffer;
 		buffer_handle uvBuffer;
 		buffer_handle matrixBuffer;
 
-		void initialize(mesh_handle handle)
+		model() = default;
+		model(const model& mod) : indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
+
+		void initialize(internal::window& hwnd, shader_handle shader, mesh_handle handle, bool instanced)
 		{
-			vertexBuffer->bufferData(handle->vertices.data(),handle->vertices.size());
-			indexBuffer->bufferData(handle->indices.data(), handle->indices.size());
-			colorBuffer->bufferData(handle->colors.data(), handle->colors.size());
-			uvBuffer->bufferData(handle->texCoords.data(), handle->texCoords.size());
+			layout.initialize(hwnd, 1, shader);
+			layout.bind();
+
+			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, handle->vertices);
+			layout.setAttributePtr(vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
+
+			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW,handle->indices);
+
+			if (handle->texCoords.size() > 0)
+			{
+				uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, handle->texCoords);
+				layout.setAttributePtr(uvBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(math::vec2), 0);
+			}
+
+			if (instanced)
+			{
+				matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+			}
+			layout.submitAttributes();
 		}
 
 		void bind()
 		{
+			indexBuffer->bind();
 			vertexBuffer->bind();
 			uvBuffer->bind();
 			matrixBuffer->bind();
+			layout.bind();
 		}
 	};
 

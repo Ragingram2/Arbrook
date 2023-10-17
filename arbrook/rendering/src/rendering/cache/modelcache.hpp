@@ -3,21 +3,14 @@
 #include <memory>
 #include <unordered_map>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-#include "rendering/data/model.hpp"
-#include "rendering/data/modelhandle.hpp"
 #include "rendering/data/meshhandle.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/data/modelhandle.hpp"
 
 namespace rythe::rendering
 {
 	class ModelCache
 	{
 	private:
-		static Assimp::Importer m_importer;
 		static std::unordered_map<std::string, std::unique_ptr<model>> m_models;
 	public:
 		//needs import settings

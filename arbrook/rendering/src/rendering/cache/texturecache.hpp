@@ -4,9 +4,8 @@
 #include <memory>
 
 #include "core/core.hpp"
-#include "rendering/data/handles.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/texture.hpp"
 
 
 namespace rythe::rendering

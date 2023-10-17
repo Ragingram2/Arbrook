@@ -2,34 +2,21 @@
 #include <string>
 
 #include "rendering/interface/enumtypes.hpp"
-#include "rendering/data/handles.hpp"
-#include "rendering/data/bufferhandle.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering
 {
+	struct buffer_handle;
 	class ShaderCache;
-	template<typename APIType>
-	class IRenderInterface;
-	namespace internal
-	{
-		struct inputlayout;
-		struct shader;
-		class RenderInterface;
-	}
-}
 
-namespace rythe::rendering
-{
 	template<typename APIType>
 	struct Ishader
 	{
 		friend class ShaderCache;
-		friend class IRenderInterface<internal::RenderInterface>;
-		friend struct internal::inputlayout;
-		//friend struct data_handle<Ishader<internal::shader>>;
-		friend struct shader_handle;
+		//friend class IRenderInterface<internal::RenderInterface>;
+		//friend struct internal::inputlayout;
+		//friend struct shader_handle;
 	private:
 		APIType m_impl;
 	public:

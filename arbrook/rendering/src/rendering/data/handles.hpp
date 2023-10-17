@@ -8,6 +8,13 @@
 //#include Texture_HPP_PATH
 //#include Buffer_HPP_PATH
 
+#include "rendering/data/bufferhandle.hpp"
+#include "rendering/data/meshhandle.hpp"
+#include "rendering/data/modelhandle.hpp"
+#include "rendering/data/shaderhandle.hpp"
+#include "rendering/data/texturehandle.hpp"
+#include "rendering/data/materialhandle.hpp"
+
 namespace rythe::rendering
 {
 	//template<typename dataType>

@@ -1,22 +1,24 @@
 #pragma once
+
 #include "core/components/property.hpp"
-#include "rendering/data/model.hpp"
-#include "rendering/interface/definitions.hpp"
-#include "rendering/cache/buffercache.hpp"
-#include "rendering/data/mesh.hpp"
-#include "rendering/data/material.hpp"
+//#include "rendering/interface/definitions.hpp"
+#include "rendering/data/materialhandle.hpp"
+#include "rendering/data/modelhandle.hpp"
+#include "rendering/data/meshhandle.hpp"
+
+#include "rendering/interface/config.hpp"
+#include Window_HPP_PATH 
 
 namespace rythe::rendering
 {
 	struct mesh_renderer
 	{
 	private:
-		//bool m_instanced = true;
+		bool m_instanced = true;
 	public:
-		material m_material;
-		model m_model;
-		mesh m_mesh;
-		inputlayout layout;
+		material_handle m_material;
+		model_handle m_model;
+		mesh_handle m_mesh;
 
 		//mesh_renderer() :
 		//	vertexBuffer(&m_model.vertexBuffer), uvBuffer(&m_model.uvBuffer), indexBuffer(&m_model.indexBuffer), matrixBuffer(&m_model.matrixBuffer),
@@ -32,37 +34,28 @@ namespace rythe::rendering
 
 		void initialize(internal::window& hwnd)
 		{
-			layout.initialize(hwnd, 1, m_material.m_shader);
-
-			m_model.vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, m_mesh.vertices);
-			layout.setAttributePtr(m_model.vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
-
-			m_model.uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, m_mesh.texCoords);
-			layout.setAttributePtr(m_model.uvBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(math::vec2), 0);
-
-			m_model.matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER);
-			layout.setAttributePtr(m_model.matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(m_model.matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(m_model.matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.setAttributePtr(m_model.matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-			layout.submitAttributes();
+			m_model->initialize(hwnd, m_material->m_shader, m_mesh, m_instanced);
 		}
 
-		void set_mesh(mesh msh)
+		void set_model(model_handle handle)
 		{
-			m_mesh = msh;
+			m_model = handle;
 		}
-		void set_material(material mat)
+
+		void set_mesh(mesh_handle handle)
+		{
+			m_mesh = handle;
+		}
+
+		void set_material(material_handle mat)
 		{
 			m_material = mat;
 		}
 
 		void bind()
 		{
-			m_material.bind();
-			m_model.bind();
-			layout.bind();
-
+			m_material->bind();
+			m_model->bind();
 		}
 	};
 }

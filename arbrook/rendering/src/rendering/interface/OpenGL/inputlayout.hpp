@@ -8,9 +8,7 @@
 #include <rsl/primitives>
 
 #include "core/logging/logging.hpp"
-#include "rendering/data/handles.hpp"
 #include "rendering/data/shaderhandle.hpp"
-#include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/data/vertexattribute.hpp"
 #include "rendering/interface/config.hpp"
@@ -25,14 +23,12 @@ namespace rythe::rendering::internal
 	public:
 		unsigned int id;
 	private:
-		window m_hwnd;
 		std::unordered_map<unsigned int, std::vector<vertexattribute>> m_vertexAttribs;
 		std::unordered_map<int, std::set<int>> m_flatIndeces;
 	public:
 
 		void initialize(window& hwnd, unsigned int numBuffers, shader_handle shader)
 		{
-			m_hwnd = hwnd;
 			glGenVertexArrays(1, &id);
 		}
 
@@ -44,7 +40,6 @@ namespace rythe::rendering::internal
 		void setAttributePtr(buffer_handle buf, const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
 			m_vertexAttribs[buf->getId()].emplace_back(vertexattribute{ attribName.c_str(), index, components, inputSlot,stride, offset, inputClass, instancedStep });
-			//m_flatIndeces[inputSlot].insert(index);
 		}
 
 		void submitAttributes()
@@ -52,7 +47,6 @@ namespace rythe::rendering::internal
 			bind();
 			if (m_vertexAttribs.size() > 0)
 			{
-				log::debug("VertexAttribs: {}",m_vertexAttribs.size());
 				for (auto& [bufId, attribs] : m_vertexAttribs)
 				{
 					for (auto& attrib : attribs)

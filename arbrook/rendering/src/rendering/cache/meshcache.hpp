@@ -1,6 +1,4 @@
 #pragma once
-
-#pragma once
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -9,9 +7,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include "rendering/data/mesh.hpp"
 #include "rendering/data/meshhandle.hpp"
-#include "rendering/interface/definitions.hpp"
 
 namespace rythe::rendering
 {

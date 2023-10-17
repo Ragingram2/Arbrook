@@ -5,10 +5,10 @@
 #include <memory>
 #include <unordered_map>
 
-#include "core/core.hpp"
 #include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/data/shaderhandle.hpp"
+#include "rendering/interface/shader.hpp"
+
 
 namespace rythe::rendering
 {
