@@ -35,13 +35,13 @@ namespace rythe::rendering::internal
 		D3D11_DEPTH_STENCIL_DESC m_depthStencilDesc;
 		D3D11_DEPTH_STENCIL_VIEW_DESC m_depthStencilViewDesc;
 		float m_colorData[4];
-		window m_hwnd;
+		window hwnd;
 	public:
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing DX11");
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-			m_hwnd.initialize(res, name, window);
+			hwnd.initialize(res, name, window);
 
 			ZeroMemory(&m_swapChainDesc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
@@ -50,7 +50,7 @@ namespace rythe::rendering::internal
 			m_swapChainDesc.BufferDesc.Width = res.x;
 			m_swapChainDesc.BufferDesc.Height = res.y;
 			m_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			m_swapChainDesc.OutputWindow = glfwGetWin32Window(m_hwnd.getWindow());
+			m_swapChainDesc.OutputWindow = glfwGetWin32Window(hwnd.getWindow());
 			m_swapChainDesc.SampleDesc.Count = 1;
 			m_swapChainDesc.Windowed = TRUE;
 			m_swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
@@ -65,20 +65,20 @@ namespace rythe::rendering::internal
 				NULL,
 				D3D11_SDK_VERSION,
 				&m_swapChainDesc,
-				&m_hwnd.swapchain,
-				&m_hwnd.dev,
+				&hwnd.swapchain,
+				&hwnd.dev,
 				NULL,
-				&m_hwnd.devcon);
+				&hwnd.devcon);
 
 #ifdef _DEBUG
-			hr = m_hwnd.dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_hwnd.infoQueue);
+			hr = hwnd.dev->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&hwnd.infoQueue);
 			CHECKERROR(hr, "Retrieving the info queue failed", checkError());
 #endif
 
-			hr = m_hwnd.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&m_backBuffer);
+			hr = hwnd.swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&m_backBuffer);
 			CHECKERROR(hr, "Retrieving the backbuffer failed", checkError());
 
-			hr = m_hwnd.dev->CreateRenderTargetView(m_backBuffer, NULL, &m_hwnd.backbuffer);
+			hr = hwnd.dev->CreateRenderTargetView(m_backBuffer, NULL, &hwnd.backbuffer);
 			CHECKERROR(hr, "Creating a render target view failed", checkError());
 
 			m_backBuffer->Release();
@@ -97,25 +97,25 @@ namespace rythe::rendering::internal
 			m_depthTexDesc.CPUAccessFlags = 0;
 			m_depthTexDesc.MiscFlags = 0;
 
-			hr = m_hwnd.dev->CreateTexture2D(&m_depthTexDesc, NULL, &m_hwnd.depthStencilBuffer);
+			hr = hwnd.dev->CreateTexture2D(&m_depthTexDesc, NULL, &hwnd.depthStencilBuffer);
 			CHECKERROR(hr, "Creating the depth texture failed", checkError());
 
 			ZeroMemory(&m_depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 
-			hr = m_hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
+			hr = hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
 			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
 
-			m_hwnd.devcon->OMSetDepthStencilState(m_depthStencilState, 1);
+			hwnd.devcon->OMSetDepthStencilState(m_depthStencilState, 1);
 
 			ZeroMemory(&m_depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 
 			m_depthStencilViewDesc.Format = m_depthTexDesc.Format;
 			m_depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
 
-			hr = m_hwnd.dev->CreateDepthStencilView(m_hwnd.depthStencilBuffer, &m_depthStencilViewDesc, &m_hwnd.depthStencilView);
+			hr = hwnd.dev->CreateDepthStencilView(hwnd.depthStencilBuffer, &m_depthStencilViewDesc, &hwnd.depthStencilView);
 			CHECKERROR(hr, "Creating the depth stencil view failed", checkError());
 
-			m_hwnd.devcon->OMSetRenderTargets(1, &m_hwnd.backbuffer, m_hwnd.depthStencilView);
+			hwnd.devcon->OMSetRenderTargets(1, &hwnd.backbuffer, hwnd.depthStencilView);
 
 			ZeroMemory(&m_rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
@@ -131,10 +131,10 @@ namespace rythe::rendering::internal
 			m_rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
 			// Create the rasterizer state object.
-			hr = m_hwnd.dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState);
+			hr = hwnd.dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState);
 			CHECKERROR(hr, "Creating rasterizer state failed", checkError());
 
-			m_hwnd.devcon->RSSetState(m_rasterizerState);
+			hwnd.devcon->RSSetState(m_rasterizerState);
 
 			setViewport(1, 0, 0, res.x, res.y, 0, 1);
 
@@ -142,84 +142,84 @@ namespace rythe::rendering::internal
 
 		void close()
 		{
-			m_hwnd.swapchain->SetFullscreenState(FALSE, NULL);
+			hwnd.swapchain->SetFullscreenState(FALSE, NULL);
 
-			m_hwnd.swapchain->Release();
-			m_hwnd.backbuffer->Release();
-			m_hwnd.dev->Release();
-			m_hwnd.devcon->Release();
+			hwnd.swapchain->Release();
+			hwnd.backbuffer->Release();
+			hwnd.dev->Release();
+			hwnd.devcon->Release();
 		}
 
 		GLFWwindow* getWindow()
 		{
-			return m_hwnd.getWindow();
+			return hwnd.getWindow();
 		}
 
 		window& getHwnd()
 		{
-			return m_hwnd;
+			return hwnd;
 		}
 
 		void makeCurrent()
 		{
-			m_hwnd.makeCurrent();
+			hwnd.makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
 		{
-			m_hwnd.setSwapInterval(interval);
+			hwnd.setSwapInterval(interval);
 		}
 
 		bool shouldWindowClose()
 		{
-			return m_hwnd.shouldClose();
+			return hwnd.shouldClose();
 		}
 
 		void setWindowTitle(const std::string& name)
 		{
-			m_hwnd.setWindowTitle(name);
+			hwnd.setWindowTitle(name);
 		}
 
 		void pollEvents()
 		{
-			m_hwnd.pollEvents();
+			hwnd.pollEvents();
 		}
 
 		void swapBuffers()
 		{
-			m_hwnd.swapchain->Present(0, 0);
+			hwnd.swapchain->Present(0, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
 		{
-			m_hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			m_hwnd.devcon->Draw(vertexCount, startVertex);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->Draw(vertexCount, startVertex);
 		}
 
 		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance)
 		{
-			m_hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			m_hwnd.devcon->DrawInstanced(vertexCount, instanceCount, startVertex, startInstance);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawInstanced(vertexCount, instanceCount, startVertex, startInstance);
 		}
 
 		void drawIndexed(PrimitiveType mode, unsigned int indexCount, unsigned int startIndex, unsigned int baseVertex)
 		{
-			m_hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			m_hwnd.devcon->DrawIndexed(indexCount, startIndex, baseVertex);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawIndexed(indexCount, startIndex, baseVertex);
 		}
 
 		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
-			m_hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
-			m_hwnd.devcon->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
+			hwnd.devcon->IASetPrimitiveTopology(static_cast<D3D11_PRIMITIVE_TOPOLOGY>(mode));
+			hwnd.devcon->DrawIndexedInstanced(indexCount, instanceCount, startIndex, baseVertex, startInstance);
 		}
 
 		void clear(internal::ClearBit flags)
 		{
 			if (flags == internal::ClearBit::COLOR_DEPTH_STENCIL || flags == internal::ClearBit::DEPTH_STENCIL || flags == internal::ClearBit::DEPTH || flags == internal::ClearBit::STENCIL)
-				m_hwnd.devcon->ClearDepthStencilView(m_hwnd.depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
+				hwnd.devcon->ClearDepthStencilView(hwnd.depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
 			if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
-				m_hwnd.devcon->ClearRenderTargetView(m_hwnd.backbuffer, m_colorData);
+				hwnd.devcon->ClearRenderTargetView(hwnd.backbuffer, m_colorData);
 		}
 
 		void setClearColor(math::vec4 color)
@@ -234,8 +234,8 @@ namespace rythe::rendering::internal
 		{
 			if (width == 0 && height == 0)
 			{
-				width = m_hwnd.m_resolution.x;
-				height = m_hwnd.m_resolution.y;
+				width = hwnd.m_resolution.x;
+				height = hwnd.m_resolution.y;
 			}
 
 			ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
@@ -247,7 +247,7 @@ namespace rythe::rendering::internal
 			m_viewport.MinDepth = minDepth;
 			m_viewport.MaxDepth = maxDepth;
 
-			m_hwnd.devcon->RSSetViewports(numViewPorts, &m_viewport);
+			hwnd.devcon->RSSetViewports(numViewPorts, &m_viewport);
 
 		}
 
@@ -332,29 +332,29 @@ namespace rythe::rendering::internal
 
 		void updateDepthStencil()
 		{
-			HRESULT hr = m_hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
+			HRESULT hr = hwnd.dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
 			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
 
-			m_hwnd.devcon->OMSetDepthStencilState(m_depthStencilState, 1);
+			hwnd.devcon->OMSetDepthStencilState(m_depthStencilState, 1);
 		}
 
 		//createVAO();
 
 		void createShader(shader* shader, const std::string& name, const shader_source& source)
 		{
-			shader->initialize(m_hwnd, name, source);
+			shader->initialize(hwnd, name, source);
 		}
 
 		void createTexture2D(texture* texture, const std::string& name, const std::string& filepath, texture_parameters params = { rendering::WrapMode::REPEAT ,rendering::WrapMode::REPEAT, rendering::FilterMode::LINEAR,rendering::FormatType::RGBA8UN, 1 }, bool generateMipMaps = false)
 		{
-			texture->initialize(m_hwnd, TargetType::TEXTURE2D, UsageType::IMMUTABLE, params, generateMipMaps);
+			texture->initialize(hwnd, TargetType::TEXTURE2D, UsageType::IMMUTABLE, params, generateMipMaps);
 			texture->loadData(filepath);
 		}
 
 		template<typename elementType>
 		void createBuffer(buffer* buffer, TargetType target, UsageType usage, elementType* data = nullptr, int size = 1)
 		{
-			buffer->initialize<elementType>(m_hwnd, target, usage, size);
+			buffer->initialize<elementType>(hwnd, target, usage, size);
 			if (data)
 			{
 				buffer->bufferData(data);
@@ -363,7 +363,9 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
-			m_hwnd.checkError();
+			hwnd.checkError();
 		}
 	};
+
+	inline window RenderInterface::hwnd;
 }

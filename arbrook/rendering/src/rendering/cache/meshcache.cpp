@@ -16,7 +16,7 @@ namespace rythe::rendering
 
 		const aiScene* scene = m_importer.ReadFile(filePath, aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_FlipWindingOrder);
 		auto mes = m_meshes.emplace(name, std::make_unique<mesh>()).first->second.get();
-		mes->initialize(scene);
+		mes->load(scene);
 		return { mes };
 	}
 
@@ -35,6 +35,14 @@ namespace rythe::rendering
 		if (m_meshes.contains(name))
 		{
 			m_meshes.erase(name);
+		}
+	}
+
+	void MeshCache::importMeshes(const std::string& filePath)
+	{
+		for(auto& p : fs::recursive_directory_iterator(filePath))
+		{
+			loadMesh(p.path().filename().string(), p.path().stem().string());
 		}
 	}
 }

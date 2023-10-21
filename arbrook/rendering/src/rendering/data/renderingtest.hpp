@@ -198,17 +198,22 @@ namespace rythe::rendering
 
 			layout.bind();
 			i += .1f;
-			int num = math::sqrt(instanceCount);
-			for (float x = 0; x < num; x += 1)
-			{
-				for (float y = 0; y < num; y += 1)
-				{
-					math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0 };
-					auto model = math::translate(math::mat4(1.0f), pos);
-					model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
-					data.model = model;
-				}
-			}
+			//int num = math::sqrt(instanceCount);
+			//for (float x = 0; x < num; x += 1)
+			//{
+			//	for (float y = 0; y < num; y += 1)
+			//	{
+			//		math::vec3 pos = modelPosition + math::vec3{ x* (10.f / num), y* (10.f / num), 0 };
+			//		auto model = math::translate(math::mat4(1.0f), pos);
+			//		model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+			//		data.model = model;
+			//	}
+			//}
+
+			math::vec3 pos = modelPosition + math::vec3{ 0, 0, 0 };
+			auto model = math::translate(math::mat4(1.0f), pos);
+			model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
+			data.model = model;
 
 			shader->setData("ConstantBuffer", &data);
 			vBuffer->bind();

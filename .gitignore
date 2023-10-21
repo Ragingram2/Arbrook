@@ -403,3 +403,5 @@ arbrook/core/src/core/core.vcxproj.filters
 *.filters
 *.vcxproj
 *.sln
+arbrook/rendering/include
+arbrook/rendering/include

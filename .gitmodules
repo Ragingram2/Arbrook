@@ -1,14 +1,11 @@
 [submodule "include/rythe-standard-library"]
 	path = include/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "include/imgui"]
-	path = include/imgui
+[submodule "arbrook/rendering/include/imgui"]
+	path = arbrook/rendering/include/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
-[submodule "include/glfw"]
-	path = include/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "include/glew"]
-	path = include/glew
+[submodule "arbrook/rendering/include/glew"]
+	path = arbrook/rendering/include/glew
 	url = https://github.com/nigels-com/glew.git
 [submodule "include/gainput"]
 	path = include/gainput

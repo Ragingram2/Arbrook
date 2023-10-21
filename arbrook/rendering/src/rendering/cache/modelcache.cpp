@@ -1,26 +1,46 @@
 #include "rendering/cache/modelcache.hpp"
+#include "rendering/cache/meshcache.hpp"
 
 namespace rythe::rendering
 {
-	std::unordered_map<std::string, std::unique_ptr<model>> ModelCache::m_models;
+	std::unordered_map<rsl::id_type, std::unique_ptr<model>> ModelCache::m_models;
+
+	model_handle ModelCache::createModel(const std::string& name, const std::string& filePath)
+	{
+		rsl::id_type id = rsl::nameHash(name);
+
+		if (m_models.contains(id))
+		{
+			log::warn("Model {} already exists, ignoring new model, and returning existing one", name);
+			return { m_models[id].get() };
+		}
+
+		auto mod = m_models.emplace(id, std::make_unique<model>()).first->second.get();
+		mod->mesh = MeshCache::loadMesh(name, filePath);
+		return { mod };
+	}
 
 	model_handle ModelCache::createModel(const std::string& name, mesh_handle handle)
 	{
-		if (m_models.contains(name))
+		rsl::id_type id = rsl::nameHash(name);
+
+		if (m_models.contains(id))
 		{
 			log::warn("Model {} already exists, ignoring new model, and returning existing one", name);
-			return { m_models[name].get() };
+			return { m_models[id].get() };
 		}
-		auto mod = m_models.emplace(name, std::make_unique<model>()).first->second.get();
-		//mod->initialize(handle);
+		auto mod = m_models.emplace(id, std::make_unique<model>()).first->second.get();
+		mod->mesh = handle;
 		return { mod };
 	}
 
 	model_handle ModelCache::getModel(const std::string& name)
 	{
-		if (m_models.contains(name))
+		rsl::id_type id = rsl::nameHash(name);
+
+		if (m_models.contains(id))
 		{
-			return { m_models[name].get() };
+			return { m_models[id].get() };
 		}
 		log::warn("Model {} does not exist", name);
 		return model_handle{};
@@ -28,9 +48,32 @@ namespace rythe::rendering
 
 	void ModelCache::deleteModel(const std::string& name)
 	{
-		if (m_models.contains(name))
+		rsl::id_type id = rsl::nameHash(name);
+
+		if (m_models.contains(id))
 		{
-			m_models.erase(name);
+			m_models.erase(id);
 		}
+	}
+
+	void ModelCache::loadModels(const std::string& filePath)
+	{
+		for (auto& p : fs::recursive_directory_iterator(filePath))
+		{
+			auto fileName = p.path().stem().string();
+			auto path = p.path().string();
+			log::debug("Loading model {} at \"{}\"",fileName, path);
+			createModel(fileName, path);
+		}
+	}
+
+	std::vector<model_handle> ModelCache::getModels()
+	{
+		std::vector<model_handle> handles;
+		for (auto& [id, handle] : m_models)
+		{
+			handles.push_back(model_handle{ handle.get()});
+		}
+		return handles;
 	}
 }

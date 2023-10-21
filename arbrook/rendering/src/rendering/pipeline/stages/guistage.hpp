@@ -15,8 +15,12 @@
 
 namespace rythe::rendering
 {
+	using guiRenderFunc = void();
 	struct gui_stage : public graphics_stage<gui_stage>
 	{
+	private:
+		static rsl::multicast_delegate<guiRenderFunc> m_onGuiRender;
+	public:
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			RI->makeCurrent();
@@ -33,7 +37,8 @@ namespace rythe::rendering
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			ImGui::ShowDemoWindow();
+			m_onGuiRender();
+			//ImGui::ShowDemoWindow();
 
 			ImGui::Render();
 			auto* draw_data = ImGui::GetDrawData();
@@ -41,5 +46,11 @@ namespace rythe::rendering
 		}
 
 		virtual rsl::priority_type priority() override { return UI_PRIORITY; }
+
+		template <class T, void(T::* Func)()>
+		static void addGuiRender(T* ptr)
+		{
+			m_onGuiRender.emplace_back<T>(ptr, Func);
+		}
 	};
 }

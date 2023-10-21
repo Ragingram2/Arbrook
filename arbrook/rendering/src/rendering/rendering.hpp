@@ -5,6 +5,7 @@
 #include "rendering/cache/cache.hpp"
 #include "rendering/data/handles.hpp"
 #include "rendering/data/vertex.hpp"
+#include "rendering/systems/renderer.hpp"
 
 namespace rythe
 {

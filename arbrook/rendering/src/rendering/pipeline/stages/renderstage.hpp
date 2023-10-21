@@ -20,13 +20,13 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				renderer.initialize(RI->getHwnd());
 
 				auto& transf = ent.getComponent<core::transform>();
 				cam.calculate_view(&camTransf);
 				cam.calculate_projection();
-				math::mat4 mat = { cam.projection * cam.view * transf.to_world()};
-				buffer_handle buff = renderer.m_model->matrixBuffer;
+				camData mat = { cam.projection, cam.view, transf.to_world() };
+				renderer.model->initialize(RI->getHwnd(), renderer.material->m_shader, renderer.model->mesh, renderer.instanced);
+				buffer_handle buff = renderer.model->cameraBuffer;
 				buff->bufferData(&mat, 1);
 			}
 			RI->checkError();
@@ -39,11 +39,15 @@ namespace rythe::rendering
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				auto& transf = ent.getComponent<core::transform>();
 				cam.calculate_view(&camTransf);
-				math::mat4 mat = { cam.projection * cam.view * transf.to_world() };
-				buffer_handle buff = renderer.m_model->matrixBuffer;
+				camData mat = { cam.projection, cam.view, transf.to_world() };
+				buffer_handle buff = renderer.model->cameraBuffer;
 				buff->bufferData(&mat, 1);
-				renderer.bind();
-				RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.m_mesh->vertices.size());
+				renderer.material->bind();
+				renderer.model->bind();
+				if (renderer.model->indexBuffer != nullptr)
+					RI->drawIndexed(PrimitiveType::TRIANGLESLIST, renderer.model->mesh->indices.size(), 0, 0);
+				else
+					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->mesh->vertices.size());
 			}
 			RI->checkError();
 		}

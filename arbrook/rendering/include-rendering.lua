@@ -3,6 +3,17 @@ print("including rendering")
 includedirs {
     "src/",
     "include/",
+    "include/*/",
+    "include/*/src/",
+    "include/*/include/",
+    "../../include/",
+    "../../include/*/",
+    "../../include/*/src/",
+    "../../include/*/include/",
+    "../../include/*/third_party/",
+    "../../include/*/third_party/*/",
+    "../../include/*/third_party/*/src/",
+    "../../include/*/third_party/*/include/",
     "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"
 }  
 dependson { "rendering" }

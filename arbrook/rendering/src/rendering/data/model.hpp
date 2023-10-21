@@ -10,6 +10,13 @@
 
 namespace rythe::rendering
 {
+	struct camData
+	{
+		math::mat4 projection;
+		math::mat4 view;
+		math::mat4 model;
+	};
+
 	struct model
 	{
 		inputlayout layout;
@@ -20,6 +27,8 @@ namespace rythe::rendering
 		buffer_handle tangentBuffer;
 		buffer_handle uvBuffer;
 		buffer_handle matrixBuffer;
+		buffer_handle cameraBuffer;
+		mesh_handle mesh;
 
 		model() = default;
 		model(const model& mod) : indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
@@ -32,7 +41,11 @@ namespace rythe::rendering
 			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, handle->vertices);
 			layout.setAttributePtr(vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 
-			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW,handle->indices);
+			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, handle->indices);
+
+			cameraBuffer = BufferCache::createBuffer<camData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
+			shader->bind();
 
 			if (handle->texCoords.size() > 0)
 			{
@@ -53,11 +66,15 @@ namespace rythe::rendering
 
 		void bind()
 		{
-			indexBuffer->bind();
-			vertexBuffer->bind();
-			uvBuffer->bind();
-			matrixBuffer->bind();
 			layout.bind();
+			if (vertexBuffer != nullptr)
+				vertexBuffer->bind();
+			if (indexBuffer != nullptr)
+				indexBuffer->bind();
+			if (uvBuffer != nullptr)
+				uvBuffer->bind();
+			if (matrixBuffer != nullptr)
+				matrixBuffer->bind();
 		}
 	};
 

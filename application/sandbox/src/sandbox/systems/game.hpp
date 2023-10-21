@@ -10,27 +10,27 @@ namespace rythe::game
 	private:
 		core::ecs::entity camera;
 		core::ecs::entity ent;
+		gfx::model_handle modelHandle;
 		gfx::material mat;
-		gfx::mesh_handle meshHandle;
 
 		math::vec3 camPos = math::vec3::zero;
 
 		math::vec3 inputVec;
 		math::vec3 cameraUp = math::vec3::up;
 		math::vec3 cameraFront = math::vec3::forward;
-		float speed = 2.5f;
-		float angularSpeed = 1.f;
-		float degrees = 0.0f;
+		float speed = 50.0f;
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
 		float currentFrame = 0.0f;
 
-		double lastX = Screen_Width/2.f;
-		double lastY = Screen_Height/2.f;
+		float sensitivity = .1f;
 
-		double yaw = -90.f;
-		double pitch = 0;
+		float lastX = Screen_Width/2.f;
+		float lastY = Screen_Height/2.f;
+
+		float yaw = -90.0f;
+		float pitch = 0.0f;
 
 		bool firstMouse = true;
 
@@ -38,9 +38,16 @@ namespace rythe::game
 		void setup();
 		void update();
 
+		void guiRender()
+		{
+
+		}
+
 		void reloadShaders(core::events::key_input& input);
 		void move(core::events::key_input& input);
 		void mouselook(core::events::mouse_input& input);
+		void randomModel();
+		void randomShader(core::events::key_input& input);
 		void debugInfo(core::events::key_input& input);
 	};
 }

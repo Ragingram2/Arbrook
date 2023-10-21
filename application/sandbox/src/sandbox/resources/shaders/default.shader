@@ -3,7 +3,7 @@
 #version 420 core
 
 layout(location = 0) in vec4 v_position;
-layout(location = 1) in vec2 v_texCoord;
+//layout(location = 1) in vec2 v_texCoord;
 layout(location = 2) in mat4 v_mvp;
 
 out vec2 TexCoord;
@@ -11,7 +11,7 @@ out vec2 TexCoord;
 void main()
 {
 	gl_Position = v_mvp * v_position;
-	TexCoord = v_texCoord;
+	//TexCoord = v_texCoord;
 }
 
 #shader fragment
@@ -24,8 +24,9 @@ uniform sampler2D ourTexture;
 
 void main()
 {
-	vec4 tColor = texture(ourTexture, TexCoord);
-	FragColor = tColor;
+	//vec4 tColor = texture(ourTexture, TexCoord);
+	//FragColor = tColor;
+	FragColor = vec4(1.0,0.0,0.0,1.0);
 }
 #END
 

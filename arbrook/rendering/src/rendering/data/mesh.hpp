@@ -32,10 +32,10 @@ namespace rythe::rendering
 		mesh(const mesh& msh) : name(msh.name), vertices(msh.vertices), colors(msh.colors), normals(msh.normals), texCoords(msh.texCoords), indices(msh.indices), submeshes(msh.submeshes) {}
 		mesh(const aiScene* scene)
 		{
-			initialize(scene);
+			load(scene);
 		}
 
-		void initialize(const aiScene* scene)
+		void load(const aiScene* scene)
 		{
 			name = std::string(scene->mName.C_Str());
 			if (!scene->HasMeshes())
@@ -45,7 +45,6 @@ namespace rythe::rendering
 			}
 			//Currently only supporting single meshes, i'll figure out how to do submeshes later
 			auto mesh = scene->mMeshes[0];
-			log::debug("Mesh Count:{}", scene->mNumMeshes);
 
 			if (mesh->HasPositions())
 			{

@@ -1,7 +1,7 @@
 #pragma once
 #include "core/logging/logging.hpp"
 #include "core/modules/module.hpp"
-//#include "sandbox/systems/testsystem.hpp"
+#include "sandbox/systems/testsystem.hpp"
 #include "sandbox/systems/game.hpp"
 
 namespace rythe::core
@@ -11,8 +11,9 @@ namespace rythe::core
 	public:
 		void setup() override
 		{
-			log::info("Initializing Test Module");
+			log::info("Initializing Game Module");
 			reportSystem<game::Game>();
+			//reportSystem<TestSystem>();
 		}
 	};
 }

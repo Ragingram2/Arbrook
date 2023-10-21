@@ -2,6 +2,9 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <fstream>
+#include <iostream>
+#include <filesystem>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -9,6 +12,7 @@
 
 #include "rendering/data/meshhandle.hpp"
 
+namespace fs = std::filesystem;
 namespace rythe::rendering
 {
 	class MeshCache
@@ -21,5 +25,6 @@ namespace rythe::rendering
 		static mesh_handle loadMesh(const std::string& name, const std::string& filePath);
 		static mesh_handle getMesh(const std::string& name);
 		static void deleteMesh(const std::string& name);
+		static void importMeshes(const std::string& filePath);
 	};
 }
