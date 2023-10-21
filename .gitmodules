@@ -13,3 +13,6 @@
 [submodule "include/assimp"]
 	path = include/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "arbrook/rendering/include/glfw"]
+	path = arbrook/rendering/include/glfw
+	url = https://github.com/glfw/glfw.git
