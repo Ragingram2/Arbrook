@@ -19,6 +19,7 @@ namespace rythe::rendering
 
 	struct model
 	{
+		std::string name;
 		inputlayout layout;
 		buffer_handle indexBuffer;
 		buffer_handle vertexBuffer;
@@ -28,28 +29,31 @@ namespace rythe::rendering
 		buffer_handle uvBuffer;
 		buffer_handle matrixBuffer;
 		buffer_handle cameraBuffer;
-		mesh_handle mesh;
+		mesh_handle meshHandle;
+
 
 		model() = default;
-		model(const model& mod) : indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
+		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
 
 		void initialize(internal::window& hwnd, shader_handle shader, mesh_handle handle, bool instanced)
 		{
+			meshHandle = handle;
+			layout.release();
 			layout.initialize(hwnd, 1, shader);
 			layout.bind();
 
-			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, handle->vertices);
+			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
 			layout.setAttributePtr(vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 
-			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, handle->indices);
+			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, meshHandle->indices);
 
 			cameraBuffer = BufferCache::createBuffer<camData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
 			shader->bind();
 
-			if (handle->texCoords.size() > 0)
+			if (meshHandle->texCoords.size() > 0)
 			{
-				uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, handle->texCoords);
+				uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->texCoords);
 				layout.setAttributePtr(uvBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(math::vec2), 0);
 			}
 
@@ -62,6 +66,17 @@ namespace rythe::rendering
 				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			}
 			layout.submitAttributes();
+		}
+
+		void loadData()
+		{
+			//layout.bind();
+			//vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
+			//indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
+			//if (meshHandle->texCoords.size() > 0)
+			//{
+			//	uvBuffer->bufferData(meshHandle->texCoords.data(),meshHandle->texCoords.size());
+			//}
 		}
 
 		void bind()

@@ -52,11 +52,30 @@ namespace rythe::game
 
 	void Game::guiRender()
 	{
-		ImGui::Begin("Change Model");
+		using namespace ImGui;
+		Begin("Change Model");
+		auto models = gfx::ModelCache::getModels();
+		auto modelNames = gfx::ModelCache::getModelNamesC();
+		ShowDemoWindow();
+		Text("Here is where you can select which model to render");
+		static int currentIdx = 0;
+		if (BeginCombo("Model Dropdown", modelNames[currentIdx]))
+		{
+			for (int i = 0; i < models.size(); i++)
+			{
+				const bool is_selected = (currentIdx == i);
+				if (Selectable(modelNames[i], is_selected))
+					currentIdx = i;
 
-		ImGui::Text("Here is where you can select which model to render");
-		if (ImGui::Button("Random Model"))
-			randomModel();
+				if (is_selected)
+				{
+					SetItemDefaultFocus();
+				}
+			}
+			setModel(models[currentIdx]);
+			EndCombo();
+		}
+
 		ImGui::End();
 	}
 
@@ -141,12 +160,14 @@ namespace rythe::game
 		//camTransf.rotation = math::quat(math::lookAt(camPos, camPos + math::normalize(direction), up));
 	}
 
-	void Game::randomModel()
+	void Game::setModel(gfx::model_handle handle)
 	{
 		auto& renderer = ent.getComponent<gfx::mesh_renderer>();
-		auto models = gfx::ModelCache::getModels();
-
-		renderer.model = models[std::rand() * models.size()];
+		if (renderer.model != handle)
+		{
+			renderer.model = handle;
+			renderer.dirty = true;
+		}
 	}
 
 	void Game::randomShader(core::events::key_input& input)

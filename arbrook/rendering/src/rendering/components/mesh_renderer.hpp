@@ -10,6 +10,7 @@ namespace rythe::rendering
 {
 	struct mesh_renderer
 	{
+		bool dirty = true;
 		bool instanced = true;
 		material_handle material;
 		model_handle model;

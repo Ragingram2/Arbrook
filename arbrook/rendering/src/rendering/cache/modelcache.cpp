@@ -16,7 +16,8 @@ namespace rythe::rendering
 		}
 
 		auto mod = m_models.emplace(id, std::make_unique<model>()).first->second.get();
-		mod->mesh = MeshCache::loadMesh(name, filePath);
+		mod->meshHandle = MeshCache::loadMesh(name, filePath);
+		mod->name = name;
 		return { mod };
 	}
 
@@ -30,7 +31,8 @@ namespace rythe::rendering
 			return { m_models[id].get() };
 		}
 		auto mod = m_models.emplace(id, std::make_unique<model>()).first->second.get();
-		mod->mesh = handle;
+		mod->meshHandle = handle;
+		mod->name = name;
 		return { mod };
 	}
 
@@ -75,5 +77,26 @@ namespace rythe::rendering
 			handles.push_back(model_handle{ handle.get()});
 		}
 		return handles;
+	}
+
+	std::vector<std::string> ModelCache::getModelNames()
+	{
+		std::vector<std::string> names;
+		for (auto& [id, handle] : m_models)
+		{
+			names.push_back(handle->name);
+		}
+		return names;
+
+	}
+
+	std::vector<const char*> ModelCache::getModelNamesC()
+	{
+		std::vector<const char*> names;
+		for (auto& [id, handle] : m_models)
+		{
+			names.push_back(handle->name.c_str());
+		}
+		return names;
 	}
 }

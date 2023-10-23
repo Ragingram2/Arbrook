@@ -25,7 +25,8 @@ namespace rythe::rendering
 				cam.calculate_view(&camTransf);
 				cam.calculate_projection();
 				camData mat = { cam.projection, cam.view, transf.to_world() };
-				renderer.model->initialize(RI->getHwnd(), renderer.material->m_shader, renderer.model->mesh, renderer.instanced);
+				renderer.model->initialize(RI->getHwnd(), renderer.material->m_shader, renderer.model->meshHandle, renderer.instanced);
+				renderer.dirty = false;
 				buffer_handle buff = renderer.model->cameraBuffer;
 				buff->bufferData(&mat, 1);
 			}
@@ -37,6 +38,11 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
+				if (renderer.dirty)
+				{
+					renderer.model->initialize(RI->getHwnd(), renderer.material->m_shader, renderer.model->meshHandle, renderer.instanced);
+					renderer.dirty = false;
+				}
 				auto& transf = ent.getComponent<core::transform>();
 				cam.calculate_view(&camTransf);
 				camData mat = { cam.projection, cam.view, transf.to_world() };
@@ -45,9 +51,9 @@ namespace rythe::rendering
 				renderer.material->bind();
 				renderer.model->bind();
 				if (renderer.model->indexBuffer != nullptr)
-					RI->drawIndexed(PrimitiveType::TRIANGLESLIST, renderer.model->mesh->indices.size(), 0, 0);
+					RI->drawIndexed(PrimitiveType::TRIANGLESLIST, renderer.model->meshHandle->indices.size(), 0, 0);
 				else
-					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->mesh->vertices.size());
+					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->meshHandle->vertices.size());
 			}
 			RI->checkError();
 		}

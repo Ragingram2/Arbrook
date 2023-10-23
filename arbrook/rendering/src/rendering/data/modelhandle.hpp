@@ -13,6 +13,9 @@ namespace rythe::rendering
 		model* operator->() { return m_data; }
 		operator model& () const { return *m_data; }
 
+		bool operator ==(model_handle handle) { return m_data == handle.m_data; }
+		bool operator !=(model_handle handle) { return m_data != handle.m_data; }
+
 		bool operator ==(model* data) { return m_data == data; }
 		bool operator !=(model* data) { return m_data != data; }
 	};

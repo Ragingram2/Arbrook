@@ -38,7 +38,6 @@ namespace rythe::rendering
 			ImGui::NewFrame();
 
 			m_onGuiRender();
-			//ImGui::ShowDemoWindow();
 
 			ImGui::Render();
 			auto* draw_data = ImGui::GetDrawData();
@@ -50,7 +49,9 @@ namespace rythe::rendering
 		template <class T, void(T::* Func)()>
 		static void addGuiRender(T* ptr)
 		{
-			m_onGuiRender.emplace_back<T>(ptr, Func);
+			m_onGuiRender.push_back<T,Func>(*ptr);
 		}
 	};
+
+	inline rsl::multicast_delegate<guiRenderFunc> gui_stage::m_onGuiRender;
 }

@@ -35,6 +35,10 @@ namespace rythe::rendering
 	{
 		if (m_buffers.contains(name))
 		{
+			if (data)
+			{
+				m_buffers[name]->bufferData<elementType>(data, size);
+			}
 			return m_buffers[name].get();
 		}
 

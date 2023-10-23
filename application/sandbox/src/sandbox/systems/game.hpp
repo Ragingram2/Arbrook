@@ -37,16 +37,12 @@ namespace rythe::game
 	public:
 		void setup();
 		void update();
-
-		void guiRender()
-		{
-
-		}
+		void guiRender();
+		void setModel(gfx::model_handle handle);
 
 		void reloadShaders(core::events::key_input& input);
 		void move(core::events::key_input& input);
 		void mouselook(core::events::mouse_input& input);
-		void randomModel();
 		void randomShader(core::events::key_input& input);
 		void debugInfo(core::events::key_input& input);
 	};

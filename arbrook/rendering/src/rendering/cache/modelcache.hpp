@@ -25,5 +25,7 @@ namespace rythe::rendering
 		static void deleteModel(const std::string& name);
 		static void loadModels(const std::string& filePath);
 		static std::vector<model_handle> getModels();
+		static std::vector<std::string> getModelNames();
+		static std::vector<const char*> getModelNamesC();
 	};
 }
