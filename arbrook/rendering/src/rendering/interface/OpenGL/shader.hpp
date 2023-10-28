@@ -76,10 +76,14 @@ namespace rythe::rendering::internal
 			switch (type)
 			{
 			case ShaderType::VERTEX:
-				m_vsConstBuffers.emplace(handle->getName(), handle);
+				if (!m_vsConstBuffers.count(handle->getName()))
+					m_vsConstBuffers.emplace(handle->getName(), handle);
+				return;
 				break;
 			case ShaderType::FRAGMENT:
-				m_psConstBuffers.emplace(handle->getName(), handle);
+				if (!m_psConstBuffers.count(handle->getName()))
+					m_psConstBuffers.emplace(handle->getName(), handle);
+				return;
 				break;
 			default:
 				log::error("Adding a constant buffer to shader type {} is not supported", RYTHE_STRINGIFY(TargetType::CONSTANT_BUFFER));
@@ -89,6 +93,17 @@ namespace rythe::rendering::internal
 			glUniformBlockBinding(programId, glGetUniformBlockIndex(programId, handle->getName().c_str()), handle->m_impl.bindId);
 		}
 
+		void release()
+		{
+			glDeleteProgram(programId);
+			clearBuffers();
+		}
+
+		void clearBuffers()
+		{
+			m_vsConstBuffers.clear();
+			m_psConstBuffers.clear();
+		}
 	private:
 		unsigned int compileShader(ShaderType type, const std::string& source)
 		{

@@ -1,91 +1,120 @@
 #include "sandbox/systems/testsystem.hpp"
-namespace rythe::core
-{
 
+namespace rythe::testing
+{
 	void TestSystem::setup()
 	{
-		log::info("Initializing Test System");
-		//if (!glfwInit())
-		//	return;
+		log::debug("Initializing TestSystem");
 
-		m_api = &registry->world.addComponent<gfx::RenderInterface>();
-		m_api->initialize(math::ivec2(Screen_Width, Screen_Height), "Arbrook");
+		gfx::render_stage::addRender<TestSystem, &TestSystem::testRender>(this);
+		gfx::gui_stage::addGuiRender<TestSystem, &TestSystem::guiRender>(this);
 
-		if (!m_api->getWindow())
+		gfx::ModelCache::loadModels("resources/meshes/");
+		gfx::TextureCache::loadTextures("resources/textures/");
+		gfx::ShaderCache::loadShaders("resources/shaders/");
+
+		//m_testScenes.emplace(APIType::None, std::vector<std::unique_ptr<rendering_test>>());
+		m_testScenes.emplace(APIType::Arbrook, std::vector<std::unique_ptr<rendering_test>>());
+		m_testScenes[APIType::Arbrook].emplace_back(std::make_unique<DrawIndexedTest<APIType::Arbrook>>());
+
+		m_testScenes.emplace(APIType::BGFX, std::vector<std::unique_ptr<rendering_test>>());
+		m_testScenes[APIType::BGFX].emplace_back(std::make_unique<DrawIndexedTest<APIType::BGFX>>());
+
+		m_testScenes.emplace(APIType::Native, std::vector<std::unique_ptr<rendering_test>>());
+		m_testScenes[APIType::Native].emplace_back(std::make_unique<DrawIndexedTest<APIType::Native>>());
+
+		testEntity = createEntity("Entity");
 		{
-			//glfwTerminate();
-			log::error("Window initialization failed");
-			return;
+			testEntity.addComponent<core::transform>();
+			auto& testRenderer = testEntity.addComponent<test_renderer>();
+			testRenderer.test = m_testScenes[currentType][0].get();
 		}
-		vertex verticies[] =
-		{	//positions						
-			{{  -1.f, 1.f, 0.0f  },{0,1}},//0
-			{{ 	-1.f,-1.f, 0.0f  },{0,0}},//1
-			{{  1.f,-1.f, 0.0f  },{1,0}},//2
-			{{  -1.f, 1.f, 0.0f  },{0,1}},//0
-			{{  1.f,-1.f, 0.0f },{1,0}},//2
-			{{  1.f, 1.f, 0.0f },{1,1}}//3
-		};
-
-		shader = gfx::ShaderCache::createShader("test", "resources/shaders/fluid.shader");
-		vertexHandle = gfx::BufferCache::createBuffer<vertex>("Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, verticies, sizeof(verticies) / sizeof(vertex));
-		constantHandle = gfx::BufferCache::createBuffer<math::vec4>( "ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
-		shader->addBuffer(gfx::ShaderType::FRAGMENT, constantHandle);
-		shader->bind();
-
-		layout.initialize(m_api->getHwnd(), 1, shader);
-		vertexHandle->bind();
-		layout.setAttributePtr(vertexHandle, "POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
-		layout.setAttributePtr(vertexHandle,"TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));
-		layout.bind();
-
-		for (int x = 0; x < SIZE; x++)
+		cameraEntity = createEntity("Camera");
 		{
-			for (int y = 0; y < SIZE; y++)
-			{
-				addDensity(x, y, .5f);
-			}
+			auto& transf = cameraEntity.addComponent<core::transform>();
+			transf.position = cameraPos;
+			transf.rotation = math::quat(math::lookAt(cameraPos, cameraPos + math::vec3::forward, cameraUp));
+			auto& cam = cameraEntity.addComponent<gfx::camera>();
+			cam.farZ = 100.f;
+			cam.nearZ = 1.0f;
+			cam.fov = 90.f;
 		}
-
 	}
 
 	void TestSystem::update()
 	{
-		m_api->makeCurrent();
-		m_api->setSwapInterval(0);
+		currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+	}
 
-		if (m_api->shouldWindowClose())
+	void TestSystem::testRender(core::transform transf, gfx::camera cam)
+	{
+		for (auto ent : m_filter)
 		{
-			rythe::core::events::exit evnt(0);
-			raiseEvent(evnt);
-			return;
+			auto& testRenderer = ent.getComponent<test_renderer>();
+
+			if (!testRenderer.test->initialized)
+				testRenderer.test->setup(cam, transf);
+			testRenderer.test->update(cam, transf);
+		}
+	}
+
+	void TestSystem::guiRender()
+	{
+		using namespace ImGui;
+		auto& testRenderer = testEntity.getComponent<test_renderer>();
+		Begin("Set Test");
+		ShowDemoWindow();
+
+		Text("Here is where you can select which API to use for rendering");
+		static const char* typeNames[] = { "Arbrook","BGFX","Native" };
+		if (BeginCombo("API Dropdown", typeNames[currentType]))
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				const bool is_selected = (currentType == i);
+				if (Button(typeNames[i]))
+				{
+					currentType = static_cast<APIType>(i);
+					testRenderer.test->destroy();
+					testRenderer.test = m_testScenes[currentType][0].get();
+				}
+
+				if (is_selected)
+				{
+					SetItemDefaultFocus();
+				}
+			}
+			EndCombo();
 		}
 
-		m_api->setViewport(1, 0, 0, Screen_Width, Screen_Height, 0, 1);
-		m_api->setClearColor(0x64 / 255.0f, 0x95 / 255.0f, 0xED / 255.0f, 1.0f);
-		m_api->clear(gfx::ClearBit::COLOR);
+		Text("Here is where you can select which rendering test to run");
+		static int currentTestSelected = 0;
+		static const char* testNames[] = { "DrawIndexed" };
+		if (BeginCombo("Test Dropdown", testNames[currentTestSelected]))
+		{
+			for (int i = 0; i < 1; i++)
+			{
+				const bool is_selected = (currentTestSelected == i);
+				if (Selectable(testNames[i], is_selected))
+					currentTestSelected = i;
 
+				if (is_selected)
+				{
+					SetItemDefaultFocus();
+				}
+			}
+			EndCombo();
+		}
 
-		//int N = SIZE;
+		if (Button("Run Test"))
+		{
+			//auto& testRenderer = testEntity.getComponent<test_renderer>();
+			//testRenderer.test->destroy();
+			//testRenderer.test = m_testScenes[currentType][0].get();
+		}
 
-		//addDensity((SIZE / 2), (SIZE / 2), 10.f);
-		//addVelocity(SIZE / 2, SIZE / 2, 0.f, 1.f);
-		//step(5, .002f);
-		//log::debug(cube.source[IX((SIZE / 2)-1, SIZE / 2)]);
-		render();
-
-		m_api->swapBuffers();
-		m_api->pollEvents();
-	}
-
-	void TestSystem::shutdown()
-	{
-		log::info("Shutting down Test System ");
-	}
-
-	void TestSystem::render()
-	{
-		shader->setData("ConstantBuffer", cube.density);
-		m_api->drawArrays(gfx::PrimitiveType::TRIANGLESLIST, 0, 6);
+		ImGui::End();
 	}
 }

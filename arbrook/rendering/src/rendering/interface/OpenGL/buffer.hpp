@@ -86,6 +86,11 @@ namespace rythe::rendering::internal
 			}
 		}
 
+		void release()
+		{
+			glDeleteBuffers(1, &id);
+		}
+
 	private:
 		void createBuffer()
 		{

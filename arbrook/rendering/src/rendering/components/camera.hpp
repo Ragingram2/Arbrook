@@ -9,6 +9,13 @@
 
 namespace rythe::rendering
 {
+	struct camera_data
+	{
+		math::mat4 projection;
+		math::mat4 view;
+		math::mat4 model;
+	};
+
 	struct camera
 	{
 		friend struct core::ecs::component_family<camera>;

@@ -29,9 +29,9 @@ namespace rythe::rendering
 	class Renderer : public core::System<core::transform, camera>
 	{
 	public:
-		static std::unique_ptr<pipeline_provider_base> m_provider;
-		static PipelineBase* m_pipeline;
-		RenderInterface* RI;
+		static std::unique_ptr<pipeline_provider_base> provider;
+		static PipelineBase* pipeline;
+		static RenderInterface* RI;
 
 		Renderer() : System<core::transform, camera>()
 		{
@@ -45,8 +45,8 @@ namespace rythe::rendering
 			if (!glfwInit())
 				return;
 
-			m_pipeline = m_provider->get(0);
-			RI = &m_pipeline->RI;
+			pipeline = provider->get(0);
+			RI = &pipeline->RI;
 
 			if (!RI->getWindow())
 			{
@@ -69,18 +69,20 @@ namespace rythe::rendering
 				return;
 			}
 
+			if (m_filter.size() < 1) return;
+
 			auto& camEnt = getCameraEntity();
 			auto& transf = camEnt.getComponent<core::transform>();
 			auto& cam = camEnt.getComponent<camera>();
 			cam.calculate_projection();
-			m_pipeline->render(transf, getCamera());
+			pipeline->render(transf, getCamera());
 
 			RI->pollEvents();
 		}
 
 		void shutdown()
 		{
-			m_pipeline->shutdown();
+			pipeline->shutdown();
 		}
 
 		core::ecs::entity& getCameraEntity()
@@ -96,12 +98,12 @@ namespace rythe::rendering
 		template<typename Type>
 		static void setPipeline()
 		{
-			m_provider = std::make_unique<pipeline_provider<Type>>();
+			provider = std::make_unique<pipeline_provider<Type>>();
 		}
 
 		static PipelineBase* getCurrentPipeline()
 		{
-			return m_pipeline;
+			return pipeline;
 		}
 	};
 

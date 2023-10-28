@@ -4,6 +4,7 @@ namespace rythe::game
 {
 	void Game::setup()
 	{
+		log::debug("Initializing Game system");
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
 		EventBus::bind<key_input, Game, &Game::move>(*this);
 		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
@@ -14,13 +15,9 @@ namespace rythe::game
 		gfx::gui_stage::addGuiRender<Game, &Game::guiRender>(this);
 
 		gfx::ModelCache::loadModels("resources/meshes/");
-		//gfx::ModelCache::createModel("Armadillo", "resources/meshes/armadillo.obj");
-		//gfx::ModelCache::createModel("Alligator", "resources/meshes/alligator.obj");
-		//gfx::ModelCache::createModel("Beast", "resources/meshes/beast.obj");
-		//gfx::ModelCache::createModel("Bunny", "resources/meshes/bunny.obj");
-		//gfx::ModelCache::createModel("Suzanne", "resources/meshes/suzanne.obj");
-		//gfx::ModelCache::createModel("Teapot", "resources/meshes/teapot.obj");
-		modelHandle = gfx::ModelCache::getModel("suzanne");
+		gfx::TextureCache::loadTextures("resources/textures/");
+		gfx::ShaderCache::loadShaders("resources/shaders/");
+		modelHandle = gfx::ModelCache::getModel("cube");
 
 		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader", "resources/textures/Rythe.png");
 
@@ -58,21 +55,21 @@ namespace rythe::game
 		auto modelNames = gfx::ModelCache::getModelNamesC();
 		ShowDemoWindow();
 		Text("Here is where you can select which model to render");
-		static int currentIdx = 0;
-		if (BeginCombo("Model Dropdown", modelNames[currentIdx]))
+		static gfx::model_handle currentSelected = modelHandle;
+		if (BeginCombo("Model Dropdown", currentSelected->name.c_str()))
 		{
-			for (int i = 0; i < models.size(); i++)
+			for (auto handle : models)
 			{
-				const bool is_selected = (currentIdx == i);
-				if (Selectable(modelNames[i], is_selected))
-					currentIdx = i;
+				const bool is_selected = (currentSelected == handle);
+				if (Selectable(handle->name.c_str(), is_selected))
+					currentSelected = handle;
 
 				if (is_selected)
 				{
 					SetItemDefaultFocus();
 				}
 			}
-			setModel(models[currentIdx]);
+			setModel(currentSelected);
 			EndCombo();
 		}
 

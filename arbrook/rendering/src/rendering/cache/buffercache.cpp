@@ -18,6 +18,7 @@ namespace rythe::rendering
 	{
 		if (m_buffers.contains(name))
 		{
+			m_buffers[name]->release();
 			m_buffers.erase(name);
 		}
 	}

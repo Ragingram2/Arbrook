@@ -20,7 +20,6 @@ namespace rythe::rendering
 		mod->name = name;
 		return { mod };
 	}
-
 	model_handle ModelCache::createModel(const std::string& name, mesh_handle handle)
 	{
 		rsl::id_type id = rsl::nameHash(name);
@@ -35,7 +34,6 @@ namespace rythe::rendering
 		mod->name = name;
 		return { mod };
 	}
-
 	model_handle ModelCache::getModel(const std::string& name)
 	{
 		rsl::id_type id = rsl::nameHash(name);
@@ -47,7 +45,6 @@ namespace rythe::rendering
 		log::warn("Model {} does not exist", name);
 		return model_handle{};
 	}
-
 	void ModelCache::deleteModel(const std::string& name)
 	{
 		rsl::id_type id = rsl::nameHash(name);
@@ -57,18 +54,17 @@ namespace rythe::rendering
 			m_models.erase(id);
 		}
 	}
-
-	void ModelCache::loadModels(const std::string& filePath)
+	void ModelCache::loadModels(const std::string& directory)
 	{
-		for (auto& p : fs::recursive_directory_iterator(filePath))
+		for (auto& p : fs::directory_iterator(directory))
 		{
+			if (!p.path().has_extension()) continue;
 			auto fileName = p.path().stem().string();
 			auto path = p.path().string();
 			log::debug("Loading model {} at \"{}\"",fileName, path);
 			createModel(fileName, path);
 		}
 	}
-
 	std::vector<model_handle> ModelCache::getModels()
 	{
 		std::vector<model_handle> handles;
@@ -78,7 +74,6 @@ namespace rythe::rendering
 		}
 		return handles;
 	}
-
 	std::vector<std::string> ModelCache::getModelNames()
 	{
 		std::vector<std::string> names;
@@ -89,7 +84,6 @@ namespace rythe::rendering
 		return names;
 
 	}
-
 	std::vector<const char*> ModelCache::getModelNamesC()
 	{
 		std::vector<const char*> names;

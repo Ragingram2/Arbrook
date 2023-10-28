@@ -24,6 +24,8 @@ namespace rythe::rendering
 		void addBuffer(ShaderType type, buffer_handle handle) { m_impl.addBuffer(static_cast<internal::ShaderType>(type), handle); }
 		template<typename elementType>
 		void setData(const std::string& bufferName, elementType data[]) { m_impl.setData(bufferName, data); }
+		void release() { m_impl.release(); }
+		void clearBuffers() { m_impl.clearBuffers(); }
 
 		std::string getName() { return m_impl.name; }
 		unsigned int getId() { return m_impl.programId; }

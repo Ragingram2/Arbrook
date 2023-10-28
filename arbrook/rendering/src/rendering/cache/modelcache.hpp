@@ -11,6 +11,7 @@
 #include "rendering/data/meshhandle.hpp"
 #include "rendering/data/modelhandle.hpp"
 
+namespace fs = std::filesystem;
 namespace rythe::rendering
 {
 	class ModelCache
@@ -23,7 +24,7 @@ namespace rythe::rendering
 		static model_handle createModel(const std::string& name, mesh_handle handle);
 		static model_handle getModel(const std::string& name);
 		static void deleteModel(const std::string& name);
-		static void loadModels(const std::string& filePath);
+		static void loadModels(const std::string& directory);
 		static std::vector<model_handle> getModels();
 		static std::vector<std::string> getModelNames();
 		static std::vector<const char*> getModelNamesC();

@@ -17,7 +17,6 @@ namespace rythe::rendering
 		shad->m_impl.initialize(name, loadShader(filepath));
 		return { shad };
 	}
-
 	shader_handle ShaderCache::getShader(const std::string& name)
 	{
 		if (m_shaders.contains(name))
@@ -27,11 +26,11 @@ namespace rythe::rendering
 		log::warn("Shader {} does not exist", name);
 		return shader_handle{};
 	}
-
 	void ShaderCache::deleteShader(const std::string& name)
 	{
 		if (m_shaders.contains(name))
 		{
+			m_shaders[name]->release();
 			m_shaders.erase(name);
 		}
 
@@ -40,18 +39,31 @@ namespace rythe::rendering
 			m_filePaths.erase(name);
 		}
 	}
-
 	void ShaderCache::reloadShaders()
 	{
 		for (auto& [name, shader] : m_shaders)
 		{
 			//Make sure to delete the previous shader on the gpu
+			shader->release();
 			log::debug("reloading {} at path {} ", name, m_filePaths[name]);
 			shader->m_impl.initialize(name, loadShader(m_filePaths[name]));
 		}
 		log::debug("Done!");
 	}
+	void ShaderCache::loadShaders(const std::string& directory)
+	{
+		for (auto& p : fs::directory_iterator(directory))
+		{
+			if (!p.path().has_extension()) continue;
+			if (p.path().extension() != ".shader") continue;
 
+			auto fileName = p.path().stem().string();
+			auto path = p.path().string();
+			m_filePaths.emplace(fileName, path);
+			log::debug("Loading shader {} at \"{}\"", fileName, path);
+			createShader(fileName, path);
+		}
+	}
 	shader_source ShaderCache::loadShader(const std::string& filepath)
 	{
 		std::ifstream stream(filepath);
@@ -104,5 +116,6 @@ namespace rythe::rendering
 
 		return { ss };
 	}
+
 
 }

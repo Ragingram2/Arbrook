@@ -28,4 +28,18 @@ namespace rythe::rendering
 		}
 		return texture_handle{ nullptr };
 	}
+
+	void TextureCache::loadTextures(const std::string& directory)
+	{
+		for (auto& p : fs::directory_iterator(directory))
+		{
+			if (!p.path().has_extension()) continue;
+			if (p.path().extension() != ".png") continue;
+
+			auto fileName = p.path().stem().string();
+			auto path = p.path().string();
+			log::debug("Loading texture {} at \"{}\"", fileName, path);
+			createTexture2D(fileName, path);
+		}
+	}
 }

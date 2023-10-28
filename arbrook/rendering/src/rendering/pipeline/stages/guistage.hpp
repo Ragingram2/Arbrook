@@ -42,6 +42,8 @@ namespace rythe::rendering
 			ImGui::Render();
 			auto* draw_data = ImGui::GetDrawData();
 			ImGui_ImplOpenGL3_RenderDrawData(draw_data);
+
+			ImGui::EndFrame();
 		}
 
 		virtual rsl::priority_type priority() override { return UI_PRIORITY; }

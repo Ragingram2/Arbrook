@@ -2,6 +2,7 @@
 
 namespace rythe::rendering
 {
-	std::unique_ptr<pipeline_provider_base> Renderer::m_provider;
-	PipelineBase* Renderer::m_pipeline;
+	std::unique_ptr<pipeline_provider_base> Renderer::provider;
+	PipelineBase* Renderer::pipeline;
+	RenderInterface* Renderer::RI;
 }

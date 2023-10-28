@@ -11,9 +11,9 @@
 namespace rythe::rendering
 {
 	class BufferCache;
-//	template<typename APIType>
-//	class IRenderInterface;
-namespace internal
+	//	template<typename APIType>
+	//	class IRenderInterface;
+	namespace internal
 	{
 		struct shader;
 	}
@@ -42,6 +42,7 @@ namespace rythe::rendering
 		void bind(int slot = 0, int offset = 0) { m_impl.bind(slot, offset); }
 		template<typename elementType>
 		void bufferData(elementType data[], int size = 1) { m_impl.bufferData(data, size); }
+		void release() { m_impl.release(); }
 
 		std::string getName() { return m_impl.name; }
 		void setName(std::string name) { m_impl.name = name; }
