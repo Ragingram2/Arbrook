@@ -3,6 +3,8 @@
 
 #include <GL/glew.h>
 
+#include <rsl/logging>
+
 #include "rendering/data/textureparameters.hpp"
 
 #include <stb/stb_image.h>
@@ -58,7 +60,7 @@ namespace rythe::rendering::internal
 			data = stbi_load(filepath.c_str(), &params.resolution.x, &params.resolution.y, &params.channels, 0);
 			if (!data)
 			{
-				log::error("Image failed to load");
+				rsl::log::error("Image failed to load");
 			}
 
 			//make some enums for the data formats

@@ -14,7 +14,6 @@
 #include "rendering/interface/config.hpp"
 #include Buffer_HPP_PATH
 #include EnumTypes_HPP_PATH
-#include Window_HPP_PATH
 
 namespace rythe::rendering::internal
 {
@@ -27,7 +26,7 @@ namespace rythe::rendering::internal
 		std::unordered_map<int, std::set<int>> m_flatIndeces;
 	public:
 
-		void initialize(window& hwnd, unsigned int numBuffers, shader_handle shader)
+		void initialize(unsigned int numBuffers, shader_handle shader)
 		{
 			glGenVertexArrays(1, &id);
 		}

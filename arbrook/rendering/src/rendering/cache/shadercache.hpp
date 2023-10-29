@@ -9,7 +9,7 @@
 
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/shaderhandle.hpp"
-#include "rendering/interface/shader.hpp"
+#include "rendering/interface/definitions/shader.hpp"
 
 namespace fs = std::filesystem;
 namespace rythe::rendering

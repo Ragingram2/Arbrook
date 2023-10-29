@@ -8,7 +8,7 @@
 
 #include "core/core.hpp"
 #include "rendering/data/texturehandle.hpp"
-#include "rendering/interface/texture.hpp"
+#include "rendering/interface/definitions/texture.hpp"
 
 namespace fs = std::filesystem;
 namespace rythe::rendering

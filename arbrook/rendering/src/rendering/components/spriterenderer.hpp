@@ -1,6 +1,6 @@
 #pragma once
-#include "rendering/interface/definitions.hpp"
-#include "rendering/data/handles.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
+#include "rendering/data/meshhandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/data/vertex.hpp"
@@ -9,18 +9,7 @@ namespace rythe::rendering
 {
 	struct sprite_renderer
 	{
-		//vertex verticies[4] =
-		//{	//positions						//colors								//tex coors
-		//	{ { -0.1f, 0.1f, 0.0f },			{ 1.0f, 0.0f, 0.0f, 1.0f },		{ 0.0f, 1.0f } },//0
-		//	{ {	-0.1f,-0.1f, 0.0f },			{ 0.0f, 1.0f, 0.0f, 1.0f },		{ 0.0f, 0.0f } },//1
-		//	{ { 0.1f,-0.1f, 0.0f },			{ 0.0f, 0.0f, 1.0f, 1.0f },		{ 1.0f, 0.0f } },//2
-		//	{ { 0.1f, 0.1f, 0.0f },			{ 1.0f, 1.0f, 0.0f, 1.0f },		{ 1.0f, 1.0f } }//3
-		//};
-		//unsigned int indicies[4] =
-		//{
-		//	1,2,0,3
-		//};
-
+		mesh_handle mesh;
 		texture_handle texture;
 		shader_handle shader;
 		inputlayout layout;

@@ -11,7 +11,7 @@
 //#include "core/ecs/ecs.hpp"
 //#include "core/components/components.hpp"
 //
-//#include "rendering/interface/definitions.hpp"
+//#include "rendering/interface/definitions/definitions.hpp"
 //#include "rendering/data/shadersource.hpp"
 //#include "rendering/data/vertex.hpp"
 //#include "rendering/data/handles.hpp"

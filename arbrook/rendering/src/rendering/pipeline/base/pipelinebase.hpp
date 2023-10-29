@@ -3,7 +3,7 @@
 #include <rsl/math>
 
 #include "core/components/transform.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/components/camera.hpp"
 
 namespace rythe::rendering

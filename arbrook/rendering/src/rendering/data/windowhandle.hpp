@@ -1,0 +1,22 @@
+#pragma once
+#include <GLFW/glfw3.h>
+#include "rendering/interface/config.hpp"
+#include Window_HPP_PATH
+
+namespace rythe::rendering
+{
+	struct window_handle
+	{
+		internal::window* m_data = nullptr;
+		window_handle() = default;
+		window_handle(internal::window* data) : m_data(data) {}
+		window_handle(internal::window& data) : m_data(&data) {}
+
+		internal::window* operator->() { return m_data; }
+		operator internal::window& () const { return *m_data; }
+
+		bool operator ==(internal::window* data) { return m_data == data; }
+		bool operator !=(internal::window* data) { return m_data != data; }
+	};
+
+}

@@ -7,7 +7,7 @@
 #include <rsl/utilities>
 #include <rsl/math>
 
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/pipeline/base/pipelinebase.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
 #include "rendering/components/camera.hpp"

@@ -99,6 +99,8 @@ namespace rythe::rendering
 		static void setPipeline()
 		{
 			provider = std::make_unique<pipeline_provider<Type>>();
+			pipeline = provider->get(0);
+			RI = &pipeline->RI;
 		}
 
 		static PipelineBase* getCurrentPipeline()

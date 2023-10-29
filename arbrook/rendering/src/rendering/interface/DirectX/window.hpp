@@ -1,18 +1,13 @@
 #pragma once
 #include <string>
 #include <string_view>
-//#include <D3D11.h>
-//#include <D3DX11.h>
-//#include <D3DX10.h>
+
 #include <GLFW/glfw3.h>
 
-//#pragma comment (lib, "d3d11.lib")
-//#pragma comment (lib, "d3dx11.lib")
-//#pragma comment (lib, "d3dx10.lib")
-
-#include "rendering/interface/DirectX/dx11includes.hpp"
+#include <rsl/logging>
 
 #include "core/math/math.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
 
 namespace rythe::rendering::internal
 {
@@ -86,6 +81,11 @@ namespace rythe::rendering::internal
 			glfwMakeContextCurrent(m_window);
 		}
 
+		math::ivec2 getResolution()
+		{
+			return m_resolution;
+		}
+
 		void checkError()
 		{
 #if _DEBUG
@@ -110,16 +110,16 @@ namespace rythe::rendering::internal
 				switch (message->Severity)
 				{
 				case D3D11_MESSAGE_SEVERITY_CORRUPTION:
-					log::fatal("DX11: {}", message->pDescription);
+					rsl::log::fatal("DX11: {}", message->pDescription);
 					break;
 				case D3D11_MESSAGE_SEVERITY_ERROR:
-					log::error("DX11: {}", message->pDescription);
+					rsl::log::error("DX11: {}", message->pDescription);
 					break;
 				case D3D11_MESSAGE_SEVERITY_INFO:
-					log::info("DX11: {}", message->pDescription);
+					rsl::log::info("DX11: {}", message->pDescription);
 					break;
 				case D3D11_MESSAGE_SEVERITY_WARNING:
-					log::warn("DX11: {}", message->pDescription);
+					rsl::log::warn("DX11: {}", message->pDescription);
 					break;
 				}
 

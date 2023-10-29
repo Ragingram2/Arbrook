@@ -3,34 +3,31 @@
 #include <string>
 #include <fstream>
 
-#include <GL/glew.h>
-
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/handles.hpp"
 #include "rendering/interface/config.hpp"
-
-#include Window_HPP_PATH
 #include Shader_HPP_PATH
 #include Buffer_HPP_PATH
 #include Texture_HPP_PATH
 
-//#include <stb/stb_image.h>
-//#define STB_IMAGE_IMPLEMENTATION
+#include "rendering/cache/windowprovider.hpp"
+
 
 namespace rythe::rendering::internal
 {
 	class RenderInterface
 	{
 	private:
-		window hwnd;
+		window_handle hwnd;
 	public:
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing OpenGL");
-			hwnd.initialize(res, name, window);
-			hwnd.makeCurrent();
+			hwnd = WindowProvider::addWindow();
+			hwnd->initialize(res, name, window);
+			hwnd->makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
@@ -67,42 +64,42 @@ namespace rythe::rendering::internal
 
 		GLFWwindow* getWindow()
 		{
-			return hwnd.getWindow();
+			return hwnd->getWindow();
 		}
 
-		window& getHwnd()
+		window_handle getHwnd()
 		{
 			return hwnd;
 		}
 
 		void makeCurrent()
 		{
-			hwnd.makeCurrent();
+			hwnd->makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
 		{
-			hwnd.setSwapInterval(interval);
+			hwnd->setSwapInterval(interval);
 		}
 
 		bool shouldWindowClose()
 		{
-			return hwnd.shouldClose();
+			return hwnd->shouldClose();
 		}
 
 		void setWindowTitle(const std::string& name)
 		{
-			hwnd.setWindowTitle(name);
+			hwnd->setWindowTitle(name);
 		}
 
 		void pollEvents()
 		{
-			hwnd.pollEvents();
+			hwnd->pollEvents();
 		}
 
 		void swapBuffers()
 		{
-			glfwSwapBuffers(hwnd.getWindow());
+			glfwSwapBuffers(hwnd->getWindow());
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
@@ -138,10 +135,10 @@ namespace rythe::rendering::internal
 		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
 		{
 			if (width <= 0)
-				width = hwnd.m_resolution.x;
+				width = hwnd->getResolution().x;
 
 			if (height <= 0)
-				height = hwnd.m_resolution.y;
+				height = hwnd->getResolution().y;
 
 			glViewport(leftX, leftY, width, height);
 			glDepthRange(minDepth, maxDepth);

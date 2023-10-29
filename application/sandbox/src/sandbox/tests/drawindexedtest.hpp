@@ -34,7 +34,7 @@ namespace rythe::testing
 			mat->bind();
 
 			idxBuffer->bind();
-			layout.initialize(gfx::Renderer::RI->getHwnd(), 1, mat->shader);
+			layout.initialize(1, mat->shader);
 			layout.setAttributePtr(vBuffer, "POSITION", 0, gfx::FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 			layout.submitAttributes();
 
@@ -107,13 +107,13 @@ namespace rythe::testing
 			init.type = bgfx::RendererType::OpenGL;
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
-			init.platformData.context = api->getHwnd().dev;
-			init.platformData.backBuffer = api->getHwnd().backbuffer;
-			init.platformData.backBufferDS = api->getHwnd().depthStencilView;
+			init.platformData.context = gfx::Renderer::RI->getHwnd()->dev;
+			init.platformData.backBuffer = gfx::Renderer::RI->getHwnd().backbuffer;
+			init.platformData.backBufferDS = gfx::Renderer::RI->getHwnd().depthStencilView;
 #endif
 
-			init.resolution.width = gfx::Renderer::RI->getHwnd().m_resolution.x;
-			init.resolution.height = gfx::Renderer::RI->getHwnd().m_resolution.y;
+			init.resolution.width = gfx::Renderer::RI->getHwnd()->getResolution().x;
+			init.resolution.height = gfx::Renderer::RI->getHwnd()->getResolution().y;
 #ifdef _DEBUG
 			init.callback = &callback;
 #endif
@@ -167,10 +167,12 @@ namespace rythe::testing
 		virtual void destroy() override
 		{
 			bgfx::shutdown();
-			gfx::Renderer::RI->initialize(gfx::Renderer::RI->getHwnd().m_resolution, "Arbook", gfx::Renderer::RI->getWindow());
+			gfx::Renderer::RI->initialize(gfx::Renderer::RI->getHwnd()->getResolution(), "Arbook", gfx::Renderer::RI->getWindow());
 			initialized = false;
 		}
 	};
+
+#if RenderingAPI == RenderingAPI_OGL
 	template<>
 	struct DrawIndexedTest<APIType::Native> : public rendering_test
 	{
@@ -269,4 +271,40 @@ namespace rythe::testing
 			initialized = false;
 		}
 	};
+#elif RenderingAPI == RenderingAPI_DX11
+template<>
+struct DrawIndexedTest<APIType::Native> : public rendering_test
+{
+	gfx::camera_data data;
+	gfx::mesh_handle meshHandle;
+	gfx::material_handle mat;
+
+
+	float i = 0;
+
+	virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+	{
+		name = "DrawIndexed";
+		log::debug("Initializing {}DX11_Test{}", getAPIName(APIType::Native), name);
+		glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}OGL_Test{}", getAPIName(APIType::Native), name).c_str());
+
+		meshHandle = gfx::MeshCache::getMesh("teapot");
+		mat = gfx::MaterialCache::loadMaterial("test", "cube");
+
+		initialized = true;
+	}
+
+	virtual void update(gfx::camera& cam, core::transform& camTransf) override
+	{
+
+
+	}
+
+	virtual void destroy() override
+	{
+
+		initialized = false;
+	}
+};
+#endif
 }

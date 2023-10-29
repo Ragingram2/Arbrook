@@ -33,7 +33,7 @@ namespace rythe::core
 		shader->addBuffer(gfx::ShaderType::FRAGMENT, constantHandle);
 		shader->bind();
 
-		layout.initialize(m_api->getHwnd(), 1, shader);
+		layout.initialize(1, shader);
 		vertexHandle->bind();
 		layout.setAttributePtr(vertexHandle, "POSITION", 0, gfx::FormatType::RGB32F, 0, sizeof(vertex), 0);
 		layout.setAttributePtr(vertexHandle,"TEXCOORD", 1, gfx::FormatType::RG32F, 0, sizeof(vertex), sizeof(math::vec3));

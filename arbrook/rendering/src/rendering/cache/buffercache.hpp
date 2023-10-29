@@ -6,7 +6,8 @@
 #include "core/logging/logging.hpp"
 
 #include "rendering/data/bufferhandle.hpp"
-#include "rendering/interface/buffer.hpp"
+#include "rendering/interface/definitions/buffer.hpp"
+#include "rendering/interface/definitions/enumtypes.hpp"
 
 
 namespace rythe::rendering

@@ -6,7 +6,7 @@
 #include "core/logging/logging.hpp"
 #include "core/components/transform.hpp"
 #include "rendering/cache/cache.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/pipeline/base/graphicsstage.hpp"
 #include "rendering/components/components.hpp"
 

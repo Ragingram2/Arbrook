@@ -2,13 +2,12 @@
 #include <memory>
 #include <string>
 
-#include "rendering/interface/enumtypes.hpp"
+#include "rendering/data/windowhandle.hpp"
+#include "rendering/interface/definitions/enumtypes.hpp"
 #include "rendering/interface/config.hpp"
-//#include Shader_HPP_PATH
-//#include Texture_HPP_PATH
-//#include Buffer_HPP_PATH
 #include Window_HPP_PATH
 #include EnumTypes_HPP_PATH
+
 
 namespace rythe::rendering
 {
@@ -21,7 +20,7 @@ namespace rythe::rendering
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr) { m_impl.initialize(res, name, window); }
 		void close() { m_impl.close(); }
 		GLFWwindow* getWindow() { return m_impl.getWindow(); }
-		internal::window& getHwnd() { return m_impl.getHwnd(); }
+		window_handle getHwnd() { return m_impl.getHwnd(); }
 		void makeCurrent() { m_impl.makeCurrent(); }
 		void setSwapInterval(int interval) { m_impl.setSwapInterval(interval); }
 		bool shouldWindowClose() { return m_impl.shouldWindowClose(); }

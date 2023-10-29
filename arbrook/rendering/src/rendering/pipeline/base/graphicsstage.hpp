@@ -4,7 +4,7 @@
 
 #include "core/logging/logging.hpp"
 
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/cache/shadercache.hpp"
 #include "rendering/cache/texturecache.hpp"
 #include "rendering/cache/buffercache.hpp"
@@ -25,7 +25,4 @@ namespace rythe::rendering
 			}
 		}
 	};
-
-	//template<typename T>
-	//concept StageType = std::derived_from<T, graphics_stage<T>;
 }

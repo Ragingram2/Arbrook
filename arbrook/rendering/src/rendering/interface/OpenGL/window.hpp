@@ -3,7 +3,9 @@
 
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW//glfw3native.h>
+#include <GLFW/glfw3native.h>
+
+#include <rsl/logging>
 
 #include "core/math/math.hpp"
 
@@ -13,7 +15,6 @@ namespace rythe::rendering::internal
 	{
 	private:
 		GLFWwindow* m_window;
-	public:
 		math::ivec2 m_resolution;
 		std::string m_windowName;
 
@@ -67,6 +68,11 @@ namespace rythe::rendering::internal
 			glfwMakeContextCurrent(m_window);
 		}
 
+		math::ivec2 getResolution()
+		{
+			return m_resolution;
+		}
+
 		void checkError()
 		{
 			GLenum errcode;
@@ -93,11 +99,11 @@ namespace rythe::rendering::internal
 				case GL_OUT_OF_MEMORY:
 					error = "OUT_OF_MEMORY";
 					break;
-				case GL_INVALID_FRAMEBUFFER_OPERATION:
-					error = "INVALID_FRAMEBUFFER_OPERATION";
-					break;
+				//case GL_INVALID_FRAMEBUFFER_OPERATION:
+				//	error = "INVALID_FRAMEBUFFER_OPERATION";
+				//	break;
 				}
-				log::error("{}: {}", errcode, error);
+				//log::error("{}: {}", errcode, error);
 			}
 		}
 	};

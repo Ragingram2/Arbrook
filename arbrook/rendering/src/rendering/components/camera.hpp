@@ -5,7 +5,7 @@
 #include "core/ecs/entity.hpp"
 #include "core/components/transform.hpp"
 #include "core/ecs/component_family.hpp"
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 
 namespace rythe::rendering
 {
@@ -46,7 +46,6 @@ namespace rythe::rendering
 				}
 			}
 
-			log::warn("Camera has no owner or owner doesn't contain a transform component");
 			return math::mat4(1.f);
 		}
 

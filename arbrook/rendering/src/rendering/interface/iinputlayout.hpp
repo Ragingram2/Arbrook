@@ -2,10 +2,8 @@
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/bufferhandle.hpp"
 
-#include "rendering/interface/enumtypes.hpp"
-#include "rendering/interface/config.hpp"
-#include EnumTypes_HPP_PATH
-#include Window_HPP_PATH
+#include "rendering/interface/definitions/enumtypes.hpp"
+
 
 namespace rythe::rendering
 {
@@ -16,11 +14,12 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 
-		void initialize(internal::window& hwnd, unsigned int numBuffers, shader_handle shader) { m_impl.initialize(hwnd, numBuffers, shader); }
+		void initialize(unsigned int numBuffers, shader_handle shader) { m_impl.initialize(numBuffers, shader); }
 
 		void bind() { m_impl.bind(); }
 
-		void setAttributePtr(buffer_handle buf, const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass = InputClass::PER_VERTEX, unsigned int instanceStep = 0) { m_impl.setAttributePtr(buf,attribName, index, static_cast<internal::FormatType>(components), inputSlot, stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
+		void setAttributePtr(buffer_handle buf, const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass = InputClass::PER_VERTEX, unsigned int instanceStep = 0) 
+		{ m_impl.setAttributePtr(buf, attribName, index, static_cast<internal::FormatType>(components), inputSlot, stride, offset, static_cast<internal::InputClass>(inputClass), instanceStep); }
 
 		void submitAttributes() { m_impl.submitAttributes(); }
 		

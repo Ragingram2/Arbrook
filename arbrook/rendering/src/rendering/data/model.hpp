@@ -4,8 +4,8 @@
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/bufferhandle.hpp"
 
-#include "rendering/interface/buffer.hpp"
-#include "rendering/interface/inputlayout.hpp"
+#include "rendering/interface/definitions/buffer.hpp"
+#include "rendering/interface/definitions/inputlayout.hpp"
 #include "rendering/cache/buffercache.hpp"
 
 namespace rythe::rendering
@@ -39,7 +39,7 @@ namespace rythe::rendering
 		{
 			meshHandle = handle;
 			layout.release();
-			layout.initialize(hwnd, 1, shader);
+			layout.initialize(1, shader);
 			layout.bind();
 
 			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);

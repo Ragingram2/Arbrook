@@ -7,9 +7,14 @@
 
 namespace rythe::rendering
 {
+	namespace internal
+	{
+		struct window;
+	}
 	template<typename APIType>
 	struct Iwindow
 	{
+		friend struct window_handle;
 	private:
 		APIType m_impl;
 	public:
@@ -27,5 +32,9 @@ namespace rythe::rendering
 		bool shouldClose() { return m_impl.shouldClose(); }
 
 		void setWindowTitle(const std::string& name) { m_impl.setWindowTitle(name); }
+
+		void makeCurrent() { m_impl.makeCurrent(); }
+		
+		math::ivec2 getResolution() { return m_impl.getResolution(); }
 	};
 }

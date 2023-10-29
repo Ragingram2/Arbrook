@@ -1,22 +1,22 @@
 #pragma once
 #include <string>
 
-#include "rendering/interface/enumtypes.hpp"
-#include "rendering/interface/config.hpp"
-#include EnumTypes_HPP_PATH
+#include "rendering/interface/definitions/enumtypes.hpp"
 
 namespace rythe::rendering
 {
 	struct buffer_handle;
 	class ShaderCache;
+	namespace internal
+	{
+		struct inputlayout;
+	}
 
 	template<typename APIType>
 	struct Ishader
 	{
 		friend class ShaderCache;
-		//friend class IRenderInterface<internal::RenderInterface>;
-		//friend struct internal::inputlayout;
-		//friend struct shader_handle;
+		friend struct internal::inputlayout;
 	private:
 		APIType m_impl;
 	public:

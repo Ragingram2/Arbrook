@@ -4,18 +4,15 @@
 
 #include <rsl/primitives>
 
-#include "rendering/interface/enumtypes.hpp"
-#include "rendering/interface/config.hpp"
-#include EnumTypes_HPP_PATH
+#include "rendering/interface/definitions/enumtypes.hpp"
 
 namespace rythe::rendering
 {
 	class BufferCache;
-	//	template<typename APIType>
-	//	class IRenderInterface;
 	namespace internal
 	{
 		struct shader;
+		struct window;
 	}
 }
 
@@ -29,11 +26,7 @@ namespace rythe::rendering
 	struct Ibuffer
 	{
 		friend class BufferCache;
-		//friend class IRenderInterface<internal::RenderInterface>;
-		//friend struct internal::inputlayout;
 		friend struct internal::shader;
-		////friend struct data_handle<Ibuffer<internal::buffer>>;
-		//friend struct buffer_handle;
 	private:
 		APIType m_impl;
 	public:

@@ -30,13 +30,23 @@ filter "configurations:*OGL"
         "include/imgui/backends/imgui_impl_opengl3.h"
     }
 
+    removefiles {
+        "include/imgui/backends/imgui_impl_dx11.cpp",
+        "include/imgui/backends/imgui_impl_dx11.h"
+    }
+
 filter "configurations:*DX11"
     files {
         "include/imgui/backends/imgui_impl_dx11.cpp",
         "include/imgui/backends/imgui_impl_dx11.h"
     }
 
+    removefiles {
+        "include/imgui/backends/imgui_impl_opengl3.cpp",
+        "include/imgui/backends/imgui_impl_opengl3.h"
+    }
 
+filter {}
 
 
 

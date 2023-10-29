@@ -3,7 +3,7 @@
 
 #include <rsl/math>
 
-#include "rendering/interface/definitions.hpp"
+#include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/rendering.hpp"
 
 
@@ -46,9 +46,9 @@ namespace rythe::testing
 	};
 }
 
-namespace std {
-	template <> struct hash<rythe::testing::APIType> {
-		size_t operator() (const rythe::testing::APIType& t) const { return size_t(t); }
-	};
-}
+//namespace std {
+//	template <> struct hash<rythe::testing::APIType> {
+//		size_t operator() (const rythe::testing::APIType& t) const { return size_t(t); }
+//	};
+//}
 

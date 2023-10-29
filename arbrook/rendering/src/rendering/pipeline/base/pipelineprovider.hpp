@@ -20,7 +20,7 @@ namespace rythe::rendering
 
 		PipelineBase* get(int index) override
 		{
-			if (index <= m_pipelines.size() - 1)
+			if (index <= m_pipelines.size() - 1)//what is this?
 			{
 				m_pipelines.push_back(std::make_unique<PipelineType>());
 				graphics_stage_base::pipeline = m_pipelines[index].get();

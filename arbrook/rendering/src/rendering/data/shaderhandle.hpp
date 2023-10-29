@@ -1,5 +1,5 @@
 #pragma once
-#include "rendering/interface/shader.hpp"
+#include "rendering/interface/definitions/shader.hpp"
 
 namespace rythe::rendering
 {

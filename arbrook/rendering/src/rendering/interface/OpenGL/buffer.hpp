@@ -6,8 +6,6 @@
 
 #include <rsl/primitives>
 
-//#include "rendering/interface/ibuffer.hpp"
-//#include "rendering/interface/iinputlayout.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 

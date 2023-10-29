@@ -24,3 +24,4 @@ filter "configurations:Release*"
     links {"rendering","glfw3_mt","bgfx","bimg","bx","glew32s","opengl32","libpng16"}
 
 filter {}
+
