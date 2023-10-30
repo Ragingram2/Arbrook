@@ -44,9 +44,9 @@ namespace rythe::rendering::internal
 		void initialize(const std::string& name, const shader_source& source)
 		{
 			compileShader(ShaderType::VERTEX, source.vertexSource);
-			hwnd.checkError();
+			m_hwnd.checkError();
 			compileShader(ShaderType::FRAGMENT, source.fragSource);
-			hwnd.checkError();
+			m_hwnd.checkError();
 
 			hwnd.dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
 			hwnd.dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);

@@ -115,8 +115,9 @@ namespace rythe::rendering::internal
 
 		void release()
 		{
-
+			//do stuff here later
 		}
+
 	private:
 		void createBuffer()
 		{

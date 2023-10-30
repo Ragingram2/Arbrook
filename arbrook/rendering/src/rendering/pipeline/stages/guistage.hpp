@@ -64,7 +64,7 @@ namespace rythe::rendering
 		template <class T, void(T::* Func)()>
 		static void addGuiRender(T* ptr)
 		{
-			m_onGuiRender.push_back<T,Func>(*ptr);
+			m_onGuiRender.push_back<T, Func>(*ptr);
 		}
 	};
 

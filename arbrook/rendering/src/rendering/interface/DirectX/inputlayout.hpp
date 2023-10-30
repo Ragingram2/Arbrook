@@ -32,7 +32,7 @@ namespace rythe::rendering::internal
 		unsigned int id = 0;
 	private:
 		std::vector<D3D11_INPUT_ELEMENT_DESC> elementDesc;
-		std::unordered_map<unsigned int, std::vector<vertexattribute>> m_vertexAttribs;
+		std::unordered_map<std::string, vertexattribute> m_vertexAttribs;
 		ID3D11InputLayout* m_layout = nullptr;
 		ID3D10Blob* m_vsBlob = nullptr;
 	public:
@@ -48,17 +48,16 @@ namespace rythe::rendering::internal
 
 		void setAttributePtr(buffer_handle buf, const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
 		{
-			m_vertexAttribs[buf->getId()].emplace_back(vertexattribute{ attribName.c_str(), index, components, inputSlot, stride, offset, inputClass, instancedStep });
+			m_vertexAttribs.emplace(buf->getName(), vertexattribute{attribName.c_str(), index, components, inputSlot, stride, offset, inputClass, instancedStep});
 		}
 
 		void submitAttributes()
 		{
 			if (m_vertexAttribs.size() > 0)
 			{
-				for (auto& [buffId, attribs] : m_vertexAttribs)
+				for (auto& [name,attrib] : m_vertexAttribs)
 				{
-					for (auto& attrib : attribs)
-						elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), attrib.index, static_cast<DXGI_FORMAT>(attrib.format), attrib.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
+					elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ name.c_str(), attrib.index, static_cast<DXGI_FORMAT>(attrib.format), attrib.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
 				}
 				CHECKERROR(hwnd.dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout), "Failed creating input layout", hwnd.checkError());
 

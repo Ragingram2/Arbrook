@@ -279,7 +279,6 @@ struct DrawIndexedTest<APIType::Native> : public rendering_test
 	gfx::mesh_handle meshHandle;
 	gfx::material_handle mat;
 
-
 	float i = 0;
 
 	virtual void setup(gfx::camera& cam, core::transform& camTransf) override
@@ -302,7 +301,6 @@ struct DrawIndexedTest<APIType::Native> : public rendering_test
 
 	virtual void destroy() override
 	{
-
 		initialized = false;
 	}
 };

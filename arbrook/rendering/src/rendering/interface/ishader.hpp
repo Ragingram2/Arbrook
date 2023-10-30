@@ -12,6 +12,11 @@ namespace rythe::rendering
 		struct inputlayout;
 	}
 
+	namespace internal
+	{
+		struct inputlayout;
+	}
+
 	template<typename APIType>
 	struct Ishader
 	{

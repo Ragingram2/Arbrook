@@ -19,7 +19,8 @@ namespace rythe::rendering::internal
 		D3D11_SAMPLER_DESC m_sampDesc;
 		D3D11_TEXTURE2D_DESC m_texDesc;
 		TargetType m_texType;
-		UsageType m_usage;
+		//UsageType m_usage;
+		//window m_hwnd;
 	public:
 		unsigned int id;
 		std::string name;
@@ -35,10 +36,10 @@ namespace rythe::rendering::internal
 			params = other->params;
 		}
 
-		void initialize(TargetType texType, UsageType usage, texture_parameters params, bool generateMipMaps = false)
+		void initialize(TargetType texType, texture_parameters params, bool generateMipMaps = false)
 		{
 			m_texType = texType;
-			m_usage = usage;
+			//m_usage = usage;
 			this->params = params;
 		}
 
@@ -80,7 +81,7 @@ namespace rythe::rendering::internal
 			m_texDesc.Format = static_cast<DXGI_FORMAT>(params.format);
 			m_texDesc.SampleDesc.Count = 1;
 			m_texDesc.SampleDesc.Quality = 0;
-			m_texDesc.Usage = static_cast<D3D11_USAGE>(m_usage);
+			m_texDesc.Usage = D3D11_USAGE_DEFAULT;//static_cast<D3D11_USAGE>(m_usage);
 			m_texDesc.BindFlags = static_cast<unsigned int>(m_texType);
 
 			D3D11_SUBRESOURCE_DATA subData;

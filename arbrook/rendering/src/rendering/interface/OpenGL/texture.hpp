@@ -12,6 +12,7 @@
 
 namespace rythe::rendering::internal
 {
+	namespace log = rsl::log;
 	struct texture
 	{
 	private:
