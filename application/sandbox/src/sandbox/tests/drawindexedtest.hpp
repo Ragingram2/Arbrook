@@ -108,8 +108,8 @@ namespace rythe::testing
 #elif RenderingAPI == RenderingAPI_DX11
 			init.type = bgfx::RendererType::Direct3D11;
 			init.platformData.context = gfx::Renderer::RI->getHwnd()->dev;
-			init.platformData.backBuffer = gfx::Renderer::RI->getHwnd().backbuffer;
-			init.platformData.backBufferDS = gfx::Renderer::RI->getHwnd().depthStencilView;
+			init.platformData.backBuffer = gfx::Renderer::RI->getHwnd()->backbuffer;
+			init.platformData.backBufferDS = gfx::Renderer::RI->getHwnd()->depthStencilView;
 #endif
 
 			init.resolution.width = gfx::Renderer::RI->getHwnd()->getResolution().x;

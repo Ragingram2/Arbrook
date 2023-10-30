@@ -32,7 +32,7 @@ namespace rythe::rendering
 			ImGui_ImplOpenGL3_Init("#version 420");
 #elif RenderingAPI == RenderingAPI_DX11
 			ImGui_ImplGlfw_InitForOther(RI->getWindow(), true);
-			ImGui_ImplDX11_Init(RI->getHwnd().dev,RI->getHwnd().devcon);
+			ImGui_ImplDX11_Init(RI->getHwnd()->dev,RI->getHwnd()->devcon);
 #endif
 		}
 

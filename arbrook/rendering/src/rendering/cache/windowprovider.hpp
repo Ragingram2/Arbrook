@@ -27,4 +27,5 @@ namespace rythe::rendering
 			return { nullptr };
 		}
 	};
+	inline std::vector<std::unique_ptr<internal::window>> WindowProvider::m_windows;
 }

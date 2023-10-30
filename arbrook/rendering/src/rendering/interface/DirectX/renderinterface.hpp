@@ -12,6 +12,7 @@
 #include "core/math/math.hpp"
 #include "core/logging/logging.hpp"
 #include "rendering/interface/DirectX/dx11includes.hpp"
+#include "rendering/cache/windowprovider.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/data/texturehandle.hpp"
 #include "rendering/interface/definitions/window.hpp"

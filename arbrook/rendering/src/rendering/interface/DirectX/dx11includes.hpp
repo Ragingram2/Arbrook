@@ -11,6 +11,3 @@
 #pragma comment (lib, "DxErr.lib")
 #pragma comment (lib, "D3DCompiler.lib")
 #pragma comment(lib, "legacy_stdio_definitions.lib")
-
-#undef min
-#undef max

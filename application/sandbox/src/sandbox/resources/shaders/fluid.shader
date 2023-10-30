@@ -41,14 +41,15 @@ void main()
 #HLSL
 #shader vertex
 
-struct VOut()
+struct VOut
 {
-
+	float4 p_position : SV_POSITION;
 };
 
-VOut VShader()
+VOut VShader(float4 position : POSITION) 
 {
 	VOut output;
+	output.p_position = position;
 	return output;
 }
 
@@ -58,6 +59,6 @@ SamplerState m_sampler;
 
 float4 PShader(float4 position : SV_POSITION) : SV_TARGET
 {
-	return float4(0.f);
+	return float4(1.0,0.0,0.0,1.0);
 }
 #END

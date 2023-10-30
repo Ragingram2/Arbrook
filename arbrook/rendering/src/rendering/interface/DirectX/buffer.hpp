@@ -2,6 +2,7 @@
 
 #include "core/logging/logging.hpp"
 
+#include "rendering/cache/windowprovider.hpp"
 #include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/interface/definitions/window.hpp"
 #include "rendering/interface/config.hpp"
@@ -42,12 +43,14 @@ namespace rythe::rendering::internal
 
 		TargetType m_target;
 		UsageType m_usage;
+		window_handle hwnd;
 
 	public:
 		operator ID3D11Buffer* () const { return m_internalBuffer; }
 		template<typename elementType>
 		void initialize(TargetType target, UsageType usage, int size)
 		{
+			hwnd = WindowProvider::get(0);
 			m_target = target;
 			m_usage = usage;
 			m_size = size;
@@ -94,13 +97,13 @@ namespace rythe::rendering::internal
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				hwnd.devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
+				hwnd->devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
 				break;
 			case TargetType::INDEX_BUFFER:
-				hwnd.devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
+				hwnd->devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				hwnd.devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
+				hwnd->devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -108,9 +111,9 @@ namespace rythe::rendering::internal
 			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			CHECKERROR(hwnd.devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource),"Buffer Failed to be filled",hwnd.checkError() );
+			CHECKERROR(hwnd->devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource),"Buffer Failed to be filled",hwnd->checkError() );
 			memcpy(resource.pData, data, m_size * sizeof(elementType));
-			hwnd.devcon->Unmap(m_internalBuffer, NULL);
+			hwnd->devcon->Unmap(m_internalBuffer, NULL);
 		}
 
 		void release()
@@ -136,7 +139,7 @@ namespace rythe::rendering::internal
 
 			m_bufferDesc.ByteWidth *= m_size;
 
-			CHECKERROR(hwnd.dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created",hwnd.checkError());
+			CHECKERROR(hwnd->dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created",hwnd->checkError());
 		}
 	};
 }

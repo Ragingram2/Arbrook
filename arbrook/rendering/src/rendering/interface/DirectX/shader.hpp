@@ -3,9 +3,10 @@
 
 #include <rsl/logging>
 
-#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/data/bufferhandle.hpp"
 #include "rendering/data/shadersource.hpp"
+#include "rendering/cache/windowprovider.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/interface/definitions/window.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
@@ -19,6 +20,7 @@ namespace rythe::rendering::internal
 		ID3D11PixelShader* m_PS = nullptr;
 		std::unordered_map<std::string, buffer_handle> m_vsConstBuffers;
 		std::unordered_map<std::string, buffer_handle> m_psConstBuffers;
+		window_handle m_hwnd;
 	public:
 		unsigned int programId;
 		std::string name;
@@ -43,32 +45,33 @@ namespace rythe::rendering::internal
 
 		void initialize(const std::string& name, const shader_source& source)
 		{
+			m_hwnd = WindowProvider::get(0);
 			compileShader(ShaderType::VERTEX, source.vertexSource);
-			m_hwnd.checkError();
+			m_hwnd->checkError();
 			compileShader(ShaderType::FRAGMENT, source.fragSource);
-			m_hwnd.checkError();
+			m_hwnd->checkError();
 
-			hwnd.dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
-			hwnd.dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
+			m_hwnd->dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
+			m_hwnd->dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
 		}
 
 		void bind()
 		{
-			hwnd.devcon->VSSetShader(m_VS, 0, 0);
-			hwnd.devcon->PSSetShader(m_PS, 0, 0);
+			m_hwnd->devcon->VSSetShader(m_VS, 0, 0);
+			m_hwnd->devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
 			for (auto& [name, handle] : m_vsConstBuffers)
 			{
 				buffers.push_back(handle.m_data->m_impl);
 			}
-			hwnd.devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
+			m_hwnd->devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
 			for (auto& [name, handle] : m_psConstBuffers)
 			{
 				buffers.push_back(handle.m_data->m_impl);
 			}
-			hwnd.devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
+			m_hwnd->devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)
@@ -145,7 +148,7 @@ namespace rythe::rendering::internal
 					{
 						log::error((char*)error->GetBufferPointer());
 					}
-					hwnd.checkError();
+					m_hwnd->checkError();
 				}
 			}
 			else if (type == ShaderType::FRAGMENT)
@@ -158,7 +161,7 @@ namespace rythe::rendering::internal
 					{
 						log::error((char*)error->GetBufferPointer());
 					}
-					hwnd.checkError();
+					m_hwnd->checkError();
 				}
 			}
 

@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 
-#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/data/textureparameters.hpp"
+#include "rendering/cache/windowprovider.hpp"
+#include "rendering/interface/DirectX/dx11includes.hpp"
 #include "rendering/interface/definitions/window.hpp"
 
 #include <stb/stb_image.h>
@@ -20,7 +21,7 @@ namespace rythe::rendering::internal
 		D3D11_TEXTURE2D_DESC m_texDesc;
 		TargetType m_texType;
 		//UsageType m_usage;
-		//window m_hwnd;
+		window_handle m_hwnd;
 	public:
 		unsigned int id;
 		std::string name;
@@ -38,6 +39,7 @@ namespace rythe::rendering::internal
 
 		void initialize(TargetType texType, texture_parameters params, bool generateMipMaps = false)
 		{
+			m_hwnd = WindowProvider::get(0);
 			m_texType = texType;
 			//m_usage = usage;
 			this->params = params;
@@ -45,8 +47,8 @@ namespace rythe::rendering::internal
 
 		void bind()
 		{
-			hwnd.devcon->PSSetShaderResources(0, 1, &m_shaderResource);
-			hwnd.devcon->PSSetSamplers(0, 1, &m_texSamplerState);
+			m_hwnd->devcon->PSSetShaderResources(0, 1, &m_shaderResource);
+			m_hwnd->devcon->PSSetSamplers(0, 1, &m_texSamplerState);
 		}
 
 		void loadData(const std::string& filepath, bool flipVertical = true)
@@ -60,7 +62,7 @@ namespace rythe::rendering::internal
 			m_sampDesc.MinLOD = 0;
 			m_sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-			HRESULT hr = hwnd.dev->CreateSamplerState(&m_sampDesc, &m_texSamplerState);
+			HRESULT hr = m_hwnd->dev->CreateSamplerState(&m_sampDesc, &m_texSamplerState);
 			if (FAILED(hr))
 			{
 				log::error("Texture sampler failed creation");
@@ -88,18 +90,18 @@ namespace rythe::rendering::internal
 			subData.pSysMem = data;
 			subData.SysMemPitch = m_texDesc.Width * 4;
 
-			hr = hwnd.dev->CreateTexture2D(&m_texDesc, &subData, &m_texture);
+			hr = m_hwnd->dev->CreateTexture2D(&m_texDesc, &subData, &m_texture);
 			if (FAILED(hr))
 			{
 				log::error("Texture creation failed");
-				hwnd.checkError();
+				m_hwnd->checkError();
 			}
 
-			hr = hwnd.dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource);
+			hr = m_hwnd->dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource);
 			if (FAILED(hr))
 			{
 				log::error("Failed to create the ShaderResourceView");
-				hwnd.checkError();
+				m_hwnd->checkError();
 			}
 		}
 	};
