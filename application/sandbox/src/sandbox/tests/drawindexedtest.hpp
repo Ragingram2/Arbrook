@@ -5,10 +5,10 @@
 namespace rythe::testing
 {
 	template<enum APIType type>
-	struct DrawIndexedTest : public rendering_test { };
+	struct DrawIndexedInstancedTest : public rendering_test { };
 
 	template<>
-	struct DrawIndexedTest<APIType::Arbrook> : public rendering_test
+	struct DrawIndexedInstancedTest<APIType::Arbrook> : public rendering_test
 	{
 		gfx::camera_data data;
 		gfx::material_handle mat;
@@ -21,7 +21,7 @@ namespace rythe::testing
 
 		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
 		{
-			name = "DrawIndexed";
+			name = "DrawIndexedInstanced";
 			log::debug("Initializing {}_Test{}", getAPIName(APIType::Arbrook), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}_Test{}", getAPIName(APIType::Arbrook), name).c_str());
 
@@ -57,7 +57,7 @@ namespace rythe::testing
 			mat->shader->setData("ConstantBuffer", &data);
 			vBuffer->bind();
 			idxBuffer->bind();
-			gfx::Renderer::RI->drawIndexed(gfx::PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 0, 0);
+			gfx::Renderer::RI->drawIndexedInstanced(gfx::PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 1, 0, 0, 0);
 		}
 
 		virtual void destroy() override
@@ -72,7 +72,7 @@ namespace rythe::testing
 	};
 
 	template<>
-	struct DrawIndexedTest<APIType::BGFX> : public rendering_test
+	struct DrawIndexedInstancedTest<APIType::BGFX> : public rendering_test
 	{
 		gfx::camera_data data;
 		gfx::mesh_handle meshHandle;
@@ -94,8 +94,7 @@ namespace rythe::testing
 
 		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
 		{
-			//cam.calculate_projection();
-			name = "DrawIndexed";
+			name = "DrawIndexedInstanced";
 			log::debug("Initializing {}_Test{}", getAPIName(APIType::BGFX), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}_Test{}", getAPIName(APIType::BGFX), name).c_str());
 			meshHandle = gfx::MeshCache::getMesh("suzanne");
@@ -103,6 +102,12 @@ namespace rythe::testing
 			bgfx::Init init;
 			init.platformData.nwh = glfwGetWin32Window(gfx::Renderer::RI->getWindow());
 			init.platformData.ndt = nullptr;
+			init.resolution.width = gfx::Renderer::RI->getHwnd()->getResolution().x;
+			init.resolution.height = gfx::Renderer::RI->getHwnd()->getResolution().y;
+#ifdef _DEBUG
+			init.callback = &callback;
+#endif
+
 #if RenderingAPI == RenderingAPI_OGL
 			init.type = bgfx::RendererType::OpenGL;
 #elif RenderingAPI == RenderingAPI_DX11
@@ -112,12 +117,10 @@ namespace rythe::testing
 			init.platformData.backBufferDS = gfx::Renderer::RI->getHwnd()->depthStencilView;
 #endif
 
-			init.resolution.width = gfx::Renderer::RI->getHwnd()->getResolution().x;
-			init.resolution.height = gfx::Renderer::RI->getHwnd()->getResolution().y;
-#ifdef _DEBUG
-			init.callback = &callback;
-#endif
-			bgfx::init(init);
+			if (!bgfx::init(init))
+			{
+				log::error("BGFX did not initialize properly");
+			}
 
 			bgfx::setDebug(BGFX_DEBUG_TEXT);
 
@@ -133,7 +136,7 @@ namespace rythe::testing
 
 			indexBuffer = bgfx::createIndexBuffer(bgfx::makeRef(meshHandle->indices.data(), meshHandle->indices.size() * sizeof(unsigned int)), BGFX_BUFFER_INDEX32);
 
-			shader = loadProgram("testFS", "testVS");
+			shader = loadProgram("testVS", "testFS");
 
 			if (shader.idx == bgfx::kInvalidHandle)
 				log::error("Shader failed to compile");
@@ -160,7 +163,8 @@ namespace rythe::testing
 			bgfx::setVertexBuffer(0, vertexBuffer);
 			bgfx::setIndexBuffer(indexBuffer);
 			bgfx::setState(state);
-			bgfx::submit(0, shader);
+			bgfx::submit(0, shader, BGFX_DISCARD_NONE);
+			bgfx::frame();
 			bgfx::frame();
 		}
 
@@ -174,7 +178,7 @@ namespace rythe::testing
 
 #if RenderingAPI == RenderingAPI_OGL
 	template<>
-	struct DrawIndexedTest<APIType::Native> : public rendering_test
+	struct DrawIndexedInstancedTest<APIType::Native> : public rendering_test
 	{
 		gfx::camera_data data;
 		gfx::mesh_handle meshHandle;
@@ -191,7 +195,7 @@ namespace rythe::testing
 
 		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
 		{
-			name = "DrawIndexed";
+			name = "DrawIndexedInstanced";
 			log::debug("Initializing {}OGL_Test{}", getAPIName(APIType::Native), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}OGL_Test{}", getAPIName(APIType::Native), name).c_str());
 
@@ -272,37 +276,37 @@ namespace rythe::testing
 		}
 	};
 #elif RenderingAPI == RenderingAPI_DX11
-template<>
-struct DrawIndexedTest<APIType::Native> : public rendering_test
-{
-	gfx::camera_data data;
-	gfx::mesh_handle meshHandle;
-	gfx::material_handle mat;
-
-	float i = 0;
-
-	virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+	template<>
+	struct DrawIndexedInstancedTest<APIType::Native> : public rendering_test
 	{
-		name = "DrawIndexed";
-		log::debug("Initializing {}DX11_Test{}", getAPIName(APIType::Native), name);
-		glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}OGL_Test{}", getAPIName(APIType::Native), name).c_str());
+		gfx::camera_data data;
+		gfx::mesh_handle meshHandle;
+		gfx::material_handle mat;
 
-		meshHandle = gfx::MeshCache::getMesh("teapot");
-		mat = gfx::MaterialCache::loadMaterial("test", "cube");
+		float i = 0;
 
-		initialized = true;
-	}
+		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+		{
+			name = "DrawIndexedInstanced";
+			log::debug("Initializing {}DX11_Test{}", getAPIName(APIType::Native), name);
+			glfwSetWindowTitle(gfx::Renderer::RI->getWindow(), std::format("{}DX11_Test{}", getAPIName(APIType::Native), name).c_str());
 
-	virtual void update(gfx::camera& cam, core::transform& camTransf) override
-	{
+			meshHandle = gfx::MeshCache::getMesh("teapot");
+			mat = gfx::MaterialCache::loadMaterial("test", "cube");
+
+			initialized = true;
+		}
+
+		virtual void update(gfx::camera& cam, core::transform& camTransf) override
+		{
 
 
-	}
+		}
 
-	virtual void destroy() override
-	{
-		initialized = false;
-	}
-};
+		virtual void destroy() override
+		{
+			initialized = false;
+		}
+	};
 #endif
 }

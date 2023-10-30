@@ -97,6 +97,7 @@ namespace entry
 
 namespace rythe::testing
 {
+	namespace log = rsl::log;
 	inline const bgfx::Memory* loadMem(bx::FileReaderI* _reader, const char* _filePath)
 	{
 		if (bx::open(_reader, _filePath))
@@ -192,6 +193,7 @@ namespace rythe::testing
 		return loadProgram(entry::getFileReader(), _vsName, _fsName);
 	}
 
+
 	struct BgfxCallback : public bgfx::CallbackI
 	{
 		virtual ~BgfxCallback()
@@ -210,8 +212,10 @@ namespace rythe::testing
 
 		virtual void traceVargs(const char* _filePath, uint16_t _line, const char* _format, va_list _argList) override
 		{
-			//log::debug("%s (%d): ", _filePath, _line);
-			//log::debug(_format, _argList);
+			//log::info("{} ({}): ", _filePath, _line);
+			//bx::debugPrintfVargs(_format, _argList);
+			//std::printf(_format,_argList);
+			//log::info(_format, _argList);
 		}
 
 		virtual void profilerBegin(const char* /*_name*/, uint32_t /*_abgr*/, const char* /*_filePath*/, uint16_t /*_line*/) override

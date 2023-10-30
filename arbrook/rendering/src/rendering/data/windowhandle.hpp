@@ -1,5 +1,4 @@
 #pragma once
-#include <GLFW/glfw3.h>
 #include "rendering/interface/config.hpp"
 #include Window_HPP_PATH
 

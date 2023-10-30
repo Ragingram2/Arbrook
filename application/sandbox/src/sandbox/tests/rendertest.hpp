@@ -6,8 +6,6 @@
 #include "rendering/interface/definitions/definitions.hpp"
 #include "rendering/rendering.hpp"
 
-
-
 namespace rythe::testing
 {
 	enum APIType

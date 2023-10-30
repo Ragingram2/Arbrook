@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
 
-#include <GL/glew.h>
 
 #include <rsl/logging>
 
 #include "rendering/data/textureparameters.hpp"
+#include "rendering/interface/OpenGL/oglincludes.hpp"
 
 #include <stb/stb_image.h>
 #define STB_IMAGE_IMPLEMENTATION

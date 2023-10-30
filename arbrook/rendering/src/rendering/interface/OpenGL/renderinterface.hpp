@@ -3,20 +3,17 @@
 #include <string>
 #include <fstream>
 
-#include "core/math/math.hpp"
-#include "core/logging/logging.hpp"
-#include "rendering/data/shadersource.hpp"
-#include "rendering/data/handles.hpp"
-#include "rendering/interface/config.hpp"
-#include Shader_HPP_PATH
-#include Buffer_HPP_PATH
-#include Texture_HPP_PATH
+#include <rsl/logging>
+#include <rsl/math>
 
+#include "rendering/interface/OpenGL/oglincludes.hpp"
+#include "rendering/interface/OpenGL/enumtypes.hpp"
 #include "rendering/cache/windowprovider.hpp"
-
 
 namespace rythe::rendering::internal
 {
+	namespace log = rsl::log;
+	namespace math = rsl::math;
 	class RenderInterface
 	{
 	private:
@@ -25,7 +22,9 @@ namespace rythe::rendering::internal
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing OpenGL");
-			hwnd = WindowProvider::addWindow();
+			if (!window)
+				hwnd = WindowProvider::addWindow();
+
 			hwnd->initialize(res, name, window);
 			hwnd->makeCurrent();
 
@@ -163,7 +162,7 @@ namespace rythe::rendering::internal
 			glStencilMask(mask);
 		}
 
-		void setDepthFunction(internal::DepthFuncs function)
+		void setDepthFunction(DepthFuncs function)
 		{
 			glDepthFunc(static_cast<GLenum>(function));
 		}
@@ -271,7 +270,7 @@ namespace rythe::rendering::internal
 		{
 		case GL_DEBUG_SEVERITY_HIGH:
 			log::error("[{}-{}] {}: {}", s, t, id, message);
-			__debugbreak();
+			//__debugbreak();
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
 			log::warn("[{}-{}] {}: {}", s, t, id, message);

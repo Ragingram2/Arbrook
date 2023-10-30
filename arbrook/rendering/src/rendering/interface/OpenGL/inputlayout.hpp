@@ -3,7 +3,6 @@
 #include <set>
 #include <algorithm>
 
-#include <GL/glew.h>
 
 #include <rsl/primitives>
 
@@ -11,6 +10,7 @@
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/vertex.hpp"
 #include "rendering/data/vertexattribute.hpp"
+#include "rendering/interface/OpenGL/oglincludes.hpp"
 #include "rendering/interface/config.hpp"
 #include Buffer_HPP_PATH
 #include EnumTypes_HPP_PATH

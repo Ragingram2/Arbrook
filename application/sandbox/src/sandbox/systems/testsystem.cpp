@@ -15,13 +15,13 @@ namespace rythe::testing
 
 		//m_testScenes.emplace(APIType::None, std::vector<std::unique_ptr<rendering_test>>());
 		m_testScenes.emplace(APIType::Arbrook, std::vector<std::unique_ptr<rendering_test>>());
-		m_testScenes[APIType::Arbrook].emplace_back(std::make_unique<DrawIndexedTest<APIType::Arbrook>>());
+		m_testScenes[APIType::Arbrook].emplace_back(std::make_unique<DrawIndexedInstancedTest<APIType::Arbrook>>());
 
 		m_testScenes.emplace(APIType::BGFX, std::vector<std::unique_ptr<rendering_test>>());
-		m_testScenes[APIType::BGFX].emplace_back(std::make_unique<DrawIndexedTest<APIType::BGFX>>());
+		m_testScenes[APIType::BGFX].emplace_back(std::make_unique<DrawIndexedInstancedTest<APIType::BGFX>>());
 
 		m_testScenes.emplace(APIType::Native, std::vector<std::unique_ptr<rendering_test>>());
-		m_testScenes[APIType::Native].emplace_back(std::make_unique<DrawIndexedTest<APIType::Native>>());
+		m_testScenes[APIType::Native].emplace_back(std::make_unique<DrawIndexedInstancedTest<APIType::Native>>());
 
 		testEntity = createEntity("Entity");
 		{
@@ -91,7 +91,7 @@ namespace rythe::testing
 
 		Text("Here is where you can select which rendering test to run");
 		static int currentTestSelected = 0;
-		static const char* testNames[] = { "DrawIndexed" };
+		static const char* testNames[] = { "DrawIndexedInstanced"};
 		if (BeginCombo("Test Dropdown", testNames[currentTestSelected]))
 		{
 			for (int i = 0; i < 1; i++)

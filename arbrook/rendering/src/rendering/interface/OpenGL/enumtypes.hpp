@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glew.h>
+#include "rendering/interface/OpenGL/oglincludes.hpp"
 
 namespace rythe::rendering::internal
 {

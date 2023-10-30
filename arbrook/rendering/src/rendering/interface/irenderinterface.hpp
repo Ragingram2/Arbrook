@@ -4,10 +4,6 @@
 
 #include "rendering/data/windowhandle.hpp"
 #include "rendering/interface/definitions/enumtypes.hpp"
-#include "rendering/interface/config.hpp"
-#include Window_HPP_PATH
-#include EnumTypes_HPP_PATH
-
 
 namespace rythe::rendering
 {

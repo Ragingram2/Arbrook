@@ -2,10 +2,10 @@
 #include <vector>
 #include <concepts>
 
-#include <GL/glew.h>
 
 #include <rsl/primitives>
 
+#include "rendering/interface/OpenGL/oglincludes.hpp"
 #include "rendering/interface/config.hpp"
 #include EnumTypes_HPP_PATH
 
@@ -23,10 +23,7 @@ namespace rythe::rendering::internal
 {
 	struct buffer
 	{
-		//friend struct rendering::data_handle<Ibuffer<internal::buffer>>;
 		friend struct Ibuffer<internal::buffer>;
-		//friend struct rythe::rendering::buffer_handle;
-		//friend struct internal::inputlayout;
 	public:
 		unsigned int id;
 		std::string name;

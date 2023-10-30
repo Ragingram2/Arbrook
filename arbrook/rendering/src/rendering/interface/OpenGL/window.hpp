@@ -1,16 +1,20 @@
 #pragma once
 #include <string>
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
 #include <rsl/logging>
+#include <rsl/math>
 
-#include "core/math/math.hpp"
+#include "rendering/interface/OpenGL/oglincludes.hpp"
 
 namespace rythe::rendering::internal
 {
+	namespace log = rsl::log;
+	namespace math = rsl::math;
 	struct window
 	{
 	private:
@@ -103,7 +107,7 @@ namespace rythe::rendering::internal
 				//	error = "INVALID_FRAMEBUFFER_OPERATION";
 				//	break;
 				}
-				//log::error("{}: {}", errcode, error);
+				log::error("{}: {}", errcode, error);
 			}
 		}
 	};
