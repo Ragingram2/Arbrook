@@ -16,3 +16,12 @@
 [submodule "arbrook/rendering/include/glfw"]
 	path = arbrook/rendering/include/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "application/sandbox/include/bgfx"]
+	path = application/sandbox/include/bgfx
+	url = https://github.com/Ragingram2/bgfx.git
+[submodule "application/sandbox/include/bx"]
+	path = application/sandbox/include/bx
+	url = https://github.com/bkaradzic/bx.git
+[submodule "application/sandbox/include/bimg"]
+	path = application/sandbox/include/bimg
+	url = https://github.com/bkaradzic/bimg.git
