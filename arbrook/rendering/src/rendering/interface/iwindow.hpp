@@ -21,7 +21,7 @@ namespace rythe::rendering
 
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr) { m_imple.initialize(res, name, window); }
 
-		GLFWwindow* getWindow() { return m_impl.getWindow(); }
+		GLFWwindow* getGlfwWindow() { return m_impl.getGlfwWindow(); }
 
 		void swapBuffers() { m_impl.swapBuffers(); }
 

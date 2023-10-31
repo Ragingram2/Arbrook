@@ -18,13 +18,13 @@ namespace rythe::rendering::internal
 	struct window
 	{
 	private:
-		GLFWwindow* m_window;
+		GLFWwindow* m_glfwWindow;
 		math::ivec2 m_resolution;
 		std::string m_windowName;
 
 	public:
 		window() = default;
-		window(window& hwnd) : m_window(hwnd.getWindow()), m_resolution(hwnd.m_resolution), m_windowName(hwnd.m_windowName) { }
+		window(window& hwnd) : m_glfwWindow(hwnd.getGlfwWindow()), m_resolution(hwnd.m_resolution), m_windowName(hwnd.m_windowName) { }
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
 
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
@@ -32,19 +32,19 @@ namespace rythe::rendering::internal
 			m_resolution = res;
 			m_windowName = name;
 			if (!window)
-				m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
+				m_glfwWindow = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
 			else
-				m_window = window;
+				m_glfwWindow = window;
 		}
 
-		GLFWwindow* getWindow()
+		GLFWwindow* getGlfwWindow()
 		{
-			return m_window;
+			return m_glfwWindow;
 		}
 
 		void swapBuffers()
 		{
-			glfwSwapBuffers(m_window);
+			glfwSwapBuffers(m_glfwWindow);
 		}
 
 		void setSwapInterval(int interval)
@@ -59,17 +59,17 @@ namespace rythe::rendering::internal
 
 		bool shouldClose()
 		{
-			return glfwWindowShouldClose(m_window);
+			return glfwWindowShouldClose(m_glfwWindow);
 		}
 
 		void setWindowTitle(const std::string& name)
 		{
-			glfwSetWindowTitle(m_window, name.data());
+			glfwSetWindowTitle(m_glfwWindow, name.data());
 		}
 
 		void makeCurrent()
 		{
-			glfwMakeContextCurrent(m_window);
+			glfwMakeContextCurrent(m_glfwWindow);
 		}
 
 		math::ivec2 getResolution()
@@ -103,9 +103,9 @@ namespace rythe::rendering::internal
 				case GL_OUT_OF_MEMORY:
 					error = "OUT_OF_MEMORY";
 					break;
-				//case GL_INVALID_FRAMEBUFFER_OPERATION:
-				//	error = "INVALID_FRAMEBUFFER_OPERATION";
-				//	break;
+				case GL_INVALID_FRAMEBUFFER_OPERATION:
+					error = "INVALID_FRAMEBUFFER_OPERATION";
+					break;
 				}
 				log::error("{}: {}", errcode, error);
 			}

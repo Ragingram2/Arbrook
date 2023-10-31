@@ -36,17 +36,17 @@ namespace rythe::rendering::internal
 		std::unordered_map<std::string, vertexattribute> m_vertexAttribs;
 		ID3D11InputLayout* m_layout = nullptr;
 		ID3D10Blob* m_vsBlob = nullptr;
-		window_handle hwnd;
+		window_handle m_windowHandle;
 	public:
 		void initialize(unsigned int numBuffers, shader_handle shader)
 		{
-			hwnd = WindowProvider::get(0);
+			m_windowHandle = WindowProvider::get(0);
 			m_vsBlob = shader->getImpl().VS;
 		}
 
 		void bind()
 		{
-			hwnd->devcon->IASetInputLayout(m_layout);
+			m_windowHandle->devcon->IASetInputLayout(m_layout);
 		}
 
 		void setAttributePtr(buffer_handle buf, const std::string& attribName, unsigned int index, FormatType components, unsigned int inputSlot, unsigned int stride, unsigned int offset, InputClass inputClass, unsigned int instancedStep)
@@ -62,7 +62,7 @@ namespace rythe::rendering::internal
 				{
 					elementDesc.emplace_back(D3D11_INPUT_ELEMENT_DESC{ attrib.name.c_str(), attrib.index, static_cast<DXGI_FORMAT>(attrib.format), attrib.inputSlot, D3D11_APPEND_ALIGNED_ELEMENT, static_cast<D3D11_INPUT_CLASSIFICATION>(attrib.inputClass),attrib.step });
 				}
-				CHECKERROR(hwnd->dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout), "Failed creating input layout", hwnd->checkError());
+				CHECKERROR(m_windowHandle->dev->CreateInputLayout(elementDesc.data(), elementDesc.size(), m_vsBlob->GetBufferPointer(), m_vsBlob->GetBufferSize(), &m_layout), "Failed creating input layout", m_windowHandle->checkError());
 
 				clearAttributes();
 			}

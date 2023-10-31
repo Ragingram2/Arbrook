@@ -20,7 +20,7 @@ namespace rythe::rendering::internal
 		ID3D11PixelShader* m_PS = nullptr;
 		std::unordered_map<std::string, buffer_handle> m_vsConstBuffers;
 		std::unordered_map<std::string, buffer_handle> m_psConstBuffers;
-		window_handle m_hwnd;
+		window_handle m_windowHandle;
 	public:
 		unsigned int programId;
 		std::string name;
@@ -45,33 +45,33 @@ namespace rythe::rendering::internal
 
 		void initialize(const std::string& name, const shader_source& source)
 		{
-			m_hwnd = WindowProvider::get(0);
+			m_windowHandle = WindowProvider::get(0);
 			compileShader(ShaderType::VERTEX, source.vertexSource);
-			m_hwnd->checkError();
+			m_windowHandle->checkError();
 			compileShader(ShaderType::FRAGMENT, source.fragSource);
-			m_hwnd->checkError();
+			m_windowHandle->checkError();
 
-			m_hwnd->dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
-			m_hwnd->dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
+			m_windowHandle->dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
+			m_windowHandle->dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
 		}
 
 		void bind()
 		{
-			m_hwnd->devcon->VSSetShader(m_VS, 0, 0);
-			m_hwnd->devcon->PSSetShader(m_PS, 0, 0);
+			m_windowHandle->devcon->VSSetShader(m_VS, 0, 0);
+			m_windowHandle->devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
 			for (auto& [name, handle] : m_vsConstBuffers)
 			{
 				buffers.push_back(handle.m_data->m_impl);
 			}
-			m_hwnd->devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
+			m_windowHandle->devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
 			for (auto& [name, handle] : m_psConstBuffers)
 			{
 				buffers.push_back(handle.m_data->m_impl);
 			}
-			m_hwnd->devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
+			m_windowHandle->devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)
@@ -148,7 +148,7 @@ namespace rythe::rendering::internal
 					{
 						log::error((char*)error->GetBufferPointer());
 					}
-					m_hwnd->checkError();
+					m_windowHandle->checkError();
 				}
 			}
 			else if (type == ShaderType::FRAGMENT)
@@ -161,7 +161,7 @@ namespace rythe::rendering::internal
 					{
 						log::error((char*)error->GetBufferPointer());
 					}
-					m_hwnd->checkError();
+					m_windowHandle->checkError();
 				}
 			}
 

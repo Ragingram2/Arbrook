@@ -5,10 +5,10 @@
 namespace rythe::testing
 {
 	template<enum APIType type>
-	struct DrawIndexedInstancedTest : public rendering_test { };
+	struct ModelSwitchTest : public rendering_test { };
 
 	template<>
-	struct DrawIndexedInstancedTest<APIType::Arbrook> : public rendering_test
+	struct ModelSwitchTest<APIType::Arbrook> : public rendering_test
 	{
 		gfx::camera_data data;
 		gfx::material_handle mat;
@@ -18,14 +18,18 @@ namespace rythe::testing
 		gfx::mesh_handle meshHandle;
 		gfx::inputlayout layout;
 		float i = 0;
+		int modelIdx = 0;
+		std::vector<std::string> modelNames;
 
-		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+		void setup(gfx::camera& cam, core::transform& camTransf)
 		{
-			name = "DrawIndexedInstanced";
+			name = "ModelSwitch";
 			log::debug("Initializing {}_Test{}", getAPIName(APIType::Arbrook), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getGlfwWindow(), std::format("{}_Test{}", getAPIName(APIType::Arbrook), name).c_str());
 
-			meshHandle = gfx::MeshCache::getMesh("teapot");
+			modelNames = gfx::ModelCache::getModelNames();
+
+			meshHandle = gfx::ModelCache::getModel(modelNames[modelIdx])->meshHandle;
 			mat = gfx::MaterialCache::loadMaterial("test", "cube");
 			vBuffer = gfx::BufferCache::createBuffer<math::vec4>("Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->vertices);
 			idxBuffer = gfx::BufferCache::createBuffer<unsigned int>("Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->indices);
@@ -43,9 +47,20 @@ namespace rythe::testing
 			initialized = true;
 		}
 
-		virtual void update(gfx::camera& cam, core::transform& camTransf) override
+		void update(gfx::camera& cam, core::transform& camTransf)
 		{
 			data.view = cam.calculate_view(&camTransf);
+
+			modelIdx++;
+
+			if (modelIdx >= modelNames.size())
+			{
+				modelIdx = 0;
+			}
+
+			meshHandle = gfx::ModelCache::getModel(modelNames[modelIdx])->meshHandle;
+			vBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
+			idxBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
 
 			layout.bind();
 			i += .1f;
@@ -60,7 +75,7 @@ namespace rythe::testing
 			gfx::Renderer::RI->drawIndexedInstanced(gfx::PrimitiveType::TRIANGLESLIST, meshHandle->indices.size(), 1, 0, 0, 0);
 		}
 
-		virtual void destroy() override
+		void destroy()
 		{
 			gfx::BufferCache::deleteBuffer("Vertex Buffer");
 			gfx::BufferCache::deleteBuffer("Index Buffer");
@@ -72,16 +87,17 @@ namespace rythe::testing
 	};
 
 	template<>
-	struct DrawIndexedInstancedTest<APIType::BGFX> : public rendering_test
+	struct ModelSwitchTest<APIType::BGFX> : public rendering_test
 	{
+		gfx::camera_data data;
+		gfx::material_handle mat;
+		gfx::mesh_handle meshHandle;
+
 #if RenderingAPI == RenderingAPI_OGL
 		bgfx::RendererType::Enum type = bgfx::RendererType::OpenGL;
 #elif RenderingAPI == RenderingAPI_DX11
 		bgfx::RendererType::Enum type = bgfx::RendererType::Direct3D11;
 #endif
-
-		gfx::camera_data data;
-		gfx::mesh_handle meshHandle;
 
 		bgfx::PlatformData platformData;
 		bgfx::VertexBufferHandle vertexBuffer;
@@ -98,14 +114,17 @@ namespace rythe::testing
 			| 0;
 
 		float i = 0;
+		int modelIdx = 0;
+		std::vector<std::string> modelNames;
 
-		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+		void setup(gfx::camera& cam, core::transform& camTransf)
 		{
 			gfx::Renderer::RI->BGFXMode(true);
-			name = "DrawIndexedInstanced";
+			name = "ModelSwitch";
 			log::debug("Initializing {}_Test{}", getAPIName(APIType::BGFX), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getGlfwWindow(), std::format("{}_Test{}", getAPIName(APIType::BGFX), name).c_str());
-			meshHandle = gfx::MeshCache::getMesh("teapot");
+			modelNames = gfx::ModelCache::getModelNames();
+			meshHandle = gfx::ModelCache::getModel(modelNames[modelIdx])->meshHandle;
 
 			bgfx::Init init;
 			init.type = type;
@@ -153,7 +172,7 @@ namespace rythe::testing
 			initialized = true;
 		}
 
-		virtual void update(gfx::camera& cam, core::transform& camTransf) override
+		void update(gfx::camera& cam, core::transform& camTransf)
 		{
 			data.view = cam.calculate_view(&camTransf);
 			bgfx::setViewTransform(0, data.view.data, data.projection.data);
@@ -173,7 +192,7 @@ namespace rythe::testing
 			bgfx::frame();
 		}
 
-		virtual void destroy() override
+		void destroy()
 		{
 			bgfx::destroy(indexBuffer);
 			bgfx::destroy(vertexBuffer);
@@ -186,7 +205,7 @@ namespace rythe::testing
 
 #if RenderingAPI == RenderingAPI_OGL
 	template<>
-	struct DrawIndexedInstancedTest<APIType::Native> : public rendering_test
+	struct ModelSwitchTest<APIType::Native> : public rendering_test
 	{
 		gfx::camera_data data;
 		gfx::mesh_handle meshHandle;
@@ -200,14 +219,17 @@ namespace rythe::testing
 		unsigned int shaderId;
 
 		float i = 0;
+		int modelIdx = 0;
+		std::vector<std::string> modelNames;
 
-		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+		void setup(gfx::camera& cam, core::transform& camTransf)
 		{
-			name = "DrawIndexedInstanced";
+			name = "ModelSwitch";
 			log::debug("Initializing {}OGL_Test{}", getAPIName(APIType::Native), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getGlfwWindow(), std::format("{}OGL_Test{}", getAPIName(APIType::Native), name).c_str());
 
-			meshHandle = gfx::MeshCache::getMesh("teapot");
+			modelNames = gfx::ModelCache::getModelNames();
+			meshHandle = gfx::ModelCache::getModel(modelNames[modelIdx])->meshHandle;
 			mat = gfx::MaterialCache::loadMaterial("test", "cube");
 
 			shaderId = mat->shader->getId();
@@ -259,8 +281,24 @@ namespace rythe::testing
 			initialized = true;
 		}
 
-		virtual void update(gfx::camera& cam, core::transform& camTransf) override
+		void update(gfx::camera& cam, core::transform& camTransf)
 		{
+			modelIdx++;
+
+			if (modelIdx >= modelNames.size())
+			{
+				modelIdx = 0;
+			}
+
+			meshHandle = gfx::ModelCache::getModel(modelNames[modelIdx])->meshHandle;
+
+			glBindBuffer(GL_ARRAY_BUFFER, vboId);
+			glBufferData(GL_ARRAY_BUFFER, meshHandle->vertices.size() * sizeof(math::vec4), meshHandle->vertices.data(), static_cast<GLenum>(gfx::UsageType::STATICDRAW));
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboId);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshHandle->indices.size() * sizeof(unsigned int), meshHandle->indices.data(), static_cast<GLenum>(gfx::UsageType::STATICDRAW));
+
+
 			data.view = cam.calculate_view(&camTransf);
 			i += .1f;
 
@@ -269,10 +307,9 @@ namespace rythe::testing
 			data.model = math::rotate(model, math::radians(i), math::vec3(0.0f, 1.0f, 0.0f));
 			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(gfx::camera_data), &data);
 			glDrawElements(GL_TRIANGLES, meshHandle->indices.size(), GL_UNSIGNED_INT, reinterpret_cast <void*>(0));
-
 		}
 
-		virtual void destroy() override
+		void destroy()
 		{
 			gfx::MaterialCache::deleteMaterial("test");
 			glDeleteBuffers(1, &vboId);
@@ -285,36 +322,35 @@ namespace rythe::testing
 	};
 #elif RenderingAPI == RenderingAPI_DX11
 	template<>
-	struct DrawIndexedInstancedTest<APIType::Native> : public rendering_test
+	struct ModelSwitchTest<APIType::Native> : public rendering_test
 	{
 		gfx::camera_data data;
-		gfx::mesh_handle meshHandle;
 		gfx::material_handle mat;
+		gfx::mesh_handle meshHandle;
 
 		float i = 0;
+		int modelIdx = 0;
+		std::vector<std::string> modelNames;
 
-		virtual void setup(gfx::camera& cam, core::transform& camTransf) override
+		void setup(gfx::camera& cam, core::transform& camTransf)
 		{
-			name = "DrawIndexedInstanced";
+			name = "ModelSwitch";
 			log::debug("Initializing {}DX11_Test{}", getAPIName(APIType::Native), name);
 			glfwSetWindowTitle(gfx::Renderer::RI->getGlfwWindow(), std::format("{}DX11_Test{}", getAPIName(APIType::Native), name).c_str());
-
-			meshHandle = gfx::MeshCache::getMesh("teapot");
-			mat = gfx::MaterialCache::loadMaterial("test", "cube");
 
 			initialized = true;
 		}
 
-		virtual void update(gfx::camera& cam, core::transform& camTransf) override
+		void update(gfx::camera& cam, core::transform& camTransf)
 		{
-
 
 		}
 
-		virtual void destroy() override
+		void destroy()
 		{
+
 			initialized = false;
 		}
-	};
+		};
 #endif
-}
+	}

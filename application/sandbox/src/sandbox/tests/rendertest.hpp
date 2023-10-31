@@ -11,8 +11,9 @@ namespace rythe::testing
 	enum APIType
 	{
 		Arbrook = 0,
-		BGFX = 1,
-		Native = 2
+		Native = 1,
+		BGFX = 2,
+		None = 3
 	};
 
 
@@ -22,13 +23,12 @@ namespace rythe::testing
 		{
 		case APIType::Arbrook:
 			return "Arbrook";
-			break;
 		case APIType::BGFX:
 			return  "BGFX";
-			break;
 		case APIType::Native:
 			return  "Native";
-			break;
+		case APIType::None:
+			return "None";
 		}
 		return "";
 	}

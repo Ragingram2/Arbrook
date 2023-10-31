@@ -2,7 +2,11 @@
 #include <string>
 #include <string_view>
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
 
 #include <rsl/logging>
 
@@ -15,7 +19,8 @@ namespace rythe::rendering::internal
 	struct window
 	{
 	private:
-		GLFWwindow* m_window;
+		GLFWwindow* m_glfwWindow;
+		HWND m_hwnd;
 	public:
 		math::ivec2 m_resolution;
 		std::string m_windowName;
@@ -33,7 +38,7 @@ namespace rythe::rendering::internal
 		{
 			m_resolution = hwnd.m_resolution;
 			m_windowName = hwnd.m_windowName;
-			m_window = hwnd.getWindow();
+			m_glfwWindow = hwnd.getGlfwWindow();
 		}
 		window(math::ivec2 res, const std::string& name) : m_resolution(res), m_windowName(name) { }
 
@@ -42,19 +47,26 @@ namespace rythe::rendering::internal
 			m_resolution = res;
 			m_windowName = name;
 			if (!window)
-				m_window = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
+				m_glfwWindow = glfwCreateWindow(res.x, res.y, name.c_str(), NULL, NULL);
 			else
-				m_window = window;
+				m_glfwWindow = window;
+
+			m_hwnd = glfwGetWin32Window(m_glfwWindow);
 		}
 
-		GLFWwindow* getWindow()
+		GLFWwindow* getGlfwWindow()
 		{
-			return m_window;
+			return m_glfwWindow;
+		}
+
+		HWND getHWND()
+		{
+			return m_hwnd;
 		}
 
 		void swapBuffers()
 		{
-			glfwSwapBuffers(m_window);
+			glfwSwapBuffers(m_glfwWindow);
 		}
 
 		void setSwapInterval(int interval)
@@ -69,17 +81,17 @@ namespace rythe::rendering::internal
 
 		bool shouldClose()
 		{
-			return glfwWindowShouldClose(m_window);
+			return glfwWindowShouldClose(m_glfwWindow);
 		}
 
 		void setWindowTitle(const std::string& name)
 		{
-			glfwSetWindowTitle(m_window, name.data());
+			glfwSetWindowTitle(m_glfwWindow, name.data());
 		}
 
 		void makeCurrent()
 		{
-			glfwMakeContextCurrent(m_window);
+			glfwMakeContextCurrent(m_glfwWindow);
 		}
 
 		math::ivec2 getResolution()

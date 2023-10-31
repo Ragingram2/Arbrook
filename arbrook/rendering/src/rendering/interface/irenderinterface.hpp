@@ -15,8 +15,8 @@ namespace rythe::rendering
 	public:
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr) { m_impl.initialize(res, name, window); }
 		void close() { m_impl.close(); }
-		GLFWwindow* getWindow() { return m_impl.getWindow(); }
-		window_handle getHwnd() { return m_impl.getHwnd(); }
+		GLFWwindow* getGlfwWindow() { return m_impl.getGlfwWindow(); }
+		window_handle getWindowHandle() { return m_impl.getWindowHandle(); }
 		void makeCurrent() { m_impl.makeCurrent(); }
 		void setSwapInterval(int interval) { m_impl.setSwapInterval(interval); }
 		bool shouldWindowClose() { return m_impl.shouldWindowClose(); }
@@ -50,5 +50,7 @@ namespace rythe::rendering
 		//void createRenderTarget()
 
 		void checkError() { m_impl.checkError(); }
+
+		void BGFXMode(bool enabled) { m_impl.BGFXMode(enabled); }
 	};
 }

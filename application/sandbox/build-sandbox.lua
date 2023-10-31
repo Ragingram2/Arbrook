@@ -1,5 +1,6 @@
 createProject("applications","sandbox","ConsoleApp")
 targetdir "$(SolutionDir)bin\\build\\"
+
 includedirs {
     "src/",
     "include/",
@@ -16,6 +17,7 @@ files {
     "src/sandbox/**.c",
     "src/sandbox/**.cpp" 
 }
+
 
 dofile "arbrook/core/include-core.lua"
 dofile "arbrook/rendering/include-rendering.lua"

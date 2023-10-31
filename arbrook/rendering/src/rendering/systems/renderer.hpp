@@ -49,16 +49,16 @@ namespace rythe::rendering
 			pipeline = provider->get(0);
 			RI = &pipeline->RI;
 
-			if (!RI->getWindow())
+			if (!RI->getGlfwWindow())
 			{
 				glfwTerminate();
 				log::error("Window initialization failed");
 				return;
 			}
 
-			glfwSetKeyCallback(RI->getWindow(), key_callback);
-			glfwSetCursorPosCallback(RI->getWindow(), mouse_callback);
-			glfwSetInputMode(RI->getWindow(), GLFW_CURSOR, GLFW_CURSOR);
+			glfwSetKeyCallback(RI->getGlfwWindow(), key_callback);
+			glfwSetCursorPosCallback(RI->getGlfwWindow(), mouse_callback);
+			glfwSetInputMode(RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR);
 		}
 
 		void update()

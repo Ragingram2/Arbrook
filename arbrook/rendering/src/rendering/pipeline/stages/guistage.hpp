@@ -4,6 +4,7 @@
 
 #include <rsl/primitives>
 #include <rsl/utilities>
+#include <rsl/logging>
 
 #include "core/logging/logging.hpp"
 #include "core/components/transform.hpp"
@@ -15,6 +16,7 @@
 
 namespace rythe::rendering
 {
+	namespace log = rsl::log;
 	using guiRenderFunc = void();
 	struct gui_stage : public graphics_stage<gui_stage>
 	{
@@ -28,11 +30,23 @@ namespace rythe::rendering
 			ImGui::StyleColorsDark();
 			ImGui::SetCurrentContext(ctx);
 #if RenderingAPI == RenderingAPI_OGL
-			ImGui_ImplGlfw_InitForOpenGL(RI->getWindow(),true);
-			ImGui_ImplOpenGL3_Init("#version 420");
+			if (!ImGui_ImplGlfw_InitForOpenGL(RI->getGlfwWindow(), true))
+			{
+				log::error("Imgui GLFW initialization failed");
+			}
+			if(!ImGui_ImplOpenGL3_Init("#version 420"))
+			{
+				log::error("Imgui OpenGL initialization failed");
+			}
 #elif RenderingAPI == RenderingAPI_DX11
-			ImGui_ImplGlfw_InitForOther(RI->getWindow(), true);
-			ImGui_ImplDX11_Init(RI->getHwnd()->dev,RI->getHwnd()->devcon);
+			if (!ImGui_ImplGlfw_InitForOther(RI->getGlfwWindow(), true))
+			{
+				log::error("Imgui GLFW initialization failed");
+			}
+			if (!ImGui_ImplDX11_Init(RI->getWindowHandle()->dev, RI->getWindowHandle()->devcon))
+			{
+				log::error("Imgui DX11 initialization failed");
+			}
 #endif
 		}
 

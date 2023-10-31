@@ -35,7 +35,7 @@ namespace rythe::rendering
 		model() = default;
 		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
 
-		void initialize(internal::window& hwnd, shader_handle shader, mesh_handle handle, bool instanced)
+		void initialize(shader_handle shader, mesh_handle handle, bool instanced)
 		{
 			meshHandle = handle;
 			layout.release();

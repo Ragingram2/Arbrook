@@ -17,16 +17,18 @@ namespace rythe::rendering::internal
 	class RenderInterface
 	{
 	private:
-		window_handle hwnd;
+		window_handle m_windowHandle;
+		bool m_usingBgfx = false;
 	public:
+
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
 		{
 			log::debug("Initializing OpenGL");
 			if (!window)
-				hwnd = WindowProvider::addWindow();
+				m_windowHandle = WindowProvider::addWindow();
 
-			hwnd->initialize(res, name, window);
-			hwnd->makeCurrent();
+			m_windowHandle->initialize(res, name, window);
+			m_windowHandle->makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
@@ -61,44 +63,46 @@ namespace rythe::rendering::internal
 
 		}
 
-		GLFWwindow* getWindow()
+		GLFWwindow* getGlfwWindow()
 		{
-			return hwnd->getWindow();
+			return m_windowHandle->getGlfwWindow();
 		}
 
-		window_handle getHwnd()
+		window_handle getWindowHandle()
 		{
-			return hwnd;
+			return m_windowHandle;
 		}
 
 		void makeCurrent()
 		{
-			hwnd->makeCurrent();
+			if (!m_usingBgfx)
+				m_windowHandle->makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
 		{
-			hwnd->setSwapInterval(interval);
+			m_windowHandle->setSwapInterval(interval);
 		}
 
 		bool shouldWindowClose()
 		{
-			return hwnd->shouldClose();
+			return m_windowHandle->shouldClose();
 		}
 
 		void setWindowTitle(const std::string& name)
 		{
-			hwnd->setWindowTitle(name);
+			m_windowHandle->setWindowTitle(name);
 		}
 
 		void pollEvents()
 		{
-			hwnd->pollEvents();
+			m_windowHandle->pollEvents();
 		}
 
 		void swapBuffers()
 		{
-			glfwSwapBuffers(hwnd->getWindow());
+			if (!m_usingBgfx)
+				glfwSwapBuffers(m_windowHandle->getGlfwWindow());
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
@@ -123,7 +127,8 @@ namespace rythe::rendering::internal
 
 		void clear(internal::ClearBit flags)
 		{
-			glClear(static_cast<int>(flags));
+			if (!m_usingBgfx)
+				glClear(static_cast<int>(flags));
 		}
 
 		void setClearColor(math::vec4 color)
@@ -133,15 +138,17 @@ namespace rythe::rendering::internal
 
 		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
 		{
-			if (width <= 0)
-				width = hwnd->getResolution().x;
+			if (!m_usingBgfx)
+			{
+				if (width <= 0)
+					width = m_windowHandle->getResolution().x;
 
-			if (height <= 0)
-				height = hwnd->getResolution().y;
+				if (height <= 0)
+					height = m_windowHandle->getResolution().y;
 
-			glViewport(leftX, leftY, width, height);
-			glDepthRange(minDepth, maxDepth);
-
+				glViewport(leftX, leftY, width, height);
+				glDepthRange(minDepth, maxDepth);
+			}
 		}
 
 		void depthTest(bool enable)
@@ -193,7 +200,12 @@ namespace rythe::rendering::internal
 
 		void checkError()
 		{
+			m_windowHandle->checkError();
+		}
 
+		void BGFXMode(bool enabled)
+		{
+			m_usingBgfx = enabled;
 		}
 
 	private:

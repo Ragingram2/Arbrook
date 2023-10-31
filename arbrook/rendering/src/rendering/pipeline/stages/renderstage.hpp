@@ -29,7 +29,7 @@ namespace rythe::rendering
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				auto& transf = ent.getComponent<core::transform>();
 				mat.model = transf.to_world();
-				renderer.model->initialize(RI->getHwnd(), renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
+				renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
 				renderer.dirty = false;
 				renderer.model->cameraBuffer->bufferData(&mat, 1);
 			}
@@ -45,7 +45,7 @@ namespace rythe::rendering
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				if (renderer.dirty)
 				{
-					renderer.model->initialize(RI->getHwnd(), renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
+					renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
 					renderer.dirty = false;
 				}
 				auto& transf = ent.getComponent<core::transform>();
@@ -59,7 +59,7 @@ namespace rythe::rendering
 					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->meshHandle->vertices.size());
 			}
 			m_onRender(camTransf, cam);
-			RI->checkError();
+			//RI->checkError();
 		}
 
 		virtual rsl::priority_type priority() override { return OPAQUE_PRIORITY; }

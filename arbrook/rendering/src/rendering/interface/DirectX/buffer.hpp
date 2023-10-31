@@ -43,14 +43,14 @@ namespace rythe::rendering::internal
 
 		TargetType m_target;
 		UsageType m_usage;
-		window_handle hwnd;
+		window_handle m_windowHandle;
 
 	public:
 		operator ID3D11Buffer* () const { return m_internalBuffer; }
 		template<typename elementType>
 		void initialize(TargetType target, UsageType usage, int size)
 		{
-			hwnd = WindowProvider::get(0);
+			m_windowHandle = WindowProvider::get(0);
 			m_target = target;
 			m_usage = usage;
 			m_size = size;
@@ -66,13 +66,13 @@ namespace rythe::rendering::internal
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				hwnd->devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
+				m_windowHandle->devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
 				break;
 			case TargetType::INDEX_BUFFER:
-				hwnd->devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
+				m_windowHandle->devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				hwnd->devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
+				m_windowHandle->devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -97,13 +97,13 @@ namespace rythe::rendering::internal
 			switch (m_target)
 			{
 			case TargetType::VERTEX_BUFFER:
-				hwnd->devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
+				m_windowHandle->devcon->IASetVertexBuffers(m_slot, 1, &m_internalBuffer, &m_elementSize, &m_offsets);
 				break;
 			case TargetType::INDEX_BUFFER:
-				hwnd->devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
+				m_windowHandle->devcon->IASetIndexBuffer(m_internalBuffer, static_cast<DXGI_FORMAT>(FormatType::R32U), m_offsets);
 				break;
 			case TargetType::CONSTANT_BUFFER:
-				hwnd->devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
+				m_windowHandle->devcon->VSSetConstantBuffers(m_slot, 1, &m_internalBuffer);
 				break;
 			default:
 				log::error("That type is not supported");
@@ -111,9 +111,9 @@ namespace rythe::rendering::internal
 			}
 
 			D3D11_MAPPED_SUBRESOURCE resource;
-			CHECKERROR(hwnd->devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource),"Buffer Failed to be filled",hwnd->checkError() );
+			CHECKERROR(m_windowHandle->devcon->Map(m_internalBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &resource),"Buffer Failed to be filled", m_windowHandle->checkError() );
 			memcpy(resource.pData, data, m_size * sizeof(elementType));
-			hwnd->devcon->Unmap(m_internalBuffer, NULL);
+			m_windowHandle->devcon->Unmap(m_internalBuffer, NULL);
 		}
 
 		void release()
@@ -139,7 +139,7 @@ namespace rythe::rendering::internal
 
 			m_bufferDesc.ByteWidth *= m_size;
 
-			CHECKERROR(hwnd->dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created",hwnd->checkError());
+			CHECKERROR(m_windowHandle->dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created", m_windowHandle->checkError());
 		}
 	};
 }
