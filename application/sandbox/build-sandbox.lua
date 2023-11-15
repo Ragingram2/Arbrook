@@ -6,7 +6,8 @@ includedirs {
     "include/",
     "include/*/",
     "include/*/src/",
-    "include/*/include/"
+    "include/*/include/",
+    "include/bx/include/compat/msvc/"
 }   
 
 files { 

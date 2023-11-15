@@ -39,7 +39,7 @@ namespace rythe::rendering
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_view(&camTransf);
-			camData mat = { cam.projection, cam.view, math::mat4(1.0f)};
+			camData mat = { cam.projection, cam.view, math::mat4(1.0f) };
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();

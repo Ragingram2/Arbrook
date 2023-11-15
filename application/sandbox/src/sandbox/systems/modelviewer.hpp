@@ -5,37 +5,34 @@
 namespace rythe::game
 {
 	using namespace rythe::core::events;
-	class Game : public core::System<core::transform, gfx::mesh_renderer>
+	class ModelViewer : public core::System<core::transform, gfx::mesh_renderer>
 	{
 	private:
 		core::ecs::entity camera;
-		core::ecs::entity cube;
+		core::ecs::entity ent;
 		gfx::model_handle modelHandle;
 		gfx::material mat;
 
-		math::vec3 velocity;
+		math::vec3 camPos = math::vec3::zero;
 
-		math::vec2 mousePos;
-		math::vec2 lastMousePos;
-		math::vec2 mouseDelta;
-		math::vec2 rotationDelta;
-
-		math::vec3 front;
-		math::vec3 right;
-		math::vec3 up;
-
+		math::vec3 inputVec;
+		math::vec3 cameraUp = math::vec3::up;
+		math::vec3 cameraFront = math::vec3::forward;
 		float speed = 50.0f;
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
 		float currentFrame = 0.0f;
 
-		float sensitivity = 1.1f;
+		float sensitivity = .1f;
+
+		float lastX = Screen_Width / 2.f;
+		float lastY = Screen_Height / 2.f;
 
 		float yaw = -90.0f;
 		float pitch = 0.0f;
 
-		bool mouseCapture = true;
+		bool firstMouse = true;
 
 	public:
 		void setup();
@@ -48,16 +45,5 @@ namespace rythe::game
 		void mouselook(core::events::mouse_input& input);
 		void randomShader(core::events::key_input& input);
 		void debugInfo(core::events::key_input& input);
-
-		void toggleMouseCapture(core::events::key_input& input)
-		{
-			if (input.action == GLFW_PRESS)
-			{
-				if (input.key == GLFW_KEY_ESCAPE)
-				{
-					mouseCapture = !mouseCapture;
-				}
-			}
-		}
 	};
 }

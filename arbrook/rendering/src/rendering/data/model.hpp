@@ -83,11 +83,20 @@ namespace rythe::rendering
 		{
 			layout.bind();
 			if (vertexBuffer != nullptr)
+			{
 				vertexBuffer->bind();
+				vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
+			}
 			if (indexBuffer != nullptr)
+			{
 				indexBuffer->bind();
+				indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
+			}
 			if (uvBuffer != nullptr)
+			{
 				uvBuffer->bind();
+				uvBuffer->bufferData(meshHandle->texCoords.data(), meshHandle->texCoords.size());
+			}
 			if (matrixBuffer != nullptr)
 				matrixBuffer->bind();
 		}

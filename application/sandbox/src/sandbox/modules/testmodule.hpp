@@ -12,8 +12,8 @@ namespace rythe::core
 		void setup() override
 		{
 			log::info("Initializing Game Module");
-			//reportSystem<game::Game>();
-			reportSystem<testing::TestSystem>();
+			reportSystem<game::Game>();
+			//reportSystem<testing::TestSystem>();
 		}
 	};
 }

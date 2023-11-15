@@ -8,8 +8,8 @@ namespace rythe::game
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
 		EventBus::bind<key_input, Game, &Game::move>(*this);
 		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
-		//EventBus::bind<key_input, Game, &Game::randomModel>(*this);
 		EventBus::bind<key_input, Game, &Game::randomShader>(*this);
+		EventBus::bind<key_input, Game, &Game::toggleMouseCapture>(*this);
 		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
 
 		gfx::gui_stage::addGuiRender<Game, &Game::guiRender>(this);
@@ -21,19 +21,74 @@ namespace rythe::game
 
 		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader", "resources/textures/Rythe.png");
 
-		ent = createEntity("Cube");
-		auto& transf = ent.addComponent<core::transform>();
+		cube = createEntity("Cube");
+		auto& transf = cube.addComponent<core::transform>();
 		transf.scale = math::vec3(1.0f, 1.0f, 1.0f);
 		transf.position = math::vec3(0.0f, -1.0f, 10.f);
 
-		auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+		auto& renderer = cube.addComponent<gfx::mesh_renderer>();
 		renderer.material = mat;
 		renderer.model = modelHandle;
+
+		{
+			auto ent = createEntity("Armadillio");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(-10.0f, -1.0f, 0.0f);
+
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("armadillo");
+		}
+
+		{
+			auto ent = createEntity("Suzanne");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(0.0f, -1.0f, -10.0f);
+
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("suzanne");
+		}
+
+		{
+			auto ent = createEntity("Teapot");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(10.0f, -1.0f, 0.0f);
+
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("teapot");
+		}
+
+		{
+			auto ent = createEntity("Icosphere");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
+
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("icosphere");
+		}
+
+		{
+			auto ent = createEntity("Bunny");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(0.0f, -10.0f, 0.0f);
+
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("bunny");
+		}
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
 		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);
-		camTransf.rotation = math::quat(math::lookAt(camPos, camPos + math::vec3::forward, cameraUp));
+		camTransf.rotation = math::quat(math::lookAt(math::vec3::zero, camTransf.forward(), camTransf.up()));
 		auto& cam = camera.addComponent<gfx::camera>();
 		cam.farZ = 100.f;
 		cam.nearZ = 1.0f;
@@ -42,35 +97,70 @@ namespace rythe::game
 
 	void Game::update()
 	{
+		if (mouseCapture)
+			glfwSetInputMode(gfx::Renderer::RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		else
+			glfwSetInputMode(gfx::Renderer::RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+		auto& camTransf = camera.getComponent<core::transform>();
+
+		camTransf.position -= velocity;
+		velocity = math::vec3::zero;
+
+		camTransf.rotation = math::conjugate(math::toQuat(math::lookAt(math::vec3::zero, front, up)));
 	}
 
 	void Game::guiRender()
 	{
 		using namespace ImGui;
-		Begin("Change Model");
-		auto models = gfx::ModelCache::getModels();
-		auto modelNames = gfx::ModelCache::getModelNamesC();
 		ShowDemoWindow();
-		Text("Here is where you can select which model to render");
-		static gfx::model_handle currentSelected = modelHandle;
-		if (BeginCombo("Model Dropdown", currentSelected->name.c_str()))
+		Begin("Inspector");
+		if (CollapsingHeader("MeshRenderer"))
 		{
-			for (auto handle : models)
+			auto models = gfx::ModelCache::getModels();
+			auto modelNames = gfx::ModelCache::getModelNamesC();
+			Text("Here is where you can select which model to render");
+			static gfx::model_handle currentSelected = modelHandle;
+			if (BeginCombo("Model Dropdown", currentSelected->name.c_str()))
 			{
-				const bool is_selected = (currentSelected == handle);
-				if (Selectable(handle->name.c_str(), is_selected))
-					currentSelected = handle;
-
-				if (is_selected)
+				for (auto handle : models)
 				{
-					SetItemDefaultFocus();
+					const bool is_selected = (currentSelected == handle);
+					if (Selectable(handle->name.c_str(), is_selected))
+						currentSelected = handle;
+
+					if (is_selected)
+					{
+						SetItemDefaultFocus();
+					}
 				}
+				setModel(currentSelected);
+				EndCombo();
 			}
-			setModel(currentSelected);
-			EndCombo();
+		}
+
+		//auto& cam = camera.getComponent<gfx::camera>();
+		auto& transf = camera.getComponent<core::transform>();
+		if (CollapsingHeader("DebugInfo", ImGuiTreeNodeFlags_::ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			Text("Mouse Attributes");
+			InputScalarN("Mouse Position", ImGuiDataType_Float, mousePos.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Last Mouse Position", ImGuiDataType_Float, lastMousePos.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Mouse Delta", ImGuiDataType_Float, mouseDelta.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Yaw/Pitch", ImGuiDataType_Float, math::vec2(yaw, pitch).data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Yaw/Pitch Delta", ImGuiDataType_Float, rotationDelta.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+
+			Text("Camera Transform");
+			InputScalarN("Position", ImGuiDataType_Float, transf.position.data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Rotation", ImGuiDataType_Float, transf.rotation.data, 4, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Scale", ImGuiDataType_Float, transf.scale.data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+
+			InputScalarN("Right", ImGuiDataType_Float, transf.right().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Up", ImGuiDataType_Float, transf.up().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
+			InputScalarN("Forward", ImGuiDataType_Float, transf.forward().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
 		}
 
 		ImGui::End();
@@ -98,68 +188,59 @@ namespace rythe::game
 			{
 			case GLFW_KEY_D:
 			case GLFW_KEY_RIGHT:
-				camPos -= math::normalize(math::cross(cameraFront, cameraUp)) * speed * deltaTime;
+				velocity -= transf.right() * speed * deltaTime;
 				break;
 			case GLFW_KEY_A:
 			case GLFW_KEY_LEFT:
-				camPos += math::normalize(math::cross(cameraFront, cameraUp)) * speed * deltaTime;
+				velocity += transf.right() * speed * deltaTime;
 				break;
 			case GLFW_KEY_W:
 			case GLFW_KEY_UP:
-				camPos += speed * cameraFront * deltaTime;
+				velocity -= transf.forward() * speed * deltaTime;
 				break;
 			case GLFW_KEY_S:
 			case GLFW_KEY_DOWN:
-				camPos -= speed * cameraFront * deltaTime;
+				velocity += transf.forward() * speed * deltaTime;
 				break;
 			}
 		}
 
-		transf.position = camPos;
+
 	}
 
 	void Game::mouselook(core::events::mouse_input& input)
 	{
+		if (!mouseCapture) return;
+
+		static bool firstMouse = true;
+
+		mousePos = math::vec2(static_cast<float>(input.xpos), static_cast<float>(input.ypos));
+
 		if (firstMouse)
 		{
-			lastX = input.xpos;
-			lastY = input.ypos;
+			lastMousePos = mousePos;
 			firstMouse = false;
 		}
 
-		float xoffset = lastX - input.xpos;
-		float yoffset = lastY - input.ypos;
-		lastX = input.xpos;
-		lastY = input.ypos;
+		mouseDelta = math::vec2(mousePos.x - lastMousePos.x, mousePos.y - lastMousePos.y);
+		lastMousePos = mousePos;
 
-		xoffset *= sensitivity;
-		yoffset *= sensitivity;
+		rotationDelta = math::vec2(mouseDelta.x * sensitivity, mouseDelta.y * sensitivity);
 
-		yaw += xoffset;
-		pitch += yoffset;
+		pitch += rotationDelta.y;
+		yaw += -rotationDelta.x;
 
-		if (pitch > 89.0f)
-			pitch = 89.0f;
-		if (pitch < -89.0f)
-			pitch = -89.0f;
-		auto& camTransf = camera.getComponent<core::transform>();
-
-		math::vec3 direction;
-		direction.x = cos(math::radians(yaw)) * cos(math::radians(pitch));
-		direction.y = sin(math::radians(pitch));
-		direction.z = sin(math::radians(yaw)) * cos(math::radians(pitch));
-
-		math::mat3 rotMat = math::toMat3(camTransf.rotation);
-		math::vec3 right = rotMat * math::vec3::right;
-		math::vec3 fwd = math::normalize(math::cross(right, math::vec3::up));
-		math::vec3 up = rotMat * math::vec3::up;
-
-		//camTransf.rotation = math::quat(math::lookAt(camPos, camPos + math::normalize(direction), up));
+		front.x = cos(math::radians(yaw)) * cos(math::radians(pitch));
+		front.y = sin(math::radians(pitch));
+		front.z = sin(math::radians(yaw)) * cos(math::radians(pitch));
+		front = math::normalize(front);
+		right = math::normalize(math::cross(front, math::vec3::up));
+		up = math::normalize(math::cross(right, front));
 	}
 
 	void Game::setModel(gfx::model_handle handle)
 	{
-		auto& renderer = ent.getComponent<gfx::mesh_renderer>();
+		auto& renderer = cube.getComponent<gfx::mesh_renderer>();
 		if (renderer.model != handle)
 		{
 			renderer.model = handle;
@@ -174,8 +255,7 @@ namespace rythe::game
 	void Game::debugInfo(core::events::key_input& input)
 	{
 		auto& cam = camera.getComponent<gfx::camera>();
-		//auto& transf = camera.getComponent<core::transform>();
-		auto& entTransf = ent.getComponent<core::transform>();
+		auto& entTransf = cube.getComponent<core::transform>();
 
 		if (input.action == GLFW_PRESS)
 		{

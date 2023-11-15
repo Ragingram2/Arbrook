@@ -9,7 +9,6 @@ namespace rythe::core
 		friend struct ecs::component_family<transform>;
 	private:
 		ecs::entity m_owner;
-		math::mat4 m_localMatrix;
 
 		//void set_position(math::vec3 val) { m_position = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
 		//void set_scale(math::vec3 val) { m_scale = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
@@ -28,9 +27,9 @@ namespace rythe::core
 		math::vec3 scale = math::vec3(1.0f);
 		math::quat rotation = math::quat(1.0f, 0.0f, 0.0f, 0.0f);
 
-		math::vec3 up() { return m_localMatrix[1]; }
-		math::vec3 right() { return m_localMatrix[0]; }
-		math::vec3 forward() { return m_localMatrix[2]; }
+		math::vec3 up() { return rotation.up(); }
+		math::vec3 right() { return rotation.right(); }
+		math::vec3 forward() { return rotation.forward(); }
 
 		void set_owner(core::ecs::entity ent)
 		{
