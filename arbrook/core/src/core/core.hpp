@@ -27,9 +27,11 @@ namespace rythe::core
 	namespace events
 	{
 		namespace log = rsl::log;
+		namespace math = rsl::math;
 	}
 	namespace scheduling
 	{
 		namespace log = rsl::log;
+		namespace math = rsl::math;
 	}
 }
