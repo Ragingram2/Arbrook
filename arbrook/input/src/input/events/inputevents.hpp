@@ -1,6 +1,6 @@
 #pragma once
 #include "core/events/event.hpp"
-#include "core/input/inputmap.hpp"
+#include "input/map/inputmap.hpp"
 
 namespace rythe::core::events
 {

@@ -7,9 +7,9 @@
 [submodule "arbrook/rendering/include/glew"]
 	path = arbrook/rendering/include/glew
 	url = https://github.com/nigels-com/glew.git
-[submodule "include/gainput"]
-	path = include/gainput
-	url = https://github.com/jkuhlmann/gainput.git
+[submodule "arbrook/input/include/gainput"]
+	path = arbrook/input/include/gainput
+	url = https://github.com/Ragingram2/gainput.git
 [submodule "include/assimp"]
 	path = include/assimp
 	url = https://github.com/assimp/assimp.git

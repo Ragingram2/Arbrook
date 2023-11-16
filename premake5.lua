@@ -21,7 +21,7 @@ function createProject(groupName,projectName,kindName)
         objdir "$(SolutionDir)bin\\obj"
         defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName}
         filter "configurations:Debug*"
-            defines {"DEBUG"}
+            defines {"DEBUG","BX_CONFIG_DEBUG"}
             symbols "On"
             targetsuffix "-d"
         filter "configurations:Release*"
@@ -37,11 +37,26 @@ function createProject(groupName,projectName,kindName)
     group ""
 end
 
+basicIncludes = {
+"src/",
+"include/",
+"include/*/",
+"include/*/src/",
+"include/*/include/",
+"include/*/lib/include/",
+"include/*/third_party/",
+"include/*/third_party/*/",
+"include/*/third_party/*/src/",
+"include/*/third_party/*/include/",
+"include/*/third_party/*/lib/include/"
+}
+
 workspace "arbrook"
     configurations {"DebugOGL","DebugDX11","ReleaseOGL","ReleaseDX11" }
     platforms {"Win64"}
 
 include(formatEngineModulePath("core"))
+include(formatEngineModulePath("input"))
 include(formatEngineModulePath("rendering"))
 include(formatApplicationPath("sandbox"))
 include "include/rythe-standard-library/build-rythe-standard-library.lua"

@@ -1,11 +1,7 @@
 --This is only used to include the neccesary stuff for this module
 print("including rendering")
 includedirs {
-    "src/",
-    "include/",
-    "include/*/",
-    "include/*/src/",
-    "include/*/include/",
+    basicIncludes,
     "../../include/",
     "../../include/*/",
     "../../include/*/src/",

@@ -1,11 +1,7 @@
 --This is only used to include the neccesary stuff for this module
 print("including core")
 includedirs {
-    "src/",
-    "include/",
-    "include/*/",
-    "include/*/src/",
-    "include/*/include/",
+    basicIncludes,
     "../../include/",
     "../../include/*/",
     "../../include/*/src/",
@@ -14,11 +10,6 @@ includedirs {
     "../../include/*/third_party/*/",
     "../../include/*/third_party/*/src/",
     "../../include/*/third_party/*/include/"
-    -- "../../include/rythe-standard-library/src/",
-    -- "../../include/rythe-standard-library/third_party/",
-    -- "../../include/rythe-standard-library/third_party/*/",
-    -- "../../include/rythe-standard-library/third_party/*/src/",
-    -- "../../include/rythe-standard-library/third_party/*/include/"
 }
 
 dependson { "core", "rsl"}

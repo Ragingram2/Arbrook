@@ -4,14 +4,12 @@
 
 namespace rythe::rendering
 {
-	namespace log = core::log;
-
 	class CoreModule : public core::Module
 	{
 	public:
 		void setup()
 		{
-
+			log::debug("Initializing Core Module");
 		}
 	};
 }

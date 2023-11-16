@@ -1,10 +1,6 @@
 createProject("engine","core","StaticLib")
 includedirs {
-    "src/",
-    "include/",
-    "include/*/",
-    "include/*/src/",
-    "include/*/include/",
+    basicIncludes,
     "../../include/",
     "../../include/*/",
     "../../include/*/src/",

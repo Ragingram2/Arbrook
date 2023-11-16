@@ -2,11 +2,7 @@ createProject("applications","sandbox","ConsoleApp")
 targetdir "$(SolutionDir)bin\\build\\"
 
 includedirs {
-    "src/",
-    "include/",
-    "include/*/",
-    "include/*/src/",
-    "include/*/include/",
+    basicIncludes,
     "include/bx/include/compat/msvc/"
 }   
 
@@ -22,4 +18,5 @@ files {
 
 dofile "arbrook/core/include-core.lua"
 dofile "arbrook/rendering/include-rendering.lua"
+dofile "arbrook/input/include-input.lua"
 

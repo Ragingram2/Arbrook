@@ -2,7 +2,7 @@
 #include <set>
 #include <rsl/primitives>
 
-namespace rythe::core::input
+namespace rythe::input
 {
     struct inputmap
     {
