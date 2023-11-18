@@ -7,10 +7,10 @@ namespace rythe::game
 		log::debug("Initializing Game system");
 		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
 		EventBus::bind<key_input, Game, &Game::move>(*this);
-		EventBus::bind<key_input, Game, &Game::debugInfo>(*this);
-		EventBus::bind<key_input, Game, &Game::randomShader>(*this);
 		EventBus::bind<key_input, Game, &Game::toggleMouseCapture>(*this);
 		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
+
+		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
 		gfx::gui_stage::addGuiRender<Game, &Game::guiRender>(this);
 
@@ -105,6 +105,7 @@ namespace rythe::game
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
 		auto& camTransf = camera.getComponent<core::transform>();
 
 		camTransf.position -= velocity;
@@ -168,12 +169,14 @@ namespace rythe::game
 
 	void Game::reloadShaders(core::events::key_input& input)
 	{
-		if (input.action == GLFW_PRESS)
+		if (input.value)
 		{
 			switch (input.key)
 			{
-			case GLFW_KEY_1:
+			case inputmap::method::NUM1:
 				gfx::ShaderCache::reloadShaders();
+				break;
+			default:
 				break;
 			}
 		}
@@ -182,30 +185,30 @@ namespace rythe::game
 	void Game::move(core::events::key_input& input)
 	{
 		auto& transf = camera.getComponent<core::transform>();
-		if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
+		if (input.value)
 		{
 			switch (input.key)
 			{
-			case GLFW_KEY_D:
-			case GLFW_KEY_RIGHT:
+			case inputmap::method::D:
+			case inputmap::method::RIGHT:
 				velocity -= transf.right() * speed * deltaTime;
 				break;
-			case GLFW_KEY_A:
-			case GLFW_KEY_LEFT:
+			case inputmap::method::A:
+			case inputmap::method::LEFT:
 				velocity += transf.right() * speed * deltaTime;
 				break;
-			case GLFW_KEY_W:
-			case GLFW_KEY_UP:
+			case inputmap::method::W:
+			case inputmap::method::UP:
 				velocity -= transf.forward() * speed * deltaTime;
 				break;
-			case GLFW_KEY_S:
-			case GLFW_KEY_DOWN:
+			case inputmap::method::S:
+			case inputmap::method::DOWN:
 				velocity += transf.forward() * speed * deltaTime;
+				break;
+			default:
 				break;
 			}
 		}
-
-
 	}
 
 	void Game::mouselook(core::events::mouse_input& input)
@@ -214,16 +217,15 @@ namespace rythe::game
 
 		static bool firstMouse = true;
 
-		mousePos = math::vec2(static_cast<float>(input.xpos), static_cast<float>(input.ypos));
-
 		if (firstMouse)
 		{
-			lastMousePos = mousePos;
+			lastMousePos = input.lastPosition;
 			firstMouse = false;
 		}
 
-		mouseDelta = math::vec2(mousePos.x - lastMousePos.x, mousePos.y - lastMousePos.y);
-		lastMousePos = mousePos;
+		mousePos = input.position;
+		mouseDelta = input.positionDelta;
+		lastMousePos = input.lastPosition;
 
 		rotationDelta = math::vec2(mouseDelta.x * sensitivity, mouseDelta.y * sensitivity);
 
@@ -245,29 +247,6 @@ namespace rythe::game
 		{
 			renderer.model = handle;
 			renderer.dirty = true;
-		}
-	}
-
-	void Game::randomShader(core::events::key_input& input)
-	{
-	}
-
-	void Game::debugInfo(core::events::key_input& input)
-	{
-		auto& cam = camera.getComponent<gfx::camera>();
-		auto& entTransf = cube.getComponent<core::transform>();
-
-		if (input.action == GLFW_PRESS)
-		{
-			switch (input.key)
-			{
-			case GLFW_KEY_T:
-				log::debug("Perspective Matrix\n{}", cam.projection);
-				log::debug("View Matrix\n{}", cam.view);
-				log::debug("ProjeView\n{}", cam.projection * cam.view);
-				log::debug("MVP\n{}", (cam.projection * cam.view) * entTransf.to_world());
-				break;
-			}
 		}
 	}
 }

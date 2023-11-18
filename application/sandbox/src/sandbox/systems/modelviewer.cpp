@@ -77,11 +77,11 @@ namespace rythe::game
 
 	void ModelViewer::reloadShaders(core::events::key_input& input)
 	{
-		if (input.action == GLFW_PRESS)
+		if (input.value)
 		{
 			switch (input.key)
 			{
-			case GLFW_KEY_1:
+			case inputmap::method::NUM1:
 				gfx::ShaderCache::reloadShaders();
 				break;
 			}
@@ -91,24 +91,24 @@ namespace rythe::game
 	void ModelViewer::move(core::events::key_input& input)
 	{
 		auto& transf = camera.getComponent<core::transform>();
-		if (input.action == GLFW_PRESS || input.action == GLFW_REPEAT)
+		if (input.value)
 		{
 			switch (input.key)
 			{
-			case GLFW_KEY_D:
-			case GLFW_KEY_RIGHT:
+			case inputmap::method::D:
+			case inputmap::method::RIGHT:
 				camPos -= math::normalize(math::cross(cameraFront, cameraUp)) * speed * deltaTime;
 				break;
-			case GLFW_KEY_A:
-			case GLFW_KEY_LEFT:
+			case inputmap::method::A:
+			case inputmap::method::LEFT:
 				camPos += math::normalize(math::cross(cameraFront, cameraUp)) * speed * deltaTime;
 				break;
-			case GLFW_KEY_W:
-			case GLFW_KEY_UP:
+			case inputmap::method::W:
+			case inputmap::method::UP:
 				camPos += speed * cameraFront * deltaTime;
 				break;
-			case GLFW_KEY_S:
-			case GLFW_KEY_DOWN:
+			case inputmap::method::S:
+			case inputmap::method::DOWN:
 				camPos -= speed * cameraFront * deltaTime;
 				break;
 			}
@@ -119,41 +119,7 @@ namespace rythe::game
 
 	void ModelViewer::mouselook(core::events::mouse_input& input)
 	{
-		if (firstMouse)
-		{
-			lastX = input.xpos;
-			lastY = input.ypos;
-			firstMouse = false;
-		}
 
-		float xoffset = lastX - input.xpos;
-		float yoffset = lastY - input.ypos;
-		lastX = input.xpos;
-		lastY = input.ypos;
-
-		xoffset *= sensitivity;
-		yoffset *= sensitivity;
-
-		yaw += xoffset;
-		pitch += yoffset;
-
-		if (pitch > 89.0f)
-			pitch = 89.0f;
-		if (pitch < -89.0f)
-			pitch = -89.0f;
-		auto& camTransf = camera.getComponent<core::transform>();
-
-		math::vec3 direction;
-		direction.x = cos(math::radians(yaw)) * cos(math::radians(pitch));
-		direction.y = sin(math::radians(pitch));
-		direction.z = sin(math::radians(yaw)) * cos(math::radians(pitch));
-
-		math::mat3 rotMat = math::toMat3(camTransf.rotation);
-		math::vec3 right = rotMat * math::vec3::right;
-		math::vec3 fwd = math::normalize(math::cross(right, math::vec3::up));
-		math::vec3 up = rotMat * math::vec3::up;
-
-		//camTransf.rotation = math::quat(math::lookAt(camPos, camPos + math::normalize(direction), up));
 	}
 
 	void ModelViewer::setModel(gfx::model_handle handle)
@@ -176,11 +142,11 @@ namespace rythe::game
 		//auto& transf = camera.getComponent<core::transform>();
 		auto& entTransf = ent.getComponent<core::transform>();
 
-		if (input.action == GLFW_PRESS)
+		if (input.value)
 		{
 			switch (input.key)
 			{
-			case GLFW_KEY_T:
+			case inputmap::method::T:
 				log::debug("Perspective Matrix\n{}", cam.projection);
 				log::debug("View Matrix\n{}", cam.view);
 				log::debug("ProjeView\n{}", cam.projection * cam.view);

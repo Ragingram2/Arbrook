@@ -13,6 +13,5 @@ namespace rythe::input
 			log::info("Initializing Input Module");
 			reportSystem<InputSystem>();
 		}
-
 	};
 }

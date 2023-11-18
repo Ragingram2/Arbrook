@@ -1,6 +1,7 @@
 #pragma once
 #include "core/core.hpp"
 #include "rendering/rendering.hpp"
+#include "input/input.hpp"
 
 namespace rythe::game
 {

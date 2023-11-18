@@ -16,7 +16,6 @@ namespace rythe::rendering
 		{
 			log::info("Initializing Rendering Module");
 			reportSystem<Renderer>();
-			//reportSystem<TestRenderer>();
 		}
 	};
 }

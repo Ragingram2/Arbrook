@@ -1,6 +1,7 @@
 #pragma once
 #include "core/core.hpp"
 #include "rendering/rendering.hpp"
+#include "input/input.hpp"
 
 namespace rythe::game
 {
@@ -46,15 +47,15 @@ namespace rythe::game
 		void reloadShaders(core::events::key_input& input);
 		void move(core::events::key_input& input);
 		void mouselook(core::events::mouse_input& input);
-		void randomShader(core::events::key_input& input);
-		void debugInfo(core::events::key_input& input);
 
 		void toggleMouseCapture(core::events::key_input& input)
 		{
-			if (input.action == GLFW_PRESS)
+			if (input.value)
 			{
-				if (input.key == GLFW_KEY_ESCAPE)
+				log::debug("Value is true");
+				if (input.key == inputmap::method::ESCAPE)
 				{
+					log::debug("Key is Escape");
 					mouseCapture = !mouseCapture;
 				}
 			}

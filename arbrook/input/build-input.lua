@@ -1,5 +1,8 @@
 createProject("engine","input","StaticLib")
-includedirs { basicIncludes }
+includedirs { 
+    basicIncludes,
+    "../rendering/include/glfw/include/"
+ }
  
 files { 
     "src/input/**.h",

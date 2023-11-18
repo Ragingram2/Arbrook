@@ -1,4 +1,6 @@
 #pragma once
+#include <rsl/math>
+
 #include "core/events/event.hpp"
 #include "input/map/inputmap.hpp"
 
@@ -34,5 +36,20 @@ namespace rythe::core::events
 		inputmap::method identifier;
 		std::vector<inputmap::modifier_keys> mods_parts;
 		std::vector<inputmap::method> identifier_parts;
+	};
+
+	struct key_input final : public event<key_input>
+	{
+		inputmap::method key;
+		bool value;
+		key_input(inputmap::method _key, bool _value) : key(_key), value(_value) {}
+	};
+
+	struct mouse_input final : public event<mouse_input>
+	{
+		math::vec2 position;
+		math::vec2 lastPosition;
+		math::vec2 positionDelta;
+		mouse_input(math::vec2 pos, math::vec2 lastPos, math::vec2 posDelta) : position(pos), lastPosition(lastPos), positionDelta(posDelta) {}
 	};
 }

@@ -47,7 +47,7 @@ namespace rythe::input
             return value(lhs) | value(rhs);
         }
 
-        enum class method
+        enum method
         {
             KEY,
             CHAR,
