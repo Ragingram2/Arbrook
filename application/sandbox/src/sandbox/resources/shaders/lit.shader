@@ -3,6 +3,7 @@
 #version 420 core
 
 layout(location = 0) in vec4 v_position;
+layout(location = 2) in vec3 v_normal;
 
 layout(std140, binding = 0) uniform ConstantBuffer
 {
@@ -11,61 +12,76 @@ layout(std140, binding = 0) uniform ConstantBuffer
 	mat4 u_model;
 };
 
+out vec3 Normal;
+out vec3 FragPos;
+
 void main()
 {
 	gl_Position = ((u_projection * u_view) * u_model) * v_position;
+	FragPos = vec3(u_model * vec4(v_position));
+	//this should be moved to the cpu at some point
+	Normal = mat3(transpose(inverse(u_model))) * v_normal;
 }
 
 #shader fragment
 #version 420 core
 
+in vec3 Normal;
+in vec3 FragPos;
+
+// layout(std140, binding = 1) uniform LightBuffer
+// {
+// 	vec3 u_lightPos;
+// };
+
 out vec4 FragColor;
-layout(std140, binding = 0) uniform LightInfo
-{
-	vec3 objectColor;
-    vec3 lightColor;
-};
+
+vec3 lightColor = vec3(1.0,0.5,.31);
+vec3 objectColor = vec3(1.0);
+vec3 u_lightPos = vec3(-1.2,100.0,200.2);
 
 void main()
 {
+	vec3 norm = normalize(Normal);
+	vec3 lightDir = normalize(u_lightPos - FragPos);
+	float diff = max(dot(norm,lightDir),0.0);
+	vec3 diffuse = diff * lightColor;
 
-	FragColor = vec4(lightColor*objectColor, 1.0);
+	float ambientStrength = 0.1;
+	vec3 ambient = ambientStrength * lightColor;
+	vec3 result = (ambient + diffuse) * objectColor;
+	FragColor = vec4(result,1.0);
 }
 #END
 
 #HLSL
 #shader vertex
+
 cbuffer ConstantBuffer : register(b0)
 {
-	float3 u_position;
-	float u_time;
+	matrix u_projection;
+	matrix u_view;
+	matrix u_model;
 };
 
 struct VOut
 {
 	float4 p_position : SV_POSITION;
-	float4 p_color : COLOR;
-	float2 p_texcoord : TEXCOORD;
 };
 
-VOut VShader(float3 position : POSITION, float4 color : COLOR, float2 texCoord : TEXCOORD)
+VOut VShader(float4 position : POSITION)
 {
 	VOut output;
 
-	float3 offset = float3(0, sin(u_time), 0);
-	output.p_position = float4(position + u_position + offset, 1);
-	output.p_color = color;
-	output.p_texcoord = texCoord;
+    output.p_position = mul(mul(mul(u_projection,u_view),u_model),position);
 
 	return output;
 }
 
 #shader fragment
-Texture2D m_texture;
-SamplerState m_sampler;
 
-float4 PShader(float4 position : SV_POSITION, float4 color : COLOR, float2 texCoord : TEXCOORD) : SV_TARGET
+float4 PShader(float4 position : SV_POSITION) : SV_TARGET
 {
-	return m_texture.Sample(m_sampler, texCoord);
+	return float4(1,0,0,1);
 }
 #END

@@ -43,8 +43,6 @@ namespace rythe::rendering
 				log::error("Window initialization failed");
 				return;
 			}
-
-			glfwSetInputMode(RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 
 		void update()

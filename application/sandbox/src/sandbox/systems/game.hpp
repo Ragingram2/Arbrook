@@ -13,6 +13,7 @@ namespace rythe::game
 		core::ecs::entity cube;
 		gfx::model_handle modelHandle;
 		gfx::material mat;
+		gfx::material lit;
 
 		math::vec3 velocity;
 
@@ -36,8 +37,6 @@ namespace rythe::game
 		float yaw = -90.0f;
 		float pitch = 0.0f;
 
-		bool mouseCapture = true;
-
 	public:
 		void setup();
 		void update();
@@ -52,11 +51,9 @@ namespace rythe::game
 		{
 			if (input.value)
 			{
-				log::debug("Value is true");
 				if (input.key == inputmap::method::ESCAPE)
 				{
-					log::debug("Key is Escape");
-					mouseCapture = !mouseCapture;
+					input::InputSystem::mouseCaptured = !input::InputSystem::mouseCaptured;
 				}
 			}
 		}

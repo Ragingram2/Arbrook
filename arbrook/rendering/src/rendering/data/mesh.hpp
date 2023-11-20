@@ -70,6 +70,16 @@ namespace rythe::rendering
 				}
 			}
 
+			if (mesh->HasNormals())
+			{
+				auto normalCount = mesh->mNumVertices;
+				auto s_normals = mesh->mNormals;
+
+				for (int i = 0; i < normalCount; i++)
+				{
+					normals.push_back(math::vec3(s_normals[i].x, s_normals[i].y, s_normals[i].z));
+				}
+			}
 
 			if (mesh->HasFaces())
 			{

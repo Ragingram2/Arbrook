@@ -4,9 +4,7 @@ namespace rythe::input
 {
 	GLFWwindow* InputSystem::m_windowHandle;
 	bool InputSystem::m_initialize = false;
-	math::vec2 InputSystem::mousePos;
-	math::vec2 InputSystem::lastMousePos;
-	math::vec2 InputSystem::mouseDelta;
+	bool InputSystem::mouseCaptured = true;
 
 	void InputSystem::setup()
 	{
@@ -24,7 +22,17 @@ namespace rythe::input
 		map = new gainput::InputMap(*m_manager, "Testmap");
 		map->MapFloat(inputmap::method::MOUSE_X, mouseId, gainput::MouseAxisX, 0, width);
 		map->MapFloat(inputmap::method::MOUSE_Y, mouseId, gainput::MouseAxisY, 0, height);
-		map->MapBool(inputmap::method::ESCAPE, mouseId, gainput::KeyEscape);
+		map->MapBool(inputmap::method::MOUSE_LEFT, mouseId, gainput::MouseButtonLeft);
+		map->MapBool(inputmap::method::MOUSE_RIGHT, mouseId, gainput::MouseButtonRight);
+		map->MapBool(inputmap::method::ESCAPE, keyboardId, gainput::KeyEscape);
+
+		map->MapBool(inputmap::method::W, keyboardId, gainput::KeyW);
+		map->MapBool(inputmap::method::A, keyboardId, gainput::KeyA);
+		map->MapBool(inputmap::method::S, keyboardId, gainput::KeyS);
+		map->MapBool(inputmap::method::D, keyboardId, gainput::KeyD);
+		map->MapBool(inputmap::method::Q, keyboardId, gainput::KeyQ);
+		map->MapBool(inputmap::method::E, keyboardId, gainput::KeyE);
+		map->MapBool(inputmap::method::NUM1, keyboardId, gainput::Key1);
 		m_initialize = false;
 	}
 
@@ -48,6 +56,45 @@ namespace rythe::input
 			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
 		}
 
+		{
+			core::events::key_input keyEvnt{ inputmap::method::W,map->GetBool(inputmap::method::W) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::A,map->GetBool(inputmap::method::A) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::S,map->GetBool(inputmap::method::S) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::D,map->GetBool(inputmap::method::D) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::Q,map->GetBool(inputmap::method::Q) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::E,map->GetBool(inputmap::method::E) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+
+		{
+			core::events::key_input keyEvnt{ inputmap::method::MOUSE_LEFT, map->GetBool(inputmap::method::MOUSE_LEFT) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+		{
+			core::events::key_input keyEvnt{ inputmap::method::MOUSE_RIGHT, map->GetBool(inputmap::method::MOUSE_RIGHT) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+
+		{
+			core::events::key_input keyEvnt{ inputmap::method::NUM1, map->GetBool(inputmap::method::NUM1) };
+			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+		}
+
 		mousePos = math::vec2(map->GetFloat(inputmap::method::MOUSE_X), map->GetFloat(inputmap::method::MOUSE_Y));
 		lastMousePos = math::vec2(map->GetFloatPrevious(inputmap::method::MOUSE_X), map->GetFloatPrevious(inputmap::method::MOUSE_Y));
 		mouseDelta = math::vec2(map->GetFloatDelta(inputmap::method::MOUSE_X), map->GetFloatDelta(inputmap::method::MOUSE_Y));
@@ -55,6 +102,11 @@ namespace rythe::input
 			core::events::mouse_input mouseEvnt{ mousePos, lastMousePos, mouseDelta };
 			core::events::EventBus::raiseEvent<core::events::mouse_input>(mouseEvnt);
 		}
+
+		if (mouseCaptured)
+			glfwSetInputMode(m_windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		else
+			glfwSetInputMode(m_windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void InputSystem::shutdown()

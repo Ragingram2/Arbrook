@@ -27,10 +27,11 @@ namespace rythe::input
 		gainput::DeviceId mouseId;
 		gainput::DeviceId keyboardId; 
 		int width, height;
+		math::vec2 mousePos;
+		math::vec2 lastMousePos;
+		math::vec2 mouseDelta;
 	public:
-		static math::vec2 mousePos;
-		static math::vec2 lastMousePos;
-		static math::vec2 mouseDelta;
+		static bool mouseCaptured;
 		void setup();
 		void update();
 		void shutdown();

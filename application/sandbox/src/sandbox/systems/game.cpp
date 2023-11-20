@@ -20,6 +20,7 @@ namespace rythe::game
 		modelHandle = gfx::ModelCache::getModel("cube");
 
 		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader", "resources/textures/Rythe.png");
+		lit = gfx::MaterialCache::loadMaterialFromFile("default-lit","resources/shaders/lit.shader","resources/textures/Rythe.png");
 
 		cube = createEntity("Cube");
 		auto& transf = cube.addComponent<core::transform>();
@@ -27,7 +28,7 @@ namespace rythe::game
 		transf.position = math::vec3(0.0f, -1.0f, 10.f);
 
 		auto& renderer = cube.addComponent<gfx::mesh_renderer>();
-		renderer.material = mat;
+		renderer.material = lit;
 		renderer.model = modelHandle;
 
 		{
@@ -97,18 +98,13 @@ namespace rythe::game
 
 	void Game::update()
 	{
-		if (mouseCapture)
-			glfwSetInputMode(gfx::Renderer::RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		else
-			glfwSetInputMode(gfx::Renderer::RI->getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 		auto& camTransf = camera.getComponent<core::transform>();
 
-		camTransf.position -= velocity;
+		camTransf.position += velocity;
 		velocity = math::vec3::zero;
 
 		camTransf.rotation = math::conjugate(math::toQuat(math::lookAt(math::vec3::zero, front, up)));
@@ -149,19 +145,11 @@ namespace rythe::game
 		{
 			Text("Mouse Attributes");
 			InputScalarN("Mouse Position", ImGuiDataType_Float, mousePos.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Last Mouse Position", ImGuiDataType_Float, lastMousePos.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Mouse Delta", ImGuiDataType_Float, mouseDelta.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Yaw/Pitch", ImGuiDataType_Float, math::vec2(yaw, pitch).data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Yaw/Pitch Delta", ImGuiDataType_Float, rotationDelta.data, 2, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
 
 			Text("Camera Transform");
 			InputScalarN("Position", ImGuiDataType_Float, transf.position.data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
 			InputScalarN("Rotation", ImGuiDataType_Float, transf.rotation.data, 4, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
 			InputScalarN("Scale", ImGuiDataType_Float, transf.scale.data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-
-			InputScalarN("Right", ImGuiDataType_Float, transf.right().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Up", ImGuiDataType_Float, transf.up().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
-			InputScalarN("Forward", ImGuiDataType_Float, transf.forward().data, 3, 0, 0, 0, ImGuiInputTextFlags_ReadOnly);
 		}
 
 		ImGui::End();
@@ -189,21 +177,27 @@ namespace rythe::game
 		{
 			switch (input.key)
 			{
-			case inputmap::method::D:
-			case inputmap::method::RIGHT:
-				velocity -= transf.right() * speed * deltaTime;
-				break;
 			case inputmap::method::A:
 			case inputmap::method::LEFT:
-				velocity += transf.right() * speed * deltaTime;
+				velocity -= transf.right() * speed * deltaTime;
 				break;
-			case inputmap::method::W:
-			case inputmap::method::UP:
-				velocity -= transf.forward() * speed * deltaTime;
+			case inputmap::method::D:
+			case inputmap::method::RIGHT:
+				velocity += transf.right() * speed * deltaTime;
 				break;
 			case inputmap::method::S:
 			case inputmap::method::DOWN:
+				velocity -= transf.forward() * speed * deltaTime;
+				break;
+			case inputmap::method::W:
+			case inputmap::method::UP:
 				velocity += transf.forward() * speed * deltaTime;
+				break;
+			case inputmap::method::Q:
+				velocity -= math::vec3::up * speed * deltaTime;
+				break;
+			case inputmap::method::E:
+				velocity += math::vec3::up * speed * deltaTime;
 				break;
 			default:
 				break;
@@ -213,7 +207,7 @@ namespace rythe::game
 
 	void Game::mouselook(core::events::mouse_input& input)
 	{
-		if (!mouseCapture) return;
+		if (!input::InputSystem::mouseCaptured) return;
 
 		static bool firstMouse = true;
 
@@ -229,7 +223,7 @@ namespace rythe::game
 
 		rotationDelta = math::vec2(mouseDelta.x * sensitivity, mouseDelta.y * sensitivity);
 
-		pitch += rotationDelta.y;
+		pitch = math::clamp(pitch + rotationDelta.y,-89.99f,89.99);
 		yaw += -rotationDelta.x;
 
 		front.x = cos(math::radians(yaw)) * cos(math::radians(pitch));

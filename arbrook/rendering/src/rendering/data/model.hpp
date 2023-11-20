@@ -47,6 +47,9 @@ namespace rythe::rendering
 
 			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, meshHandle->indices);
 
+			normalBuffer = BufferCache::createBuffer<math::vec3>("Normal Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
+			layout.setAttributePtr(normalBuffer, "NORMAL", 1, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+
 			cameraBuffer = BufferCache::createBuffer<camData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
 			shader->bind();
@@ -54,16 +57,16 @@ namespace rythe::rendering
 			if (meshHandle->texCoords.size() > 0)
 			{
 				uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->texCoords);
-				layout.setAttributePtr(uvBuffer, "TEXCOORD", 1, FormatType::RG32F, 0, sizeof(math::vec2), 0);
+				layout.setAttributePtr(uvBuffer, "TEXCOORD", 2, FormatType::RG32F, 0, sizeof(math::vec2), 0);
 			}
 
 			if (instanced)
 			{
 				matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 6, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			}
 			layout.submitAttributes();
 		}
@@ -91,6 +94,11 @@ namespace rythe::rendering
 			{
 				indexBuffer->bind();
 				indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
+			}
+			if (normalBuffer != nullptr)
+			{
+				normalBuffer->bind();
+				normalBuffer->bufferData(meshHandle->normals.data(), meshHandle->normals.size());
 			}
 			if (uvBuffer != nullptr)
 			{

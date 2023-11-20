@@ -157,7 +157,6 @@ namespace rythe::testing
 		{
 			data.view = cam.calculate_view(&camTransf);
 			bgfx::setViewTransform(0, data.view.data, data.projection.data);
-
 			i += .1f;
 			bgfx::touch(0);
 
