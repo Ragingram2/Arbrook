@@ -29,7 +29,7 @@ namespace rythe::testing
 			mat = gfx::MaterialCache::loadMaterial("test", "cube");
 			vBuffer = gfx::BufferCache::createBuffer<math::vec4>("Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->vertices);
 			idxBuffer = gfx::BufferCache::createBuffer<unsigned int>("Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->indices);
-			cBuffer = gfx::BufferCache::createBuffer<gfx::camera_data>("ConstantBuffer", gfx::TargetType::CONSTANT_BUFFER, gfx::UsageType::STATICDRAW);
+			cBuffer = gfx::BufferCache::createConstantBuffer<gfx::camera_data>("ConstantBuffer", 0, gfx::UsageType::STATICDRAW);
 			mat->shader->addBuffer(gfx::ShaderType::VERTEX, cBuffer);
 			mat->bind();
 

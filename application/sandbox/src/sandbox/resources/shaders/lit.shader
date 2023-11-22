@@ -29,28 +29,27 @@ void main()
 in vec3 Normal;
 in vec3 FragPos;
 
-// layout(std140, binding = 1) uniform LightBuffer
-// {
-// 	vec3 u_lightPos;
-// };
+layout(std140, binding = 1) uniform LightBuffer
+{
+	vec3 u_lightPos;
+	vec3 u_lightColor;
+};
 
 out vec4 FragColor;
 
-vec3 lightColor = vec3(1.0,0.5,.31);
 vec3 objectColor = vec3(1.0);
-vec3 u_lightPos = vec3(-1.2,100.0,200.2);
 
 void main()
 {
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(u_lightPos - FragPos);
-	float diff = max(dot(norm,lightDir),0.0);
-	vec3 diffuse = diff * lightColor;
+	float diff = max(dot(norm, lightDir), 0.0);
+	vec3 diffuse = diff * u_lightColor;
 
 	float ambientStrength = 0.1;
-	vec3 ambient = ambientStrength * lightColor;
+	vec3 ambient = ambientStrength * u_lightColor;
 	vec3 result = (ambient + diffuse) * objectColor;
-	FragColor = vec4(result,1.0);
+	FragColor = vec4(result, 1.0);
 }
 #END
 

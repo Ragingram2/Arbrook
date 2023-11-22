@@ -86,6 +86,18 @@ namespace rythe::game
 			renderer.model = gfx::ModelCache::getModel("bunny");
 		}
 
+		{
+			auto ent = createEntity("Light");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one;
+			transf.position = math::vec3(5.0f, 0.0f, 10.0f);
+			ent.addComponent<gfx::light>();
+			
+			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+			renderer.material = mat;
+			renderer.model = gfx::ModelCache::getModel("icosphere");
+		}
+
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
 		camTransf.position = math::vec3(0.0f, 0.0f, 0.0f);

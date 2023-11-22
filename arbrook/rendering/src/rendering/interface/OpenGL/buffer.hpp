@@ -71,7 +71,7 @@ namespace rythe::rendering::internal
 				createBuffer();
 			}
 
-			if (m_target == TargetType::CONSTANT_BUFFER)
+			if (m_target == TargetType::CONSTANT_BUFFER || m_usage == UsageType::IMMUTABLE)
 			{
 				glBufferSubData(static_cast<GLenum>(m_target), 0, m_size * sizeof(elementType), data);
 			}
@@ -93,10 +93,17 @@ namespace rythe::rendering::internal
 				glGenBuffers(1, &id);
 
 			bind();
-			glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, nullptr, static_cast<GLenum>(m_usage));
-			if (m_target == TargetType::CONSTANT_BUFFER)
+			if (m_usage == UsageType::IMMUTABLE)
 			{
-				glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, m_elementSize);
+				glBufferStorage(static_cast<GLenum>(m_target), m_size * m_elementSize, 0, GL_MAP_WRITE_BIT | GL_DYNAMIC_STORAGE_BIT);
+			}
+			else
+			{
+				glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, nullptr, static_cast<GLenum>(m_usage));
+				if (m_target == TargetType::CONSTANT_BUFFER)
+				{
+					glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, m_elementSize);
+				}
 			}
 		}
 	};

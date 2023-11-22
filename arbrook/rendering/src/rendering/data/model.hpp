@@ -3,10 +3,10 @@
 #include "rendering/data/meshhandle.hpp"
 #include "rendering/data/shaderhandle.hpp"
 #include "rendering/data/bufferhandle.hpp"
-
 #include "rendering/interface/definitions/buffer.hpp"
 #include "rendering/interface/definitions/inputlayout.hpp"
 #include "rendering/cache/buffercache.hpp"
+#include "rendering/components/light.hpp"
 
 namespace rythe::rendering
 {
@@ -29,6 +29,7 @@ namespace rythe::rendering
 		buffer_handle uvBuffer;
 		buffer_handle matrixBuffer;
 		buffer_handle cameraBuffer;
+		buffer_handle lightBuffer;
 		mesh_handle meshHandle;
 
 
@@ -42,16 +43,20 @@ namespace rythe::rendering
 			layout.initialize(1, shader);
 			layout.bind();
 
-			vertexBuffer = BufferCache::createBuffer<math::vec4>("Vertex Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->vertices);
+			vertexBuffer = BufferCache::createVertexBuffer<math::vec4>(std::format("{}-Vertex Buffer", handle->name), UsageType::STATICDRAW, meshHandle->vertices);
 			layout.setAttributePtr(vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 
-			indexBuffer = BufferCache::createBuffer<unsigned int>("Index Buffer", TargetType::INDEX_BUFFER, UsageType::STATICDRAW, meshHandle->indices);
+			indexBuffer = BufferCache::createIndexBuffer(std::format("{}-Index Buffer", handle->name), UsageType::STATICDRAW, meshHandle->indices);
 
-			normalBuffer = BufferCache::createBuffer<math::vec3>("Normal Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
+			normalBuffer = BufferCache::createBuffer<math::vec3>(std::format("{}-Normal Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
 			layout.setAttributePtr(normalBuffer, "NORMAL", 1, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
 
-			cameraBuffer = BufferCache::createBuffer<camData>("ConstantBuffer", TargetType::CONSTANT_BUFFER, UsageType::STATICDRAW);
+			cameraBuffer = BufferCache::createConstantBuffer<camData>("ConstantBuffer", 0, UsageType::STATICDRAW);
 			shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
+
+			lightBuffer = BufferCache::createConstantBuffer<light>("LightBuffer", 1, UsageType::STATICDRAW);
+			shader->addBuffer(ShaderType::FRAGMENT, lightBuffer);
+
 			shader->bind();
 
 			if (meshHandle->texCoords.size() > 0)

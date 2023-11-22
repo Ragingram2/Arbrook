@@ -3,6 +3,7 @@
 #include "rendering/pipeline/stages/clearstage.hpp"
 #include "rendering/pipeline/stages/renderstage.hpp"
 #include "rendering/pipeline/stages/guistage.hpp"
+#include "rendering/pipeline/stages/lightrenderstage.hpp"
 
 namespace rythe::rendering
 {
@@ -12,6 +13,7 @@ namespace rythe::rendering
 		virtual void setup() override
 		{
 			attachStage<render_stage>();
+			attachStage<light_render_stage>();
 			attachStage<clear_stage>();
 			attachStage<gui_stage>();
 
