@@ -1,9 +1,6 @@
 [submodule "include/rythe-standard-library"]
 	path = include/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "arbrook/rendering/include/glew"]
-	path = arbrook/rendering/include/glew
-	url = https://github.com/nigels-com/glew.git
 [submodule "arbrook/input/include/gainput"]
 	path = arbrook/input/include/gainput
 	url = https://github.com/Ragingram2/gainput.git
