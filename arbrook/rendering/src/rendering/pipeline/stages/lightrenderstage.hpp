@@ -10,8 +10,10 @@ namespace rythe::rendering
 	struct light_render_stage : public graphics_stage<light_render_stage, light>
 	{
 		std::vector<light> m_lights;
+		buffer_handle lightBuffer;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
+			lightBuffer = BufferCache::createConstantBuffer<light>("LightBuffer", 1, UsageType::STATICDRAW);
 		}
 
 		virtual void render(core::transform camTransf, camera& cam) override
@@ -24,10 +26,10 @@ namespace rythe::rendering
 				lightComp.lightPos = transf.position;
 				m_lights.push_back(lightComp);
 			}
-			auto handle = BufferCache::getBuffer("LightBuffer");
-			if (handle != nullptr)
+
+			if (lightBuffer != nullptr)
 			{
-				handle->bufferData(m_lights.data(), m_lights.size());
+				lightBuffer->bufferData(m_lights.data(), m_lights.size());
 			}
 		}
 

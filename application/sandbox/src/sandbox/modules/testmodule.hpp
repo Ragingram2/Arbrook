@@ -3,6 +3,7 @@
 #include "core/modules/module.hpp"
 #include "sandbox/systems/testsystem.hpp"
 #include "sandbox/systems/game.hpp"
+#include "sandbox/systems/examplesystem.hpp"
 
 namespace rythe::core
 {
@@ -13,6 +14,7 @@ namespace rythe::core
 		{
 			log::info("Initializing Game Module");
 			reportSystem<game::Game>();
+			reportSystem<game::ExampleSystem>();
 			//reportSystem<testing::TestSystem>();
 		}
 	};

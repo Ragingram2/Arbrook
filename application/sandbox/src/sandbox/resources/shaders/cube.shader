@@ -4,8 +4,9 @@
 
 layout(location = 0) in vec4 v_position;
 
-layout(std140, binding = 0) uniform ConstantBuffer
+layout(std140, binding = 0) uniform CameraBuffer
 {
+	vec3 u_viewPosition;
 	mat4 u_projection;
 	mat4 u_view;
 	mat4 u_model;

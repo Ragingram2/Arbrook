@@ -5,7 +5,7 @@ namespace rythe::rendering
 {
 	struct light
 	{
-		math::vec3 lightPos;
-		math::vec3 lightColor;
+		math::vec4 lightPos;
+		math::vec4 lightColor;
 	};
 }

@@ -2,7 +2,6 @@
 #include <rsl/math>
 
 //#include "core/components/property.hpp"
-#include "core/ecs/entity.hpp"
 #include "core/components/transform.hpp"
 #include "core/ecs/component_family.hpp"
 #include "rendering/interface/definitions/definitions.hpp"
@@ -11,6 +10,7 @@ namespace rythe::rendering
 {
 	struct camera_data
 	{
+		math::vec3 viewPosition;
 		math::mat4 projection;
 		math::mat4 view;
 		math::mat4 model;
@@ -18,9 +18,6 @@ namespace rythe::rendering
 
 	struct camera
 	{
-		friend struct core::ecs::component_family<camera>;
-	private:
-		core::ecs::entity m_owner;
 	public:
 		math::mat4 projection;
 		math::mat4 view;
@@ -36,15 +33,15 @@ namespace rythe::rendering
 				return view;
 			}
 
-			if (m_owner)
-			{
-				if (m_owner.hasComponent<core::transform>())
-				{
-					auto transf = m_owner.getComponent<core::transform>();
-					view = transf.from_world();
-					return view;
-				}
-			}
+			//if (m_owner)
+			//{
+			//	if (m_owner.hasComponent<core::transform>())
+			//	{
+			//		auto transf = m_owner.getComponent<core::transform>();
+			//		view = transf.from_world();
+			//		return view;
+			//	}
+			//}
 
 			return math::mat4(1.f);
 		}

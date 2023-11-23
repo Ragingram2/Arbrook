@@ -1,15 +1,10 @@
 #pragma once
 #include "core/math/math.hpp"
-#include "core/ecs/entity.hpp"
 #include "core/components/property.hpp"
 namespace rythe::core
 {
 	struct transform
 	{
-		friend struct ecs::component_family<transform>;
-	private:
-		ecs::entity m_owner;
-
 		//void set_position(math::vec3 val) { m_position = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
 		//void set_scale(math::vec3 val) { m_scale = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
 		//void set_rotation(math::quat val) { m_rotation = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
@@ -31,9 +26,9 @@ namespace rythe::core
 		math::vec3 right() { return rotation.right(); }
 		math::vec3 forward() { return rotation.forward(); }
 
-		void set_owner(core::ecs::entity ent)
+		void set_owner(/*core::ecs::entity ent*/)
 		{
-			m_owner = ent;
+			//m_owner = ent;
 		}
 
 		math::mat4 from_world()
@@ -43,11 +38,11 @@ namespace rythe::core
 
 		math::mat4 to_world()
 		{
-			if (m_owner && m_owner->parent)
-			{
-				transform parentTransf = m_owner->parent.getComponent<transform>();
-				return parentTransf.to_world() * to_parent();
-			}
+			//if (m_owner && m_owner->parent)
+			//{
+			//	transform parentTransf = m_owner->parent.getComponent<transform>();
+			//	return parentTransf.to_world() * to_parent();
+			//}
 			return to_parent();
 		}
 

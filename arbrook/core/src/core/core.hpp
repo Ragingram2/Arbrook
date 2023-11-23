@@ -23,6 +23,11 @@ namespace rythe::core
 	namespace gfx = rythe::rendering;
 	namespace log = rsl::log;
 	namespace math = rsl::math;
+	struct examplecomp
+	{
+		float i = 0;
+		int direction = 1;
+	};
 
 	namespace events
 	{

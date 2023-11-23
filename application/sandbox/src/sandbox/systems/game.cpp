@@ -19,8 +19,7 @@ namespace rythe::game
 		gfx::ShaderCache::loadShaders("resources/shaders/");
 		modelHandle = gfx::ModelCache::getModel("cube");
 
-		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader", "resources/textures/Rythe.png");
-		lit = gfx::MaterialCache::loadMaterialFromFile("default-lit","resources/shaders/lit.shader","resources/textures/Rythe.png");
+		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/lit.shader", "resources/textures/Rythe.png");
 
 		cube = createEntity("Cube");
 		auto& transf = cube.addComponent<core::transform>();
@@ -28,7 +27,7 @@ namespace rythe::game
 		transf.position = math::vec3(0.0f, -1.0f, 10.f);
 
 		auto& renderer = cube.addComponent<gfx::mesh_renderer>();
-		renderer.material = lit;
+		renderer.material = mat;
 		renderer.model = modelHandle;
 
 		{
@@ -90,13 +89,31 @@ namespace rythe::game
 			auto ent = createEntity("Light");
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
-			transf.position = math::vec3(5.0f, 0.0f, 10.0f);
-			ent.addComponent<gfx::light>();
-			
+			transf.position = math::vec3(0.0f, 1.0f, 7.0f);
+			auto& lightComp = ent.addComponent<gfx::light>();
+			lightComp.lightColor = math::vec3(1.0f, 1.0f, 1.0f);
+			auto& comp = ent.addComponent<core::examplecomp>();
+			comp.direction = 1;
+
 			auto& renderer = ent.addComponent<gfx::mesh_renderer>();
 			renderer.material = mat;
 			renderer.model = gfx::ModelCache::getModel("icosphere");
 		}
+
+		//{
+		//	auto ent = createEntity("Light2");
+		//	auto& transf = ent.addComponent<core::transform>();
+		//	transf.scale = math::vec3::one;
+		//	transf.position = math::vec3(0.0f, 1.0f, 13.0f);
+		//	auto& lightComp = ent.addComponent<gfx::light>();
+		//	lightComp.lightColor = math::color(1.0f, 1.0f, 1.0f, 1.0f);
+		//	auto& comp = ent.addComponent<core::examplecomp>();
+		//	comp.direction = -1;
+
+		//	auto& renderer = ent.addComponent<gfx::mesh_renderer>();
+		//	renderer.material = mat;
+		//	renderer.model = gfx::ModelCache::getModel("icosphere");
+		//}
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();

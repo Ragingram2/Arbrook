@@ -49,6 +49,17 @@ namespace rythe::rendering::internal
 		void bind()
 		{
 			glUseProgram(programId);
+
+			for (auto [name, handle] : m_vsConstBuffers)
+			{
+				handle->bind();
+				glBindBufferBase(GL_UNIFORM_BUFFER, handle->m_impl.bindId, handle->getId());
+			}
+			for (auto [name, handle] : m_psConstBuffers)
+			{
+				handle->bind();
+				glBindBufferBase(GL_UNIFORM_BUFFER, handle->m_impl.bindId, handle->getId());
+			}
 		}
 
 		template<typename elementType>
@@ -90,7 +101,8 @@ namespace rythe::rendering::internal
 				break;
 			}
 
-			glUniformBlockBinding(programId, glGetUniformBlockIndex(programId, handle->getName().c_str()), handle->m_impl.bindId);
+			auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
+			glUniformBlockBinding(programId, idx , handle->m_impl.bindId);
 		}
 
 		void release()

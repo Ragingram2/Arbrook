@@ -7,16 +7,10 @@
 #include "rendering/interface/definitions/inputlayout.hpp"
 #include "rendering/cache/buffercache.hpp"
 #include "rendering/components/light.hpp"
+#include "rendering/components/camera.hpp"
 
 namespace rythe::rendering
 {
-	struct camData
-	{
-		math::mat4 projection;
-		math::mat4 view;
-		math::mat4 model;
-	};
-
 	struct model
 	{
 		std::string name;
@@ -29,7 +23,6 @@ namespace rythe::rendering
 		buffer_handle uvBuffer;
 		buffer_handle matrixBuffer;
 		buffer_handle cameraBuffer;
-		buffer_handle lightBuffer;
 		mesh_handle meshHandle;
 
 
@@ -48,26 +41,21 @@ namespace rythe::rendering
 
 			indexBuffer = BufferCache::createIndexBuffer(std::format("{}-Index Buffer", handle->name), UsageType::STATICDRAW, meshHandle->indices);
 
-			normalBuffer = BufferCache::createBuffer<math::vec3>(std::format("{}-Normal Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
-			layout.setAttributePtr(normalBuffer, "NORMAL", 1, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
-
-			cameraBuffer = BufferCache::createConstantBuffer<camData>("ConstantBuffer", 0, UsageType::STATICDRAW);
-			shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
-
-			lightBuffer = BufferCache::createConstantBuffer<light>("LightBuffer", 1, UsageType::STATICDRAW);
-			shader->addBuffer(ShaderType::FRAGMENT, lightBuffer);
-
-			shader->bind();
+			if (meshHandle->normals.size() > 0)
+			{
+				normalBuffer = BufferCache::createBuffer<math::vec3>(std::format("{}-Normal Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
+				layout.setAttributePtr(normalBuffer, "NORMAL", 1, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+			}
 
 			if (meshHandle->texCoords.size() > 0)
 			{
-				uvBuffer = BufferCache::createBuffer<math::vec2>("UV Buffer", TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->texCoords);
+				uvBuffer = BufferCache::createBuffer<math::vec2>(std::format("{}-UV Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->texCoords);
 				layout.setAttributePtr(uvBuffer, "TEXCOORD", 2, FormatType::RG32F, 0, sizeof(math::vec2), 0);
 			}
 
 			if (instanced)
 			{
-				matrixBuffer = BufferCache::createBuffer<math::mat4>("Matrix Buffer", TargetType::VERTEX_BUFFER);
+				matrixBuffer = BufferCache::createBuffer<math::mat4>(std::format("{}-Matrix Buffer", handle->name), TargetType::VERTEX_BUFFER);
 				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
@@ -76,38 +64,23 @@ namespace rythe::rendering
 			layout.submitAttributes();
 		}
 
-		void loadData()
-		{
-			//layout.bind();
-			//vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
-			//indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
-			//if (meshHandle->texCoords.size() > 0)
-			//{
-			//	uvBuffer->bufferData(meshHandle->texCoords.data(),meshHandle->texCoords.size());
-			//}
-		}
-
 		void bind()
 		{
 			layout.bind();
 			if (vertexBuffer != nullptr)
 			{
-				vertexBuffer->bind();
 				vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
 			}
 			if (indexBuffer != nullptr)
 			{
-				indexBuffer->bind();
 				indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
 			}
 			if (normalBuffer != nullptr)
 			{
-				normalBuffer->bind();
 				normalBuffer->bufferData(meshHandle->normals.data(), meshHandle->normals.size());
 			}
 			if (uvBuffer != nullptr)
 			{
-				uvBuffer->bind();
 				uvBuffer->bufferData(meshHandle->texCoords.data(), meshHandle->texCoords.size());
 			}
 			if (matrixBuffer != nullptr)

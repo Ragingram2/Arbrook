@@ -18,20 +18,20 @@ namespace rythe::rendering
 	private:
 		static rsl::multicast_delegate<renderFunc> m_onRender;
 	public:
+		buffer_handle cameraBuffer;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
-			cam.calculate_view(&camTransf);
 			cam.calculate_projection();
-			camData mat = { cam.projection, cam.view, math::mat4(1.0f) };
+			cameraBuffer = BufferCache::createConstantBuffer<camera_data>("CameraBuffer", 0, UsageType::STATICDRAW);
+
 			RI->depthTest(true);
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				auto& transf = ent.getComponent<core::transform>();
-				mat.model = transf.to_world();
 				renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
 				renderer.dirty = false;
-				renderer.model->cameraBuffer->bufferData(&mat, 1);
+				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, BufferCache::getBuffer("LightBuffer"));
+				renderer.material->shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
 			}
 			RI->checkError();
 		}
@@ -39,7 +39,7 @@ namespace rythe::rendering
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_view(&camTransf);
-			camData mat = { cam.projection, cam.view, math::mat4(1.0f) };
+			camera_data mat = { camTransf.position, cam.projection, cam.view, math::mat4(1.0f) };
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
@@ -50,7 +50,7 @@ namespace rythe::rendering
 				}
 				auto& transf = ent.getComponent<core::transform>();
 				mat.model = transf.to_world();
-				renderer.model->cameraBuffer->bufferData(&mat, 1);
+				cameraBuffer->bufferData(&mat, 1);
 				renderer.material->bind();
 				renderer.model->bind();
 				if (renderer.model->indexBuffer != nullptr)
