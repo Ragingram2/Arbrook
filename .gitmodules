@@ -1,9 +1,6 @@
 [submodule "include/rythe-standard-library"]
 	path = include/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "arbrook/rendering/include/imgui"]
-	path = arbrook/rendering/include/imgui
-	url = https://github.com/Rythe-Interactive/imgui.git
 [submodule "arbrook/rendering/include/glew"]
 	path = arbrook/rendering/include/glew
 	url = https://github.com/nigels-com/glew.git
@@ -25,3 +22,6 @@
 [submodule "application/sandbox/include/bimg"]
 	path = application/sandbox/include/bimg
 	url = https://github.com/bkaradzic/bimg.git
+[submodule "arbrook/rendering/include/imgui"]
+	path = arbrook/rendering/include/imgui
+	url = https://github.com/ocornut/imgui.git
