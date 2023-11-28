@@ -4,13 +4,20 @@
 
 namespace rythe::rendering
 {
+	struct material_data
+	{
+		float shininess = 32.0f;
+	};
+
 	struct material
 	{
-		texture_handle texture;
+		material_data data;
+		texture_handle diffuse;
+		texture_handle specular;
 		shader_handle shader;
 
 		material() = default;
-		material(const material& mat) : texture(mat.texture), shader(mat.shader) {}
+		material(const material& mat) : diffuse(mat.diffuse), specular(mat.specular), shader(mat.shader) {}
 
 		void bind()
 		{
@@ -18,8 +25,10 @@ namespace rythe::rendering
 				shader->bind();
 			else
 				log::warn("[Material] Shader handle is null, cannot bind");
-			if (texture != nullptr)
-				texture->bind();
+			if (diffuse != nullptr)
+				diffuse->bind(TextureSlot::TEXTURE0);
+			if (specular != nullptr)
+				specular->bind(TextureSlot::TEXTURE1);
 		}
 	};
 

@@ -25,7 +25,7 @@ namespace rythe::rendering
 	private:
 		APIType m_impl;
 	public:
-		void bind() { m_impl.bind(); }
+		void bind(TextureSlot textureSlot = TextureSlot::TEXTURE0) { m_impl.bind(static_cast<internal::TextureSlot>(textureSlot)); }
 		void loadData(const std::string& filepath) { m_impl.loadData(filepath); }
 
 		unsigned int getId() { return m_impl.id; }

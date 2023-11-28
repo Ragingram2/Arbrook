@@ -2,11 +2,20 @@
 #shader vertex
 #version 420 core
 
-layout(location = 0) in vec3 v_position;
+layout(location = 0) in vec4 v_position;
+
+layout(std140, binding = 0) uniform CameraBuffer
+{
+	vec3 u_viewPosition;
+	mat4 u_projection;
+	mat4 u_view;
+	mat4 u_model;
+};
+
 
 void main()
 {
-	gl_Position = vec4(v_position, 1.0);
+	gl_Position = ((u_projection * u_view) * u_model) * v_position;
 }
 
 #shader fragment
@@ -16,7 +25,7 @@ out vec4 FragColor;
 
 void main()
 {
-	FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	FragColor = vec4(1.0, 1.0, 0.75, 1.0);
 }
 #END
 

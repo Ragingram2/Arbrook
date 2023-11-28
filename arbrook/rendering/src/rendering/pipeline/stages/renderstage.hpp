@@ -19,10 +19,14 @@ namespace rythe::rendering
 		static rsl::multicast_delegate<renderFunc> m_onRender;
 	public:
 		buffer_handle cameraBuffer;
+		buffer_handle materialBuffer;
+		buffer_handle lightBuffer;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_projection();
 			cameraBuffer = BufferCache::createConstantBuffer<camera_data>("CameraBuffer", 0, UsageType::STATICDRAW);
+			materialBuffer = BufferCache::createConstantBuffer<material_data>("MaterialBuffer", 2, UsageType::STATICDRAW);
+			lightBuffer = BufferCache::getBuffer("LightBuffer");
 
 			RI->depthTest(true);
 			for (auto& ent : m_filter)
@@ -30,8 +34,9 @@ namespace rythe::rendering
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
 				renderer.dirty = false;
-				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, BufferCache::getBuffer("LightBuffer"));
+				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, lightBuffer);
 				renderer.material->shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
+				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, materialBuffer);
 			}
 			RI->checkError();
 		}
@@ -51,10 +56,15 @@ namespace rythe::rendering
 				auto& transf = ent.getComponent<core::transform>();
 				mat.model = transf.to_world();
 				cameraBuffer->bufferData(&mat, 1);
+				materialBuffer->bufferData(&renderer.material->data, 1);
 				renderer.material->bind();
 				renderer.model->bind();
 				if (renderer.model->indexBuffer != nullptr)
-					RI->drawIndexed(PrimitiveType::TRIANGLESLIST, renderer.model->meshHandle->indices.size(), 0, 0);
+					for (unsigned int i = 0; i < renderer.model->meshHandle->meshes.size(); i++)
+					{
+						auto& mesh = renderer.model->meshHandle->meshes[i];
+						RI->drawIndexed(PrimitiveType::TRIANGLESLIST, mesh.count, sizeof(unsigned int) * mesh.indexOffset, mesh.vertexOffset);
+					}
 				else
 					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->meshHandle->vertices.size());
 			}

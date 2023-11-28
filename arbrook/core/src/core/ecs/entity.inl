@@ -19,6 +19,18 @@ namespace rythe::core::ecs
 		return Registry::createComponent<componentType>(data->id);
 	}
 
+    template<typename componentType>
+    inline componentType& entity::addComponent(const componentType& value)
+    {
+        return Registry::createComponent<componentType>(data->id, value);
+    }
+
+    template<typename componentType>
+    inline componentType& entity::addComponent(componentType&& value)
+    {
+        return Registry::createComponent<componentType>(data->id,std::forward<componentType>(value));
+    }
+
 	template<typename componentType>
 	inline componentType& entity::getComponent()
 	{

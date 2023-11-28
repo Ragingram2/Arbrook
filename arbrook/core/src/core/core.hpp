@@ -25,7 +25,9 @@ namespace rythe::core
 	namespace math = rsl::math;
 	struct examplecomp
 	{
-		float i = 0;
+		float i = 0.1f;
+		float range = 50.0f;
+		float speed = .05f;
 		int direction = 1;
 	};
 

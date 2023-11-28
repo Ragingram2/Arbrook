@@ -18,7 +18,7 @@ namespace rythe::game
 		gfx::ShaderCache::loadShaders("resources/shaders/");
 		modelHandle = gfx::ModelCache::getModel("cube");
 
-		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader", "resources/textures/Rythe.png");
+		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/cube.shader");
 
 		ent = createEntity("Cube");
 		auto& transf = ent.addComponent<core::transform>();

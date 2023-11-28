@@ -32,8 +32,13 @@ namespace rythe::core::ecs
 		virtual void clear();
 
 		virtual pointer<void> createComponent(entity& ent);
-
 		virtual pointer<void> createComponent(entityId id);
+
+		virtual pointer<void> createComponent(entity& ent, componentType&& value);
+		virtual pointer<void> createComponent(entityId id, componentType&& value);
+
+		virtual pointer<void> createComponent(entity& ent, const componentType& value);
+		virtual pointer<void> createComponent(entityId id, const componentType& value);
 
 		virtual pointer<void> getComponent(entity& ent);
 

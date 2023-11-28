@@ -67,6 +67,14 @@ namespace rythe::core::ecs
 		static componentType& createComponent(ecs::entity& ent);
 		template<typename componentType>
 		static componentType& createComponent(rsl::id_type id);
+		template<typename componentType>
+		static componentType& createComponent(ecs::entity& ent, componentType&& value);
+		template<typename componentType>
+		static componentType& createComponent(rsl::id_type id, componentType&& value);
+		template<typename componentType>
+		static componentType& createComponent(ecs::entity& ent, const componentType& value);
+		template<typename componentType>
+		static componentType& createComponent(rsl::id_type id, const componentType& value);
 
 		template<typename componentType>
 		static componentType& getComponent(ecs::entity& ent);

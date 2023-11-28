@@ -6,7 +6,7 @@ namespace rythe::rendering
 {
 	std::unordered_map<std::string, std::unique_ptr<material>> MaterialCache::m_materials;
 
-	material_handle MaterialCache::loadMaterial(const std::string& name, const shader_handle shader, const texture_handle texture)
+	material_handle MaterialCache::loadMaterial(const std::string& name, const shader_handle shader)
 	{
 		if (m_materials.contains(name))
 		{
@@ -16,23 +16,17 @@ namespace rythe::rendering
 
 		auto mat = m_materials.emplace(name, std::make_unique<material>()).first->second.get();
 		mat->shader = shader;
-		mat->texture = texture;
 		return { mat };
 	}
 	material_handle MaterialCache::loadMaterial(const std::string& name, const std::string& shaderName)
 	{
-		return loadMaterial(name, ShaderCache::getShader(shaderName), texture_handle{});
+		return loadMaterial(name, ShaderCache::getShader(shaderName));
 	}
-	material_handle MaterialCache::loadMaterial(const std::string& name, const std::string& shaderName, const std::string& textureName)
-	{
-		return loadMaterial(name, ShaderCache::getShader(shaderName), TextureCache::getTexture2D(textureName));
-	}
-	material_handle MaterialCache::loadMaterialFromFile(const std::string& name, const std::string& shaderPath, const std::string& texturePath)
+	material_handle MaterialCache::loadMaterialFromFile(const std::string& name, const std::string& shaderPath)
 	{
 		shader_handle shader = ShaderCache::createShader(std::format("{}_shader", name), shaderPath);
-		texture_handle texture = TextureCache::createTexture2D(std::format("{}_texture", name), texturePath);
 
-		return loadMaterial(name, shader, texture);
+		return loadMaterial(name, shader);
 	}
 	material_handle MaterialCache::getMaterial(const std::string& name)
 	{

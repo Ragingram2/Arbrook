@@ -58,6 +58,86 @@ namespace rythe::core::ecs
 	}
 
 	template<typename componentType>
+	inline pointer<void> component_family<componentType>::createComponent(entityId id, componentType&& value)
+	{
+		events::component_creation<componentType> compCreate{ id };
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
+
+		m_components.try_emplace(id);
+		m_components.at(id) = value;
+		//if constexpr (common::has_m_owner_v<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}",id);
+		//	m_components.at(id).m_owner = ecs::entity{ &Registry::entities[id] };
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
+		return { &m_components.at(id) };
+	}
+
+	template<typename componentType>
+	inline pointer<void> component_family<componentType>::createComponent(entity& ent, componentType&& value)
+	{
+		events::component_creation<componentType> compCreate{ ent->id };
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
+
+		m_components.try_emplace(ent->id);
+		m_components.at(ent->id) = value;
+		//if constexpr (common::has_m_owner_v<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}", ent->id);
+		//	m_components.at(ent->id).m_owner = ent;
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
+		return { &m_components.at(ent->id) };
+	}
+
+	template<typename componentType>
+	inline pointer<void> component_family<componentType>::createComponent(entityId id, const componentType& value)
+	{
+		events::component_creation<componentType> compCreate{ id };
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
+
+		m_components.try_emplace(id);
+		m_components.at(id) = value;
+		//if constexpr (common::has_m_owner_v<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}",id);
+		//	m_components.at(id).m_owner = ecs::entity{ &Registry::entities[id] };
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
+		return { &m_components.at(id) };
+	}
+
+	template<typename componentType>
+	inline pointer<void> component_family<componentType>::createComponent(entity& ent, const componentType& value)
+	{
+		events::component_creation<componentType> compCreate{ ent->id };
+		events::EventBus::raiseEvent<events::component_creation<componentType>>(compCreate);
+
+		m_components.try_emplace(ent->id);
+		m_components.at(ent->id) = value;
+		//if constexpr (common::has_m_owner_v<componentType>)
+		//{
+		//	log::debug("Setting Owner to Entity with ID {}", ent->id);
+		//	m_components.at(ent->id).m_owner = ent;
+		//}
+		//else
+		//{
+		//	log::debug("Component does not have member");
+		//}
+		return { &m_components.at(ent->id) };
+	}
+
+	template<typename componentType>
 	inline pointer<void> component_family<componentType>::getComponent(entity& ent)
 	{
 		return { &m_components.at(ent->id) };

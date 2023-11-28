@@ -14,6 +14,7 @@ namespace rythe::game
 		gfx::model_handle modelHandle;
 		gfx::material mat;
 		gfx::material lit;
+		gfx::material color;
 
 		math::vec3 velocity;
 

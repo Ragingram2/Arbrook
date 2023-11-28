@@ -121,4 +121,40 @@ namespace rythe::rendering
 		PER_VERTEX = static_cast<int>(internal::InputClass::PER_VERTEX),
 		PER_INSTANCE = static_cast<int>(internal::InputClass::PER_INSTANCE)
 	};
+
+	enum class TextureSlot
+	{
+		TEXTURE0 = static_cast<int>(internal::TextureSlot::TEXTURE0),
+		TEXTURE1 = static_cast<int>(internal::TextureSlot::TEXTURE1),
+		TEXTURE2 = static_cast<int>(internal::TextureSlot::TEXTURE2),
+		TEXTURE3 = static_cast<int>(internal::TextureSlot::TEXTURE3),
+		TEXTURE4 = static_cast<int>(internal::TextureSlot::TEXTURE4),
+		TEXTURE5 = static_cast<int>(internal::TextureSlot::TEXTURE5),
+		TEXTURE6 = static_cast<int>(internal::TextureSlot::TEXTURE6),
+		TEXTURE7 = static_cast<int>(internal::TextureSlot::TEXTURE7),
+		TEXTURE8 = static_cast<int>(internal::TextureSlot::TEXTURE8),
+		TEXTURE9 = static_cast<int>(internal::TextureSlot::TEXTURE9),
+		TEXTURE10 = static_cast<int>(internal::TextureSlot::TEXTURE10),
+		TEXTURE11 = static_cast<int>(internal::TextureSlot::TEXTURE11),
+		TEXTURE12 = static_cast<int>(internal::TextureSlot::TEXTURE12),
+		TEXTURE13 = static_cast<int>(internal::TextureSlot::TEXTURE13),
+		TEXTURE14 = static_cast<int>(internal::TextureSlot::TEXTURE14),
+		TEXTURE15 = static_cast<int>(internal::TextureSlot::TEXTURE15),
+		TEXTURE16 = static_cast<int>(internal::TextureSlot::TEXTURE16),
+		TEXTURE17 = static_cast<int>(internal::TextureSlot::TEXTURE17),
+		TEXTURE18 = static_cast<int>(internal::TextureSlot::TEXTURE18),
+		TEXTURE19 = static_cast<int>(internal::TextureSlot::TEXTURE19),
+		TEXTURE20 = static_cast<int>(internal::TextureSlot::TEXTURE20),
+		TEXTURE21 = static_cast<int>(internal::TextureSlot::TEXTURE21),
+		TEXTURE22 = static_cast<int>(internal::TextureSlot::TEXTURE22),
+		TEXTURE23 = static_cast<int>(internal::TextureSlot::TEXTURE23),
+		TEXTURE24 = static_cast<int>(internal::TextureSlot::TEXTURE24),
+		TEXTURE25 = static_cast<int>(internal::TextureSlot::TEXTURE25),
+		TEXTURE26 = static_cast<int>(internal::TextureSlot::TEXTURE26),
+		TEXTURE27 = static_cast<int>(internal::TextureSlot::TEXTURE27),
+		TEXTURE28 = static_cast<int>(internal::TextureSlot::TEXTURE28),
+		TEXTURE29 = static_cast<int>(internal::TextureSlot::TEXTURE29),
+		TEXTURE30 = static_cast<int>(internal::TextureSlot::TEXTURE30),
+		TEXTURE31 = static_cast<int>(internal::TextureSlot::TEXTURE31)
+	};
 }

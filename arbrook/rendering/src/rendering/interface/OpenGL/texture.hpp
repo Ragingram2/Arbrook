@@ -50,8 +50,9 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void bind()
+		void bind(TextureSlot textureSlot = TextureSlot::TEXTURE0)
 		{
+			glActiveTexture(static_cast<GLenum>(textureSlot));
 			glBindTexture(static_cast<GLenum>(m_texType), id);
 		}
 

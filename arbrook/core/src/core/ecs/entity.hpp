@@ -151,6 +151,12 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		componentType& addComponent();
 
+        template<typename componentType>
+        componentType& addComponent(componentType&& value);
+
+        template<typename componentType>
+        componentType& addComponent(const componentType& value);
+
 		template<typename componentType>
 		componentType& getComponent();
 

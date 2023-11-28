@@ -60,6 +60,84 @@ namespace rythe::core::ecs
 	}
 
 	template<typename componentType>
+	inline componentType& Registry::createComponent(ecs::entity& ent, componentType&& value)
+	{
+		static rsl::id_type typeId = rsl::typeHash<componentType>();
+
+		//Register component with the registry
+		if (!componentFamilies.contains(typeId))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
+
+		//Register component with the entity
+		if (!entityCompositions.contains(ent.m_id))
+			entityCompositions.emplace(ent.m_id, std::vector<rsl::id_type>());
+
+		entityCompositions.at(ent.m_id).push_back(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(ent, std::forward<componentType>(value)).ptr);
+	}
+
+	template<typename componentType>
+	inline componentType& Registry::createComponent(rsl::id_type id, componentType&& value)
+	{
+		static rsl::id_type typeId = rsl::typeHash<componentType>();
+		//Register component with the registry
+		if (!componentFamilies.contains(typeId))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
+
+		//Registry component with the entity
+		if (!entityCompositions.contains(id))
+			entityCompositions.emplace(id, std::unordered_set<rsl::id_type>());
+
+		entityCompositions.at(id).emplace(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(id, std::forward<componentType>(value)).ptr);
+	}
+
+	template<typename componentType>
+	inline componentType& Registry::createComponent(ecs::entity& ent, const componentType& value)
+	{
+		static rsl::id_type typeId = rsl::typeHash<componentType>();
+
+		//Register component with the registry
+		if (!componentFamilies.contains(typeId))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
+
+		//Register component with the entity
+		if (!entityCompositions.contains(ent.m_id))
+			entityCompositions.emplace(ent.m_id, std::vector<rsl::id_type>());
+
+		entityCompositions.at(ent.m_id).push_back(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(ent, value).ptr);
+	}
+
+	template<typename componentType>
+	inline componentType& Registry::createComponent(rsl::id_type id, const componentType& value)
+	{
+		static rsl::id_type typeId = rsl::typeHash<componentType>();
+		//Register component with the registry
+		if (!componentFamilies.contains(typeId))
+		{
+			ecs::Registry::registerComponent<componentType>();
+		}
+
+		//Registry component with the entity
+		if (!entityCompositions.contains(id))
+			entityCompositions.emplace(id, std::unordered_set<rsl::id_type>());
+
+		entityCompositions.at(id).emplace(typeId);
+
+		return *reinterpret_cast<componentType*>(getFamily<componentType>().createComponent(id, value).ptr);
+	}
+
+	template<typename componentType>
 	inline componentType& Registry::getComponent(ecs::entity& ent)
 	{
 		return *reinterpret_cast<componentType*>(getFamily<componentType>().getComponent(ent).ptr);

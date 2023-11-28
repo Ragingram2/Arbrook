@@ -17,17 +17,16 @@ namespace rythe::rendering
 		inputlayout layout;
 		buffer_handle indexBuffer;
 		buffer_handle vertexBuffer;
-		buffer_handle colorBuffer;
 		buffer_handle normalBuffer;
-		buffer_handle tangentBuffer;
 		buffer_handle uvBuffer;
+		buffer_handle colorBuffer;
+		buffer_handle tangentBuffer;
 		buffer_handle matrixBuffer;
-		buffer_handle cameraBuffer;
 		mesh_handle meshHandle;
 
 
 		model() = default;
-		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), colorBuffer(mod.colorBuffer), normalBuffer(mod.normalBuffer), tangentBuffer(mod.tangentBuffer), uvBuffer(mod.uvBuffer), matrixBuffer(mod.matrixBuffer) { }
+		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), normalBuffer(mod.normalBuffer), uvBuffer(mod.uvBuffer), colorBuffer(mod.colorBuffer),  tangentBuffer(mod.tangentBuffer),  matrixBuffer(mod.matrixBuffer) { }
 
 		void initialize(shader_handle shader, mesh_handle handle, bool instanced)
 		{
