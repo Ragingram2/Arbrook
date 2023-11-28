@@ -24,8 +24,8 @@ namespace rythe::rendering
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_projection();
-			cameraBuffer = BufferCache::createConstantBuffer<camera_data>("CameraBuffer", 0, UsageType::STATICDRAW);
-			materialBuffer = BufferCache::createConstantBuffer<material_data>("MaterialBuffer", 2, UsageType::STATICDRAW);
+			cameraBuffer = BufferCache::createConstantBuffer<camera_data>("CameraBuffer", SV_CAMERA, UsageType::STATICDRAW);
+			materialBuffer = BufferCache::createConstantBuffer<material_data>("MaterialBuffer", SV_MATERIALS, UsageType::STATICDRAW);
 			lightBuffer = BufferCache::getBuffer("LightBuffer");
 
 			RI->depthTest(true);
@@ -34,9 +34,9 @@ namespace rythe::rendering
 				auto& renderer = ent.getComponent<mesh_renderer>();
 				renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
 				renderer.dirty = false;
-				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, lightBuffer);
-				renderer.material->shader->addBuffer(ShaderType::VERTEX, cameraBuffer);
-				renderer.material->shader->addBuffer(ShaderType::FRAGMENT, materialBuffer);
+				renderer.material->shader->addBuffer(lightBuffer);
+				renderer.material->shader->addBuffer(cameraBuffer);
+				renderer.material->shader->addBuffer(materialBuffer);
 			}
 			RI->checkError();
 		}

@@ -18,8 +18,7 @@ namespace rythe::rendering::internal
 		std::string name;
 
 	private:
-		std::unordered_map<std::string, buffer_handle> m_vsConstBuffers;
-		std::unordered_map<std::string, buffer_handle> m_psConstBuffers;
+		std::unordered_map<std::string, buffer_handle> m_constBuffers;
 	public:
 		shader() = default;
 		shader(shader* other)
@@ -50,12 +49,7 @@ namespace rythe::rendering::internal
 		{
 			glUseProgram(programId);
 
-			for (auto [name, handle] : m_vsConstBuffers)
-			{
-				handle->bind();
-				glBindBufferBase(GL_UNIFORM_BUFFER, handle->m_impl.bindId, handle->getId());
-			}
-			for (auto [name, handle] : m_psConstBuffers)
+			for (auto [name, handle] : m_constBuffers)
 			{
 				handle->bind();
 				glBindBufferBase(GL_UNIFORM_BUFFER, handle->m_impl.bindId, handle->getId());
@@ -65,44 +59,31 @@ namespace rythe::rendering::internal
 		template<typename elementType>
 		void setData(const std::string& bufferName, elementType data[])
 		{
-			if (m_vsConstBuffers.count(bufferName) != 0)
+			if (m_constBuffers.count(bufferName) != 0)
 			{
-				m_vsConstBuffers[bufferName]->bufferData<elementType>(data);
-			}
-
-			if (m_psConstBuffers.count(bufferName) != 0)
-			{
-				m_psConstBuffers[bufferName]->bufferData<elementType>(data);
+				m_constBuffers[bufferName]->bufferData<elementType>(data);
 			}
 		}
 
-		void addBuffer(ShaderType type, buffer_handle handle)
+		void addBuffer(buffer_handle handle)
 		{
 			if (static_cast<internal::TargetType>(handle->getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;
 			}
-
-			switch (type)
+			log::debug("Adding a Constant Buffer to shader {}", name);
+			if (!m_constBuffers.count(handle->getName()))
 			{
-			case ShaderType::VERTEX:
-				if (!m_vsConstBuffers.count(handle->getName()))
-					m_vsConstBuffers.emplace(handle->getName(), handle);
+				m_constBuffers.emplace(handle->getName(), handle);
+				log::debug("Binding Uniform Buffer {}", handle->getName());
+				auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
+				glUniformBlockBinding(programId, idx, handle->m_impl.bindId);
 				return;
-				break;
-			case ShaderType::FRAGMENT:
-				if (!m_psConstBuffers.count(handle->getName()))
-					m_psConstBuffers.emplace(handle->getName(), handle);
-				return;
-				break;
-			default:
-				log::error("Adding a constant buffer to shader type {} is not supported", RYTHE_STRINGIFY(TargetType::CONSTANT_BUFFER));
-				break;
 			}
-
-			auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
-			glUniformBlockBinding(programId, idx , handle->m_impl.bindId);
+			//log::debug("Binding Uniform Buffer");
+			//auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
+			//glUniformBlockBinding(programId, idx, handle->m_impl.bindId);
 		}
 
 		void release()
@@ -113,8 +94,7 @@ namespace rythe::rendering::internal
 
 		void clearBuffers()
 		{
-			m_vsConstBuffers.clear();
-			m_psConstBuffers.clear();
+			m_constBuffers.clear();
 		}
 	private:
 		unsigned int compileShader(ShaderType type, const std::string& source)

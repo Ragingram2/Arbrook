@@ -20,7 +20,7 @@ namespace rythe::rendering
 		light_buffer lightDataStruct;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
-			lightBuffer = BufferCache::createConstantBuffer<light_buffer>("LightBuffer", 1, UsageType::STATICDRAW);
+			lightBuffer = BufferCache::createConstantBuffer<light_buffer>("LightBuffer", SV_LIGHTS, UsageType::STATICDRAW);
 		}
 
 		virtual void render(core::transform camTransf, camera& cam) override

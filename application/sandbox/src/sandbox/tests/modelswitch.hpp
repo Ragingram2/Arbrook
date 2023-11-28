@@ -34,7 +34,7 @@ namespace rythe::testing
 			vBuffer = gfx::BufferCache::createBuffer<math::vec4>("Vertex Buffer", gfx::TargetType::VERTEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->vertices);
 			idxBuffer = gfx::BufferCache::createBuffer<unsigned int>("Index Buffer", gfx::TargetType::INDEX_BUFFER, gfx::UsageType::STATICDRAW, meshHandle->indices);
 			cBuffer = gfx::BufferCache::createConstantBuffer<gfx::camera_data>("ConstantBuffer", 0, gfx::UsageType::STATICDRAW);
-			mat->shader->addBuffer(gfx::ShaderType::VERTEX, cBuffer);
+			mat->shader->addBuffer(cBuffer);
 			mat->bind();
 
 			idxBuffer->bind();

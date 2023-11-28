@@ -18,8 +18,7 @@ namespace rythe::rendering::internal
 	private:
 		ID3D11VertexShader* m_VS = nullptr;
 		ID3D11PixelShader* m_PS = nullptr;
-		std::unordered_map<std::string, buffer_handle> m_vsConstBuffers;
-		std::unordered_map<std::string, buffer_handle> m_psConstBuffers;
+		std::unordered_map<std::string, buffer_handle> m_constBuffers;
 		window_handle m_windowHandle;
 	public:
 		unsigned int programId;
@@ -61,17 +60,13 @@ namespace rythe::rendering::internal
 			m_windowHandle->devcon->PSSetShader(m_PS, 0, 0);
 
 			std::vector<ID3D11Buffer*> buffers;
-			for (auto& [name, handle] : m_vsConstBuffers)
+			for (auto& [name, handle] : m_constBuffers)
 			{
 				buffers.push_back(handle.m_data->m_impl);
 			}
-			m_windowHandle->devcon->VSSetConstantBuffers(0, m_vsConstBuffers.size(), buffers.data());
 
-			for (auto& [name, handle] : m_psConstBuffers)
-			{
-				buffers.push_back(handle.m_data->m_impl);
-			}
-			m_windowHandle->devcon->PSSetConstantBuffers(0, m_psConstBuffers.size(), buffers.data());
+			m_windowHandle->devcon->VSSetConstantBuffers(0, m_constBuffers.size(), buffers.data());
+			m_windowHandle->devcon->PSSetConstantBuffers(0, m_constBuffers.size(), buffers.data());
 		}
 
 		void addBuffer(ShaderType type, buffer_handle handle)
@@ -82,38 +77,22 @@ namespace rythe::rendering::internal
 				return;
 			}
 
-			switch (type)
-			{
-			case ShaderType::VERTEX:
-				m_vsConstBuffers.emplace(handle->getName(), handle);
-				break;
-			case ShaderType::FRAGMENT:
-				m_psConstBuffers.emplace(handle->getName(), handle);
-				break;
-			default:
-				log::error("Adding a constant buffer to shader type {} is not supported", RYTHE_STRINGIFY(type));
-				break;
-			}
+			if (!m_constBuffers.count(handle->getName()))
+				m_constBuffers.emplace(handle->getName(), handle);
 		}
 
 		template<typename elementType>
 		void setData(const std::string& bufferName, elementType data[])
 		{
 			bool dataSet = false;
-			if (m_vsConstBuffers.count(bufferName) != 0)
+			if (m_constBuffers.count(bufferName) != 0)
 			{
-				m_vsConstBuffers[bufferName]->bufferData(data);
-				dataSet = true;
-			}
-
-			if (m_psConstBuffers.count(bufferName) != 0)
-			{
-				m_psConstBuffers[bufferName]->bufferData(data);
+				m_constBuffers[bufferName]->bufferData(data);
 				dataSet = true;
 			}
 
 			if (!dataSet)
-				log::error("No data was buffered, because the buffer {} was not added or does not exist",bufferName);
+				log::error("No data was buffered, because the buffer {} was not added or does not exist", bufferName);
 		}
 
 		void release()
@@ -124,8 +103,7 @@ namespace rythe::rendering::internal
 
 		void clearBuffers()
 		{
-			m_vsConstBuffers.clear();
-			m_psConstBuffers.clear();
+			m_constBuffers.clear();
 		}
 
 	private:

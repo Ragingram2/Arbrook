@@ -26,7 +26,7 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 		void bind() { m_impl.bind(); }
-		void addBuffer(ShaderType type, buffer_handle handle) { m_impl.addBuffer(static_cast<internal::ShaderType>(type), handle); }
+		void addBuffer(buffer_handle handle) { m_impl.addBuffer(handle); }
 		template<typename elementType>
 		void setData(const std::string& bufferName, elementType data[]) { m_impl.setData(bufferName, data); }
 		void release() { m_impl.release(); }

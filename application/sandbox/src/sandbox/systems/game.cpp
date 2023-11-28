@@ -27,7 +27,7 @@ namespace rythe::game
 
 		cube = createEntity("Sponza");
 		auto& transf = cube.addComponent<core::transform>();
-		transf.scale = math::vec3(0.1f, 0.1f, 0.1f);
+		transf.scale = math::vec3::one;
 		transf.position = math::vec3(0.0f, -1.0f, 10.f);
 
 		cube.addComponent<gfx::mesh_renderer>({ .material = mat, .model = modelHandle});
