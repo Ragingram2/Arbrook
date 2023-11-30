@@ -72,14 +72,11 @@ namespace rythe::rendering::internal
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;
 			}
-			log::debug("Adding a Constant Buffer to shader {}", name);
+			//log::debug("Adding a Constant Buffer to shader {}", name);
 			if (!m_constBuffers.count(handle->getName()))
 			{
 				m_constBuffers.emplace(handle->getName(), handle);
-				log::debug("Binding Uniform Buffer {}", handle->getName());
-				auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
-				glUniformBlockBinding(programId, idx, handle->m_impl.bindId);
-				return;
+				//return;
 			}
 			//log::debug("Binding Uniform Buffer");
 			//auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());

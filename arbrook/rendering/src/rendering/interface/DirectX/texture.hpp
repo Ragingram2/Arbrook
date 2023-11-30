@@ -45,10 +45,10 @@ namespace rythe::rendering::internal
 			this->params = params;
 		}
 
-		void bind()
+		void bind(TextureSlot slot)
 		{
-			m_windowHandle->devcon->PSSetShaderResources(0, 1, &m_shaderResource);
-			m_windowHandle->devcon->PSSetSamplers(0, 1, &m_texSamplerState);
+			m_windowHandle->devcon->PSSetShaderResources(static_cast<UINT>(slot), 1, &m_shaderResource);
+			m_windowHandle->devcon->PSSetSamplers(static_cast<UINT>(slot), 1, &m_texSamplerState);
 		}
 
 		void loadData(const std::string& filepath, bool flipVertical = true)

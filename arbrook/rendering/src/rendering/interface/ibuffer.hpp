@@ -32,7 +32,7 @@ namespace rythe::rendering
 	public:
 		template<typename elementType>
 		void initialize(TargetType target, UsageType usage, int size) { m_impl.template initialize<elementType>(static_cast<internal::TargetType>(target), static_cast<internal::UsageType>(usage), size); }
-		void bind(int slot = 0, int offset = 0) { m_impl.bind(slot, offset); }
+		void bind() { m_impl.bind(); }
 		template<typename elementType>
 		void bufferData(elementType data[], int size = 1) { m_impl.bufferData(data, size); }
 		void release() { m_impl.release(); }

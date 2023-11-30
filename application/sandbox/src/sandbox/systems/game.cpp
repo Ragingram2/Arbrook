@@ -17,7 +17,7 @@ namespace rythe::game
 		gfx::ModelCache::loadModels("resources/meshes/");
 		gfx::TextureCache::loadTextures("resources/textures/");
 		gfx::ShaderCache::loadShaders("resources/shaders/");
-		modelHandle = gfx::ModelCache::getModel("sponza");
+		modelHandle = gfx::ModelCache::getModel("cube");
 
 		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/lit.shader");
 		mat.diffuse = gfx::TextureCache::getTexture2D("container_diffuse");
@@ -32,7 +32,7 @@ namespace rythe::game
 
 		cube.addComponent<gfx::mesh_renderer>({ .material = mat, .model = modelHandle});
 
-		{
+		/*{
 			auto ent = createEntity("Armadillio");
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
@@ -76,7 +76,7 @@ namespace rythe::game
 
 			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("bunny") });
 		}
-
+		*/
 		{
 			auto ent = createEntity("Light");
 			auto& transf = ent.addComponent<core::transform>();
@@ -84,14 +84,14 @@ namespace rythe::game
 			transf.position = math::vec3(0.0f, 0.0f, 0.0f);
 			ent.addComponent<gfx::light>({ .type = gfx::LightType::DIRECTIONAL, .data.color = math::vec4(1.0f) });
 		}
-
+		/*
 		{
 			auto ent = createEntity("PointLight");
 			ent.addComponent<core::transform>({ .scale = math::vec3(.1f, .1f, .1f), .position = math::vec3(0.0f,6.0f,7.0f) });
 			ent.addComponent<gfx::light>({ .type = gfx::LightType::POINT, .data.color = math::vec4(1.0f,0.0f,0.0f,1.0f), .data.intensity = 1.0f, .data.range = 50.f });
 			ent.addComponent<core::examplecomp>({ .direction = 1,.range = 100.0f,.speed = .18f });
-			ent.addComponent<gfx::mesh_renderer>({.material = color, .model = gfx::ModelCache::getModel("icosphere")});
-		}
+			ent.addComponent<gfx::mesh_renderer>({.material = mat, .model = gfx::ModelCache::getModel("icosphere")});
+		}*/
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();

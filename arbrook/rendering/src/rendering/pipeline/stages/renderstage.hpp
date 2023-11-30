@@ -21,6 +21,7 @@ namespace rythe::rendering
 		buffer_handle cameraBuffer;
 		buffer_handle materialBuffer;
 		buffer_handle lightBuffer;
+		std::vector<shader_handle> m_shaders;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_projection();
@@ -32,11 +33,25 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
+				auto shader = renderer.material->shader;
+				auto model = renderer.model;
+				auto mesh = renderer.model->meshHandle;
+
+				model->initialize(shader, mesh, renderer.instanced);
 				renderer.dirty = false;
-				renderer.material->shader->addBuffer(lightBuffer);
-				renderer.material->shader->addBuffer(cameraBuffer);
-				renderer.material->shader->addBuffer(materialBuffer);
+				auto pos = std::find(m_shaders.begin(), m_shaders.end(), shader);
+				if (pos == m_shaders.end())
+					m_shaders.push_back(shader);
+			}
+
+			for (auto handle : m_shaders)
+			{
+				if (lightBuffer != nullptr)
+					handle->addBuffer(lightBuffer);
+				if (cameraBuffer != nullptr)
+					handle->addBuffer(cameraBuffer);
+				if (materialBuffer != nullptr)
+					handle->addBuffer(materialBuffer);
 			}
 			RI->checkError();
 		}
@@ -48,25 +63,38 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
+				material_handle material = renderer.material;
+				shader_handle shader = renderer.material->shader;
+				model_handle model = renderer.model;
+				mesh_handle mesh = renderer.model->meshHandle;
 				if (renderer.dirty)
 				{
-					renderer.model->initialize(renderer.material->shader, renderer.model->meshHandle, renderer.instanced);
+					model->initialize(shader, mesh, renderer.instanced);
 					renderer.dirty = false;
+					auto pos = std::find(m_shaders.begin(), m_shaders.end(), shader);
+					if (pos == m_shaders.end())
+					{
+						log::debug("Shader being added to list is {}", shader->getName());
+						m_shaders.push_back(shader);
+						shader->addBuffer(lightBuffer);
+						shader->addBuffer(cameraBuffer);
+						shader->addBuffer(materialBuffer);
+					}
 				}
 				auto& transf = ent.getComponent<core::transform>();
 				mat.model = transf.to_world();
 				cameraBuffer->bufferData(&mat, 1);
-				materialBuffer->bufferData(&renderer.material->data, 1);
-				renderer.material->bind();
-				renderer.model->bind();
-				if (renderer.model->indexBuffer != nullptr)
-					for (unsigned int i = 0; i < renderer.model->meshHandle->meshes.size(); i++)
+				materialBuffer->bufferData(&material->data, 1);
+				material->bind();
+				model->bind();
+				if (model->indexBuffer != nullptr)
+					for (unsigned int i = 0; i < mesh->meshes.size(); i++)
 					{
-						auto& mesh = renderer.model->meshHandle->meshes[i];
-						RI->drawIndexed(PrimitiveType::TRIANGLESLIST, mesh.count, sizeof(unsigned int) * mesh.indexOffset, mesh.vertexOffset);
+						auto& submesh = mesh->meshes[i];
+						RI->drawIndexed(PrimitiveType::TRIANGLESLIST, submesh.count, sizeof(unsigned int) * submesh.indexOffset, submesh.vertexOffset);
 					}
 				else
-					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, renderer.model->meshHandle->vertices.size());
+					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, mesh->vertices.size());
 			}
 			m_onRender(camTransf, cam);
 		}

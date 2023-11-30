@@ -26,39 +26,40 @@ namespace rythe::rendering
 
 
 		model() = default;
-		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), normalBuffer(mod.normalBuffer), uvBuffer(mod.uvBuffer), colorBuffer(mod.colorBuffer),  tangentBuffer(mod.tangentBuffer),  matrixBuffer(mod.matrixBuffer) { }
+		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), normalBuffer(mod.normalBuffer), uvBuffer(mod.uvBuffer), colorBuffer(mod.colorBuffer), tangentBuffer(mod.tangentBuffer), matrixBuffer(mod.matrixBuffer) { }
 
 		void initialize(shader_handle shader, mesh_handle handle, bool instanced)
 		{
+			log::debug("Initializing Model");
 			meshHandle = handle;
 			layout.release();
 			layout.initialize(1, shader);
 			layout.bind();
 
-			vertexBuffer = BufferCache::createVertexBuffer<math::vec4>(std::format("{}-Vertex Buffer", handle->name), UsageType::STATICDRAW, meshHandle->vertices);
+			vertexBuffer = BufferCache::createVertexBuffer<math::vec4>(std::format("{}-Vertex Buffer", handle->name), 0, UsageType::STATICDRAW, meshHandle->vertices);
 			layout.setAttributePtr(vertexBuffer, "POSITION", 0, FormatType::RGBA32F, 0, sizeof(math::vec4), 0);
 
 			indexBuffer = BufferCache::createIndexBuffer(std::format("{}-Index Buffer", handle->name), UsageType::STATICDRAW, meshHandle->indices);
 
 			if (meshHandle->normals.size() > 0)
 			{
-				normalBuffer = BufferCache::createBuffer<math::vec3>(std::format("{}-Normal Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->normals);
-				layout.setAttributePtr(normalBuffer, "NORMAL", 1, FormatType::RGB32F, 0, sizeof(math::vec3), 0);
+				normalBuffer = BufferCache::createVertexBuffer<math::vec3>(std::format("{}-Normal Buffer", handle->name), 1, UsageType::STATICDRAW, meshHandle->normals);
+				layout.setAttributePtr(normalBuffer, "NORMAL", 0, FormatType::RGB32F, 1, sizeof(math::vec3), 0);
 			}
 
 			if (meshHandle->texCoords.size() > 0)
 			{
-				uvBuffer = BufferCache::createBuffer<math::vec2>(std::format("{}-UV Buffer", handle->name), TargetType::VERTEX_BUFFER, UsageType::STATICDRAW, meshHandle->texCoords);
-				layout.setAttributePtr(uvBuffer, "TEXCOORD", 2, FormatType::RG32F, 0, sizeof(math::vec2), 0);
+				uvBuffer = BufferCache::createVertexBuffer<math::vec2>(std::format("{}-UV Buffer", handle->name), 2, UsageType::STATICDRAW, meshHandle->texCoords);
+				layout.setAttributePtr(uvBuffer, "TEXCOORD", 0, FormatType::RG32F, 2, sizeof(math::vec2), 0);
 			}
 
 			if (instanced)
 			{
 				matrixBuffer = BufferCache::createBuffer<math::mat4>(std::format("{}-Matrix Buffer", handle->name), TargetType::VERTEX_BUFFER);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 1, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 1, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 5, FormatType::RGBA32F, 1, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
-				layout.setAttributePtr(matrixBuffer, "MODEL", 6, FormatType::RGBA32F, 1, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 1, FormatType::RGBA32F, 3, sizeof(math::mat4), 0.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 2, FormatType::RGBA32F, 3, sizeof(math::mat4), 1.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 3, FormatType::RGBA32F, 3, sizeof(math::mat4), 2.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
+				layout.setAttributePtr(matrixBuffer, "MODEL", 4, FormatType::RGBA32F, 3, sizeof(math::mat4), 3.f * sizeof(math::vec4), InputClass::PER_INSTANCE, 1);
 			}
 			layout.submitAttributes();
 		}
@@ -67,23 +68,23 @@ namespace rythe::rendering
 		{
 			layout.bind();
 			if (vertexBuffer != nullptr)
-			{
-				vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
-			}
+				vertexBuffer->bind();
+			//vertexBuffer->bufferData(meshHandle->vertices.data(), meshHandle->vertices.size());
+
 			if (indexBuffer != nullptr)
-			{
-				indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
-			}
+				indexBuffer->bind();
+			//indexBuffer->bufferData(meshHandle->indices.data(), meshHandle->indices.size());
+
 			if (normalBuffer != nullptr)
-			{
-				normalBuffer->bufferData(meshHandle->normals.data(), meshHandle->normals.size());
-			}
+				normalBuffer->bind();
+			//normalBuffer->bufferData(meshHandle->normals.data(), meshHandle->normals.size());
+
 			if (uvBuffer != nullptr)
-			{
-				uvBuffer->bufferData(meshHandle->texCoords.data(), meshHandle->texCoords.size());
-			}
-			if (matrixBuffer != nullptr)
-				matrixBuffer->bind();
+				uvBuffer->bind();
+			//uvBuffer->bufferData(meshHandle->texCoords.data(), meshHandle->texCoords.size());
+
+		//if (matrixBuffer != nullptr)
+		//	matrixBuffer->bind();
 		}
 	};
 

@@ -41,7 +41,7 @@ namespace rythe::rendering
 
 		void load(const aiScene* scene)
 		{
-			name = std::string(scene->mName.C_Str());
+			//name = std::string(scene->mName.C_Str());
 			if (!scene->HasMeshes())
 			{
 				log::error("The scene we tried to load did not contain any meshes, curious");

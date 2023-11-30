@@ -59,17 +59,13 @@ namespace rythe::rendering::internal
 			m_windowHandle->devcon->VSSetShader(m_VS, 0, 0);
 			m_windowHandle->devcon->PSSetShader(m_PS, 0, 0);
 
-			std::vector<ID3D11Buffer*> buffers;
 			for (auto& [name, handle] : m_constBuffers)
 			{
-				buffers.push_back(handle.m_data->m_impl);
+				handle->bind();
 			}
-
-			m_windowHandle->devcon->VSSetConstantBuffers(0, m_constBuffers.size(), buffers.data());
-			m_windowHandle->devcon->PSSetConstantBuffers(0, m_constBuffers.size(), buffers.data());
 		}
 
-		void addBuffer(ShaderType type, buffer_handle handle)
+		void addBuffer(buffer_handle handle)
 		{
 			if (static_cast<internal::TargetType>(handle->getTargetType()) != TargetType::CONSTANT_BUFFER)
 			{
@@ -97,7 +93,6 @@ namespace rythe::rendering::internal
 
 		void release()
 		{
-
 			clearBuffers();
 		}
 

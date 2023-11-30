@@ -13,6 +13,9 @@ namespace rythe::rendering
 		Ishader<internal::shader>* operator->() { return m_data; }
 		operator Ishader<internal::shader >& () const { return *m_data; }
 
+		bool operator == (shader_handle handle) { return m_data == handle.m_data; }
+		bool operator != (shader_handle handle) { return m_data != handle.m_data; }
+
 		bool operator ==(Ishader<internal::shader>* data) { return m_data == data; }
 		bool operator !=(Ishader<internal::shader>* data) { return m_data != data; }
 	};

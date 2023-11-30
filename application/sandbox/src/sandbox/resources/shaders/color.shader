@@ -31,16 +31,27 @@ void main()
 
 #HLSL
 #shader vertex
+
+cbuffer CameraBuffer : register(b0)
+{
+	float4 u_viewPosition;
+	matrix u_projection;
+	matrix u_view;
+	matrix u_model;
+};
+
 struct VOut
 {
 	float4 p_position : SV_POSITION;
 };
 
-VOut VShader(float3 position : POSITION)
+VOut VShader(float4 position : POSITION)
 {
 	VOut output;
-
-	output.p_position = float4(position, 1.0);
+	matrix model = u_model;
+	matrix view = u_view;
+	matrix projection = u_projection;
+	output.p_position = mul(mul(mul(projection, view), model), position);
 
 	return output;
 }
