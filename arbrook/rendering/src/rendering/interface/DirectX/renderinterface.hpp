@@ -127,7 +127,7 @@ namespace rythe::rendering::internal
 			ZeroMemory(&m_rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
 
 			m_rasterizerDesc.AntialiasedLineEnable = FALSE;
-			m_rasterizerDesc.CullMode = D3D11_CULL_NONE;
+			m_rasterizerDesc.CullMode = D3D11_CULL_BACK;
 			m_rasterizerDesc.DepthBias = 0;
 			m_rasterizerDesc.DepthBiasClamp = 0.0f;
 			m_rasterizerDesc.DepthClipEnable = TRUE;

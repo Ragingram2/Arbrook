@@ -38,14 +38,14 @@ namespace rythe::rendering::internal
 	public:
 
 		template<typename elementType>
-		void initialize(TargetType target, UsageType usage, int size)
+		void initialize(TargetType target, UsageType usage, int size, elementType data[])
 		{
 			m_target = target;
 			m_usage = usage;
 			m_size = size;
 			m_elementSize = sizeof(elementType);
 
-			createBuffer();
+			createBuffer(data);
 		}
 
 		void bind(int slot = 0, int offset = 0)
@@ -58,7 +58,11 @@ namespace rythe::rendering::internal
 		template<typename elementType>
 		void bufferData(elementType data[], int size = 1)
 		{
-			bind();
+			//if (m_target == TargetType::INDEX_BUFFER)
+			//{
+			//	log::warn("Index Buffer is not allowed to be written too, returning without writing");
+			//	return;
+			//}
 
 			if (size < 1)
 			{
@@ -70,6 +74,8 @@ namespace rythe::rendering::internal
 				m_elementSize = sizeof(elementType);
 				createBuffer();
 			}
+
+			bind();
 
 			if (m_target == TargetType::CONSTANT_BUFFER || m_usage == UsageType::IMMUTABLE)
 			{
@@ -87,7 +93,8 @@ namespace rythe::rendering::internal
 		}
 
 	private:
-		void createBuffer()
+		template<typename elementType>
+		void createBuffer(elementType data[])
 		{
 			if (id == 0)
 				glGenBuffers(1, &id);
@@ -95,11 +102,11 @@ namespace rythe::rendering::internal
 			bind();
 			if (m_usage == UsageType::IMMUTABLE)
 			{
-				glBufferStorage(static_cast<GLenum>(m_target), m_size * m_elementSize, 0, GL_MAP_WRITE_BIT | GL_DYNAMIC_STORAGE_BIT);
+				glBufferStorage(static_cast<GLenum>(m_target), m_size * m_elementSize, data, GL_MAP_WRITE_BIT | GL_DYNAMIC_STORAGE_BIT);
 			}
 			else
 			{
-				glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, nullptr, static_cast<GLenum>(m_usage));
+				glBufferData(static_cast<GLenum>(m_target), m_size * m_elementSize, data, static_cast<GLenum>(m_usage));
 				if (m_target == TargetType::CONSTANT_BUFFER)
 				{
 					glBindBufferRange(static_cast<GLenum>(m_target), 0, id, 0, m_elementSize);

@@ -48,7 +48,7 @@ namespace rythe::rendering::internal
 	public:
 		operator ID3D11Buffer* () const { return m_internalBuffer; }
 		template<typename elementType>
-		void initialize(TargetType target, UsageType usage, int size)
+		void initialize(TargetType target, UsageType usage, int size, elementType data[] = nullptr)
 		{
 			m_windowHandle = WindowProvider::get(0);
 			m_target = target;
@@ -56,7 +56,7 @@ namespace rythe::rendering::internal
 			m_size = size;
 			m_elementSize = sizeof(elementType);
 
-			createBuffer();
+			createBuffer(data);
 		}
 
 		void bind()
@@ -83,6 +83,12 @@ namespace rythe::rendering::internal
 		template<typename elementType>
 		void bufferData(elementType data[], int size = 0)
 		{
+			//if (m_target == TargetType::INDEX_BUFFER)
+			//{
+			//	log::warn("Index Buffer is not allowed to be written too, returning without writing");
+			//	return;
+			//}
+
 			if (size < 1)
 			{
 				size = m_size;
@@ -91,7 +97,9 @@ namespace rythe::rendering::internal
 			{
 				m_size = size;
 				m_elementSize = sizeof(elementType);
-				createBuffer();
+				bind();
+				createBuffer(data);
+				return;
 			}
 
 			bind();
@@ -108,9 +116,9 @@ namespace rythe::rendering::internal
 		}
 
 	private:
-		void createBuffer()
+		template<typename elementType>
+		void createBuffer(elementType data[])
 		{
-			log::debug("Creating Buffer: {}",name);
 			ZeroMemory(&m_bufferDesc, sizeof(m_bufferDesc));
 
 			m_bufferDesc.Usage = static_cast<D3D11_USAGE>(m_usage);
@@ -126,7 +134,21 @@ namespace rythe::rendering::internal
 
 			m_bufferDesc.ByteWidth *= m_size;
 
-			CHECKERROR(m_windowHandle->dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created", m_windowHandle->checkError());
+			if (data == nullptr)
+			{
+				CHECKERROR(m_windowHandle->dev->CreateBuffer(&m_bufferDesc, NULL, &m_internalBuffer), "Buffer failed to be created", m_windowHandle->checkError())
+			}
+			else
+			{
+				D3D11_SUBRESOURCE_DATA m_initData;
+
+				ZeroMemory(&m_initData, sizeof(m_initData));
+				m_initData.pSysMem = data;
+				m_initData.SysMemPitch = 0;
+				m_initData.SysMemSlicePitch = 0;
+
+				CHECKERROR(m_windowHandle->dev->CreateBuffer(&m_bufferDesc, &m_initData, &m_internalBuffer), "Buffer failed to be created", m_windowHandle->checkError())
+			}
 		}
 	};
 }

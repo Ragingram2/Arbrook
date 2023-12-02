@@ -30,7 +30,6 @@ namespace rythe::rendering
 
 		void initialize(shader_handle shader, mesh_handle handle, bool instanced)
 		{
-			log::debug("Initializing Model");
 			meshHandle = handle;
 			layout.release();
 			layout.initialize(1, shader);
