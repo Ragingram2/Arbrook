@@ -16,14 +16,14 @@ namespace rythe::game
 
 		gfx::ModelCache::loadModels("resources/meshes/");
 		gfx::TextureCache::loadTextures("resources/textures/");
-		gfx::ShaderCache::loadShaders("resources/shaders/");
-		modelHandle = gfx::ModelCache::getModel("sponza");
+		//gfx::ShaderCache::loadShaders("resources/shaders/");
+		modelHandle = gfx::ModelCache::getModel("cube");
 
-		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/lit.shader");
+		mat = gfx::MaterialCache::loadMaterialFromFile("default", "resources/shaders/dxc_lit.shader");
 		mat.diffuse = gfx::TextureCache::getTexture2D("container_diffuse");
 		mat.specular = gfx::TextureCache::getTexture2D("container_specular");
 
-		color = gfx::MaterialCache::loadMaterialFromFile("color", "resources/shaders/color.shader");
+		//color = gfx::MaterialCache::loadMaterialFromFile("color", "resources/shaders/color.shader");
 
 		cube = createEntity("Sponza");
 		auto& transf = cube.addComponent<core::transform>();

@@ -35,7 +35,7 @@ namespace rythe::rendering::internal
 		std::vector<D3D11_INPUT_ELEMENT_DESC> elementDesc;
 		std::unordered_map<std::string, vertexattribute> m_vertexAttribs;
 		ID3D11InputLayout* m_layout = nullptr;
-		ID3D10Blob* m_vsBlob = nullptr;
+		ID3DBlob* m_vsBlob = nullptr;
 		window_handle m_windowHandle;
 	public:
 		void initialize(unsigned int numBuffers, shader_handle shader)

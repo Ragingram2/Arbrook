@@ -2,8 +2,8 @@
 #include <vector>
 #include <concepts>
 
-
 #include <rsl/primitives>
+#include <rsl/logging>
 
 #include "rendering/interface/OpenGL/oglincludes.hpp"
 #include "rendering/interface/config.hpp"
@@ -21,6 +21,7 @@ namespace rythe::rendering
 
 namespace rythe::rendering::internal
 {
+	namespace log = rsl::log;
 	struct buffer
 	{
 		friend struct Ibuffer<internal::buffer>;
@@ -48,11 +49,24 @@ namespace rythe::rendering::internal
 			createBuffer(data);
 		}
 
-		void bind(int slot = 0, int offset = 0)
+		void bind()
 		{
 			glBindBuffer(static_cast<GLenum>(m_target), id);
-			m_slot = slot;
-			m_offset = offset;
+
+			//switch (m_target)
+			//{
+			//case TargetType::VERTEX_BUFFER:
+			//	log::debug("Binding Buffer to target Vertex Buffer");
+			//	break;
+			//case TargetType::INDEX_BUFFER:
+			//	log::debug("Binding Buffer to target Index Buffer");
+			//	break;
+			//case TargetType::CONSTANT_BUFFER:
+			//	log::debug("Binding Buffer to target Constant Buffer");
+			//	break;
+			//default:
+			//	break;
+			//}
 		}
 
 		template<typename elementType>
@@ -72,7 +86,7 @@ namespace rythe::rendering::internal
 			{
 				m_size = size;
 				m_elementSize = sizeof(elementType);
-				createBuffer();
+				createBuffer(data);
 			}
 
 			bind();

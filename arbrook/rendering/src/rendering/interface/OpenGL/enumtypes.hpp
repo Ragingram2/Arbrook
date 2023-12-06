@@ -7,9 +7,9 @@ namespace rythe::rendering::internal
 	{
 		VERTEX = GL_VERTEX_SHADER,
 		FRAGMENT = GL_FRAGMENT_SHADER,
-		GEOMETRY,
-		HULL,
-		COMPUTE
+		GEOMETRY = GL_GEOMETRY_SHADER,
+		HULL = GL_TESS_EVALUATION_SHADER,
+		COMPUTE = GL_COMPUTE_SHADER
 	};
 
 	enum class TargetType : GLenum

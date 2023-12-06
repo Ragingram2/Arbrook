@@ -11,7 +11,14 @@
 #define Shader_HPP_PATH "rendering/interface/OpenGL/shader.hpp"
 #define Window_HPP_PATH "rendering/interface/OpenGL/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/interface/OpenGL/enumtypes.hpp"
-#define ShaderLanguage "GLSL"
+#define ShaderCompiler_HPP_PATH "rendering/interface/OpenGL/shadercompiler.hpp"
+//#define ShaderLanguage "GLSL"
+
+#ifdef _DEBUG
+#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func; __debugbreak();}
+#else
+#define CHECKERROR(hr,text,func) if(FAILED(hr)) {}
+#endif
 #endif
 
 #ifdef RenderingAPI_DX11
@@ -24,11 +31,10 @@
 #define Shader_HPP_PATH "rendering/interface/DirectX/shader.hpp"
 #define Window_HPP_PATH "rendering/interface/DirectX/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/interface/DirectX/enumtypes.hpp"
-#define ShaderLanguage "HLSL"
-
+//#define ShaderLanguage "HLSL"
 
 #ifdef _DEBUG
-#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;__debugbreak();}
+#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func; __debugbreak();}
 #else
 #define CHECKERROR(hr,text,func) if(FAILED(hr)) {}
 #endif

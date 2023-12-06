@@ -64,57 +64,71 @@ namespace rythe::rendering
 			createShader(fileName, path);
 		}
 	}
+	//Think about this later
 	shader_source ShaderCache::loadShader(const std::string& filepath)
 	{
 		std::ifstream stream(filepath);
+		std::filesystem::directory_entry path{ filepath };
 
-		enum class ShaderType
+		enum shader_type : int
 		{
 			NONE = -1,
 			VERTEX = 0,
-			FRAG = 1
+			FRAG = 1,
+			GEOM = 2,
+			HULL = 3,
+			COMPUTE = 4,
+			COUNT = 5
 		};
 
 		std::string line;
-		std::stringstream ss[2];
-		ShaderType type = ShaderType::NONE;
+		std::stringstream ss[shader_type::COUNT];
+		shader_type type = shader_type::NONE;
 		bool parse = false;
-		auto langDefine = std::string("#").append(ShaderLanguage);
 
 		while (getline(stream, line))
 		{
-			if (line.find(langDefine) != std::string::npos)
-			{
-				parse = true;
-				continue;
-			}
-			else if (parse && line.find("#END") != std::string::npos)
+			if (line.find("#shader") != std::string::npos && parse)
 			{
 				parse = false;
-				break;
 			}
 
-			if (parse)
+			if (!parse)
 			{
-				if (line.find("#shader") != std::string::npos)
+				parse = true;
+				if (line.find("vertex") != std::string::npos)
 				{
-					if (line.find("vertex") != std::string::npos)
-					{
-						type = ShaderType::VERTEX;
-					}
-					else if (line.find("fragment") != std::string::npos)
-					{
-						type = ShaderType::FRAG;
-					}
+					type = shader_type::VERTEX;
 				}
-				else
+				else if (line.find("fragment") != std::string::npos)
 				{
-					ss[(int)type] << line << "\n";
+					type = shader_type::FRAG;	
 				}
+				else if (line.find("geometry") != std::string::npos)
+				{
+					type = shader_type::GEOM;
+				}
+				else if (line.find("hull") != std::string::npos)
+				{
+					type = shader_type::HULL;
+				}
+				else if (line.find("compute") != std::string::npos)
+				{
+					type = shader_type::COMPUTE;
+				}
+			}
+			else
+			{
+				ss[(int)type] << line << "\n";
+			}
+
+			if (stream.eof())
+			{
+				break;
 			}
 		}
 
-		return { ss };
+		return { path.path().stem().string(), ss };
 	}
 
 

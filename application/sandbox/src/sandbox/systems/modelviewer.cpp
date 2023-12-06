@@ -84,6 +84,8 @@ namespace rythe::game
 			case inputmap::method::NUM1:
 				gfx::ShaderCache::reloadShaders();
 				break;
+			default:
+				break;
 			}
 		}
 	}

@@ -74,7 +74,6 @@ namespace rythe::rendering
 					auto pos = std::find(m_shaders.begin(), m_shaders.end(), shader);
 					if (pos == m_shaders.end())
 					{
-						log::debug("Shader being added to list is {}", shader->getName());
 						m_shaders.push_back(shader);
 						shader->addBuffer(lightBuffer);
 						shader->addBuffer(cameraBuffer);
@@ -87,6 +86,7 @@ namespace rythe::rendering
 				materialBuffer->bufferData(&material->data, 1);
 				material->bind();
 				model->bind();
+				RI->checkError();
 				if (model->indexBuffer != nullptr)
 					for (unsigned int i = 0; i < mesh->meshes.size(); i++)
 					{

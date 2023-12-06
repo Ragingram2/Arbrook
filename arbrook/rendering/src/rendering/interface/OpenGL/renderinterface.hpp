@@ -31,7 +31,7 @@ namespace rythe::rendering::internal
 			m_windowHandle->makeCurrent();
 
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
@@ -45,10 +45,6 @@ namespace rythe::rendering::internal
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glFrontFace(GL_CCW);
-
 			if (GLEW_AMD_debug_output)
 				glDebugMessageCallbackAMD(&RenderInterface::debugCallbackAMD, nullptr);
 			else if (GLEW_KHR_debug)
@@ -56,6 +52,9 @@ namespace rythe::rendering::internal
 			else if (GLEW_ARB_debug_output)
 				glDebugMessageCallbackARB(&RenderInterface::debugCallbackARB, nullptr);
 #endif
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+			glFrontFace(GL_CCW);
 		}
 
 		void close()
