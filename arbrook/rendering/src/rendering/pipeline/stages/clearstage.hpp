@@ -19,9 +19,6 @@ namespace rythe::rendering
 			RI->clear(ClearBit::COLOR_DEPTH);
 		}
 
-		virtual rsl::priority_type priority() override
-		{
-			return CLEAR_PRIORITY;
-		}
+		virtual rsl::priority_type priority() override { return CLEAR_PRIORITY; }
 	};
 }

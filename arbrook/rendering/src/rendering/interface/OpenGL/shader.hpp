@@ -35,11 +35,11 @@ namespace rythe::rendering::internal
 			programId = glCreateProgram();
 
 			ShaderCompiler::initialize();
-			unsigned int vs = ShaderCompiler::compile(ShaderType::VERTEX, source);
-			unsigned int fs = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
+			//unsigned int vs = ShaderCompiler::compile(ShaderType::VERTEX, source);
+			//unsigned int fs = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
 
-			//unsigned int vs = compileShader(ShaderType::VERTEX, source.sources[0].second);
-			//unsigned int fs = compileShader(ShaderType::FRAGMENT, source.sources[1].second);
+			unsigned int vs = compileShader(ShaderType::VERTEX, source.sources[0].second);
+			unsigned int fs = compileShader(ShaderType::FRAGMENT, source.sources[1].second);
 			glAttachShader(programId, vs);
 			glAttachShader(programId, fs);
 			glLinkProgram(programId);

@@ -53,7 +53,6 @@ namespace rythe::rendering
 				if (materialBuffer != nullptr)
 					handle->addBuffer(materialBuffer);
 			}
-			RI->checkError();
 		}
 
 		virtual void render(core::transform camTransf, camera& cam) override
@@ -86,17 +85,17 @@ namespace rythe::rendering
 				materialBuffer->bufferData(&material->data, 1);
 				material->bind();
 				model->bind();
-				RI->checkError();
 				if (model->indexBuffer != nullptr)
 					for (unsigned int i = 0; i < mesh->meshes.size(); i++)
 					{
 						auto& submesh = mesh->meshes[i];
-						RI->drawIndexed(PrimitiveType::TRIANGLESLIST, submesh.count, sizeof(unsigned int) * submesh.indexOffset, submesh.vertexOffset);
+						RI->drawIndexed(PrimitiveType::TRIANGLESLIST, submesh.count, submesh.indexOffset, submesh.vertexOffset);
 					}
 				else
 					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, mesh->vertices.size());
 			}
 			m_onRender(camTransf, cam);
+			RI->checkError();
 		}
 
 		virtual rsl::priority_type priority() override { return OPAQUE_PRIORITY; }
