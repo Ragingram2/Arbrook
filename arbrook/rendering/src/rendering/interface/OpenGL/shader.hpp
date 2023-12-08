@@ -35,35 +35,35 @@ namespace rythe::rendering::internal
 			programId = glCreateProgram();
 
 			ShaderCompiler::initialize();
-			//unsigned int vs = ShaderCompiler::compile(ShaderType::VERTEX, source);
-			//unsigned int fs = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
+			unsigned int vs = ShaderCompiler::compile(ShaderType::VERTEX, source);
+			unsigned int fs = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
 
-			unsigned int vs = compileShader(ShaderType::VERTEX, source.sources[0].second);
-			unsigned int fs = compileShader(ShaderType::FRAGMENT, source.sources[1].second);
+			//unsigned int vs = compileShader(ShaderType::VERTEX, source.sources[0].second);
+			//unsigned int fs = compileShader(ShaderType::FRAGMENT, source.sources[1].second);
 			glAttachShader(programId, vs);
 			glAttachShader(programId, fs);
 			glLinkProgram(programId);
 			glValidateProgram(programId);
 
-			GLint isLinked = 0;
-			glGetProgramiv(programId, GL_LINK_STATUS, (int*)&isLinked);
-			if (isLinked == GL_FALSE)
-			{
-				GLint maxLength = 0;
-				glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+			//GLint isLinked = 0;
+			//glGetProgramiv(programId, GL_LINK_STATUS, (int*)&isLinked);
+			//if (isLinked == GL_FALSE)
+			//{
+			//	GLint maxLength = 0;
+			//	glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
 
-				std::vector<GLchar> infoLog(maxLength);
-				glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
+			//	std::vector<GLchar> infoLog(maxLength);
+			//	glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
 
-				log::error("Shader Linkage failed: {}",infoLog.data());
+			//	log::error("Shader Linkage failed: {}",infoLog.data());
 
-				glDeleteProgram(programId);
+			//	glDeleteProgram(programId);
 
-				glDeleteShader(vs);
-				glDeleteShader(fs);
+			//	glDeleteShader(vs);
+			//	glDeleteShader(fs);
 
-				return;
-			}
+			//	return;
+			//}
 
 			glDeleteShader(vs);
 			glDeleteShader(fs);

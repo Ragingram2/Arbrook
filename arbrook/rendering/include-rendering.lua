@@ -14,10 +14,20 @@ includedirs {
 }  
 dependson { "rendering" }
 filter "configurations:Debug*"
-    links {"rendering-d","glfw3_mt","bgfx-d","bimg-d","bx-d","glew32s","opengl32","libpng16"}
+    links {
+        "rendering-d","glfw3_mt","bgfx-d","bimg-d","bx-d","glew32s","opengl32","libpng16",
+        "GenericCodeGen-d","MachineIndependent-d","glslang-d","OGLCompiler-d","SPIRV-d",
+        "OSDependent-d","glslang-default-resource-limits-d","SPIRV-Tools-d","SPIRV-Tools-opt-d",
+        "spirv-cross-core-d", "spirv-cross-glsl-d"
+    }
 
 filter "configurations:Release*"
-    links {"rendering","glfw3_mt","bgfx","bimg","bx","glew32s","opengl32","libpng16"}
+    links {
+        "rendering","glfw3_mt","bgfx","bimg","bx","glew32s","opengl32","libpng16",
+        "GenericCodeGen-d","MachineIndependent-d","glslang-d","OGLCompiler-d","SPIRV",
+        "OSDependent","glslang-default-resource-limits","SPIRV-Tools","SPIRV-Tools-opt",
+        "spirv-cross-core", "spirv-cross-glsl"
+    }
 
 filter {}
 
