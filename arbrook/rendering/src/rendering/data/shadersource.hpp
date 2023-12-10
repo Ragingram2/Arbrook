@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <sstream>
+#include <utility>
 
 #include "rendering/interface/definitions/enumtypes.hpp"
 
@@ -21,7 +22,5 @@ namespace rythe::rendering
 			sources[3] = std::make_pair<ShaderType, std::string>(ShaderType::HULL,_ss[3].str());
 			sources[4] = std::make_pair<ShaderType, std::string>(ShaderType::COMPUTE,_ss[4].str());
 		}
-
 	};
-
 }

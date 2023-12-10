@@ -43,6 +43,7 @@ namespace rythe::game
 		void update();
 		void guiRender();
 		void setModel(gfx::model_handle handle);
+		void setMaterial(gfx::material_handle handle);
 
 		void reloadShaders(core::events::key_input& input);
 		void move(core::events::key_input& input);

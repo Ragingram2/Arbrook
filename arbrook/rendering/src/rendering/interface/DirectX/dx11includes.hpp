@@ -7,7 +7,6 @@
 #include <DxErr.h>
 #include <dxcerrors.h>
 #include <dxcapi.h>
-#include <winerror.h>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dx11.lib")

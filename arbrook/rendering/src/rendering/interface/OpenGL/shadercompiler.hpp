@@ -6,14 +6,10 @@
 #include <rsl/logging>
 #include <rsl/primitives>
 
-#include <spirv_cross/spirv_glsl.hpp>
-
-#include "rendering/interface/config.hpp"
 #include "rendering/data/shadersource.hpp"
 #include "rendering/cache/windowprovider.hpp"
-
-#include "rendering/interface/DirectX/dx11includes.hpp"
-#include "rendering/interface/DirectX/glslangincludes.hpp"
+#include "rendering/interface/config.hpp"
+#include "rendering/interface/OpenGL/glslangincludes.hpp"
 
 namespace rythe::rendering::internal
 {
@@ -27,14 +23,14 @@ namespace rythe::rendering::internal
 		static glslang::EShTargetLanguageVersion m_targetVersion;
 		static glslang::EShSource m_sourceType;
 
-		static bool initialized;
+		static bool m_initialized;
 		static window_handle m_windowHandle;
 		static std::vector<std::string> IncludeDirectoryList;
 		static std::string glslSource;
 	public:
 		static void initialize()
 		{
-			if (initialized) return;
+			if (m_initialized) return;
 			m_client = glslang::EShClientVulkan;
 			m_clientVersion = glslang::EShTargetVulkan_1_0;
 
@@ -43,10 +39,10 @@ namespace rythe::rendering::internal
 
 			m_sourceType = glslang::EShSourceHlsl;
 
-			m_includer.pushExternalLocalDirectory("assets\\shaders\\include\\");
+			m_includer.pushExternalLocalDirectory("resources\\shaders\\include");
 
 			m_windowHandle = WindowProvider::get(0);
-			initialized = true;
+			m_initialized = true;
 		}
 
 		static unsigned int compile(ShaderType type, shader_source source)
@@ -85,18 +81,26 @@ namespace rythe::rendering::internal
 				break;
 			}
 
-
-			std::vector<unsigned int> spirVBin = compileToSpirV(profile, shaderType, source.fileName, source.sources[shaderIdx].second);
-			if (!compileToGLSL(spirVBin))
+			std::string file{ std::format("{}-{}", source.fileName, shaderType) };
+			auto hlslSource = source.sources[shaderIdx].second;
+			//log::debug("[{}] HLSL Source:\n{}", file, hlslSource);
+			std::vector<unsigned int> spirVBin = compileToSpirV(profile, shaderType, source.fileName, hlslSource);
+			if (spirVBin.size() < 1)
 			{
-				log::error("Compiling to GLSL failed");
+				log::error("[{}] SpirV file is too small", file);
 				return 0;
 			}
 
-			log::debug("Shader: {}\n{}", source.fileName, glslSource);
+			if (!compileToGLSL(spirVBin))
+			{
+				log::error("[{}] Compiling to GLSL failed", file);
+				return 0;
+			}
+
+			//log::debug("[{}] GLSL Source\n{}", file, glslSource);
 			unsigned int id = glCreateShader(static_cast<GLenum>(type));
-			std::string file{ std::format("{}-{}", source.fileName, shaderType) };
-			rsl::log::debug("Compiling GLSL Shader {}...", file);
+
+			rsl::log::debug("[{}] Compiling GLSL Shader", file);
 			const char* src = glslSource.c_str();
 			glShaderSource(id, 1, &src, NULL);
 			glCompileShader(id);
@@ -110,14 +114,14 @@ namespace rythe::rendering::internal
 
 				std::vector<GLchar> infoLog(maxLength);
 				glGetShaderInfoLog(id, maxLength, &maxLength, &infoLog[0]);
-				rsl::log::error("Shader Compilation Failed");
-				rsl::log::error("Shader Compilation {}", infoLog.data());
+				rsl::log::error("[{}] Shader Compilation Failed", file);
+				rsl::log::error("[{}] Shader Compilation {}", file, infoLog.data());
 
 				glDeleteShader(id);
 				return 0;
 			}
 
-			rsl::log::debug("GLSL Shader Compilation Success");
+			rsl::log::debug("[{}] GLSL Shader Compilation Success", file);
 
 			return id;
 		}
@@ -155,18 +159,19 @@ namespace rythe::rendering::internal
 			_shader->setEnvTargetHlslFunctionality1();
 			_shader->setEnvInputVulkanRulesRelaxed();
 
+			std::string file = std::format("{}-{}", fileName, shaderType);
 			std::string str;
 			auto resource = GetResources();
 			if (!_shader->preprocess(resource, defaultVersion, ENoProfile, false, false, message, &str, m_includer))
 			{
-				log::error("Shader preprocessing failed");
+				log::error("[{}] Shader preprocessing failed", file);
 				log::error(_shader->getInfoLog());
 				return spirVBin;
 			}
 
 			if (!_shader->parse(GetResources(), defaultVersion, false, message, m_includer))
 			{
-				log::error("Shader Compilation of {} failed", std::format("{}-{}", fileName, shaderType));
+				log::error("[{}] Shader Compilation failed", file);
 				log::error(_shader->getInfoLog());
 				return spirVBin;
 			}
@@ -176,18 +181,18 @@ namespace rythe::rendering::internal
 
 			if (!program.link(message))
 			{
-				log::error("Program Linking failed:\n{}",program.getInfoLog());
+				log::error("[{}] Program Linking failed:\n{}", file, program.getInfoLog());
 			}
 
 			if (auto* i = program.getIntermediate(profile))
 			{
 				spv::SpvBuildLogger logger;
 				glslang::GlslangToSpv(*i, spirVBin, &logger);
-				log::debug("SpirV Conversion output log: {}", logger.getAllMessages());
+				if (logger.getAllMessages().length() > 0)
+					log::debug("[{}] SpirV Conversion output log: {}", file, logger.getAllMessages());
+
 				if (!glslang::OutputSpvBin(spirVBin, fileName.c_str()))
-				{
-					log::error("Output to SpirV bin failed");
-				}
+					log::error("[{}] Output to SpirV bin failed", file);
 			}
 
 			glslang::FinalizeProcess();
@@ -233,7 +238,7 @@ namespace rythe::rendering::internal
 	inline glslang::EShTargetLanguage ShaderCompiler::m_targetLanguage;
 	inline glslang::EShTargetLanguageVersion ShaderCompiler::m_targetVersion;     // not valid until m_targetLanguage is set
 	inline glslang::EShSource ShaderCompiler::m_sourceType;
-	inline bool ShaderCompiler::initialized = false;
+	inline bool ShaderCompiler::m_initialized = false;
 	inline window_handle ShaderCompiler::m_windowHandle;
 	inline std::string ShaderCompiler::glslSource;
 }

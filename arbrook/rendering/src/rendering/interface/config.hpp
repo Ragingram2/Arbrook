@@ -1,6 +1,13 @@
 #pragma once
 #include <imgui/backends/imgui_impl_glfw.h>
 
+
+#ifdef _DEBUG
+#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;}
+#else
+#define CHECKERROR(hr,text,func) hr;
+#endif
+
 #ifdef RenderingAPI_OGL
 #include <imgui/backends/imgui_impl_opengl3.h>
 #define Texture_HPP_PATH "rendering/interface/OpenGL/texture.hpp"
@@ -12,13 +19,6 @@
 #define Window_HPP_PATH "rendering/interface/OpenGL/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/interface/OpenGL/enumtypes.hpp"
 #define ShaderCompiler_HPP_PATH "rendering/interface/OpenGL/shadercompiler.hpp"
-//#define ShaderLanguage "GLSL"
-
-#ifdef _DEBUG
-#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func; __debugbreak();}
-#else
-#define CHECKERROR(hr,text,func) if(FAILED(hr)) {}
-#endif
 #endif
 
 #ifdef RenderingAPI_DX11
@@ -31,13 +31,7 @@
 #define Shader_HPP_PATH "rendering/interface/DirectX/shader.hpp"
 #define Window_HPP_PATH "rendering/interface/DirectX/window.hpp"
 #define EnumTypes_HPP_PATH "rendering/interface/DirectX/enumtypes.hpp"
-//#define ShaderLanguage "HLSL"
-
-#ifdef _DEBUG
-#define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func; __debugbreak();}
-#else
-#define CHECKERROR(hr,text,func) if(FAILED(hr)) {}
-#endif
+#define ShaderCompiler_HPP_PATH "rendering/interface/DirectX/shadercompiler.hpp"
 #endif
 
 

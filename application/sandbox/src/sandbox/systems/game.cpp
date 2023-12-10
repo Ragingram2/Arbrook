@@ -14,7 +14,7 @@ namespace rythe::game
 
 		gfx::gui_stage::addGuiRender<Game, &Game::guiRender>(this);
 
-		gfx::ModelCache::loadModels("resources/meshes/obj/");
+		gfx::ModelCache::loadModels("resources/meshes/glb/");
 		gfx::TextureCache::loadTextures("resources/textures/");
 		gfx::ShaderCache::loadShaders("resources/shaders/");
 		modelHandle = gfx::ModelCache::getModel("cube");
@@ -23,60 +23,16 @@ namespace rythe::game
 		mat.diffuse = gfx::TextureCache::getTexture2D("container_diffuse");
 		mat.specular = gfx::TextureCache::getTexture2D("container_specular");
 
-		//color = gfx::MaterialCache::loadMaterialFromFile("color", "resources/shaders/color.shader");
+		color = gfx::MaterialCache::loadMaterialFromFile("color", "resources/shaders/color.shader");
 
 		cube = createEntity("Cube");
+		cube.addComponent<core::examplecomp>({ .direction = 1, .angularSpeed = .02f });
 		auto& transf = cube.addComponent<core::transform>();
 		transf.scale = math::vec3::one;
 		transf.position = math::vec3(0.0f, -1.0f, 10.f);
+		auto normalMat = gfx::MaterialCache::loadMaterialFromFile("normal", "resources/shaders/normal.shader");
+		cube.addComponent<gfx::mesh_renderer>({ .material = mat, .model = modelHandle });
 
-		cube.addComponent<gfx::mesh_renderer>({ .material = mat, .model = modelHandle});
-
-		/*{
-			auto ent = createEntity("Armadillio");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one;
-			transf.position = math::vec3(-10.0f, -1.0f, 0.0f);
-
-			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("armadillo") });
-		}
-
-		{
-			auto ent = createEntity("Suzanne");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one;
-			transf.position = math::vec3(0.0f, -1.0f, -10.0f);
-
-			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("suzanne") });
-		}
-
-		{
-			auto ent = createEntity("Teapot");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one;
-			transf.position = math::vec3(10.0f, -1.0f, 0.0f);
-
-			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("teapot") });
-		}
-
-		{
-			auto ent = createEntity("Icosphere");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one;
-			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-
-			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("icosphere") });
-		}
-
-		{
-			auto ent = createEntity("Bunny");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one;
-			transf.position = math::vec3(0.0f, -10.0f, 0.0f);
-
-			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("bunny") });
-		}
-		*/
 		{
 			auto ent = createEntity("Light");
 			auto& transf = ent.addComponent<core::transform>();
@@ -84,14 +40,14 @@ namespace rythe::game
 			transf.position = math::vec3(0.0f, 0.0f, 0.0f);
 			ent.addComponent<gfx::light>({ .type = gfx::LightType::DIRECTIONAL, .data.color = math::vec4(1.0f) });
 		}
-		
-		{
-			auto ent = createEntity("PointLight");
-			ent.addComponent<core::transform>({ .scale = math::vec3(.1f, .1f, .1f), .position = math::vec3(0.0f,6.0f,7.0f) });
-			ent.addComponent<gfx::light>({ .type = gfx::LightType::POINT, .data.color = math::vec4(1.0f,0.0f,0.0f,1.0f), .data.intensity = 1.0f, .data.range = 50.f });
-			ent.addComponent<core::examplecomp>({ .direction = 1,.range = 10.0f,.speed = .02f });
-			ent.addComponent<gfx::mesh_renderer>({.material = mat, .model = gfx::ModelCache::getModel("icosphere")});
-		}
+
+		//{
+		//	auto ent = createEntity("PointLight");
+		//	ent.addComponent<core::transform>({ .scale = math::vec3(.1f, .1f, .1f), .position = math::vec3(0.0f,6.0f,7.0f) });
+		//	ent.addComponent<gfx::light>({ .type = gfx::LightType::POINT, .data.color = math::vec4(1.0f,0.0f,0.0f,1.0f), .data.intensity = 1.0f, .data.range = 50.f });
+		//	ent.addComponent<core::examplecomp>({ .direction = 1,.range = 10.0f,.speed = .02f });
+		//	ent.addComponent<gfx::mesh_renderer>({.material = mat, .model = gfx::ModelCache::getModel("icosphere")});
+		//}
 
 		camera = createEntity("Camera");
 		auto& camTransf = camera.addComponent<core::transform>();
@@ -121,25 +77,50 @@ namespace rythe::game
 		Begin("Inspector");
 		if (CollapsingHeader("MeshRenderer"))
 		{
-			auto models = gfx::ModelCache::getModels();
-			auto modelNames = gfx::ModelCache::getModelNamesC();
-			Text("Here is where you can select which model to render");
-			static gfx::model_handle currentSelected = modelHandle;
-			if (BeginCombo("Model Dropdown", currentSelected->name.c_str()))
 			{
-				for (auto handle : models)
+				auto models = gfx::ModelCache::getModels();
+				//auto modelNames = gfx::ModelCache::getModelNamesC();
+				Text("Here is where you can select which model to render");
+				static gfx::model_handle currentSelected = modelHandle;
+				if (BeginCombo("Model Dropdown", currentSelected->name.c_str()))
 				{
-					const bool is_selected = (currentSelected == handle);
-					if (Selectable(handle->name.c_str(), is_selected))
-						currentSelected = handle;
-
-					if (is_selected)
+					for (auto handle : models)
 					{
-						SetItemDefaultFocus();
+						const bool is_selected = (currentSelected == handle);
+						if (Selectable(handle->name.c_str(), is_selected))
+							currentSelected = handle;
+
+						if (is_selected)
+						{
+							SetItemDefaultFocus();
+						}
 					}
+					setModel(currentSelected);
+					EndCombo();
 				}
-				setModel(currentSelected);
-				EndCombo();
+			}
+
+			{
+				auto mats = gfx::MaterialCache::getMaterials();
+				//auto matNames = gfx::MaterialCache::getMaterialNamesC();
+				Text("Here is where you can select which material to use");
+				static gfx::material_handle currentSelected = mat;
+				if (BeginCombo("Material Dropdown", currentSelected->name.c_str()))
+				{
+					for (auto handle : mats)
+					{
+						const bool is_selected = (currentSelected == handle);
+						if (Selectable(handle->name.c_str(), is_selected))
+							currentSelected = handle;
+
+						if (is_selected)
+						{
+							SetItemDefaultFocus();
+						}
+					}
+					setMaterial(currentSelected);
+					EndCombo();
+				}
 			}
 		}
 
@@ -244,6 +225,16 @@ namespace rythe::game
 		if (renderer.model != handle)
 		{
 			renderer.model = handle;
+			renderer.dirty = true;
+		}
+	}
+
+	void Game::setMaterial(gfx::material_handle handle)
+	{
+		auto& renderer = cube.getComponent<gfx::mesh_renderer>();
+		if (renderer.material != handle)
+		{
+			renderer.material = handle;
 			renderer.dirty = true;
 		}
 	}

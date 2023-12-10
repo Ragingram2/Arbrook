@@ -16,6 +16,10 @@ function createProject(groupName,projectName,kindName)
         toolset "clang"
         language "C++"
         cppdialect "C++20"
+        buildoptions {
+            "-Wno-nonportable-include-path",
+            "-Wno-reorder-init-list"
+        }
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}
         objdir "$(SolutionDir)bin\\obj"

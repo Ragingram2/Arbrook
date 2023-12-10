@@ -113,6 +113,8 @@ namespace rythe::game
 			case inputmap::method::DOWN:
 				camPos -= speed * cameraFront * deltaTime;
 				break;
+			default:
+				break;
 			}
 		}
 
@@ -154,6 +156,8 @@ namespace rythe::game
 				log::debug("ProjeView\n{}", cam.projection * cam.view);
 				log::debug("MVP\n{}", (cam.projection * cam.view) * entTransf.to_world());
 				break;
+				default:
+					break;
 			}
 		}
 	}

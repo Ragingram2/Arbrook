@@ -38,38 +38,33 @@ namespace rythe::rendering::internal
 			unsigned int vs = ShaderCompiler::compile(ShaderType::VERTEX, source);
 			unsigned int fs = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
 
-			//unsigned int vs = compileShader(ShaderType::VERTEX, source.sources[0].second);
-			//unsigned int fs = compileShader(ShaderType::FRAGMENT, source.sources[1].second);
 			glAttachShader(programId, vs);
 			glAttachShader(programId, fs);
 			glLinkProgram(programId);
 			glValidateProgram(programId);
 
-			//GLint isLinked = 0;
-			//glGetProgramiv(programId, GL_LINK_STATUS, (int*)&isLinked);
-			//if (isLinked == GL_FALSE)
-			//{
-			//	GLint maxLength = 0;
-			//	glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+			GLint isLinked = 0;
+			glGetProgramiv(programId, GL_LINK_STATUS, (int*)&isLinked);
+			if (isLinked == GL_FALSE)
+			{
+				GLint maxLength = 0;
+				glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
 
-			//	std::vector<GLchar> infoLog(maxLength);
-			//	glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
+				std::vector<GLchar> infoLog(maxLength);
+				glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
 
-			//	log::error("Shader Linkage failed: {}",infoLog.data());
+				log::error("Shader Linkage failed: {}",infoLog.data());
 
-			//	glDeleteProgram(programId);
+				glDeleteProgram(programId);
 
-			//	glDeleteShader(vs);
-			//	glDeleteShader(fs);
+				glDeleteShader(vs);
+				glDeleteShader(fs);
 
-			//	return;
-			//}
+				return;
+			}
 
 			glDeleteShader(vs);
 			glDeleteShader(fs);
-
-			//glDetachShader(programId, vs);
-			//glDetachShader(programId, fs);
 
 		}
 
@@ -100,15 +95,11 @@ namespace rythe::rendering::internal
 				log::error("Buffer is not a constant buffer, this is not supported");
 				return;
 			}
-			//log::debug("Adding a Constant Buffer to shader {}", name);
+
 			if (!m_constBuffers.count(handle->getName()))
 			{
 				m_constBuffers.emplace(handle->getName(), handle);
-				//return;
 			}
-			//log::debug("Binding Uniform Buffer");
-			//auto idx = glGetUniformBlockIndex(programId, handle->getName().c_str());
-			//glUniformBlockBinding(programId, idx, handle->m_impl.bindId);
 		}
 
 		void release()
@@ -120,31 +111,6 @@ namespace rythe::rendering::internal
 		void clearBuffers()
 		{
 			m_constBuffers.clear();
-		}
-	private:
-		unsigned int compileShader(ShaderType type, const std::string& source)
-		{
-			unsigned int id = glCreateShader(static_cast<GLenum>(type));
-			const char* src = source.c_str();
-			glShaderSource(id, 1, &src, nullptr);
-			glCompileShader(id);
-
-			int result;
-			glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-			int length;
-			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-			char* message = (char*)__builtin_alloca(length * sizeof(char));
-			glGetShaderInfoLog(id, length, &length, message);
-
-			if (result == GL_FALSE)
-			{
-				log::error(message);
-				glDeleteShader(id);
-				return 0;
-			}
-
-			return id;
 		}
 	};
 

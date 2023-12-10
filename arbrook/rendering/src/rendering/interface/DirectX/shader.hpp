@@ -54,11 +54,7 @@ namespace rythe::rendering::internal
 			m_windowHandle = WindowProvider::get(0);
 			ShaderCompiler::initialize();
 			VS = ShaderCompiler::compile(ShaderType::VERTEX,source);
-			//compileShader(ShaderType::VERTEX, source.sources[0].second);
-			m_windowHandle->checkError();
 			PS = ShaderCompiler::compile(ShaderType::FRAGMENT, source);
-			//compileShader(ShaderType::FRAGMENT, source.sources[1].second);
-			m_windowHandle->checkError();
 
 			m_windowHandle->dev->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &m_VS);
 			m_windowHandle->dev->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &m_PS);
@@ -110,45 +106,5 @@ namespace rythe::rendering::internal
 		{
 			m_constBuffers.clear();
 		}
-
-	private:
-//		unsigned int compileShader(ShaderType type, const std::string& source)
-//		{
-//			HRESULT hr;
-//			ID3DBlob* error;
-//
-//			UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
-//#if defined( DEBUG ) || defined( _DEBUG )
-//			flags |= D3DCOMPILE_DEBUG;
-//#endif
-//			if (type == ShaderType::VERTEX)
-//			{
-//				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "VShader", "vs_4_0", flags, 0, &VS, &error);
-//				if (FAILED(hr))
-//				{
-//					log::error("Vertex Shader Compilation failed");
-//					if (error)
-//					{
-//						log::error((char*)error->GetBufferPointer());
-//					}
-//					m_windowHandle->checkError();
-//				}
-//			}
-//			else if (type == ShaderType::FRAGMENT)
-//			{
-//				hr = D3DCompile(source.c_str(), source.length(), nullptr, nullptr, nullptr, "PShader", "ps_4_0", flags, 0, &PS, &error);
-//				if (FAILED(hr))
-//				{
-//					log::error("Fragment Shader Compilation failed");
-//					if (error)
-//					{
-//						log::error((char*)error->GetBufferPointer());
-//					}
-//					m_windowHandle->checkError();
-//				}
-//			}
-//
-//			return 0;
-//		}
 	};
 }

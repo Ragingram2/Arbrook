@@ -25,10 +25,11 @@ namespace rythe::core
 	namespace math = rsl::math;
 	struct examplecomp
 	{
-		float i = 0.1f;
-		float range = 50.0f;
-		float speed = .05f;
-		int direction = 1;
+		float pos = 0.0f;
+		float range = 0.0f;
+		float speed = 0.0f;
+		float angularSpeed = 0.0f;
+		int direction = 0;
 	};
 
 	namespace events

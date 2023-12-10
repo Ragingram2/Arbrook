@@ -20,6 +20,7 @@ namespace rythe::rendering
 		static std::unordered_map<std::string, std::unique_ptr<shader>> m_shaders;
 		static std::unordered_map<std::string, std::string> m_filePaths;
 	public:
+		static shader_handle createShader(const std::string& filepath);
 		static shader_handle createShader(const std::string& name,const std::string& filepath);
 		static shader_handle getShader(const std::string& name);
 		static void deleteShader(const std::string& name);

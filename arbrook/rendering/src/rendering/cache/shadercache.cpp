@@ -5,6 +5,13 @@ namespace rythe::rendering
 	std::unordered_map<std::string, std::unique_ptr<shader>> ShaderCache::m_shaders;
 	std::unordered_map<std::string, std::string> ShaderCache::m_filePaths;
 
+	shader_handle ShaderCache::createShader(const std::string& filepath)
+	{
+		std::string name = filepath.substr(filepath.rfind('/')+1);
+		int extCount = filepath.substr(filepath.rfind('.')).length();
+		name = name.substr(0,name.length()-extCount);
+		return createShader(name, filepath);
+	}
 	shader_handle ShaderCache::createShader(const std::string& name, const std::string& filepath)
 	{
 		if (m_shaders.contains(name))
@@ -88,21 +95,15 @@ namespace rythe::rendering
 
 		while (getline(stream, line))
 		{
-			if (line.find("#shader") != std::string::npos && parse)
+			if (line.find("namespace") != std::string::npos && !parse)
 			{
-				parse = false;
-			}
-
-			if (!parse)
-			{
-				parse = true;
 				if (line.find("vertex") != std::string::npos)
 				{
 					type = shader_type::VERTEX;
 				}
 				else if (line.find("fragment") != std::string::npos)
 				{
-					type = shader_type::FRAG;	
+					type = shader_type::FRAG;
 				}
 				else if (line.find("geometry") != std::string::npos)
 				{
@@ -116,8 +117,25 @@ namespace rythe::rendering
 				{
 					type = shader_type::COMPUTE;
 				}
+				else
+				{
+					log::error("No Shader Type be found or maybe specified type is not supported");
+					log::error(line);
+					log::error("Stopping parsing");
+					break;
+				}
+				getline(stream, line);
+				getline(stream, line);
+				parse = true;
+
 			}
-			else
+			else if (line.find("}//end") != std::string::npos)
+			{
+				parse = false;
+				continue;
+			}
+
+			if (parse)
 			{
 				ss[(int)type] << line << "\n";
 			}

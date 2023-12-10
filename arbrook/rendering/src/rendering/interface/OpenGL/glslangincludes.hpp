@@ -13,7 +13,7 @@
 
 #include <glslang/build_info.h>
 
-
+#include <spirv_cross/spirv_glsl.hpp>
 
 namespace rythe::rendering::internal
 {

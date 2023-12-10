@@ -11,6 +11,7 @@ namespace rythe::rendering
 
 	struct material
 	{
+		std::string name;
 		material_data data;
 		texture_handle diffuse;
 		texture_handle specular;

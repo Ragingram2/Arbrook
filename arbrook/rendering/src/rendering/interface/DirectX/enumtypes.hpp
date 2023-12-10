@@ -6,11 +6,11 @@ namespace rythe::rendering::internal
 {
 	enum class ShaderType
 	{
-		VERTEX,
-		FRAGMENT,
-		GEOMETRY,
-		HULL,
-		COMPUTE
+		VERTEX = 0,
+		FRAGMENT = 1,
+		GEOMETRY = 2,
+		HULL = 3,
+		COMPUTE = 4
 	};
 
 	enum class TargetType

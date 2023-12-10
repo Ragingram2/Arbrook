@@ -13,6 +13,9 @@ namespace rythe::rendering
 		material* operator->() { return m_data; }
 		operator material& () const { return *m_data; }
 
+		bool operator ==(material_handle handle) { return m_data == handle.m_data; }
+		bool operator !=(material_handle handle) { return m_data != handle.m_data; }
+
 		bool operator ==(material* data) { return m_data == data; }
 		bool operator !=(material* data) { return m_data != data; }
 	};
