@@ -6,7 +6,9 @@
 namespace rythe::game
 {
 	using namespace rythe::core::events;
-	class Game : public core::System<core::transform, gfx::mesh_renderer>
+	//using moveInput = axis_input < axis_data{inputmap::method::A, inputmap::method::D, 1, -1}, axis_data{inputmap::method::W, inputmap::method::S, 1, -1}, axis_data{ inputmap::method::Q, inputmap::method::E, 1, -1 } >;
+
+	class Game : public core::System<Game,core::transform, gfx::mesh_renderer>
 	{
 	private:
 		core::ecs::entity camera;
@@ -16,7 +18,7 @@ namespace rythe::game
 		gfx::material lit;
 		gfx::material color;
 
-		math::vec3 velocity;
+		math::vec3 velocity = math::vec3(0.0f);
 
 		math::vec2 mousePos;
 		math::vec2 lastMousePos;
@@ -45,18 +47,15 @@ namespace rythe::game
 		void setModel(gfx::model_handle handle);
 		void setMaterial(gfx::material_handle handle);
 
-		void reloadShaders(core::events::key_input& input);
-		void move(core::events::key_input& input);
-		void mouselook(core::events::mouse_input& input);
+		void reloadShaders(key_input<inputmap::method::NUM1>& input);
+		void move(moveInput& input);
+		void mouselook(mouse_input& input);
 
-		void toggleMouseCapture(core::events::key_input& input)
+		void toggleMouseCapture(key_input<inputmap::method::ESCAPE>& input)
 		{
-			if (input.value)
+			if (input.isPressed())
 			{
-				if (input.key == inputmap::method::ESCAPE)
-				{
-					input::InputSystem::mouseCaptured = !input::InputSystem::mouseCaptured;
-				}
+				input::InputSystem::mouseCaptured = !input::InputSystem::mouseCaptured;
 			}
 		}
 	};

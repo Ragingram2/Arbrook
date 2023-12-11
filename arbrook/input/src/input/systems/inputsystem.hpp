@@ -16,8 +16,9 @@
 
 namespace rythe::input
 {
-	//Figure out what to do here
-	class InputSystem : public core::System<int>
+	using namespace rythe::core::events;
+	using moveInput = axis_input < axis_data{ inputmap::method::A, inputmap::method::D, 1, -1 }, axis_data{ inputmap::method::W, inputmap::method::S, 1, -1 }, axis_data{ inputmap::method::Q, inputmap::method::E, 1, -1 } > ;
+	class InputSystem : public core::System<InputSystem,int>
 	{
 	private:
 		static GLFWwindow* m_windowHandle;

@@ -4,13 +4,9 @@
 namespace rythe::game
 {
 	using namespace rythe::core::events;
-	class ExampleSystem : public core::System<core::examplecomp>
+	class ExampleSystem : public core::System<ExampleSystem,core::examplecomp>
 	{
 	public:
-		void setup()
-		{
-
-		}
 		void update()
 		{
 			for (auto ent : m_filter)

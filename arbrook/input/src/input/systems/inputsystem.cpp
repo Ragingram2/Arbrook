@@ -26,12 +26,13 @@ namespace rythe::input
 		map->MapBool(inputmap::method::MOUSE_RIGHT, mouseId, gainput::MouseButtonRight);
 		map->MapBool(inputmap::method::ESCAPE, keyboardId, gainput::KeyEscape);
 
-		map->MapBool(inputmap::method::W, keyboardId, gainput::KeyW);
-		map->MapBool(inputmap::method::A, keyboardId, gainput::KeyA);
-		map->MapBool(inputmap::method::S, keyboardId, gainput::KeyS);
-		map->MapBool(inputmap::method::D, keyboardId, gainput::KeyD);
-		map->MapBool(inputmap::method::Q, keyboardId, gainput::KeyQ);
-		map->MapBool(inputmap::method::E, keyboardId, gainput::KeyE);
+		map->MapFloat(inputmap::method::W, keyboardId, gainput::KeyW);
+		map->MapFloat(inputmap::method::S, keyboardId, gainput::KeyS);
+		map->MapFloat(inputmap::method::A, keyboardId, gainput::KeyA);
+		map->MapFloat(inputmap::method::D, keyboardId, gainput::KeyD);
+		map->MapFloat(inputmap::method::E, keyboardId, gainput::KeyE);
+		map->MapFloat(inputmap::method::Q, keyboardId, gainput::KeyQ);
+
 		map->MapBool(inputmap::method::NUM1, keyboardId, gainput::Key1);
 		m_initialize = false;
 	}
@@ -52,47 +53,32 @@ namespace rythe::input
 		}
 
 		{
-			core::events::key_input keyEvnt{ inputmap::method::ESCAPE,map->GetBoolIsNew(inputmap::method::ESCAPE) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+			moveInput axisEvnt;
+			axisEvnt.m_values.emplace("Left/Right", map->GetFloat(inputmap::method::D) - map->GetFloat(inputmap::method::A));
+			axisEvnt.m_values.emplace("Forward/Backward", map->GetFloat(inputmap::method::W) - map->GetFloat(inputmap::method::S));
+			axisEvnt.m_values.emplace("Up/Down", map->GetFloat(inputmap::method::E) - map->GetFloat(inputmap::method::Q));
+			//for (auto& [name, value] : axisEvnt.m_values)
+			//{
+			//	log::debug("Value:{}",value);
+			//}
+			EventBus::raiseEvent<moveInput>(axisEvnt);
 		}
 
 		{
-			core::events::key_input keyEvnt{ inputmap::method::W,map->GetBool(inputmap::method::W) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+			key_input<inputmap::method::ESCAPE> keyEvnt{ map->GetBoolIsNew(inputmap::method::ESCAPE) , map->GetBoolPrevious(inputmap::method::ESCAPE) };
+			EventBus::raiseEvent<key_input<inputmap::method::ESCAPE>>(keyEvnt);
 		}
 		{
-			core::events::key_input keyEvnt{ inputmap::method::A,map->GetBool(inputmap::method::A) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+			key_input<inputmap::method::NUM1> keyEvnt{ map->GetBool(inputmap::method::NUM1),map->GetBoolPrevious(inputmap::method::NUM1) };
+			EventBus::raiseEvent<key_input<inputmap::method::NUM1>>(keyEvnt);
 		}
 		{
-			core::events::key_input keyEvnt{ inputmap::method::S,map->GetBool(inputmap::method::S) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+			key_input<inputmap::method::MOUSE_LEFT> keyEvnt{ map->GetBool(inputmap::method::MOUSE_LEFT),map->GetBoolPrevious(inputmap::method::MOUSE_LEFT) };
+			EventBus::raiseEvent<key_input<inputmap::method::MOUSE_LEFT>>(keyEvnt);
 		}
 		{
-			core::events::key_input keyEvnt{ inputmap::method::D,map->GetBool(inputmap::method::D) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
-		}
-		{
-			core::events::key_input keyEvnt{ inputmap::method::Q,map->GetBool(inputmap::method::Q) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
-		}
-		{
-			core::events::key_input keyEvnt{ inputmap::method::E,map->GetBool(inputmap::method::E) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
-		}
-
-		{
-			core::events::key_input keyEvnt{ inputmap::method::MOUSE_LEFT, map->GetBool(inputmap::method::MOUSE_LEFT) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
-		}
-		{
-			core::events::key_input keyEvnt{ inputmap::method::MOUSE_RIGHT, map->GetBool(inputmap::method::MOUSE_RIGHT) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
-		}
-
-		{
-			core::events::key_input keyEvnt{ inputmap::method::NUM1, map->GetBool(inputmap::method::NUM1) };
-			core::events::EventBus::raiseEvent<core::events::key_input>(keyEvnt);
+			key_input<inputmap::method::MOUSE_RIGHT> keyEvnt{ map->GetBool(inputmap::method::MOUSE_RIGHT),map->GetBoolPrevious(inputmap::method::MOUSE_RIGHT) };
+			EventBus::raiseEvent<key_input<inputmap::method::MOUSE_RIGHT>>(keyEvnt);
 		}
 
 		mousePos = math::vec2(map->GetFloat(inputmap::method::MOUSE_X), map->GetFloat(inputmap::method::MOUSE_Y));

@@ -5,10 +5,10 @@ namespace rythe::game
 	void Game::setup()
 	{
 		log::debug("Initializing Game system");
-		EventBus::bind<key_input, Game, &Game::reloadShaders>(*this);
-		EventBus::bind<key_input, Game, &Game::move>(*this);
-		EventBus::bind<key_input, Game, &Game::toggleMouseCapture>(*this);
-		EventBus::bind<mouse_input, Game, &Game::mouselook>(*this);
+		bindEvent<key_input<inputmap::method::NUM1>, &Game::reloadShaders>();
+		bindEvent<moveInput, &Game::move>();
+		bindEvent<key_input<inputmap::method::ESCAPE>, &Game::toggleMouseCapture>();
+		bindEvent<mouse_input, &Game::mouselook>();
 
 		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
@@ -140,57 +140,29 @@ namespace rythe::game
 		ImGui::End();
 	}
 
-	void Game::reloadShaders(core::events::key_input& input)
+	void Game::reloadShaders(key_input<inputmap::method::NUM1>& input)
 	{
-		if (input.value)
+		if (input.isPressed())
 		{
-			switch (input.key)
-			{
-			case inputmap::method::NUM1:
-				gfx::ShaderCache::reloadShaders();
-				break;
-			default:
-				break;
-			}
+			gfx::ShaderCache::reloadShaders();
 		}
 	}
 
-	void Game::move(core::events::key_input& input)
+	void Game::move(moveInput& input)
 	{
 		auto& transf = camera.getComponent<core::transform>();
-		if (input.value)
-		{
-			switch (input.key)
-			{
-			case inputmap::method::A:
-			case inputmap::method::LEFT:
-				velocity -= transf.right() * speed * deltaTime;
-				break;
-			case inputmap::method::D:
-			case inputmap::method::RIGHT:
-				velocity += transf.right() * speed * deltaTime;
-				break;
-			case inputmap::method::S:
-			case inputmap::method::DOWN:
-				velocity -= transf.forward() * speed * deltaTime;
-				break;
-			case inputmap::method::W:
-			case inputmap::method::UP:
-				velocity += transf.forward() * speed * deltaTime;
-				break;
-			case inputmap::method::Q:
-				velocity -= math::vec3::up * speed * deltaTime;
-				break;
-			case inputmap::method::E:
-				velocity += math::vec3::up * speed * deltaTime;
-				break;
-			default:
-				break;
-			}
-		}
+
+		auto leftRight = input.m_values["Left/Right"];
+		auto forwardBackward = input.m_values["Forward/Backward"];
+		auto upDown = input.m_values["Up/Down"];
+		velocity += transf.right() * leftRight;
+		velocity += transf.forward() * forwardBackward;
+		velocity += transf.up() * upDown;
+		if (velocity.length() > 0.00001f)
+			velocity = math::normalize(velocity) * speed * deltaTime;
 	}
 
-	void Game::mouselook(core::events::mouse_input& input)
+	void Game::mouselook(mouse_input& input)
 	{
 		if (!input::InputSystem::mouseCaptured) return;
 

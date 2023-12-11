@@ -3,44 +3,44 @@
 
 namespace rythe::core
 {
-	template<typename... componentTypes>
-	ecs::Registry* System<componentTypes...>::registry = 0;
+	template<typename SelfType, typename... componentTypes>
+	ecs::Registry* System<SelfType, componentTypes...>::registry = 0;
 
-	template<typename... componentTypes>
-	inline ecs::entity System<componentTypes...>::createEntity()
+	template<typename SelfType, typename... componentTypes>
+	inline ecs::entity System<SelfType, componentTypes...>::createEntity()
 	{
 		return registry->createEntity();
 	}
 
-	template<typename... componentTypes>
-	inline ecs::entity System<componentTypes...>::createEntity(std::string name)
+	template<typename SelfType, typename... componentTypes>
+	inline ecs::entity System<SelfType, componentTypes...>::createEntity(std::string name)
 	{
 		return registry->createEntity(name);
 	}
 
-	template<typename... componentTypes>
-	inline void System<componentTypes...>::destroyEntity(ecs::entity& ent)
+	template<typename SelfType, typename... componentTypes>
+	inline void System<SelfType, componentTypes...>::destroyEntity(ecs::entity& ent)
 	{
 		registry->destroyEntity(ent);
 	}
 
-	template<typename... componentTypes>
-	inline void System<componentTypes...>::destroyEntity(rsl::id_type id)
+	template<typename SelfType, typename... componentTypes>
+	inline void System<SelfType, componentTypes...>::destroyEntity(rsl::id_type id)
 	{
 		registry->destroyEntity(id);
 	}
-	template<typename... componentTypes>
+	template<typename SelfType, typename... componentTypes>
 	template<typename event_type>
-	inline void System<componentTypes...>::raiseEvent(event_type& evnt)
+	inline void System<SelfType, componentTypes...>::raiseEvent(event_type&& evnt)
 	{
-		Program::Instance().m_registry->get_service<events::EventBus>()->raiseEvent(evnt);
+		events::EventBus::raiseEvent(evnt);
 	}
 
-	template<typename... componentTypes>
-	template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
-	void System<componentTypes...>::bindEvent()
+	template<typename SelfType, typename... componentTypes>
+	template<typename event_type, void(SelfType::* func_type)(event_type&)>
+	void System<SelfType, componentTypes...>::bindEvent()
 	{
-		Program::Instance().m_registry->get_service<events::EventBus>()->bind<event_type, System<componentTypes...>, void(System<componentTypes...>::*)(event_type&)>(*this);
+		events::EventBus::bind<event_type, SelfType, func_type>(*static_cast<SelfType*>(this));
 	}
 
 	//template<typename... componentTypes>

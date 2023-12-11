@@ -15,7 +15,7 @@
 namespace rythe::rendering
 {
 	template<typename Self, typename... componentTypes>
-	struct graphics_stage : public graphics_stage_base, protected core::System<componentTypes...>
+	struct graphics_stage : public graphics_stage_base, protected core::System<Self, componentTypes...>
 	{
 		void shutdown_impl() override
 		{

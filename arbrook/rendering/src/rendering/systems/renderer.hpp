@@ -14,14 +14,14 @@
 
 namespace rythe::rendering
 {
-	class Renderer : public core::System<core::transform, camera>
+	class Renderer : public core::System<Renderer,core::transform, camera>
 	{
 	public:
 		static std::unique_ptr<pipeline_provider_base> provider;
 		static PipelineBase* pipeline;
 		static RenderInterface* RI;
 
-		Renderer() : System<core::transform, camera>()
+		Renderer() : core::System<Renderer, core::transform, camera>()
 		{
 			setPipeline<DefaultPipeline>();
 		}

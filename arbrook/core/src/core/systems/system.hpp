@@ -14,7 +14,7 @@ namespace rythe::core
 		virtual ~SystemBase() = default;
 	};
 
-	template<typename... componentTypes>
+	template<typename SelfType, typename... componentTypes>
 	class System : public SystemBase
 	{
 	public:
@@ -34,9 +34,9 @@ namespace rythe::core
 		void destroyEntity(rsl::id_type id);
 
 		template<typename event_type>
-		void raiseEvent(event_type& evnt);
+		void raiseEvent(event_type&& evnt);
 
-		template<typename event_type, void(System<componentTypes...>::* func_type)(event_type&)>
+		template<typename event_type, void(SelfType::* func_type)(event_type&)>
 		void bindEvent();
 
 		//template<typename event_type,  typename ownerType = System<componentTypes...>, void(ownerType::* func_type)(event_type&)>

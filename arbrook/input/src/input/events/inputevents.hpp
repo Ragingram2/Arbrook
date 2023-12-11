@@ -1,4 +1,7 @@
 #pragma once
+#include <unordered_map>
+#include <string>
+
 #include <rsl/math>
 
 #include "core/events/event.hpp"
@@ -7,42 +10,34 @@
 namespace rythe::core::events
 {
 	using namespace input;
-	template<typename eventType>
-	struct input_action : public event<eventType>
+
+	struct axis_data
 	{
-		bool value;
-		float input_delta;
-		inputmap::modifier_keys mods;
-		inputmap::method id;
-
-		void set(bool _value, inputmap::modifier_keys _mods, inputmap::method _id)
-		{
-			value = _value;
-			mods = _mods;
-			id = _id;
-		}
-
-		bool pressed() const { return value; }
-		bool released() const { return !value; }
+		inputmap::method positive, negative;
+		float max, min;
 	};
 
-	template<typename eventType>
-	struct input_axis : public event<eventType>
+	template<inputmap::method Key>
+	struct key_input final : public event<key_input<Key>>
 	{
-		float value;
-		float input_delta;
-		std::vector<float> value_parts;
-		inputmap::modifier_keys mods;
-		inputmap::method identifier;
-		std::vector<inputmap::modifier_keys> mods_parts;
-		std::vector<inputmap::method> identifier_parts;
+	private:
+		inputmap::method m_key = Key;
+		bool m_lastValue;
+		bool m_value;
+	public:
+		key_input(bool _value, bool _lastValue) : m_value(_value), m_lastValue(_lastValue) {}
+
+		bool isPressed() { return m_value; }
+		bool wasPressed() { return (m_value == false && m_lastValue == true); }
 	};
 
-	struct key_input final : public event<key_input>
+	template<axis_data... Inputs >
+	struct axis_input final : public event<axis_input<Inputs...>>
 	{
-		inputmap::method key;
-		bool value;
-		key_input(inputmap::method _key, bool _value) : key(_key), value(_value) {}
+	public:
+		//std::vector<axis_data> m_axes = { Inputs... };
+		std::unordered_map<std::string, float> m_values;
+		float getValue(const std::string& axisName) { return m_values[axisName]; }
 	};
 
 	struct mouse_input final : public event<mouse_input>
