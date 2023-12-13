@@ -82,9 +82,13 @@ namespace rythe::rendering
 				uvBuffer->bind();
 			//uvBuffer->bufferData(meshHandle->texCoords.data(), meshHandle->texCoords.size());
 
-		//if (matrixBuffer != nullptr)
-		//	matrixBuffer->bind();
 		}
+
+		//void unbind()
+		//{
+		//	layout.unbind();
+		//	vertexBuffer.unbind();
+		//}
 	};
 
 }

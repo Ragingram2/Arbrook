@@ -49,13 +49,15 @@ namespace rythe::rendering::internal
 		FLOAT = sizeof(float)
 	};
 
-	enum class FormatType
+	enum class FormatType 
 	{
-		RG32F = DXGI_FORMAT_R32G32_FLOAT,
-		RGB32F = DXGI_FORMAT_R32G32B32_FLOAT,
+		D24_S8 = DXGI_FORMAT_D24_UNORM_S8_UINT,
 		RGBA32F = DXGI_FORMAT_R32G32B32A32_FLOAT,
-		R32U = DXGI_FORMAT_R32_UINT,
-		RGBA8UN = DXGI_FORMAT_R8G8B8A8_UNORM
+		RGB32F = DXGI_FORMAT_R32G32B32_FLOAT,
+		RG32F = DXGI_FORMAT_R32G32_FLOAT,
+		R32F = DXGI_FORMAT_R32_FLOAT,
+		RGBA8UN = DXGI_FORMAT_R8G8B8A8_UNORM,
+		R32U = DXGI_FORMAT_R32_UINT
 	};
 
 	enum class WrapMode
@@ -113,7 +115,14 @@ namespace rythe::rendering::internal
 	{
 		FRONT = 0,
 		BACK = 1,
-		FRONT_BACK = 2
+		FRONT_BACK = 2,
+		NONE = -1
+	};
+
+	enum class WindOrder
+	{
+		CW = false,
+		CCW = true
 	};
 
 	enum class InputClass

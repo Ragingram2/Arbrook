@@ -16,6 +16,7 @@ namespace rythe::rendering::internal
 	struct texture
 	{
 	private:
+		GLenum m_nativeType;
 		TargetType m_texType;
 	public:
 		unsigned int id;
@@ -35,19 +36,18 @@ namespace rythe::rendering::internal
 		void initialize(TargetType texType, texture_parameters params, bool generateMipMaps = false)
 		{
 			m_texType = texType;
+			m_nativeType = static_cast<GLenum>(m_texType);
 			this->params = params;
+			this->params.generateMipMaps = generateMipMaps;
 
 			glGenTextures(1, &id);
 			bind();
-			glTexParameteri(static_cast<GLenum>(m_texType), GL_TEXTURE_WRAP_S, static_cast<GLint>(params.wrapModeS));
-			glTexParameteri(static_cast<GLenum>(m_texType), GL_TEXTURE_WRAP_T, static_cast<GLint>(params.wrapModeT));
-			glTexParameteri(static_cast<GLenum>(m_texType), GL_TEXTURE_MIN_FILTER, static_cast<GLint>(params.filterMode));
-			glTexParameteri(static_cast<GLenum>(m_texType), GL_TEXTURE_MAG_FILTER, static_cast<GLint>(params.filterMode));
+			glTexParameteri(m_nativeType, GL_TEXTURE_WRAP_R, static_cast<GLint>(params.wrapModeR));
+			glTexParameteri(m_nativeType, GL_TEXTURE_WRAP_S, static_cast<GLint>(params.wrapModeS));
+			glTexParameteri(m_nativeType, GL_TEXTURE_WRAP_T, static_cast<GLint>(params.wrapModeT));
+			glTexParameteri(m_nativeType, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(params.filterMode));
+			glTexParameteri(m_nativeType, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(params.filterMode));
 
-			if (generateMipMaps)
-			{
-				glGenerateMipmap(static_cast<GLenum>(m_texType));
-			}
 		}
 
 		void bind(TextureSlot textureSlot = TextureSlot::TEXTURE0)
@@ -65,15 +65,43 @@ namespace rythe::rendering::internal
 				rsl::log::error("Image failed to load");
 			}
 
-			//make some enums for the data formats
-			switch (params.channels)
+			if (params.immutable)
 			{
-			case 4:
-				glTexImage2D(static_cast<GLenum>(m_texType), 0, GL_RGBA, params.resolution.x, params.resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-				break;
-			case 3:
-				glTexImage2D(static_cast<GLenum>(m_texType), 0, GL_RGB, params.resolution.x, params.resolution.y, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
-				break;
+				auto mipCount = params.generateMipMaps ? params.mipLevels : 1;
+				glTexParameteri(m_nativeType, GL_TEXTURE_MAX_LEVEL, mipCount);
+				glTexStorage2D(m_nativeType, static_cast<GLint>(mipCount), static_cast<GLint>(params.format), params.resolution.x, params.resolution.y);
+
+				switch (params.channels)
+				{
+				case 4:
+					glTexSubImage2D(m_nativeType, 0, 0, 0, params.resolution.x, params.resolution.y, GL_RGBA, GL_UNSIGNED_INT_24_8, data);
+					break;
+				case 3:
+					glTexSubImage2D(m_nativeType, 0, 0, 0, params.resolution.x, params.resolution.y, GL_RGB, GL_UNSIGNED_INT_24_8, data);
+					break;
+				case 1:
+					glTexSubImage2D(m_nativeType, 0, 0, 0, params.resolution.x, params.resolution.y, GL_RED, GL_UNSIGNED_INT_24_8, data);
+				}
+			
+			}
+			else
+			{
+				switch (params.channels)
+				{
+				case 4:
+					glTexImage2D(m_nativeType, 0, GL_RGBA, params.resolution.x, params.resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+					break;
+				case 3:
+					glTexImage2D(m_nativeType, 0, GL_RGB, params.resolution.x, params.resolution.y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+					break;
+				case 1:
+					glTexImage2D(m_nativeType, 0, GL_RED, params.resolution.x, params.resolution.y, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+				}
+			}
+
+			if (params.generateMipMaps)
+			{
+				glGenerateMipmap(m_nativeType);
 			}
 		}
 	};

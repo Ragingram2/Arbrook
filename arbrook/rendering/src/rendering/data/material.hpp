@@ -27,9 +27,13 @@ namespace rythe::rendering
 			else
 				log::warn("[Material] Shader handle is null, cannot bind");
 			if (diffuse != nullptr)
+			{
 				diffuse->bind(TextureSlot::TEXTURE0);
+			}
 			if (specular != nullptr)
+			{
 				specular->bind(TextureSlot::TEXTURE1);
+			}
 		}
 	};
 

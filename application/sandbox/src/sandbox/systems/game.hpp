@@ -29,16 +29,16 @@ namespace rythe::game
 		math::vec3 right;
 		math::vec3 up;
 
-		float speed = 50.0f;
+		float speed = 25.0f;
 
 		float deltaTime = 0.0f;
 		float lastFrame = 0.0f;
 		float currentFrame = 0.0f;
 
-		float sensitivity = 1.1f;
+		float sensitivity = 0.9f;
 
 		float yaw = -90.0f;
-		float pitch = 0.0f;
+		float pitch = 90.0f;
 
 	public:
 		void setup();

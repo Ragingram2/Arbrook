@@ -33,6 +33,10 @@ namespace rythe::rendering
 		void setClearColor(math::vec4 color) { m_impl.setClearColor(color); }
 		void setClearColor(math::vec3 color, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(color, alpha)); }
 		void setClearColor(float r, float g, float b, float alpha = 1.0f) { m_impl.setClearColor(math::vec4(r, g, b, alpha)); }
+		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1) { m_impl.setViewport(numViewPorts, leftX, leftY, width, height, minDepth, maxDepth); }
+
+		void cullFace(bool enable, Face face) { m_impl.cullFace(enable, static_cast<internal::Face>(face)); }
+		void setWindOrder(WindOrder order) { m_impl.setWindOrder(static_cast<internal::WindOrder>(order)); }
 
 		void depthTest(bool enable) { m_impl.depthTest(enable); }
 		void depthWrite(bool enable) { m_impl.depthWrite(enable); }
@@ -43,7 +47,6 @@ namespace rythe::rendering
 		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask) { m_impl.setStencilFunction(static_cast<internal::Face>(face), static_cast<internal::DepthFuncs>(func), ref, mask); }
 		void updateDepthStencil() { m_impl.updateDepthStencil(); }
 
-		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1) { m_impl.setViewport(numViewPorts, leftX, leftY, width, height, minDepth, maxDepth); }
 		//void setScissorTest();
 		//void setBlend(bool blend);
 		//void setBlendParam()

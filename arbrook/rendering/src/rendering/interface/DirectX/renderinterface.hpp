@@ -36,7 +36,6 @@ namespace rythe::rendering::internal
 		D3D11_DEPTH_STENCIL_VIEW_DESC m_depthStencilViewDesc;
 		float m_colorData[4];
 		window_handle m_windowHandle;
-		bool m_usingBgfx = false;
 	public:
 
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
@@ -96,7 +95,7 @@ namespace rythe::rendering::internal
 			m_depthTexDesc.Height = res.y;
 			m_depthTexDesc.MipLevels = 1;
 			m_depthTexDesc.ArraySize = 1;
-			m_depthTexDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+			m_depthTexDesc.Format = static_cast<DXGI_FORMAT>(FormatType::D24_S8);
 			m_depthTexDesc.SampleDesc.Count = m_swapChainDesc.SampleDesc.Count;
 			m_depthTexDesc.SampleDesc.Quality = m_swapChainDesc.SampleDesc.Quality;
 			m_depthTexDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -138,8 +137,7 @@ namespace rythe::rendering::internal
 			m_rasterizerDesc.SlopeScaledDepthBias = 0.0f;
 
 			// Create the rasterizer state object.
-			hr = m_windowHandle->dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState);
-			CHECKERROR(hr, "Creating rasterizer state failed", checkError());
+			CHECKERROR(m_windowHandle->dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState), "Creating rasterizer state failed", checkError());
 
 			m_windowHandle->devcon->RSSetState(m_rasterizerState);
 
@@ -168,8 +166,7 @@ namespace rythe::rendering::internal
 
 		void makeCurrent()
 		{
-			if (!m_usingBgfx)
-				m_windowHandle->makeCurrent();
+			m_windowHandle->makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
@@ -194,8 +191,7 @@ namespace rythe::rendering::internal
 
 		void swapBuffers()
 		{
-			if (!m_usingBgfx)
-				m_windowHandle->swapchain->Present(0, 0);
+			m_windowHandle->swapchain->Present(0, 0);
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
@@ -224,13 +220,10 @@ namespace rythe::rendering::internal
 
 		void clear(internal::ClearBit flags)
 		{
-			if (!m_usingBgfx)
-			{
-				if (flags == internal::ClearBit::COLOR_DEPTH_STENCIL || flags == internal::ClearBit::DEPTH_STENCIL || flags == internal::ClearBit::DEPTH || flags == internal::ClearBit::STENCIL)
-					m_windowHandle->devcon->ClearDepthStencilView(m_windowHandle->depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
-				if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
-					m_windowHandle->devcon->ClearRenderTargetView(m_windowHandle->backbuffer, m_colorData);
-			}
+			if (flags == internal::ClearBit::COLOR_DEPTH_STENCIL || flags == internal::ClearBit::DEPTH_STENCIL || flags == internal::ClearBit::DEPTH || flags == internal::ClearBit::STENCIL)
+				m_windowHandle->devcon->ClearDepthStencilView(m_windowHandle->depthStencilView, static_cast<D3D11_CLEAR_FLAG>(flags), 1.f, 0);
+			if (flags == internal::ClearBit::COLOR || flags == internal::ClearBit::COLOR_DEPTH || flags == internal::ClearBit::COLOR_DEPTH_STENCIL)
+				m_windowHandle->devcon->ClearRenderTargetView(m_windowHandle->backbuffer, m_colorData);
 		}
 
 		void setClearColor(math::vec4 color)
@@ -243,26 +236,44 @@ namespace rythe::rendering::internal
 
 		void setViewport(float numViewPorts, float leftX, float leftY, float width, float height, float minDepth, float maxDepth)
 		{
-			if (!m_usingBgfx)
+			if (width == 0 && height == 0)
 			{
-				if (width == 0 && height == 0)
-				{
-					width = m_windowHandle->m_resolution.x;
-					height = m_windowHandle->m_resolution.y;
-				}
-
-				ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
-
-				m_viewport.TopLeftX = leftX;
-				m_viewport.TopLeftY = leftY;
-				m_viewport.Width = width;
-				m_viewport.Height = height;
-				m_viewport.MinDepth = minDepth;
-				m_viewport.MaxDepth = maxDepth;
-
-				m_windowHandle->devcon->RSSetViewports(numViewPorts, &m_viewport);
+				width = m_windowHandle->m_resolution.x;
+				height = m_windowHandle->m_resolution.y;
 			}
 
+			ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
+
+			m_viewport.TopLeftX = leftX;
+			m_viewport.TopLeftY = leftY;
+			m_viewport.Width = width;
+			m_viewport.Height = height;
+			m_viewport.MinDepth = minDepth;
+			m_viewport.MaxDepth = maxDepth;
+
+			m_windowHandle->devcon->RSSetViewports(numViewPorts, &m_viewport);
+		}
+
+		void cullFace(bool enable, Face face = Face::NONE)
+		{
+			if (enable)
+				m_rasterizerDesc.CullMode = static_cast<D3D11_CULL_MODE>(face);
+			else
+				m_rasterizerDesc.CullMode = static_cast<D3D11_CULL_MODE>(Face::NONE);
+
+			// Create the rasterizer state object.
+			CHECKERROR(m_windowHandle->dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState), "Creating rasterizer state failed", checkError());
+
+			m_windowHandle->devcon->RSSetState(m_rasterizerState);
+		}
+
+		void setWindOrder(WindOrder order)
+		{
+			m_rasterizerDesc.FrontCounterClockwise = (order == WindOrder::CCW);
+
+			CHECKERROR(m_windowHandle->dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState), "Creating rasterizer state failed", checkError());
+
+			m_windowHandle->devcon->RSSetState(m_rasterizerState);
 		}
 
 		void depthTest(bool enable)
@@ -321,6 +332,8 @@ namespace rythe::rendering::internal
 				m_depthStencilDesc.BackFace.StencilDepthFailOp = static_cast<D3D11_STENCIL_OP>(zfail);
 				m_depthStencilDesc.BackFace.StencilPassOp = static_cast<D3D11_STENCIL_OP>(zpass);
 				break;
+			default:
+				break;
 			}
 		}
 
@@ -346,22 +359,14 @@ namespace rythe::rendering::internal
 
 		void updateDepthStencil()
 		{
-			HRESULT hr = m_windowHandle->dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
-			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
+			CHECKERROR(m_windowHandle->dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState), "Creating the depth stencil state failed", checkError());
 
 			m_windowHandle->devcon->OMSetDepthStencilState(m_depthStencilState, 1);
 		}
 
-		//createVAO();
-
 		void checkError()
 		{
 			m_windowHandle->checkError();
-		}
-
-		void BGFXMode(bool enabled)
-		{
-			m_usingBgfx = enabled;
 		}
 	};
 }

@@ -25,11 +25,10 @@ namespace rythe::rendering
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
 			cam.calculate_projection();
-			cameraBuffer = BufferCache::createConstantBuffer<camera_data>("CameraBuffer", SV_CAMERA, UsageType::STATICDRAW);
-			materialBuffer = BufferCache::createConstantBuffer<material_data>("MaterialBuffer", SV_MATERIALS, UsageType::STATICDRAW);
+			cameraBuffer = BufferCache::getBuffer("CameraBuffer");
+			materialBuffer = BufferCache::getBuffer("MaterialBuffer");
 			lightBuffer = BufferCache::getBuffer("LightBuffer");
 
-			RI->depthTest(true);
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
@@ -95,6 +94,7 @@ namespace rythe::rendering
 					RI->drawArrays(PrimitiveType::TRIANGLESLIST, 0, mesh->vertices.size());
 			}
 			m_onRender(camTransf, cam);
+
 			RI->checkError();
 		}
 

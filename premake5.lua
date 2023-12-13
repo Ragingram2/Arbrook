@@ -18,7 +18,9 @@ function createProject(groupName,projectName,kindName)
         cppdialect "C++20"
         buildoptions {
             "-Wno-nonportable-include-path",
-            "-Wno-reorder-init-list"
+            "-Wno-reorder-init-list",
+            "-Wno-reorder-ctor",
+            "-Wno-c99-designator"
         }
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}

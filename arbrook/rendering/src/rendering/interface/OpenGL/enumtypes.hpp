@@ -51,11 +51,13 @@ namespace rythe::rendering::internal
 
 	enum class FormatType
 	{
-		RG32F = GL_RG32F,
-		RGB32F = GL_RGB32F,
+		D24_S8 = GL_DEPTH24_STENCIL8,
 		RGBA32F = GL_RGBA32F,
-		R32U = GL_R32UI,
-		RGBA8UN = GL_RGBA8_SNORM
+		RGB32F = GL_RGB32F,
+		RG32F = GL_RG32F,
+		R32F = GL_R32F,
+		RGBA8UN = GL_RGBA8_SNORM,
+		R32U = GL_R32UI
 	};
 
 	enum class WrapMode
@@ -114,7 +116,14 @@ namespace rythe::rendering::internal
 	{
 		FRONT = GL_FRONT,
 		BACK = GL_BACK,
-		FRONT_BACK = GL_FRONT_AND_BACK
+		FRONT_BACK = GL_FRONT_AND_BACK,
+		NONE = 0
+	};
+
+	enum class WindOrder
+	{
+		CW = GL_CW,
+		CCW = GL_CCW
 	};
 
 	enum class InputClass

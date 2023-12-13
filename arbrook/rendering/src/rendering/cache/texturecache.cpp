@@ -26,6 +26,7 @@ namespace rythe::rendering
 		{
 			return m_textures[name].get();
 		}
+		log::warn("Texture {} does not exist", name);
 		return texture_handle{ nullptr };
 	}
 
@@ -34,7 +35,7 @@ namespace rythe::rendering
 		for (auto& p : fs::directory_iterator(directory))
 		{
 			if (!p.path().has_extension()) continue;
-			if (p.path().extension() != ".png") continue;
+			if (p.path().extension() != ".png" && p.path().extension() != ".jpg") continue;
 
 			auto fileName = p.path().stem().string();
 			auto path = p.path().string();

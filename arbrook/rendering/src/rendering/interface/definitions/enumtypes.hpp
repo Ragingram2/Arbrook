@@ -51,11 +51,14 @@ namespace rythe::rendering
 
 	enum class FormatType
 	{
-		RG32F = static_cast<int>(internal::FormatType::RG32F),
-		RGB32F = static_cast<int>(internal::FormatType::RGB32F),
+		D24_S8 = static_cast<int>(internal::FormatType::D24_S8),
+		DEPTH_STENCIL = static_cast<int>(internal::FormatType::D24_S8),
 		RGBA32F = static_cast<int>(internal::FormatType::RGBA32F),
+		RGB32F = static_cast<int>(internal::FormatType::RGB32F),
+		RG32F = static_cast<int>(internal::FormatType::RG32F),
+		R32F = static_cast<int>(internal::FormatType::R32F),
+		RGBA8UN = static_cast<int>(internal::FormatType::RGBA8UN),
 		R32U = static_cast<int>(internal::FormatType::R32U),
-		RGBA8UN = static_cast<int>(internal::FormatType::RGBA8UN)
 	};
 
 	enum class WrapMode
@@ -113,7 +116,14 @@ namespace rythe::rendering
 	{
 		FRONT = static_cast<int>(internal::Face::FRONT),
 		BACK = static_cast<int>(internal::Face::BACK),
-		FRONT_BACK = static_cast<int>(internal::Face::FRONT_BACK)
+		FRONT_BACK = static_cast<int>(internal::Face::FRONT_BACK),
+		NONE = static_cast<int>(internal::Face::NONE)
+	};
+
+	enum class WindOrder
+	{
+		CW = static_cast<int>(internal::WindOrder::CW),
+		CCW = static_cast<int>(internal::WindOrder::CCW)
 	};
 
 	enum class InputClass

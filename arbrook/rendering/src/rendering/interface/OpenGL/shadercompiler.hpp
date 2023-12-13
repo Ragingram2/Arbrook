@@ -191,8 +191,8 @@ namespace rythe::rendering::internal
 				if (logger.getAllMessages().length() > 0)
 					log::debug("[{}] SpirV Conversion output log: {}", file, logger.getAllMessages());
 
-				if (!glslang::OutputSpvBin(spirVBin, fileName.c_str()))
-					log::error("[{}] Output to SpirV bin failed", file);
+				//if (!glslang::OutputSpvBin(spirVBin, fileName.c_str()))
+				//	log::error("[{}] Output to SpirV bin failed", file);
 			}
 
 			glslang::FinalizeProcess();

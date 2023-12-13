@@ -1,3 +1,6 @@
+#define EPSILON 0.0001
+#define PI 3.141592653589793
+#define ONE_OVER_PI 0.318309886183790
 #define IDENTITY_MATRIX float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
 
 float4x4 inverse(float4x4 m) {

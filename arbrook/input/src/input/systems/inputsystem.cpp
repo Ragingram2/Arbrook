@@ -57,10 +57,6 @@ namespace rythe::input
 			axisEvnt.m_values.emplace("Left/Right", map->GetFloat(inputmap::method::D) - map->GetFloat(inputmap::method::A));
 			axisEvnt.m_values.emplace("Forward/Backward", map->GetFloat(inputmap::method::W) - map->GetFloat(inputmap::method::S));
 			axisEvnt.m_values.emplace("Up/Down", map->GetFloat(inputmap::method::E) - map->GetFloat(inputmap::method::Q));
-			//for (auto& [name, value] : axisEvnt.m_values)
-			//{
-			//	log::debug("Value:{}",value);
-			//}
 			EventBus::raiseEvent<moveInput>(axisEvnt);
 		}
 

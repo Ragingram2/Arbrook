@@ -14,11 +14,33 @@ namespace rythe::rendering::internal
 {
 	namespace log = rsl::log;
 	namespace math = rsl::math;
+
+	struct DepthStencilInfo
+	{
+		bool DepthTest = false;
+		bool DepthWrite = false;
+		int DepthWriteMask = 0;
+		DepthFuncs DepthFunc = DepthFuncs::LESS;
+
+		struct StencilInfo
+		{
+			StencilOp StencilOpFail = StencilOp::KEEP;
+			StencilOp StencilOpDepthFail = StencilOp::KEEP;
+			StencilOp StencilOpPass = StencilOp::KEEP;
+			DepthFuncs StencilFunc = DepthFuncs::NEVER;
+		};
+		bool StencilTest = false;
+		int StencilWriteMask = 0;
+		int StencilReadMask = 0;
+		int ref = 0;
+		std::unordered_map<Face, StencilInfo> stencils = { {Face::FRONT,StencilInfo()},{Face::BACK,StencilInfo()} };
+	};
+
 	class RenderInterface
 	{
 	private:
+		DepthStencilInfo m_depthStencilInfo;
 		window_handle m_windowHandle;
-		bool m_usingBgfx = false;
 	public:
 
 		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr)
@@ -52,9 +74,6 @@ namespace rythe::rendering::internal
 			else if (GLEW_ARB_debug_output)
 				glDebugMessageCallbackARB(&RenderInterface::debugCallbackARB, nullptr);
 #endif
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_BACK);
-			glFrontFace(GL_CCW);
 		}
 
 		void close()
@@ -74,8 +93,8 @@ namespace rythe::rendering::internal
 
 		void makeCurrent()
 		{
-			if (!m_usingBgfx)
-				m_windowHandle->makeCurrent();
+
+			m_windowHandle->makeCurrent();
 		}
 
 		void setSwapInterval(int interval)
@@ -100,8 +119,7 @@ namespace rythe::rendering::internal
 
 		void swapBuffers()
 		{
-			if (!m_usingBgfx)
-				glfwSwapBuffers(m_windowHandle->getGlfwWindow());
+			glfwSwapBuffers(m_windowHandle->getGlfwWindow());
 		}
 
 		void drawArrays(PrimitiveType mode, unsigned int startVertex, unsigned int vertexCount)
@@ -126,8 +144,7 @@ namespace rythe::rendering::internal
 
 		void clear(internal::ClearBit flags)
 		{
-			if (!m_usingBgfx)
-				glClear(static_cast<int>(flags));
+			glClear(static_cast<int>(flags));
 		}
 
 		void setClearColor(math::vec4 color)
@@ -137,74 +154,97 @@ namespace rythe::rendering::internal
 
 		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = 0, float maxDepth = 1)
 		{
-			if (!m_usingBgfx)
-			{
-				if (width <= 0)
-					width = m_windowHandle->getResolution().x;
+			if (width <= 0)
+				width = m_windowHandle->getResolution().x;
 
-				if (height <= 0)
-					height = m_windowHandle->getResolution().y;
+			if (height <= 0)
+				height = m_windowHandle->getResolution().y;
 
-				glViewport(leftX, leftY, width, height);
-				glDepthRange(minDepth, maxDepth);
-			}
+			glViewport(leftX, leftY, width, height);
+			glDepthRange(minDepth, maxDepth);
+		}
+
+		void cullFace(bool enable, Face face = Face::NONE)
+		{
+			if (enable)
+				glEnable(GL_CULL_FACE);
+			else
+				glDisable(GL_CULL_FACE);
+
+			glCullFace(static_cast<GLenum>(face));
+		}
+
+		void setWindOrder(WindOrder order)
+		{
+			glFrontFace(static_cast<GLenum>(order));
 		}
 
 		void depthTest(bool enable)
 		{
-			if (enable)
-				glEnable(GL_DEPTH_TEST);
-			else
-				glDisable(GL_DEPTH_TEST);
+			m_depthStencilInfo.DepthTest = enable;
 		}
 
 		void depthWrite(bool enable)
 		{
-			glDepthMask(enable);
+			m_depthStencilInfo.DepthWrite = enable;
 		}
 
 		void setStencilMask(int mask)
 		{
-			glStencilMask(mask);
+			m_depthStencilInfo.StencilWriteMask = mask;
 		}
 
 		void setDepthFunction(DepthFuncs function)
 		{
-			glDepthFunc(static_cast<GLenum>(function));
+			m_depthStencilInfo.DepthFunc = function;
 		}
 
 		void stencilTest(bool enable)
 		{
-			if (enable)
-				glEnable(GL_STENCIL_TEST);
-			else
-				glDisable(GL_STENCIL_TEST);
+			m_depthStencilInfo.StencilTest = enable;
 		}
 
 		void setStencilOp(Face face, StencilOp fail, StencilOp  zfail, StencilOp  zpass)
 		{
-			glStencilOpSeparate(static_cast<GLenum>(face), static_cast<GLenum>(fail), static_cast<GLenum>(zfail), static_cast<GLenum>(zpass));
+			auto& stencilInfo = m_depthStencilInfo.stencils[face];
+			stencilInfo.StencilOpFail = fail;
+			stencilInfo.StencilOpDepthFail = zfail;
+			stencilInfo.StencilOpPass = zpass;
 		}
 
 		void setStencilFunction(Face face, DepthFuncs func, unsigned int ref, unsigned int mask)
 		{
-			//The function definition is wrong here
-			glStencilFuncSeparate(static_cast<GLenum>(face), static_cast<GLenum>(func), ref, mask);
+			m_depthStencilInfo.StencilReadMask = mask;
+			m_depthStencilInfo.ref = ref;
+			m_depthStencilInfo.stencils[face].StencilFunc = func;
 		}
 
 		void updateDepthStencil()
 		{
+			if (m_depthStencilInfo.DepthTest)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
 
+			glDepthMask(m_depthStencilInfo.DepthWrite);
+			glStencilMask(m_depthStencilInfo.StencilWriteMask);
+			glDepthFunc(static_cast<GLenum>(m_depthStencilInfo.DepthFunc));
+
+			if (m_depthStencilInfo.StencilTest)
+				glEnable(GL_STENCIL_TEST);
+			else
+				glDisable(GL_STENCIL_TEST);
+
+			for (auto& [face, stencil] : m_depthStencilInfo.stencils)
+			{
+				glStencilOpSeparate(static_cast<GLenum>(face), static_cast<GLenum>(stencil.StencilOpFail), static_cast<GLenum>(stencil.StencilOpDepthFail), static_cast<GLenum>(stencil.StencilOpPass));
+				glStencilFuncSeparate(static_cast<GLenum>(face), static_cast<GLenum>(stencil.StencilFunc), m_depthStencilInfo.ref, m_depthStencilInfo.StencilReadMask);
+			}
 		}
 
 		void checkError()
 		{
 			m_windowHandle->checkError();
-		}
-
-		void BGFXMode(bool enabled)
-		{
-			m_usingBgfx = enabled;
 		}
 
 	private:

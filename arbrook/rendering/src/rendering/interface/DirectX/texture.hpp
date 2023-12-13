@@ -37,12 +37,12 @@ namespace rythe::rendering::internal
 			params = other->params;
 		}
 
-		void initialize(TargetType texType, texture_parameters params, bool generateMipMaps = false)
+		void initialize(TargetType texType, texture_parameters _params, bool generateMipMaps = false)
 		{
 			m_windowHandle = WindowProvider::get(0);
 			m_texType = texType;
 			//m_usage = usage;
-			this->params = params;
+			params = _params;
 		}
 
 		void bind(TextureSlot slot)
@@ -76,7 +76,9 @@ namespace rythe::rendering::internal
 			}
 
 			ZeroMemory(&m_texDesc, sizeof(m_texDesc));
+			log::debug("Texture Width: {}", params.resolution.x);
 			m_texDesc.Width = params.resolution.x;
+			log::debug("Texture Height: {}",params.resolution.y);
 			m_texDesc.Height = params.resolution.y;
 			m_texDesc.MipLevels = params.mipLevels;
 			m_texDesc.ArraySize = 1;
@@ -89,13 +91,9 @@ namespace rythe::rendering::internal
 			D3D11_SUBRESOURCE_DATA subData;
 			subData.pSysMem = data;
 			subData.SysMemPitch = m_texDesc.Width * 4;
+			subData.SysMemSlicePitch = m_texDesc.Width* m_texDesc.Height * 4;
 
-			hr = m_windowHandle->dev->CreateTexture2D(&m_texDesc, &subData, &m_texture);
-			if (FAILED(hr))
-			{
-				log::error("Texture creation failed");
-				m_windowHandle->checkError();
-			}
+			CHECKERROR(m_windowHandle->dev->CreateTexture2D(&m_texDesc, &subData, &m_texture),"Texture creation Failed",m_windowHandle->checkError());
 
 			hr = m_windowHandle->dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource);
 			if (FAILED(hr))
