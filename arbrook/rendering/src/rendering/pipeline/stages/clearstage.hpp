@@ -22,7 +22,7 @@ namespace rythe::rendering
 			RI->clear(ClearBit::COLOR_DEPTH);
 			RI->depthTest(true);
 			RI->updateDepthStencil();
-			RI->cullFace(true, Face::BACK);
+			RI->cullFace(CullMode::BACK);
 		}
 
 		virtual rsl::priority_type priority() override { return CLEAR_PRIORITY; }

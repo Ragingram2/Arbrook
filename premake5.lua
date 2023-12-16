@@ -20,7 +20,8 @@ function createProject(groupName,projectName,kindName)
             "-Wno-nonportable-include-path",
             "-Wno-reorder-init-list",
             "-Wno-reorder-ctor",
-            "-Wno-c99-designator"
+            "-Wno-c99-designator",
+            "-Wno-microsoft-exception-spec"
         }
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}

@@ -108,10 +108,11 @@ namespace rythe::rendering::internal
 
 			ZeroMemory(&m_depthStencilDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 
-			hr = m_windowHandle->dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
-			CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
-
-			m_windowHandle->devcon->OMSetDepthStencilState(m_depthStencilState, 1);
+			setDepthFunction(DepthFuncs::LESS);
+			updateDepthStencil();
+			//hr = m_windowHandle->dev->CreateDepthStencilState(&m_depthStencilDesc, &m_depthStencilState);
+			//CHECKERROR(hr, "Creating the depth stencil state failed", checkError());
+			//m_windowHandle->devcon->OMSetDepthStencilState(m_depthStencilState, 1);
 
 			ZeroMemory(&m_depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
 
@@ -254,12 +255,9 @@ namespace rythe::rendering::internal
 			m_windowHandle->devcon->RSSetViewports(numViewPorts, &m_viewport);
 		}
 
-		void cullFace(bool enable, Face face = Face::NONE)
+		void cullFace(CullMode mode = CullMode::NONE)
 		{
-			if (enable)
-				m_rasterizerDesc.CullMode = static_cast<D3D11_CULL_MODE>(face);
-			else
-				m_rasterizerDesc.CullMode = static_cast<D3D11_CULL_MODE>(Face::NONE);
+			m_rasterizerDesc.CullMode = static_cast<D3D11_CULL_MODE>(mode);
 
 			// Create the rasterizer state object.
 			CHECKERROR(m_windowHandle->dev->CreateRasterizerState(&m_rasterizerDesc, &m_rasterizerState), "Creating rasterizer state failed", checkError());
@@ -354,6 +352,8 @@ namespace rythe::rendering::internal
 				m_depthStencilDesc.FrontFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
 				m_depthStencilDesc.BackFace.StencilFunc = static_cast<D3D11_COMPARISON_FUNC>(func);
 				break;
+			default:
+					break;
 			}
 		}
 

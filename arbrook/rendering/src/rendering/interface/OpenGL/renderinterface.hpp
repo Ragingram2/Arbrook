@@ -164,14 +164,23 @@ namespace rythe::rendering::internal
 			glDepthRange(minDepth, maxDepth);
 		}
 
-		void cullFace(bool enable, Face face = Face::NONE)
+		void cullFace(CullMode mode = CullMode::NONE)
 		{
-			if (enable)
+			switch (mode)
+			{
+			case CullMode::FRONT:
 				glEnable(GL_CULL_FACE);
-			else
+				glCullFace(GL_FRONT);
+				break;
+			case CullMode::BACK:
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
+				break;
+			case CullMode::NONE:
 				glDisable(GL_CULL_FACE);
-
-			glCullFace(static_cast<GLenum>(face));
+			default:
+				break;
+			}
 		}
 
 		void setWindOrder(WindOrder order)

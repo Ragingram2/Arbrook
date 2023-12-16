@@ -57,9 +57,18 @@ namespace rythe::rendering
 		RGB32F = static_cast<int>(internal::FormatType::RGB32F),
 		RG32F = static_cast<int>(internal::FormatType::RG32F),
 		R32F = static_cast<int>(internal::FormatType::R32F),
-		RGBA8UN = static_cast<int>(internal::FormatType::RGBA8UN),
 		R32U = static_cast<int>(internal::FormatType::R32U),
+		RGBA = static_cast<int>(internal::FormatType::RGBA),
+		RGB = static_cast<int>(internal::FormatType::RGB),
+		RG = static_cast<int>(internal::FormatType::RG),
+		R = static_cast<int>(internal::FormatType::R),
+		BGRA = static_cast<int>(internal::FormatType::BGRA)
 	};
+
+	//enum class InternalFormatType
+	//{
+
+	//};
 
 	enum class WrapMode
 	{
@@ -110,6 +119,13 @@ namespace rythe::rendering
 		DECR = static_cast<int>(internal::StencilOp::DECR),
 		DECR_WRAP = static_cast<int>(internal::StencilOp::DECR_WRAP),
 		INVERT = static_cast<int>(internal::StencilOp::INVERT)
+	};
+
+	enum class CullMode
+	{
+		FRONT = static_cast<int>(internal::CullMode::FRONT),
+		BACK = static_cast<int>(internal::CullMode::BACK),
+		NONE = static_cast<int>(internal::CullMode::NONE)
 	};
 
 	enum class Face

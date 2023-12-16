@@ -14,7 +14,11 @@ namespace rythe::game
 
 		gfx::gui_stage::addGuiRender<Game, &Game::guiRender>(this);
 
-		gfx::TextureCache::createTexture2D("skybox", "resources/textures/park.png", gfx::texture_parameters{.immutable = true, .wrapModeS = gfx::WrapMode::CLAMP_TO_BORDER, .wrapModeT = gfx::WrapMode::CLAMP_TO_BORDER, .wrapModeR = gfx::WrapMode::CLAMP_TO_BORDER, .filterMode = gfx::FilterMode::LINEAR,.mipLevels = 1});
+		gfx::TextureCache::createTexture2D("park", "resources/textures/park.png",
+			gfx::texture_parameters
+			{
+				.format = gfx::FormatType::RGB
+			});
 		gfx::ModelCache::loadModels("resources/meshes/glb/");
 		gfx::TextureCache::loadTextures("resources/textures/");
 		gfx::ShaderCache::loadShaders("resources/shaders/");
@@ -35,7 +39,7 @@ namespace rythe::game
 
 		{
 			auto& skyboxRenderer = registry->world.addComponent<gfx::skybox_renderer>();
-			skyboxRenderer.skyboxTex = gfx::TextureCache::getTexture2D("skybox");
+			skyboxRenderer.skyboxTex = gfx::TextureCache::getTexture2D("park");
 		}
 
 		{
@@ -52,7 +56,7 @@ namespace rythe::game
 			ent.addComponent<core::transform>({ .scale = math::vec3(.1f, .1f, .1f), .position = math::vec3(0.0f,1.0f,0.0f) });
 			ent.addComponent<gfx::light>({ .type = gfx::LightType::POINT, .data.color = math::vec4(1.0f,0.0f,0.0f,1.0f), .data.intensity = 1.0f, .data.range = 50.f });
 			ent.addComponent<core::examplecomp>({ .direction = 1, .range = 10.0f, .speed = .02f });
-			ent.addComponent<gfx::mesh_renderer>({.material = mat, .model = gfx::ModelCache::getModel("icosphere")});
+			ent.addComponent<gfx::mesh_renderer>({ .material = mat, .model = gfx::ModelCache::getModel("icosphere") });
 		}
 
 		{

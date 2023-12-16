@@ -56,8 +56,12 @@ namespace rythe::rendering::internal
 		RGB32F = GL_RGB32F,
 		RG32F = GL_RG32F,
 		R32F = GL_R32F,
-		RGBA8UN = GL_RGBA8_SNORM,
-		R32U = GL_R32UI
+		R32U = GL_R32UI,
+		RGBA = GL_RGBA8,
+		RGB = GL_RGB8,
+		RG = GL_RG8,
+		R = GL_R8,
+		BGRA = GL_BGRA
 	};
 
 	enum class WrapMode
@@ -110,6 +114,13 @@ namespace rythe::rendering::internal
 		DECR = GL_DECR,
 		DECR_WRAP = GL_DECR_WRAP,
 		INVERT = GL_INVERT
+	};
+
+	enum class CullMode
+	{
+		FRONT = GL_FRONT,
+		BACK = GL_BACK,
+		NONE = GL_NONE
 	};
 
 	enum class Face

@@ -19,10 +19,12 @@ namespace rythe::rendering::internal
 		ID3D11SamplerState* m_texSamplerState = nullptr;
 		D3D11_SAMPLER_DESC m_sampDesc;
 		D3D11_TEXTURE2D_DESC m_texDesc;
-		TargetType m_texType;
-		//UsageType m_usage;
+		D3D11_BIND_FLAG m_texType;
+		D3D11_USAGE m_usageType;
 		window_handle m_windowHandle;
 	public:
+		int channels;
+		math::ivec2 resolution;
 		unsigned int id;
 		std::string name;
 		unsigned char* data;
@@ -37,12 +39,12 @@ namespace rythe::rendering::internal
 			params = other->params;
 		}
 
-		void initialize(TargetType texType, texture_parameters _params, bool generateMipMaps = false)
+		void initialize(TargetType texType, texture_parameters _params)
 		{
 			m_windowHandle = WindowProvider::get(0);
-			m_texType = texType;
-			//m_usage = usage;
 			params = _params;
+			m_texType = static_cast<D3D11_BIND_FLAG>(texType);
+			m_usageType = static_cast<D3D11_USAGE>(_params.usage);
 		}
 
 		void bind(TextureSlot slot)
@@ -58,49 +60,34 @@ namespace rythe::rendering::internal
 			m_sampDesc.AddressU = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeS);
 			m_sampDesc.AddressV = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);
 			m_sampDesc.AddressW = static_cast<D3D11_TEXTURE_ADDRESS_MODE>(params.wrapModeT);
-			//m_sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 			m_sampDesc.MinLOD = 0;
 			m_sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-			HRESULT hr = m_windowHandle->dev->CreateSamplerState(&m_sampDesc, &m_texSamplerState);
-			if (FAILED(hr))
-			{
-				log::error("Texture sampler failed creation");
-			}
+			CHECKERROR(m_windowHandle->dev->CreateSamplerState(&m_sampDesc, &m_texSamplerState),"Texture sampler failed creation", m_windowHandle->checkError());
 
 			stbi_set_flip_vertically_on_load(flipVertical);
-			data = stbi_load(filepath.c_str(), &params.resolution.x, &params.resolution.y, &params.channels, 0);
+			data = stbi_load(filepath.c_str(), &resolution.x, &resolution.y, &channels, 0);
 			if (!data)
-			{
 				log::error("Image failed to load");
-			}
+
 
 			ZeroMemory(&m_texDesc, sizeof(m_texDesc));
-			log::debug("Texture Width: {}", params.resolution.x);
-			m_texDesc.Width = params.resolution.x;
-			log::debug("Texture Height: {}",params.resolution.y);
-			m_texDesc.Height = params.resolution.y;
+			m_texDesc.Width = resolution.x;
+			m_texDesc.Height = resolution.y;
 			m_texDesc.MipLevels = params.mipLevels;
 			m_texDesc.ArraySize = 1;
 			m_texDesc.Format = static_cast<DXGI_FORMAT>(params.format);
 			m_texDesc.SampleDesc.Count = 1;
 			m_texDesc.SampleDesc.Quality = 0;
-			m_texDesc.Usage = D3D11_USAGE_DEFAULT;//static_cast<D3D11_USAGE>(m_usage);
-			m_texDesc.BindFlags = static_cast<unsigned int>(m_texType);
+			m_texDesc.Usage = m_usageType;
+			m_texDesc.BindFlags = m_texType;
 
 			D3D11_SUBRESOURCE_DATA subData;
 			subData.pSysMem = data;
-			subData.SysMemPitch = m_texDesc.Width * 4;
-			subData.SysMemSlicePitch = m_texDesc.Width* m_texDesc.Height * 4;
+			subData.SysMemPitch = m_texDesc.Width * channels;
 
-			CHECKERROR(m_windowHandle->dev->CreateTexture2D(&m_texDesc, &subData, &m_texture),"Texture creation Failed",m_windowHandle->checkError());
-
-			hr = m_windowHandle->dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource);
-			if (FAILED(hr))
-			{
-				log::error("Failed to create the ShaderResourceView");
-				m_windowHandle->checkError();
-			}
+			CHECKERROR(m_windowHandle->dev->CreateTexture2D(&m_texDesc, &subData, &m_texture), "Texture creation Failed", m_windowHandle->checkError());
+			CHECKERROR(m_windowHandle->dev->CreateShaderResourceView(m_texture, nullptr, &m_shaderResource),"Failed to create the ShaderResourceView", m_windowHandle->checkError());
 		}
 	};
 }

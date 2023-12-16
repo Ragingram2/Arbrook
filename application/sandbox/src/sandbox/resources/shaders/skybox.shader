@@ -20,7 +20,7 @@ namespace vertex
     {
         VOut output;
         output.p_fragPos = input.position.xyz;
-        output.p_position = mul(mul(u_projection, u_view), float4((u_viewPosition + input.position).rgb,1.0)).xyww;
+        output.p_position = mul(mul(u_projection, u_view), float4((u_viewPosition + input.position).rgb, 1.0)).xyww;
         output.p_texCoords = input.texCoords;
 
         return output;
@@ -41,7 +41,6 @@ namespace fragment
 
     float4 main(PIn input) : SV_TARGET
     {
-        //return Texture0.Sample(TexSampler0, normalize(input.p_position));
-        return pow(SampleSkyboxLod(Texture0, TexSampler0, normalize(input.p_fragPos), 0), float4(2.2,2.2,2.2,1.0))* 1.5;
+        return SampleSkybox(Texture0, TexSampler0, normalize(input.p_fragPos));
     }
 }//end

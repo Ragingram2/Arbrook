@@ -17,7 +17,7 @@ namespace rythe::rendering
 		{
 			cam.calculate_projection();
 			skyboxMat = MaterialCache::loadMaterialFromFile("skybox", "resources/shaders/skybox.shader");
-			cubeHandle = ModelCache::getModel("sphere");
+			cubeHandle = ModelCache::getModel("cube");
 			cameraBuffer = BufferCache::getBuffer("CameraBuffer");
 			cubeHandle->initialize(skyboxMat->shader, cubeHandle->meshHandle, false);
 			for (auto& ent : m_filter)
@@ -28,6 +28,8 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			if (m_filter.size() < 1)
+				return;
 
 			cam.calculate_view(&camTransf);
 			camera_data mat = { camTransf.position, cam.projection, cam.view, math::mat4(1.0f) };
@@ -36,7 +38,7 @@ namespace rythe::rendering
 			RI->depthWrite(true);
 			RI->setDepthFunction(DepthFuncs::LESS_EQUAL);
 			RI->updateDepthStencil();
-			RI->cullFace(true, Face::FRONT);
+			RI->cullFace(CullMode::FRONT);
 			cameraBuffer->bufferData(&mat, 1);
 			skyboxMat->bind();
 			cubeHandle->bind();
@@ -48,7 +50,7 @@ namespace rythe::rendering
 
 			RI->setDepthFunction(DepthFuncs::LESS);
 			RI->updateDepthStencil();
-			RI->cullFace(true, Face::BACK);
+			RI->cullFace(CullMode::BACK);
 		}
 
 		virtual rsl::priority_type priority() override { return SKYBOX_PRIORITY; }

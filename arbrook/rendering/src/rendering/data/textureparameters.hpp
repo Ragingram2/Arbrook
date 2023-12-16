@@ -8,19 +8,25 @@ namespace rythe::rendering
 {
 	struct texture_parameters
 	{
-		int channels;
-		math::ivec2 resolution;
-
+	public:
 		WrapMode wrapModeS = WrapMode::REPEAT;
 		WrapMode wrapModeT = WrapMode::REPEAT;
 		WrapMode wrapModeR = WrapMode::REPEAT;
 		FilterMode filterMode = FilterMode::LINEAR;
-		FormatType format = FormatType::RGBA8UN;
+		FormatType format = FormatType::RGB;
+		UsageType usage = UsageType::DEFAULT;
 		int mipLevels = 1;
-		bool immutable = true;
 		bool generateMipMaps = false;
+	};
 
-		/*texture_parameters() = default;
-		texture_parameters(WrapMode wrapModeS, WrapMode wrapModeT, FilterMode filterMode, FormatType format, int mipLevels = 0) : wrapModeS(wrapModeS), wrapModeT(wrapModeT), filterMode(filterMode), format(format), mipLevels(mipLevels) { }*/
+	constexpr texture_parameters default_params{
+		.wrapModeS = WrapMode::REPEAT,
+		.wrapModeT = WrapMode::REPEAT,
+		.wrapModeR = WrapMode::REPEAT,
+		.filterMode = FilterMode::LINEAR,
+		.format = FormatType::RGBA,
+		.usage = UsageType::IMMUTABLE,
+		.mipLevels = 1,
+		.generateMipMaps = false
 	};
 }
