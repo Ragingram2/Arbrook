@@ -25,6 +25,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			ZoneScopedN("[Renderer] Light Stage");
 			for (auto& ent : m_filter)
 			{
 				auto& transf = ent.getComponent<core::transform>();

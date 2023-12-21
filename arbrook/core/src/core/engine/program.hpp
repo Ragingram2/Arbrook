@@ -6,6 +6,8 @@
 #include <rsl/primitives>
 #include <rsl/utilities>
 
+#include <tracy/Tracy.hpp>
+
 #include "core/engine/services/service.hpp"
 #include "core/engine/services/serviceregistry.hpp"
 #include "core/events/eventbus.hpp"

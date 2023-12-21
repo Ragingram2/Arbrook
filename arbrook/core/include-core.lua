@@ -9,14 +9,15 @@ includedirs {
     "../../include/*/third_party/",
     "../../include/*/third_party/*/",
     "../../include/*/third_party/*/src/",
-    "../../include/*/third_party/*/include/"
+    "../../include/*/third_party/*/include/",
+    "../../include/*/public/"
 }
 
 dependson { "core", "rsl"}
 filter "configurations:Debug*"
-    links {"core-d", "assimp-d","zlibstatic-d"}
+    links {"core-d", "assimp-d","zlibstatic-d","TracyProfiler-d"}
 
 filter "configurations:Release*"
-    links {"core","assimp","zlibstatic"}
+    links {"core","assimp","zlibstatic","TracyProfiler"}
 
     filter {}

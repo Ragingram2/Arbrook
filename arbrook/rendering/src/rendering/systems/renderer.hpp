@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+
 #include <rsl/logging>
 #include <rsl/math>
 
@@ -47,6 +48,7 @@ namespace rythe::rendering
 
 		void update()
 		{
+			ZoneScopedN("Render Frame");
 			if (RI->shouldWindowClose())
 			{
 				rythe::core::events::exit evnt(0);

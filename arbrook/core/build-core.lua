@@ -8,15 +8,16 @@ includedirs {
     "../../include/*/third_party/",
     "../../include/*/third_party/*/",
     "../../include/*/third_party/*/src/",
-    "../../include/*/third_party/*/include/"
+    "../../include/*/third_party/*/include/",
+    "../../include/*/public/"
 }   
- 
+
 files { 
     "src/core/**.h",
     "src/core/**.hpp",
     "src/core/**.inl",
     "src/core/**.c",
-    "src/core/**.cpp" 
+    "src/core/**.cpp"
 }
 
 

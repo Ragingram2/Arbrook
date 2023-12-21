@@ -1,6 +1,7 @@
 #include "core/engine/program.hpp"
 #include "core/logging/loggingservice.hpp"
 
+
 namespace rythe::core
 {
 	ServiceRegistry* Program::m_registry;

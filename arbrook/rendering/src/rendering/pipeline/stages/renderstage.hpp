@@ -56,6 +56,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			ZoneScopedN("[Renderer] Render Stage");
 			cam.calculate_view(&camTransf);
 			camera_data mat = { camTransf.position, cam.projection, cam.view, math::mat4(1.0f) };
 			for (auto& ent : m_filter)

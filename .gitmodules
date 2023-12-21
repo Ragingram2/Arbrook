@@ -22,3 +22,6 @@
 [submodule "arbrook/rendering/include/imgui"]
 	path = arbrook/rendering/include/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "include/tracy"]
+	path = include/tracy
+	url = https://github.com/wolfpld/tracy.git

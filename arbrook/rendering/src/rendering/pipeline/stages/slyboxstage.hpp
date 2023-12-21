@@ -17,7 +17,7 @@ namespace rythe::rendering
 		{
 			cam.calculate_projection();
 			skyboxMat = MaterialCache::loadMaterialFromFile("skybox", "resources/shaders/skybox.shader");
-			cubeHandle = ModelCache::getModel("cube");
+			cubeHandle = ModelCache::getModel("sphere");
 			cameraBuffer = BufferCache::getBuffer("CameraBuffer");
 			cubeHandle->initialize(skyboxMat->shader, cubeHandle->meshHandle, false);
 			for (auto& ent : m_filter)
@@ -28,6 +28,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			ZoneScopedN("[Renderer] Skybox Stage");
 			if (m_filter.size() < 1)
 				return;
 

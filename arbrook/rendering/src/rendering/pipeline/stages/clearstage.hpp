@@ -19,6 +19,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			ZoneScopedN("[Renderer] Clear Stage");
 			RI->clear(ClearBit::COLOR_DEPTH);
 			RI->depthTest(true);
 			RI->updateDepthStencil();

@@ -26,7 +26,7 @@ function createProject(groupName,projectName,kindName)
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}
         objdir "$(SolutionDir)bin\\obj"
-        defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName}
+        defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName, "TRACY_ENABLE"}
         filter "configurations:Debug*"
             defines {"DEBUG","BX_CONFIG_DEBUG"}
             symbols "On"
@@ -51,6 +51,7 @@ basicIncludes = {
 "include/*/src/",
 "include/*/include/",
 "include/*/lib/include/",
+"include/*/public/",
 "include/*/third_party/",
 "include/*/third_party/*/",
 "include/*/third_party/*/src/",

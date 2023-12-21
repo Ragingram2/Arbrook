@@ -76,6 +76,7 @@ namespace rythe::game
 
 	void Game::update()
 	{
+		ZoneScopedN("Game Update");
 		currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;

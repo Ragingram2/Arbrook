@@ -1,4 +1,7 @@
 #pragma once
+
+#include <tracy/Tracy.hpp>
+
 #include <rsl/primitives>
 #include <rsl/utilities>
 

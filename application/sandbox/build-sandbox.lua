@@ -1,6 +1,8 @@
 createProject("applications","sandbox","ConsoleApp")
 targetdir "$(SolutionDir)bin\\build\\"
-
+defines{
+    "TRACY_IMPORTS"
+}
 includedirs {
     basicIncludes,
     "include/bx/include/compat/msvc/"

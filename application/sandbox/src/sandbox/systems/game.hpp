@@ -1,4 +1,7 @@
 #pragma once
+
+#include <tracy/Tracy.hpp>
+
 #include "core/core.hpp"
 #include "rendering/rendering.hpp"
 #include "input/input.hpp"

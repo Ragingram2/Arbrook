@@ -52,6 +52,7 @@ namespace rythe::rendering
 
 		virtual void render(core::transform camTransf, camera& cam) override
 		{
+			ZoneScopedN("[Renderer] GUI Stage");
 #if RenderingAPI == RenderingAPI_OGL
 			ImGui_ImplOpenGL3_NewFrame();
 #elif RenderingAPI == RenderingAPI_DX11

@@ -1,9 +1,11 @@
 #include <iostream>
+#include <tracy/Tracy.hpp>
 
 #include "core/core.hpp"
 #include "sandbox/modules/testmodule.hpp"
 #include "rendering/modules/rendermodule.hpp"
 #include "input/modules/inputmodule.hpp"
+
 
 using namespace rythe::core;
 
@@ -38,6 +40,7 @@ int main()
 	//Update loop
 	while (Program::Instance().m_running)
 	{
+		FrameMark;
 		Program::Instance().update();
 	}
 
