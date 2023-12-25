@@ -16,3 +16,6 @@
 [submodule "arbrook/physics"]
 	path = arbrook/physics
 	url = https://github.com/Ragingram2/Arbrook-Physics.git
+[submodule "arbrook/graphics"]
+	path = arbrook/graphics
+	url = https://github.com/Ragingram2/Arbrook-Rendering.git
