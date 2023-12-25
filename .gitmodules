@@ -13,3 +13,6 @@
 [submodule "include/tracy"]
 	path = include/tracy
 	url = https://github.com/wolfpld/tracy.git
+[submodule "application/Arbrook-Sandbox"]
+	path = application/Arbrook-Sandbox
+	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
