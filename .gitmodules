@@ -13,3 +13,6 @@
 [submodule "arbrook/input"]
 	path = arbrook/input
 	url = https://github.com/Ragingram2/Arbrook-Input.git
+[submodule "arbrook/graphics"]
+	path = arbrook/graphics
+	url = https://github.com/Ragingram2/Arbrook-Rendering.git
