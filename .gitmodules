@@ -16,3 +16,6 @@
 [submodule "application/Arbrook-Sandbox"]
 	path = application/Arbrook-Sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
+[submodule "arbrook/input"]
+	path = arbrook/input
+	url = https://github.com/Ragingram2/Arbrook-Input.git
