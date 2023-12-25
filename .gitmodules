@@ -4,12 +4,6 @@
 [submodule "include/assimp"]
 	path = include/assimp
 	url = https://github.com/assimp/assimp.git
-[submodule "arbrook/rendering/include/glfw"]
-	path = arbrook/rendering/include/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "arbrook/rendering/include/imgui"]
-	path = arbrook/rendering/include/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "include/tracy"]
 	path = include/tracy
 	url = https://github.com/wolfpld/tracy.git
