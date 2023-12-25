@@ -67,7 +67,7 @@ workspace "arbrook"
 
 include(formatEngineModulePath("core"))
 include(formatEngineModulePath("input"))
-include(formatEngineModulePath("rendering"))
+include(formatEngineModulePath("graphics"))
 include(formatEngineModulePath("physics"))
 include(formatApplicationPath("sandbox"))
 include "include/rythe-standard-library/build-rythe-standard-library.lua"
