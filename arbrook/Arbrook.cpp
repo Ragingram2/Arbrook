@@ -3,7 +3,7 @@
 
 #include "core/core.hpp"
 #include "sandbox/modules/testmodule.hpp"
-#include "rendering/modules/rendermodule.hpp"
+#include "graphics/modules/rendermodule.hpp"
 #include "input/modules/inputmodule.hpp"
 
 
