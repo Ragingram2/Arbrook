@@ -10,6 +10,7 @@
 #include "core/containers/pointer.hpp"
 #include "core/events/events.hpp"
 #include "core/components/components.hpp"
+#include "core/assets/assets.hpp"
 
 
 namespace rythe::rendering

@@ -5,73 +5,144 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <type_traits>
 
 #include <rsl/utilities>
+#include <rsl/hash>
+#include <rsl/logging>
 
+#include "core/assets/importsettings.hpp"
+#include "core/assets/assethandle.hpp"
+#include "core/assets/assetimporter.hpp"
+
+namespace fs = std::filesystem;
 namespace rythe::core::assets
 {
-	//template<typename AssetType>
-	//struct import_settings
-	//{
+	template<typename AssetType>
+	class AssetCache
+	{
+	public:
+		using ImportSettings = import_settings<AssetType>;
+	private:
+		static std::unordered_map<rsl::id_type, std::unique_ptr<AssetImporter<AssetType>>> m_importers;
+		static std::unordered_map<rsl::id_type, std::unique_ptr<AssetType>> m_assets;
+		static std::unordered_map<rsl::id_type, std::string> m_names;
+	public:
 
-	//};
+		template<AssetImporterType<AssetType> Importer>
+		static void registerImporter()
+		{
+			auto id = rsl::typeHash<Importer>();
+			if (m_importers.count(id))
+			{
+				log::warn("The importer you tried to register already exists");
+				return;
+			}
 
-	//template<typename AssetType>
-	//struct asset_handle
-	//{
-	//private:
-	//	rsl::id_type m_id;
-	//	AssetType* m_data;
-	//public:
-	//	constexpr asset_handle(AssetType* p, rsl::id_type id) noexcept : m_data(p), m_id(id) {}
+			m_importers.emplace(id, std::make_unique<Importer>());
+		}
+		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
+		{
+			rsl::id_type id = rsl::nameHash(name);
 
-	//	constexpr bool operator ==(const asset_handle& other) const noexcept { return other.m_id == other.m_id && m_data == other.m_data; }
-	//	constexpr bool operator!=(const asset_handle& other) const noexcept { return !operator=(other); }
+			if (!overrideExisting)
+				if (m_assets.contains(id))
+				{
+					log::warn("Asset \"{}\" already exists, returning existing handle", name);
+					return { id, m_assets[id].get() };
+				}
 
-	//	asset_handle() noexcept = default;
-	//	asset_handle(const asset_handle&) noexcept = default;
-	//	asset_handle(asset_handle&&) noexcept = default;
-	//	asset_handle operator=(const asset_handle&) noexcept = default;
-	//	asset_handle operator=(asset_handle&&) noexcept = default;
-	//	~asset_handle() = default;
+			std::unique_ptr<AssetType> data = std::make_unique<AssetType>();
+			for (auto& [id, importer] : m_importers)
+			{
+				if (importer->canLoad(filePath))
+				{
+					importer->load(id, filePath, data.get(), settings);
+					break;
+				}
+			}
 
-	//public:
-	//	rsl::id_type id() const noexcept;
-	//	const std::string& name() const;
-	//	const std::string& path() const;
-	//	void destroy();
-	//	asset_handle copy(rsl::id_type id, const std::string& name) const;
+			if (!data.get())
+			{
+				log::error("Something whent wrong with loading this asset");
+				return { 0,nullptr };
+			}
 
-	//};
+			m_names.emplace(id, name);
+			return { id, m_assets.emplace(id, std::move(data)).first->second.get() };
+		}
+		template<AssetImporterType<AssetType> Importer>
+		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
+		{
+			rsl::id_type id = rsl::nameHash(name);
+			rsl::id_type importerId = rsl::typeHash<Importer>();
+			if (!overrideExisting)
+				if (m_assets.contains(id))
+				{
+					log::warn("Asset \"{}\" already exists, returning existing handle", name);
+					return { id, m_assets[id].get() };
+				}
 
-	//template<typename AssetType>
-	//constexpr static asset_handle<AssetType> invalid_asset = { nullptr, invalid_id };
+			std::unique_ptr<AssetType> data = std::make_unique<AssetType>();
+			m_importers[importerId]->load(id, filePath, data.get(), settings);
 
-	//template<typename AssetType>
-	//class AssetImporter
-	//{
-	//protected:
-	//	template<typename... Args>
-	//	asset_handle<AssetType> create(rsl::id_type nameHash, Args&&... args) const;
-	//public:
-	//	virtual asset_handle<AssetType> load(rsl::id_type, const std::string& filePath, const import_settings<AssetType>& settings) = 0;
-	//	virtual void free(AssetType& asset) = 0;
-	//	virtual ~AssetImporter() = default;
-	//};
+			if (!data.get())
+			{
+				log::error("Something whent wrong with loading this asset");
+				return { 0, nullptr };
+			}
 
-	//template<typename AssetType>
-	//class AssetCache
-	//{
-	//public:
-	//	using ImportSettings = import_settings<AssetType>;
-	//private:
-	//	static std::unordered_map<rsl::id_type, std::unique_ptr<AssetType>> m_assets;
-	//public:
-	//	static asset_handle<AssetType> createAsset(const std::string& name, const std::string& filePath);
-	//	static asset_handle<AssetType> createAsset(const std::string& name, const std::string& filePath, ImportSettings settings);
-	//	static asset_handle<AssetType> getAsset(const::string& name);
-	//	static void deleteAsset(const std::string& name);
-	//	static void deleteAsset(asset_handle<AssetType> handle);
-	//	static void loadAssets(const std::string& directory);
-	//};
+			m_names.emplace(id, name);
+			return { id, m_assets.emplace(id, std::move(data)).first->second.get() };
+		}
+		static void loadAssets(const std::string& directory, ImportSettings settings)
+		{
+			for (auto& d_entry : fs::directory_iterator(directory))
+			{
+				auto fileName = d_entry.path().stem().string();
+				auto path = d_entry.path().string();
+
+				log::info("Loading asset {} at \"{}\"", fileName, path);
+				createAsset(fileName, path, settings);
+			}
+		}
+		static asset_handle<AssetType> getAsset(const std::string& name)
+		{
+			return getAsset(rsl::nameHash(name));
+		}
+		static asset_handle<AssetType> getAsset(rsl::id_type nameHash)
+		{
+			if (m_assets.count(nameHash))
+			{
+				return { nameHash, m_assets[nameHash].get() };
+			}
+
+			return { 0, nullptr };
+		}
+		static std::vector<asset_handle<AssetType>> getAssets()
+		{
+			std::vector<asset_handle<AssetType>> assets;
+			for (auto& [id, data] : m_assets)
+			{
+				assets.emplace_back(id, *data.get());
+			}
+			return assets;
+		}
+		static void deleteAsset(asset_handle<AssetType> handle)
+		{
+			deleteAsset(handle.m_id);
+		}
+		static void deleteAsset(const std::string& name)
+		{
+			deleteAsset(rsl::nameHash(name));
+		}
+		static void deleteAsset(rsl::id_type nameHash)
+		{
+			if (m_assets.contains(nameHash))
+			{
+				m_assets.erase(nameHash);
+				m_names.erase(nameHash);
+			}
+		}
+	};
 }
