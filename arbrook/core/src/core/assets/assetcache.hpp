@@ -43,6 +43,12 @@ namespace rythe::core::assets
 		}
 		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
 		{
+			if (m_importers.size() < 1)
+			{
+				log::error("No importers where registered for this asset");
+				return { 0, nullptr };
+			}
+
 			rsl::id_type id = rsl::nameHash(name);
 
 			if (!overrideExisting)
@@ -64,7 +70,7 @@ namespace rythe::core::assets
 
 			if (!data.get())
 			{
-				log::error("Something whent wrong with loading this asset");
+				log::error("Something went wrong with loading this asset, do you have the appropriate importer registered?");
 				return { 0,nullptr };
 			}
 
@@ -99,6 +105,7 @@ namespace rythe::core::assets
 		{
 			for (auto& d_entry : fs::directory_iterator(directory))
 			{
+				if (!d_entry.path().has_extension()) continue;
 				auto fileName = d_entry.path().stem().string();
 				auto path = d_entry.path().string();
 
@@ -117,6 +124,7 @@ namespace rythe::core::assets
 				return { nameHash, m_assets[nameHash].get() };
 			}
 
+			log::error("Asset \"{}\" does not exist", m_names[nameHash]);
 			return { 0, nullptr };
 		}
 		static std::vector<asset_handle<AssetType>> getAssets()

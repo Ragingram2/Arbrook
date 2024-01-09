@@ -1,10 +1,10 @@
 @echo off
 
 SETLOCAL enabledelayedexpansion
-set sourcePath=application\sandbox\src\sandbox\resources\shaders
-set destinationPathOGL=application\sandbox\src\sandbox\resources\shaders\ogl
-set destinationPathDX11=application\sandbox\src\sandbox\resources\shaders\dx11
-set includePath=application\sandbox\src\sandbox\resources\shaders\include
+set sourcePath=application\sandbox\src\sandbox\resources\shaders\bgfx
+set destinationPathOGL=application\sandbox\src\sandbox\resources\shaders\bgfx\ogl
+set destinationPathDX11=application\sandbox\src\sandbox\resources\shaders\bgfx\dx11
+set includePath=application\sandbox\src\sandbox\resources\shaders\bgfx\include
 set oglProfile=420
 set dx11Profile=s_5_0
 

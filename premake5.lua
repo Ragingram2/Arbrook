@@ -76,7 +76,7 @@ function new_createProject(projectData)
         objdir (SolutionDir.."bin\\obj")--this too
         defines {projectData.defines}
         filter "configurations:Debug*"
-            defines {"DEBUG","BX_CONFIG_DEBUG"}
+            defines {"DEBUG"}
             symbols "On"
             targetsuffix "-d"
         filter "configurations:Release*"
