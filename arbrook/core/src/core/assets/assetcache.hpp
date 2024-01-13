@@ -54,7 +54,7 @@ namespace rythe::core::assets
 			if (!overrideExisting)
 				if (m_assets.contains(id))
 				{
-					log::warn("Asset \"{}\" already exists, returning existing handle", name);
+					log::warn("Asset[{}] \"{}\" already exists, returning existing handle",typeid(AssetType).name(), name);
 					return { id, m_assets[id].get() };
 				}
 
@@ -109,7 +109,7 @@ namespace rythe::core::assets
 				auto fileName = d_entry.path().stem().string();
 				auto path = d_entry.path().string();
 
-				log::info("Loading asset {} at \"{}\"", fileName, path);
+				log::info("Loading asset \"{}\" at \"{}\"", fileName, path);
 				createAsset(fileName, path, settings);
 			}
 		}
