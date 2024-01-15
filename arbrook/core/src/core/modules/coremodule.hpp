@@ -1,9 +1,11 @@
 #pragma once
+#include <rsl/logging>
+
 #include "core/modules/module.hpp"
-#include "core/logging/logging.hpp"
 
 namespace rythe::rendering
 {
+	namespace log = rsl::log;
 	class CoreModule : public core::Module
 	{
 	public:

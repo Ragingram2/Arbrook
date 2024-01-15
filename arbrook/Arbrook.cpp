@@ -37,10 +37,16 @@ int main()
 	//Initialize engine
 	Program::Instance().initialize();
 
+	float currentFrame = 0;
+	float lastFrame = 0;
 	//Update loop
 	while (Program::Instance().m_running)
 	{
 		FrameMark;
+		Time::previousDeltaTime = Time::deltaTime;
+		currentFrame = glfwGetTime();
+		Time::deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		Program::Instance().update();
 	}
 

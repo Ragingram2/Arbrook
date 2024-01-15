@@ -34,7 +34,7 @@ namespace rythe::core::ecs
 
 		void initialize() override
 		{
-			log::debug("Initializeing world entity");
+			log::info("Initializing world entity");
 			auto& [_,data] = *entities.try_emplace(worldId).first;
 			data.alive = true;
 			data.id = worldId;

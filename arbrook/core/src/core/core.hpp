@@ -11,6 +11,7 @@
 #include "core/events/events.hpp"
 #include "core/components/components.hpp"
 #include "core/assets/assets.hpp"
+#include "core/timeutil/timetutil.hpp"
 
 
 namespace rythe::rendering
