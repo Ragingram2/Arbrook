@@ -79,6 +79,12 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		void removeEntity(events::component_destruction<componentType>& evnt);
 
+		template<typename componentType>
+		ecs::component_container<componentType> getContainer()
+		{
+			return std::get<ecs::component_container<componentType>>(m_containers);
+		}
+
 		bool contains(const std::unordered_set<rsl::id_type>& comp)
 		{
 			if (!comp.size())

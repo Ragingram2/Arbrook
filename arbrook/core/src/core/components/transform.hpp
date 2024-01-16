@@ -56,4 +56,7 @@ namespace rythe::core
 			return math::compose(scale, rotation, position);
 		}
 	};
+
+	inline math::vec3 transformDirection(core::transform transf, const math::vec3& direction) { return  transf.rotation * direction; }
+	inline math::vec3 inverseTransformDirection(core::transform transf, const math::vec3& direction) { return math::inverse(transf.rotation) * direction; }
 }

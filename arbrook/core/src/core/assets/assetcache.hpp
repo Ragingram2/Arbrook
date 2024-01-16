@@ -59,16 +59,18 @@ namespace rythe::core::assets
 				}
 
 			std::unique_ptr<AssetType> data = std::make_unique<AssetType>();
+			bool somethingLoaded = false;
 			for (auto& [id, importer] : m_importers)
 			{
 				if (importer->canLoad(filePath))
 				{
 					importer->load(id, filePath, data.get(), settings);
+					somethingLoaded = true;
 					break;
 				}
 			}
 
-			if (!data.get())
+			if (!somethingLoaded)
 			{
 				log::error("Something went wrong with loading this asset, do you have the appropriate importer registered?");
 				return { 0,nullptr };
