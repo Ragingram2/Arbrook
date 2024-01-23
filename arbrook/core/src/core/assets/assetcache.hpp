@@ -51,20 +51,26 @@ namespace rythe::core::assets
 
 			rsl::id_type id = rsl::nameHash(name);
 
-			if (!overrideExisting)
-				if (m_assets.contains(id))
+			AssetType* data = new AssetType();
+			if (m_assets.contains(id))
+			{
+				if (overrideExisting)
 				{
-					log::warn("Asset[{}] \"{}\" already exists, returning existing handle",typeid(AssetType).name(), name);
+					data = m_assets[id].get();
+				}
+				else
+				{
+					log::warn("Asset[{}] \"{}\" already exists, returning existing handle", typeid(AssetType).name(), name);
 					return { id, m_assets[id].get() };
 				}
+			}
 
-			std::unique_ptr<AssetType> data = std::make_unique<AssetType>();
 			bool somethingLoaded = false;
 			for (auto& [id, importer] : m_importers)
 			{
 				if (importer->canLoad(filePath))
 				{
-					importer->load(id, filePath, data.get(), settings);
+					importer->load(id, filePath, data, settings);
 					somethingLoaded = true;
 					break;
 				}
@@ -84,17 +90,24 @@ namespace rythe::core::assets
 		{
 			rsl::id_type id = rsl::nameHash(name);
 			rsl::id_type importerId = rsl::typeHash<Importer>();
-			if (!overrideExisting)
-				if (m_assets.contains(id))
+
+			AssetType* data = new AssetType();
+			if (m_assets.contains(id))
+			{
+				if (overrideExisting)
 				{
-					log::warn("Asset \"{}\" already exists, returning existing handle", name);
+					data = m_assets[id].get();
+				}
+				else
+				{
+					log::warn("Asset[{}] \"{}\" already exists, returning existing handle", typeid(AssetType).name(), name);
 					return { id, m_assets[id].get() };
 				}
+			}
 
-			std::unique_ptr<AssetType> data = std::make_unique<AssetType>();
-			m_importers[importerId]->load(id, filePath, data.get(), settings);
+			m_importers[importerId]->load(id, filePath, data, settings);
 
-			if (!data.get())
+			if (data == nullptr)
 			{
 				log::error("Something whent wrong with loading this asset");
 				return { 0, nullptr };
@@ -103,7 +116,7 @@ namespace rythe::core::assets
 			m_names.emplace(id, name);
 			return { id, m_assets.emplace(id, std::move(data)).first->second.get() };
 		}
-		static void loadAssets(const std::string& directory, ImportSettings settings)
+		static void loadAssets(const std::string& directory, ImportSettings settings, bool overrideExisting = false)
 		{
 			for (auto& d_entry : fs::directory_iterator(directory))
 			{
@@ -112,7 +125,7 @@ namespace rythe::core::assets
 				auto path = d_entry.path().string();
 
 				log::info("Loading asset \"{}\" at \"{}\"", fileName, path);
-				createAsset(fileName, path, settings);
+				createAsset(fileName, path, settings, overrideExisting);
 			}
 		}
 		static asset_handle<AssetType> getAsset(const std::string& name)
@@ -152,6 +165,13 @@ namespace rythe::core::assets
 			{
 				m_assets.erase(nameHash);
 				m_names.erase(nameHash);
+			}
+		}
+		static void deleteAssets()
+		{
+			for (auto& [id, data] : m_assets)
+			{
+				deleteAsset(id);
 			}
 		}
 	};
