@@ -60,7 +60,7 @@ namespace rythe::core::assets
 				}
 				else
 				{
-					log::warn("Asset[{}] \"{}\" already exists, returning existing handle", typeid(AssetType).name(), name);
+					log::warn("Asset \"{}\" already exists, returning existing handle", name);
 					return { id, m_assets[id].get() };
 				}
 			}
@@ -100,7 +100,7 @@ namespace rythe::core::assets
 				}
 				else
 				{
-					log::warn("Asset[{}] \"{}\" already exists, returning existing handle", typeid(AssetType).name(), name);
+					log::warn("Asset \"{}\" already exists, returning existing handle", name);
 					return { id, m_assets[id].get() };
 				}
 			}
