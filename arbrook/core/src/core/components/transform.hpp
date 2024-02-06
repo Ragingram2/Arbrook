@@ -1,5 +1,5 @@
 #pragma once
-#include "core/math/math.hpp"
+#include <rsl/math>
 #include "core/components/property.hpp"
 namespace rythe::core
 {
