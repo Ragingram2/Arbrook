@@ -31,7 +31,7 @@ namespace rythe::core
 		float range = 0.0f;
 		float speed = 0.0f;
 		float angularSpeed = 0.0f;
-		int direction = 0;
+		math::vec3 direction = math::vec3::zero;
 	};
 
 	namespace events
