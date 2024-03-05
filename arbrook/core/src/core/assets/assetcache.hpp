@@ -116,7 +116,7 @@ namespace rythe::core::assets
 			m_names.emplace(id, name);
 			return { id, m_assets.emplace(id, std::move(data)).first->second.get() };
 		}
-		static void loadAssets(const std::string& directory, ImportSettings settings, bool overrideExisting = false)
+		static void loadAssets(const std::string& directory, ImportSettings settings = default_settings<AssetType>, bool overrideExisting = false)
 		{
 			for (auto& d_entry : fs::directory_iterator(directory))
 			{

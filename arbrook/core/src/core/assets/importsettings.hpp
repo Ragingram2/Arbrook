@@ -19,5 +19,5 @@ namespace rythe::core::assets
 	struct import_settings { };
 
 	template<typename AssetType>
-	constexpr import_settings<AssetType> default_settings{};
+	constexpr import_settings<AssetType> default_settings;
 }
