@@ -33,6 +33,7 @@ namespace rythe::core
 		float angularSpeed = 0.0f;
 		math::vec3 direction = math::vec3::zero;
 		math::vec3 axis = math::vec3::up;
+		math::vec3 initPosition = math::vec3::zero;
 	};
 
 	namespace events
