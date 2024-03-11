@@ -43,6 +43,7 @@ namespace rythe::core::assets
 		}
 		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
 		{
+			log::info("Loading asset \"{}\" at \"{}\"", name, filePath.string());
 			if (m_importers.size() < 1)
 			{
 				log::error("No importers where registered for this asset");
@@ -66,6 +67,7 @@ namespace rythe::core::assets
 			}
 
 			bool somethingLoaded = false;
+			bool wrongExtension = false;
 			for (auto& [id, importer] : m_importers)
 			{
 				if (importer->canLoad(filePath))
@@ -74,10 +76,15 @@ namespace rythe::core::assets
 					somethingLoaded = true;
 					break;
 				}
+				else
+					wrongExtension = true;
 			}
 
 			if (!somethingLoaded)
 			{
+				if (wrongExtension)
+					return { 0,nullptr };
+
 				log::error("Something went wrong with loading this asset, do you have the appropriate importer registered?");
 				return { 0,nullptr };
 			}
@@ -104,12 +111,17 @@ namespace rythe::core::assets
 					return { id, m_assets[id].get() };
 				}
 			}
-
-			m_importers[importerId]->load(id, filePath, data, settings);
+			if (m_importers[importerId]->canLoad(filePath))
+				m_importers[importerId]->load(id, filePath, data, settings);
+			else
+			{
+				log::error("This importer does not support files with the given extension {}", filePath.extension());
+				return { 0, nullptr }
+			}
 
 			if (data == nullptr)
 			{
-				log::error("Something whent wrong with loading this asset");
+				log::error("Something went wrong with loading this asset");
 				return { 0, nullptr };
 			}
 
@@ -123,8 +135,6 @@ namespace rythe::core::assets
 				if (!d_entry.path().has_extension()) continue;
 				auto fileName = d_entry.path().stem().string();
 				auto path = d_entry.path().string();
-
-				log::info("Loading asset \"{}\" at \"{}\"", fileName, path);
 				createAsset(fileName, path, settings, overrideExisting);
 			}
 		}
