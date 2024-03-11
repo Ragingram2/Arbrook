@@ -27,7 +27,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -405,3 +405,10 @@ arbrook/core/src/core/core.vcxproj.filters
 arbrook/rendering/include
 arbrook/rendering/include
 application/sandbox/src/sandbox/resources/meshes/glb/sponza2.glb
+bin/lib/core.lib
+bin/lib/core-d.lib
+bin/lib/graphics.lib
+bin/lib/graphics-d.lib
+bin/lib/input.lib
+bin/lib/input-d.lib
+bin/lib/rendering-d.lib
