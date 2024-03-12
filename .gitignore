@@ -416,3 +416,4 @@ bin/lib/assimp-d.lib
 bin/lib/SPIRV-Tools-opt-d.lib
 bin/build/sandbox-d.exe
 bin/lib/rsl-d.lib
+bin/build/sandbox-d.lib
