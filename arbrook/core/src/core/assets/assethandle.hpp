@@ -32,5 +32,8 @@ namespace rythe::core::assets
 
 		bool operator == (AssetType* data) { return m_data == data; }
 		bool operator !=(AssetType* data) { return !operator==(data); }
+
+		std::string getName() { return m_data->name; }
+		const char* getNameC() { return m_data->name.c_str(); }
 	};
 }
