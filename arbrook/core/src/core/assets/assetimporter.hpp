@@ -23,6 +23,7 @@ namespace rythe::core::assets
 	public:
 		virtual bool canLoad(fs::path filePath) = 0;
 		virtual asset_handle<AssetType> load(rsl::id_type id, fs::path filePath, AssetType* data, const import_settings<AssetType>& settings) = 0;
+		virtual void write(fs::path filePath, AssetType* data) = 0;
 		virtual void free(AssetType& asset) = 0;
 		virtual ~AssetImporter() = default;
 	};
