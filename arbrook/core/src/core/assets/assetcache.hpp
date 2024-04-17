@@ -41,6 +41,40 @@ namespace rythe::core::assets
 
 			m_importers.emplace(id, std::make_unique<Importer>());
 		}
+		static asset_handle<AssetType> createAssetFromMemory(const std::string& name, AssetType* asset, ImportSettings settings, bool overrideExisting = false)
+		{
+			log::info("Loading asset \"{}\" from memory", name);
+			if (m_importers.size() < 1)
+			{
+				log::error("No importers where registered for this asset");
+				return { 0, nullptr };
+			}
+
+			rsl::id_type id = rsl::nameHash(name);
+
+			if (m_assets.contains(id))
+			{
+				//if (overrideExisting)
+				//{
+				//	m_assets[id].reset(asset);
+				//}
+				//else
+				//{
+				log::warn("Asset \"{}\" already exists, returning existing handle", name);
+				return { id, m_assets[id].get() };
+				//}
+			}
+
+			//for (auto& [id, importer] : m_importers)
+			//{
+			//	importer->loadFromMemory(id, asset, settings);
+			//}
+
+			m_names.emplace(id, name);
+			log::debug(id);
+			return { id, m_assets.emplace(id, std::move(asset)).first->second.get() };
+		}
+
 		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
 		{
 			log::info("Loading asset \"{}\" at \"{}\"", name, filePath.string());
