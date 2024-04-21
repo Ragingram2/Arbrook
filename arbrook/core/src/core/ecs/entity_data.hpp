@@ -13,6 +13,7 @@ namespace rythe::core::ecs
 		rsl::id_type id = 0;
 		std::string name = "";
 		bool alive = true;
+		bool enabled = true;
 		entity parent = { nullptr };
 		rsl::hashed_sparse_set<entity> children;
 	};

@@ -27,6 +27,7 @@ namespace rythe::core
 	namespace math = rsl::math;
 	struct examplecomp
 	{
+		bool enabled = true;
 		float pos = 0.0f;
 		float range = 0.0f;
 		float speed = 0.0f;

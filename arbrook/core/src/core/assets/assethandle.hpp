@@ -25,14 +25,23 @@ namespace rythe::core::assets
 
 		AssetType* operator->() { return m_data; }
 		operator AssetType& () const { return *m_data; }
-		operator rsl::id_type() const { return m_id; }
-		operator bool() const { return m_data == nullptr; }
+		//operator rsl::id_type() const { return m_id; }
+		operator bool() const { return m_data != nullptr; }
+
+		asset_handle<AssetType> operator=(AssetType* data) 
+		{
+			m_data = data;
+			return *this;
+		}
 
 		bool operator == (asset_handle handle) { return m_data == handle.m_data; }
 		bool operator != (asset_handle handle) { return !operator==(handle); }
 
 		bool operator == (AssetType* data) { return m_data == data; }
 		bool operator !=(AssetType* data) { return !operator==(data); }
+
+		bool operator == (AssetType data) { return m_data == &data; }
+		bool operator !=(AssetType data) { return !operator==(data); }
 
 		std::string getName() { return m_data->name; }
 		const char* getNameC() { return m_data->name.c_str(); }

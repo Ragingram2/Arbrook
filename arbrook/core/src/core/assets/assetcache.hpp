@@ -41,7 +41,7 @@ namespace rythe::core::assets
 
 			m_importers.emplace(id, std::make_unique<Importer>());
 		}
-		static asset_handle<AssetType> createAssetFromMemory(const std::string& name, AssetType* asset, ImportSettings settings, bool overrideExisting = false)
+		static asset_handle<AssetType> createAssetFromMemory(const std::string& name, AssetType asset, ImportSettings settings)
 		{
 			log::info("Loading asset \"{}\" from memory", name);
 			if (m_importers.size() < 1)
@@ -70,9 +70,10 @@ namespace rythe::core::assets
 			//	importer->loadFromMemory(id, asset, settings);
 			//}
 
+			auto assetPtr = std::make_unique<AssetType>(asset);
 			m_names.emplace(id, name);
-			log::debug(id);
-			return { id, m_assets.emplace(id, std::move(asset)).first->second.get() };
+			//log::debug(id);
+			return { id, m_assets.emplace(id,std::move(assetPtr)).first->second.get() };
 		}
 
 		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
