@@ -405,3 +405,4 @@ arbrook/core/src/core/core.vcxproj.filters
 arbrook/rendering/include
 arbrook/rendering/include
 application/sandbox/src/sandbox/resources/meshes/glb/sponza2.glb
+*.rar
