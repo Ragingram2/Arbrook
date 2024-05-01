@@ -28,6 +28,7 @@ namespace rythe::core::ecs
 		static std::unordered_map<entityId, ecs::entity_data> entities;
 		static std::unordered_map<entityId, std::unordered_set<rsl::id_type>> entityCompositions;
 		static std::unordered_map<componentId, std::unique_ptr<component_family_base>> componentFamilies;
+		static std::unordered_map<componentId, std::string> componentNames;
 
 		Registry() = default;
 		virtual ~Registry() = default;
@@ -35,7 +36,7 @@ namespace rythe::core::ecs
 		void initialize() override
 		{
 			log::info("Initializing world entity");
-			auto& [_,data] = *entities.try_emplace(worldId).first;
+			auto& [_, data] = *entities.try_emplace(worldId).first;
 			data.alive = true;
 			data.id = worldId;
 			data.name = "World";
@@ -76,6 +77,9 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		static componentType& createComponent(rsl::id_type id, const componentType& value);
 
+		static void createComponent(ecs::entity& ent, rsl::id_type compId);
+		static void createComponent(rsl::id_type id, rsl::id_type compId);
+
 		template<typename componentType>
 		static componentType& getComponent(ecs::entity& ent);
 		template<typename componentType>
@@ -85,6 +89,9 @@ namespace rythe::core::ecs
 		static bool hasComponent(ecs::entity& ent);
 		template<typename componentType>
 		static bool hasComponent(rsl::id_type id);
+
+		static bool hasComponent(ecs::entity& ent, rsl::id_type compId);
+		static bool hasComponent(rsl::id_type id, rsl::id_type compId);
 
 		template<typename componentType>
 		static void destroyComponent(ecs::entity& ent);

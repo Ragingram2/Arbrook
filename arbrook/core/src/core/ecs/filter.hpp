@@ -26,7 +26,7 @@ namespace rythe::core::ecs
 		filter()
 		{
 			types t;
-			std::apply([=]<typename... T>(T... args)
+			std::apply([=,this]<typename... T>(T... args)
 			{
 				(
 					(

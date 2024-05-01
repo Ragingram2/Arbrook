@@ -8,6 +8,7 @@ namespace rythe::core::ecs
 	std::unordered_map<entityId, ecs::entity_data> Registry::entities;
 	std::unordered_map<entityId, std::unordered_set<rsl::id_type>> Registry::entityCompositions;
 	std::unordered_map<componentId, std::unique_ptr<component_family_base>> Registry::componentFamilies;
+	std::unordered_map<componentId, std::string> Registry::componentNames;
 
 	ecs::entity Registry::createEntity()
 	{
@@ -69,6 +70,20 @@ namespace rythe::core::ecs
 
 		entityCompositions.erase(id);
 		entities.erase(id);
+	}
+
+	bool Registry::hasComponent(ecs::entity& ent, rsl::id_type compId)
+	{
+		return hasComponent(ent->id, compId);
+	}
+
+	bool Registry::hasComponent(rsl::id_type id, rsl::id_type compId)
+	{
+		auto& vec = entityCompositions.at(id);
+		auto position = std::find(vec.begin(), vec.end(), compId);
+		if (position != vec.end())
+			return true;
+		return false;
 	}
 
 	void Registry::destroyComponent(ecs::entity& ent, rsl::id_type componentId)

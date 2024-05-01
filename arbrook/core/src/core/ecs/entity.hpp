@@ -157,11 +157,15 @@ namespace rythe::core::ecs
         template<typename componentType>
         componentType& addComponent(const componentType& value);
 
+        void addComponent(rsl::id_type compId);
+
 		template<typename componentType>
 		componentType& getComponent();
 
 		template<typename componentType>
 		bool hasComponent();
+
+        bool hasComponent(rsl::id_type compId);
 
 		template<typename componentType>
 		void destroyComponent();
