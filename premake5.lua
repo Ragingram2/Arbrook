@@ -107,12 +107,14 @@ function createProject(groupName,projectName,kindName)
             "-Wno-reorder-init-list",
             "-Wno-reorder-ctor",
             "-Wno-c99-designator",
-            "-Wno-microsoft-exception-spec"
+            "-Wno-microsoft-exception-spec",
+            "-Wno-class-conversion",
+            "-Wno-new-returns-null"
         }
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}
         objdir "$(SolutionDir)bin\\obj"
-        defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName, "TRACY_ENABLE"}
+        defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName, "TRACY_ENABLE","_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING"}
         filter "configurations:Debug*"
             defines {"DEBUG","BX_CONFIG_DEBUG"}
             symbols "On"
@@ -142,7 +144,9 @@ DefaultBuildOptions =
     "-Wno-reorder-init-list",
     "-Wno-reorder-ctor",
     "-Wno-c99-designator",
-    "-Wno-microsoft-exception-spec"
+    "-Wno-microsoft-exception-spec",
+    "-Wno-class-conversion",
+    "-Wno-new-returns-null"
 }
 basicIncludes = {
 "src/",
