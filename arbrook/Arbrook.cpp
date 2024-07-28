@@ -13,6 +13,8 @@ namespace gfx = rythe::rendering;
 namespace events = rythe::core::events;
 namespace input = rythe::input;
 
+__declspec(dllexport) DWORD NvOptimusEnablement = 0x0000001;
+
 int main()
 {
 	//Setting up service registry and program
