@@ -5,6 +5,7 @@
 #include <exception>
 #include <map>
 #include <memory>
+#include <optional>
 #include <pugixml.hpp>
 #include <sstream>
 #include <stdexcept>
@@ -17,6 +18,7 @@
 
 #include "../Result.hpp"
 #include "../always_false.hpp"
+#include "../parsing/is_view_reader.hpp"
 
 namespace rfl {
 namespace xml {
@@ -63,7 +65,19 @@ struct Reader {
     return std::visit(cast, _node_or_attribute);
   }
 
-  rfl::Result<InputVarType> get_field(
+  rfl::Result<InputVarType> get_field_from_array(
+      const size_t _idx, const InputArrayType& _arr) const noexcept {
+    const auto name = _arr.node_.name();
+    size_t i = 0;
+    for (auto node = _arr.node_; node; node = node.next_sibling(name)) {
+      if (i == _idx) {
+        return InputVarType(node);
+      }
+    }
+    return rfl::Error("Index " + std::to_string(_idx) + " of of bounds.");
+  }
+
+  rfl::Result<InputVarType> get_field_from_object(
       const std::string& _name, const InputObjectType _obj) const noexcept {
     const auto node = _obj.node_.child(_name.c_str());
     if (!node) {
@@ -119,65 +133,44 @@ struct Reader {
     return std::visit(cast_as_node, _var.node_or_attribute_).transform(wrap);
   }
 
-  template <size_t size, class FunctionType>
-  std::array<std::optional<InputVarType>, size> to_fields_array(
-      const FunctionType _fct, const InputObjectType _obj) const noexcept {
-    std::array<std::optional<InputVarType>, size> f_arr;
+  template <class ArrayReader>
+  std::optional<Error> read_array(const ArrayReader& _array_reader,
+                                  const InputArrayType& _arr) const noexcept {
+    const auto name = _arr.node_.name();
+    for (auto node = _arr.node_; node; node = node.next_sibling(name)) {
+      const auto err = _array_reader.read(InputVarType(node));
+      if (err) {
+        return err;
+      }
+    }
+    return std::nullopt;
+  }
 
+  template <class ObjectReader>
+  std::optional<Error> read_object(const ObjectReader& _object_reader,
+                                   const InputObjectType& _obj) const noexcept {
     for (auto child = _obj.node_.first_child(); child;
          child = child.next_sibling()) {
-      const auto name = child.name();
-      const auto ix = _fct(std::string_view(name));
-      // XML allows for duplicate node names, but we always want the first
-      // sibling.
-      if (ix != -1 && !f_arr[ix]) {
-        f_arr[ix] = InputVarType(child);
-      }
+      _object_reader.read(std::string_view(child.name()), InputVarType(child));
     }
 
     for (auto attr = _obj.node_.first_attribute(); attr;
          attr = attr.next_attribute()) {
-      const auto name = attr.name();
-      const auto ix = _fct(std::string_view(name));
-      // XML allows for duplicate node names, but we always want the first
-      // sibling.
-      if (ix != -1 && !f_arr[ix]) {
-        f_arr[ix] = InputVarType(attr);
-      }
+      _object_reader.read(std::string_view(attr.name()), InputVarType(attr));
     }
 
-    const auto ix = _fct(std::string_view("xml_content"));
-    if (ix != -1) {
-      f_arr[ix] = InputVarType(_obj.node_);
+    if constexpr (parsing::is_view_reader_v<ObjectReader>) {
+      _object_reader.read(std::string_view("xml_content"),
+                          InputVarType(_obj.node_));
     }
 
-    return f_arr;
-  }
-
-  std::vector<std::pair<std::string, InputVarType>> to_map(
-      const InputObjectType _obj) const noexcept {
-    std::vector<std::pair<std::string, InputVarType>> m;
-    for (auto child = _obj.node_.first_child(); child;
-         child = child.next_sibling()) {
-      auto p = std::make_pair(std::string(child.name()), InputVarType(child));
-      m.emplace_back(std::move(p));
-    }
-    return m;
+    return std::nullopt;
   }
 
   rfl::Result<InputObjectType> to_object(
       const InputVarType _var) const noexcept {
     const auto wrap = [](const auto& _node) { return InputObjectType(_node); };
     return std::visit(cast_as_node, _var.node_or_attribute_).transform(wrap);
-  }
-
-  std::vector<InputVarType> to_vec(const InputArrayType _arr) const noexcept {
-    const auto name = _arr.node_.name();
-    std::vector<InputVarType> vec;
-    for (auto node = _arr.node_; node; node = node.next_sibling(name)) {
-      vec.push_back(InputVarType(node));
-    }
-    return vec;
   }
 
   template <class T>

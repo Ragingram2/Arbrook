@@ -3,6 +3,7 @@
 
 #include <flatbuffers/flexbuffers.h>
 
+#include <cstddef>
 #include <exception>
 #include <map>
 #include <sstream>
@@ -12,6 +13,7 @@
 #include <type_traits>
 #include <vector>
 
+#include "../Bytestring.hpp"
 #include "../Result.hpp"
 #include "../always_false.hpp"
 
@@ -41,7 +43,15 @@ struct Reader {
   template <class T>
   static constexpr bool has_custom_constructor = has_from_flexbuf<T>::value;
 
-  rfl::Result<InputVarType> get_field(
+  rfl::Result<InputVarType> get_field_from_array(
+      const size_t _idx, const InputArrayType& _arr) const noexcept {
+    if (_idx >= _arr.size()) {
+      return rfl::Error("Index " + std::to_string(_idx) + " of of bounds.");
+    }
+    return _arr[_idx];
+  }
+
+  rfl::Result<InputVarType> get_field_from_object(
       const std::string& _name, const InputObjectType& _obj) const noexcept {
     const auto keys = _obj.Keys();
     for (size_t i = 0; i < keys.size(); ++i) {
@@ -61,9 +71,17 @@ struct Reader {
   rfl::Result<T> to_basic_type(const InputVarType& _var) const noexcept {
     if constexpr (std::is_same<std::remove_cvref_t<T>, std::string>()) {
       if (!_var.IsString()) {
-        return rfl::Error("Could not cast to string.");
+        return rfl::Error("Could not cast to a string.");
       }
       return std::string(_var.AsString().c_str());
+    } else if constexpr (std::is_same<std::remove_cvref_t<T>,
+                                      rfl::Bytestring>()) {
+      if (!_var.IsBlob()) {
+        return rfl::Error("Could not cast to a bytestring.");
+      }
+      const auto blob = _var.AsBlob();
+      return rfl::Bytestring(reinterpret_cast<const std::byte*>(blob.data()),
+                             blob.size());
     } else if constexpr (std::is_same<std::remove_cvref_t<T>, bool>()) {
       if (!_var.IsBool()) {
         return rfl::Error("Could not cast to boolean.");
@@ -84,23 +102,32 @@ struct Reader {
     }
   }
 
-  template <size_t size, class FunctionType>
-  std::array<std::optional<InputVarType>, size> to_fields_array(
-      const FunctionType& _fct, const InputObjectType& _obj) const noexcept {
-    std::array<std::optional<InputVarType>, size> f_arr;
+  template <class ArrayReader>
+  std::optional<Error> read_array(const ArrayReader& _array_reader,
+                                  const InputArrayType& _arr) const noexcept {
+    const auto size = _arr.size();
+    for (size_t i = 0; i < size; ++i) {
+      const auto err = _array_reader.read(InputVarType(_arr[i]));
+      if (err) {
+        return err;
+      }
+    }
+    return std::nullopt;
+  }
 
+  template <class ObjectReader>
+  std::optional<Error> read_object(const ObjectReader& _object_reader,
+                                   const InputObjectType& _obj) const noexcept {
     const auto keys = _obj.Keys();
     const auto values = _obj.Values();
     const auto num_values = std::min(keys.size(), values.size());
 
     for (size_t i = 0; i < num_values; ++i) {
-      const auto ix = _fct(std::string_view(keys[i].AsString().c_str()));
-      if (ix != -1) {
-        f_arr[ix] = values[i];
-      }
+      _object_reader.read(std::string_view(keys[i].AsString().c_str()),
+                          values[i]);
     }
 
-    return f_arr;
+    return std::nullopt;
   }
 
   rfl::Result<InputArrayType> to_array(
@@ -111,37 +138,12 @@ struct Reader {
     return _var.AsVector();
   }
 
-  std::vector<std::pair<std::string, InputVarType>> to_map(
-      const InputObjectType& _obj) const noexcept {
-    std::vector<std::pair<std::string, InputVarType>> m;
-
-    const auto keys = _obj.Keys();
-    const auto values = _obj.Values();
-    const auto size = std::min(keys.size(), values.size());
-
-    for (size_t i = 0; i < size; ++i) {
-      m.emplace_back(
-          std::make_pair(std::string(keys[i].AsString().c_str()), values[i]));
-    }
-
-    return m;
-  }
-
   rfl::Result<InputObjectType> to_object(
       const InputVarType& _var) const noexcept {
     if (!_var.IsMap()) {
       return rfl::Error("Could not cast to Map!");
     }
     return _var.AsMap();
-  }
-
-  std::vector<InputVarType> to_vec(const InputArrayType& _arr) const noexcept {
-    const auto size = _arr.size();
-    std::vector<InputVarType> vec;
-    for (size_t i = 0; i < size; ++i) {
-      vec.push_back(_arr[i]);
-    }
-    return vec;
   }
 
   template <class T>

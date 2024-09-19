@@ -2,14 +2,17 @@
 #define RFL_INTERNAL_ENUMS_GET_ENUM_NAMES_HPP_
 
 #include <limits>
-#include <source_location>
 #include <type_traits>
+
+#if __has_include(<source_location>)
+#include <source_location>
+#endif
 
 #include "../../Literal.hpp"
 #include "../../define_literal.hpp"
+#include "../../internal/remove_namespaces.hpp"
 #include "Names.hpp"
 #include "is_scoped_enum.hpp"
-#include "../../internal/remove_namespaces.hpp"
 
 // https://en.cppreference.com/w/cpp/language/static_cast:
 
@@ -41,8 +44,16 @@ namespace enums {
 
 template <auto e>
 consteval auto get_enum_name_str_view() {
+#if __cpp_lib_source_location >= 201907L
   const auto func_name =
       std::string_view{std::source_location::current().function_name()};
+#elif defined(_MSC_VER)
+  // Officially, we only support MSVC versions that are modern enough to contain
+  // <source_location>, but inofficially, this might work.
+  const auto func_name = std::string_view{__FUNCSIG__};
+#else
+  const auto func_name = std::string_view{__PRETTY_FUNCTION__};
+#endif
 #if defined(__clang__)
   const auto split = func_name.substr(0, func_name.size() - 1);
   return split.substr(split.find("e = ") + 4);

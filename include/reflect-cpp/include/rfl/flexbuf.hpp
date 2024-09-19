@@ -1,6 +1,7 @@
-#ifndef FLEXBUF_FLEXBUF_HPP_
-#define FLEXBUF_FLEXBUF_HPP_
+#ifndef RFL_FLEXBUF_HPP_
+#define RFL_FLEXBUF_HPP_
 
+#include "../rfl.hpp"
 #include "flexbuf/Parser.hpp"
 #include "flexbuf/Reader.hpp"
 #include "flexbuf/Writer.hpp"

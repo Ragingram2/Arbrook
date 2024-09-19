@@ -1,9 +1,9 @@
 #ifndef RFL_TAGGEDUNION_HPP_
 #define RFL_TAGGEDUNION_HPP_
 
-#include <variant>
-
+#include "Variant.hpp"
 #include "define_literal.hpp"
+#include "internal/Getter.hpp"
 #include "internal/StringLiteral.hpp"
 #include "internal/tag_t.hpp"
 
@@ -15,7 +15,10 @@ struct TaggedUnion {
   static constexpr internal::StringLiteral discrimininator_ = _discriminator;
 
   /// The type of the underlying variant.
-  using VariantType = std::variant<Ts...>;
+  using VariantType = rfl::Variant<Ts...>;
+
+  /// A literal containing all the tags that are possible
+  using PossibleTags = define_literal_t<internal::tag_t<_discriminator, Ts>...>;
 
   TaggedUnion(const VariantType& _variant) : variant_(_variant) {}
 
@@ -84,7 +87,31 @@ struct TaggedUnion {
   /// Returns the underlying variant.
   const VariantType& variant() const { return variant_; }
 
-  static_assert(!define_literal_t<internal::tag_t<Ts>...>::has_duplicates(),
+  /// Applies function _f to all underlying alternatives.
+  template <class F>
+  auto visit(F& _f) {
+    return variant_.visit(_f);
+  }
+
+  /// Applies function _f to all underlying alternatives.
+  template <class F>
+  auto visit(F& _f) const {
+    return variant_.visit(_f);
+  }
+
+  /// Applies function _f to all underlying alternatives.
+  template <class F>
+  auto visit(const F& _f) {
+    return variant_.visit(_f);
+  }
+
+  /// Applies function _f to all underlying alternatives.
+  template <class F>
+  auto visit(const F& _f) const {
+    return variant_.visit(_f);
+  }
+
+  static_assert(!PossibleTags::has_duplicates(),
                 "Duplicate tags are not allowed inside tagged unions.");
 
   /// The underlying variant - a TaggedUnion is a thin wrapper

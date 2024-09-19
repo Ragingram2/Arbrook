@@ -55,7 +55,7 @@ struct Field {
   template <class U = Type,
             typename std::enable_if<std::is_default_constructible_v<U>,
                                     bool>::type = true>
-  Field(const Default& _default) : value_(Type()) {}
+  Field(const Default&) : value_(Type()) {}
 
   ~Field() = default;
 
@@ -64,6 +64,9 @@ struct Field {
 
   /// Returns the underlying object.
   const Type& get() const { return value_; }
+
+  /// The name of the field.
+  constexpr static std::string_view name() { return name_.string_view(); }
 
   /// Returns the underlying object.
   Type& operator()() { return value_; }
@@ -95,7 +98,7 @@ struct Field {
   template <class U = Type,
             typename std::enable_if<std::is_default_constructible_v<U>,
                                     bool>::type = true>
-  auto& operator=(const Default& _default) {
+  auto& operator=(const Default&) {
     value_ = Type();
     return *this;
   }

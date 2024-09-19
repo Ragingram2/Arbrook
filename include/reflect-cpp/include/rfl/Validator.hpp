@@ -1,10 +1,7 @@
 #ifndef RFL_VALIDATOR_HPP_
 #define RFL_VALIDATOR_HPP_
 
-#include <concepts>
 #include <functional>
-#include <optional>
-#include <regex>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -12,18 +9,16 @@
 #include "AllOf.hpp"
 #include "Result.hpp"
 #include "internal/HasValidation.hpp"
-#include "internal/StringLiteral.hpp"
 
 namespace rfl {
 
 template <class T, class V, class... Vs>
-requires internal::HasValidation<AllOf<V, Vs...>, T>
+  requires internal::HasValidation<AllOf<V, Vs...>, T>
 struct Validator {
- private:
-  using AllOfVs = std::conditional_t<sizeof...(Vs) == 0, V, AllOf<V, Vs...>>;
-
  public:
   using ReflectionType = T;
+  using ValidationType =
+      std::conditional_t<sizeof...(Vs) == 0, V, AllOf<V, Vs...>>;
 
   /// Exception-free validation.
   static Result<Validator<T, V, Vs...>> from_value(const T& _value) noexcept {
@@ -34,36 +29,38 @@ struct Validator {
     }
   }
 
-  Validator() : value_(AllOfVs::validate(T()).value()) {}
+  Validator() : value_(ValidationType::validate(T()).value()) {}
 
   Validator(Validator<T, V, Vs...>&& _other) noexcept = default;
 
   Validator(const Validator<T, V, Vs...>& _other) = default;
 
-  Validator(T&& _value) : value_(AllOfVs::validate(_value).value()) {}
+  Validator(T&& _value) : value_(ValidationType::validate(_value).value()) {}
 
-  Validator(const T& _value) : value_(AllOfVs::validate(_value).value()) {}
+  Validator(const T& _value)
+      : value_(ValidationType::validate(_value).value()) {}
 
   template <class U, typename std::enable_if<std::is_convertible_v<U, T>,
                                              bool>::type = true>
   Validator(U&& _value)
-      : value_(AllOfVs::validate(T(std::forward<U>(_value))).value()) {}
+      : value_(ValidationType::validate(T(std::forward<U>(_value))).value()) {}
 
   template <class U, typename std::enable_if<std::is_convertible_v<U, T>,
                                              bool>::type = true>
-  Validator(const U& _value) : value_(AllOfVs::validate(T(_value)).value()) {}
+  Validator(const U& _value)
+      : value_(ValidationType::validate(T(_value)).value()) {}
 
   ~Validator() = default;
 
   /// Assigns the underlying object.
   auto& operator=(const T& _value) {
-    value_ = AllOfVs::validate(_value).value();
+    value_ = ValidationType::validate(_value).value();
     return *this;
   }
 
   /// Assigns the underlying object.
   auto& operator=(T&& _value) {
-    value_ = AllOfVs::validate(std::forward<T>(_value)).value();
+    value_ = ValidationType::validate(std::forward<T>(_value)).value();
     return *this;
   }
 
@@ -79,7 +76,7 @@ struct Validator {
   template <class U, typename std::enable_if<std::is_convertible_v<U, T>,
                                              bool>::type = true>
   auto& operator=(U&& _value) noexcept {
-    value_ = AllOfVs::validate(T(std::forward<U>(_value))).value();
+    value_ = ValidationType::validate(T(std::forward<U>(_value))).value();
     return *this;
   }
 
@@ -87,7 +84,7 @@ struct Validator {
   template <class U, typename std::enable_if<std::is_convertible_v<U, T>,
                                              bool>::type = true>
   auto& operator=(const U& _value) {
-    value_ = AllOfVs::validate(T(_value)).value();
+    value_ = ValidationType::validate(T(_value)).value();
     return *this;
   }
 
@@ -113,7 +110,17 @@ struct Validator {
 template <class T, class V, class... Vs>
 inline auto operator<=>(const Validator<T, V, Vs...>& _v1,
                         const Validator<T, V, Vs...>& _v2) {
+#if __cpp_lib_three_way_comparison >= 201907L
   return _v1.value() <=> _v2.value();
+#else
+  if (_v1.value() < _v2.value()) {
+    return std::strong_ordering::less;
+  } else if (_v1.value() > _v2.value()) {
+    return std::strong_ordering::greater;
+  } else {
+    return std::strong_ordering::equal;
+  }
+#endif
 }
 
 template <class T, class V, class... Vs>

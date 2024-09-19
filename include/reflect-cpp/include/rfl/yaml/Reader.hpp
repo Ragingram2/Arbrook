@@ -49,7 +49,15 @@ struct Reader {
     T::from_yaml_obj(var);
   });
 
-  rfl::Result<InputVarType> get_field(
+  rfl::Result<InputVarType> get_field_from_array(
+      const size_t _idx, const InputArrayType& _arr) const noexcept {
+    if (_idx >= _arr.node_.size()) {
+      return rfl::Error("Index " + std::to_string(_idx) + " of of bounds.");
+    }
+    return InputVarType(_arr.node_[_idx]);
+  }
+
+  rfl::Result<InputVarType> get_field_from_object(
       const std::string& _name, const InputObjectType& _obj) const noexcept {
     auto var = InputVarType(_obj.node_[_name]);
     if (!var.node_) {
@@ -86,36 +94,30 @@ struct Reader {
     return InputArrayType(_var.node_);
   }
 
-  template <size_t size, class FunctionType>
-  std::array<std::optional<InputVarType>, size> to_fields_array(
-      const FunctionType& _fct, const InputObjectType& _obj) const noexcept {
-    std::array<std::optional<InputVarType>, size> f_arr;
+  template <class ArrayReader>
+  std::optional<Error> read_array(const ArrayReader& _array_reader,
+                                  const InputArrayType& _arr) const noexcept {
+    for (size_t i = 0; i < _arr.node_.size(); ++i) {
+      const auto err = _array_reader.read(_arr.node_[i]);
+      if (err) {
+        return err;
+      }
+    }
+    return std::nullopt;
+  }
+
+  template <class ObjectReader>
+  std::optional<Error> read_object(const ObjectReader& _object_reader,
+                                   const InputObjectType& _obj) const noexcept {
     for (const auto& p : _obj.node_) {
       try {
         const auto k = p.first.as<std::string>();
-        const auto ix = _fct(std::string_view(k));
-        if (ix != -1) {
-          f_arr[ix] = InputVarType(p.second);
-        }
+        _object_reader.read(std::string_view(k), InputVarType(p.second));
       } catch (std::exception& e) {
         continue;
       }
     }
-    return f_arr;
-  }
-
-  std::vector<std::pair<std::string, InputVarType>> to_map(
-      const InputObjectType& _obj) const noexcept {
-    std::vector<std::pair<std::string, InputVarType>> m;
-    for (const auto& p : _obj.node_) {
-      try {
-        auto k = p.first.as<std::string>();
-        m.emplace_back(std::make_pair(k, p.second));
-      } catch (std::exception& e) {
-        continue;
-      }
-    }
-    return m;
+    return std::nullopt;
   }
 
   rfl::Result<InputObjectType> to_object(
@@ -124,14 +126,6 @@ struct Reader {
       return rfl::Error("Could not cast to map!");
     }
     return InputObjectType(_var.node_);
-  }
-
-  std::vector<InputVarType> to_vec(const InputArrayType& _arr) const noexcept {
-    std::vector<InputVarType> vec;
-    for (size_t i = 0; i < _arr.node_.size(); ++i) {
-      vec.push_back(InputVarType(_arr.node_[i]));
-    }
-    return vec;
   }
 
   template <class T>
