@@ -102,6 +102,7 @@ function createProject(groupName,projectName,kindName)
         toolset "clang"
         language "C++"
         cppdialect "C++20"
+        flags {"MultiProcessorCompile","LinkTimeOptimization"}
         buildoptions {
             "-Wno-nonportable-include-path",
             "-Wno-reorder-init-list",
