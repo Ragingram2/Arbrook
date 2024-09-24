@@ -1,6 +1,8 @@
 #pragma once
 #include <rsl/utilities>
 #include <rsl/math>
+#include <rfl.hpp>
+#include <rfl/json.hpp>
 
 #include "core/modules/module.hpp"
 #include "core/systems/system.hpp"
@@ -12,6 +14,7 @@
 #include "core/components/components.hpp"
 #include "core/assets/assets.hpp"
 #include "core/timeutil/timetutil.hpp"
+
 
 
 namespace rythe::rendering
@@ -27,7 +30,7 @@ namespace rythe::core
 	namespace math = rsl::math;
 	struct examplecomp
 	{
-		bool enabled = true;
+		rfl::Skip<bool> enabled = true;
 		float pos = 0.0f;
 		float range = 0.0f;
 		float speed = 0.0f;
