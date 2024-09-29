@@ -145,8 +145,6 @@ namespace rythe::core::ecs
         [[nodiscard]] entity_data* operator->() noexcept;
         [[nodiscard]] const entity_data* operator->() const noexcept;
 
-		//[[nodiscard]] std::unordered_set<rsl::id_type>& component_composition() { return std::unordered_set<rsl::id_type>(); }
-		//[[nodiscard]] const std::unordered_set<rsl::id_type>& component_composition() const { return std::unordered_set<rsl::id_type>(); }
 
 		template<typename componentType>
 		componentType& addComponent();
@@ -170,6 +168,8 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		void destroyComponent();
 
+       std::unordered_set<rsl::id_type>& component_composition();
+       const std::unordered_set<rsl::id_type>& component_composition() const;
 
 		///**@brief Gets iterator to the first child.
 		// */
