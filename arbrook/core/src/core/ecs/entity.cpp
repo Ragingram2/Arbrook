@@ -309,4 +309,13 @@ namespace rythe::core::ecs
 	{
 		return Registry::hasComponent(data->id, compId);
 	}
+
+	std::unordered_set<rsl::id_type>& entity::component_composition() 
+	{ 
+		return Registry::entityCompositions[data->id];
+	}
+	const std::unordered_set<rsl::id_type>& entity::component_composition() const
+	{ 
+		return Registry::entityCompositions[data->id];
+	}
 }

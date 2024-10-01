@@ -21,6 +21,7 @@ namespace rythe::core::ecs
 	struct component_family : public component_family_base
 	{
 		using entityId = rsl::id_type;
+		using type = componentType;
 
 		std::unordered_map<entityId, componentType> m_components;
 		component_family() : component_family_base(rsl::typeHash<componentType>()) {}
