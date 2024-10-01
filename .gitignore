@@ -402,8 +402,6 @@ arbrook/core/src/core/core.vcxproj.filters
 *.filters
 *.vcxproj
 *.sln
-arbrook/rendering/include
-arbrook/rendering/include
 application/sandbox/src/sandbox/resources/meshes/glb/sponza2.glb
 bin/lib/core.lib
 bin/lib/core-d.lib
