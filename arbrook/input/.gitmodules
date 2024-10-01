@@ -1,0 +1,3 @@
+[submodule "include/gainput"]
+	path = include/gainput
+	url = https://github.com/Ragingram2/gainput.git
