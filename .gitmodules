@@ -10,12 +10,12 @@
 [submodule "application/sandbox"]
 	path = application/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
-[submodule "arbrook/input/include/gainput"]
+[submodule "arbrook/input/gainput"]
 	path = arbrook/input/include/gainput
 	url = https://github.com/Ragingram2/gainput.git
-[submodule "arbrook/graphics/include/imgui"]
+[submodule "arbrook/graphics/imgui"]
 	path = arbrook/graphics/include/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
-[submodule "arbrook/graphics/include/glfw"]
+[submodule "arbrook/graphics/glfw"]
 	path = arbrook/graphics/include/glfw
 	url = https://github.com/glfw/glfw.git

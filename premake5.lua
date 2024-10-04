@@ -10,17 +10,6 @@ newaction
     end
 }
 
--- projects = {}
-
--- newaction
--- {
---     trigger = "test",
---     description = "Test action",
---     execute = function()
---         projects = scandir(".arbrook-project")
---     end
--- }
-
 
 function formatEngineModulePath(moduleName)
     return string.format("arbrook/%s/build-%s.lua", moduleName,moduleName,moduleName)
@@ -60,38 +49,6 @@ function getProjectDir()
     return removeSubstring(""..os.getcwd(),".arbrook-project")
 end
 
-function new_createProject(projectData)
-    print("Building " .. projectData.name)
-    group ("" .. projectData.group)
-    project ("" .. projectData.name)
-        kind ("".. projectData.type)
-        location (projectData.location)
-        architecture "x64"
-        toolset (projectData.toolset)
-        language (projectData.lang)
-        cppdialect (projectData.dialect)
-        buildoptions {projectData.buildOptions}
-        targetdir (projectData.targetDir)
-        libdirs {SolutionDir.."bin\\lib\\"}--this should be based on dependencies
-        objdir (SolutionDir.."bin\\obj")--this too
-        defines {projectData.defines}
-        filter "configurations:Debug*"
-            defines {"DEBUG"}
-            symbols "On"
-            targetsuffix "-d"
-        filter "configurations:Release*"
-            defines {"NDEBUG"}
-            optimize "On"
-        filter "configurations:*OGL"
-            defines {"RenderingAPI_OGL=0","RenderingAPI=0"}
-        
-        filter "configurations:*DX11"
-            defines {"RenderingAPI_DX11=1","RenderingAPI=1"}  
-
-        filter {}
-    group ""
-end
-
 function createProject(groupName,projectName,kindName)
     print("Building " .. projectName)
     group ("" .. groupName)
@@ -115,20 +72,22 @@ function createProject(groupName,projectName,kindName)
         targetdir "$(SolutionDir)bin\\lib"
         libdirs {"$(SolutionDir)bin\\lib\\"}
         objdir "$(SolutionDir)bin\\obj"
-        defines {"ARBROOK_INTERNAL", "PROJECT_NAME="..projectName, "TRACY_ENABLE","_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING"}
+        defines {
+            "ARBROOK_INTERNAL",
+            "PROJECT_NAME="..projectName,
+            "TRACY_ENABLE",
+            "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING",
+            "RenderingAPI_OGL=0",
+            "RenderingAPI_DX11=1",
+            "RenderingAPI_VK=2"
+        }
         filter "configurations:Debug*"
-            defines {"DEBUG","BX_CONFIG_DEBUG"}
+            defines {"DEBUG"}
             symbols "On"
             targetsuffix "-d"
         filter "configurations:Release*"
             defines {"NDEBUG"}
             optimize "On"
-        filter "configurations:*OGL"
-            defines {"RenderingAPI_OGL=0","RenderingAPI=0"}
-        
-        filter "configurations:*DX11"
-            defines {"RenderingAPI_DX11=1","RenderingAPI=1"}  
-
         filter {}
     group ""
 end
@@ -167,7 +126,7 @@ basicIncludes = {
 
 
 workspace "arbrook"
-    configurations {"DebugOGL","DebugDX11","ReleaseOGL","ReleaseDX11" }
+    configurations {"Debug","Release"}
     platforms {"Win64"}
 
 include(formatEngineModulePath("core"))

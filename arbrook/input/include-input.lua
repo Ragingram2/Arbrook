@@ -10,4 +10,4 @@ filter "configurations:Debug*"
 filter "configurations:Release*"
     links {"input","gainputstatic","xinput","Ws2_32"}
 
-    filter {}
+filter {}
