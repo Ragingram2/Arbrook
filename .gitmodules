@@ -14,8 +14,8 @@
 	path = arbrook/input/include/gainput
 	url = https://github.com/Ragingram2/gainput.git
 [submodule "arbrook/graphics/include/imgui"]
-	path = include/imgui
+	path = arbrook/graphics/include/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
 [submodule "arbrook/graphics/include/glfw"]
-	path = include/glfw
+	path = arbrook/graphics/include/glfw
 	url = https://github.com/glfw/glfw.git
