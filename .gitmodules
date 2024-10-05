@@ -19,3 +19,6 @@
 [submodule "arbrook/physics/JoltPhysics"]
 	path = modules/arbrook/physics/include/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
+[submodule "modules/arbrook/graphics/third_party/glfw"]
+	path = modules/arbrook/graphics/third_party/glfw
+	url = https://github.com/glfw/glfw.git
