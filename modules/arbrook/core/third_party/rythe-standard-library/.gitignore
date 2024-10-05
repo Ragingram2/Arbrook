@@ -1,0 +1,9 @@
+﻿.vs
+build
+src/rsl/obj
+*.vcxproj
+*.filters
+*.user
+*.sln
+bin/lib
+bin/obj

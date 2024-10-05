@@ -1,0 +1,13 @@
+local project = {
+    dependencies = {
+        "public third_party/rythe-standard-library",
+        "public third_party/reflect-cpp:header-only",
+        "public third_party/nlohmann:header-only",
+        "public third_party/compat:header-only",
+        "public third_party/assimp",
+        "public third_party/tracy"
+    },
+    defines = { "ARBROOK_INTERNAL" }
+}
+
+return project

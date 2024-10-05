@@ -1,21 +1,24 @@
-[submodule "include/rythe-standard-library"]
-	path = include/rythe-standard-library
+[submodule "third_party/rythe-standard-library"]
+	path = modules/arbrook/core/third_party/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "include/assimp"]
-	path = include/assimp
+[submodule "third_party/assimp"]
+	path = modules/arbrook/core/third_party/assimp
 	url = https://github.com/assimp/assimp.git
-[submodule "include/tracy"]
-	path = include/tracy
+[submodule "third_party/tracy"]
+	path = modules/arbrook/core/third_party/tracy
 	url = https://github.com/wolfpld/tracy.git
 [submodule "application/sandbox"]
 	path = application/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
 [submodule "arbrook/input/gainput"]
-	path = arbrook/input/include/gainput
+	path = modules/arbrook/input/include/gainput
 	url = https://github.com/Ragingram2/gainput.git
 [submodule "arbrook/graphics/imgui"]
-	path = arbrook/graphics/include/imgui
+	path = modules/arbrook/graphics/include/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
 [submodule "arbrook/graphics/glfw"]
-	path = arbrook/graphics/include/glfw
+	path = modules/arbrook/graphics/include/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "arbrook/physics/JoltPhysics"]
+	path = modules/arbrook/physics/include/JoltPhysics
+	url = https://github.com/jrouwe/JoltPhysics.git
