@@ -10,15 +10,12 @@
 [submodule "application/sandbox"]
 	path = application/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
-[submodule "arbrook/input/gainput"]
-	path = modules/arbrook/input/include/gainput
-	url = https://github.com/Ragingram2/gainput.git
-[submodule "arbrook/physics/JoltPhysics"]
-	path = modules/arbrook/physics/include/JoltPhysics
-	url = https://github.com/jrouwe/JoltPhysics.git
 [submodule "modules/arbrook/graphics/third_party/glfw"]
 	path = modules/arbrook/graphics/third_party/glfw
 	url = https://github.com/glfw/glfw.git
 [submodule "modules/arbrook/graphics/third_party/imgui"]
 	path = modules/arbrook/graphics/third_party/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
+[submodule "modules/arbrook/input/third_party/gainput"]
+	path = modules/arbrook/input/third_party/gainput
+	url = https://github.com/Ragingram2/gainput.git
