@@ -16,9 +16,6 @@
 [submodule "arbrook/graphics/imgui"]
 	path = modules/arbrook/graphics/include/imgui
 	url = https://github.com/Rythe-Interactive/imgui.git
-[submodule "arbrook/graphics/glfw"]
-	path = modules/arbrook/graphics/include/glfw
-	url = https://github.com/glfw/glfw.git
 [submodule "arbrook/physics/JoltPhysics"]
 	path = modules/arbrook/physics/include/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
