@@ -13,9 +13,6 @@
 [submodule "arbrook/input/gainput"]
 	path = modules/arbrook/input/include/gainput
 	url = https://github.com/Ragingram2/gainput.git
-[submodule "arbrook/graphics/imgui"]
-	path = modules/arbrook/graphics/include/imgui
-	url = https://github.com/Rythe-Interactive/imgui.git
 [submodule "arbrook/physics/JoltPhysics"]
 	path = modules/arbrook/physics/include/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
