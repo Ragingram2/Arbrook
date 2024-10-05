@@ -19,3 +19,6 @@
 [submodule "modules/arbrook/graphics/third_party/glfw"]
 	path = modules/arbrook/graphics/third_party/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "modules/arbrook/graphics/third_party/imgui"]
+	path = modules/arbrook/graphics/third_party/imgui
+	url = https://github.com/Rythe-Interactive/imgui.git
