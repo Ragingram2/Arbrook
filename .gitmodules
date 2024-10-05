@@ -1,12 +1,3 @@
-[submodule "third_party/rythe-standard-library"]
-	path = modules/arbrook/core/third_party/rythe-standard-library
-	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "third_party/assimp"]
-	path = modules/arbrook/core/third_party/assimp
-	url = https://github.com/assimp/assimp.git
-[submodule "third_party/tracy"]
-	path = modules/arbrook/core/third_party/tracy
-	url = https://github.com/wolfpld/tracy.git
 [submodule "application/sandbox"]
 	path = application/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
@@ -22,3 +13,12 @@
 [submodule "modules/arbrook/physics/third_party/JoltPhysics"]
 	path = modules/arbrook/physics/third_party/JoltPhysics
 	url = https://github.com/jrouwe/JoltPhysics.git
+[submodule "modules/arbrook/core/third_party/assimp"]
+	path = modules/arbrook/core/third_party/assimp
+	url = https://github.com/assimp/assimp.git
+[submodule "modules/arbrook/core/third_party/Rythe-Standard-Library"]
+	path = modules/arbrook/core/third_party/Rythe-Standard-Library
+	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
+[submodule "modules/arbrook/core/third_party/tracy"]
+	path = modules/arbrook/core/third_party/tracy
+	url = https://github.com/wolfpld/tracy.git
