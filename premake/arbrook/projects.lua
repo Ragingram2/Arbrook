@@ -74,10 +74,8 @@ local function findAssembly(assemblyId)
     local projectId = string.match(assemblyId, "^([^:]+)")
     local projectType = string.sub(assemblyId, string.len(projectId) + 2)
     local project = loadedProjects[projectId]
-    print("ProjectId: " .. projectId)
     if projectType == "" then        
         if project == nil then
-            print("project was nil")
             return nil, projectId, nil
         else
             return project, projectId, project.types[1]
@@ -184,7 +182,6 @@ end
 local function loadProject(projectId, project, projectPath, name, projectType)
     if project.alias == nil then
         project.alias = name
-        print("Name:" .. name)
     end
 
     if project.namespace == nil then
@@ -193,7 +190,6 @@ local function loadProject(projectId, project, projectPath, name, projectType)
 
     if project.types == nil then
         project.types = { projectType }
-        print("Type:" .. projectType)
     else
         project.types[1] = projectType
     end
@@ -215,7 +211,6 @@ local function loadProject(projectId, project, projectPath, name, projectType)
     end
 
     project.location = projectPath
-    print("Location: " .. projectPath)
 
     if project.files == nil then -- files can be an empty table if no files need to be loaded
         project.files = { "./**" }
@@ -329,6 +324,7 @@ local function setupDebug(projectType, linkTargets)
     filter("configurations:Debug")
         defines { "DEBUG" }
         symbols("On")
+        targetsuffix "-d"
         kind(kindName(projectType, solution.Configuration.DEBUG))
         links(appendConfigSuffix(linkTargets, solution.Configuration.DEBUG))
 end
@@ -402,7 +398,6 @@ local function getDepsRecursive(project, projectType)
                 if depType == nil then
                     depType = "library"
                 end
-                print(path)
                 depProject = loadProject(depId, thirdPartyProject, path, thirdPartyProject.name, depType)
             end
         end
@@ -537,6 +532,16 @@ function projects.submit(proj)
                 toolset(buildSettings.toolset)
                 language("C++")
                 cppdialect(buildSettings.cppVersion)
+                flags {"MultiProcessorCompile","LinkTimeOptimization"}
+                buildoptions {
+                    "-Wno-nonportable-include-path",
+                    "-Wno-reorder-init-list",
+                    "-Wno-reorder-ctor",
+                    "-Wno-c99-designator",
+                    "-Wno-microsoft-exception-spec",
+                    "-Wno-class-conversion",
+                    "-Wno-new-returns-null"
+                }
             end
 
             local filePatterns = {}

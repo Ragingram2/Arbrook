@@ -156,7 +156,6 @@ PROJECT_FILENAME = "arbrook_project"
 THIRD_PARTY_FILENAME = "arbrook_third_party" 
 
 workspace "arbrook"
-    print("Starting workspace arbrook")
     location (_MAIN_SCRIPT_DIR)
     configurations { "Debug", "Development", "Release" }
 

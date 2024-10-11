@@ -1,0 +1,8 @@
+local project = {
+    dependencies = {
+        "public third_party/JoltPhysics",
+    },
+    defines = { "ARBROOK_INTERNAL"}
+}
+
+return project

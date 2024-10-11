@@ -1,0 +1,17 @@
+local project = {
+    dependencies = {
+        "public third_party/DirectX11",
+        "public third_party/DXC",
+        "public third_party/GL:header-only",
+        "public third_party/glfw",
+        "public third_party/glslang",
+        "public third_party/imgui:header-only",
+        "public third_party/png:header-only",
+        "public third_party/spirv-cross",
+        "public third_party/spirv-tools",
+        "public third_party/stb"
+    },
+    defines = { "ARBROOK_INTERNAL","RenderingAPI_OGL=0","RenderingAPI_DX11=1","RenderingAPI_VK=2" }
+}
+
+return project

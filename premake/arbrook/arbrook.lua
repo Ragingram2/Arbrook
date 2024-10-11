@@ -11,6 +11,11 @@ premake.solution = {
         platform = "x86_64",
         toolset = "clang",
         cppVersion = "C++20"
+    },
+    defines =
+    {
+        "TRACY_ENABLE",
+        "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING",
     }
 }
 
