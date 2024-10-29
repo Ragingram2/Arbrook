@@ -1,4 +1,4 @@
-#include "core/logging/loggingservice.hpp"
+#include "loggingservice.hpp"
 
 namespace rythe::core
 {

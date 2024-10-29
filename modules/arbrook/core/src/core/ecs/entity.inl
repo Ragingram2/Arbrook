@@ -1,5 +1,5 @@
-#include "core/ecs/entity.hpp"
-#include "core/ecs/entity_data.hpp"
+#include "entity.hpp"
+#include "entity_data.hpp"
 #pragma once
 
 namespace std

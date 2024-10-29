@@ -1,5 +1,4 @@
-#include "sandbox/systems/game/guisystem.hpp"
-#include "sandbox/systems/game/guisystem.hpp"
+#include "guisystem.hpp"
 
 namespace rythe::game
 {

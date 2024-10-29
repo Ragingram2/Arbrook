@@ -1,5 +1,5 @@
-#include "core/engine/program.hpp"
-#include "core/logging/loggingservice.hpp"
+#include "../engine/program.hpp"
+#include "../logging/loggingservice.hpp"
 
 
 namespace rythe::core

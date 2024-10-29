@@ -152,8 +152,8 @@
 -- include(formatApplicationPath("sandbox"))
 -- include "include/rythe-standard-library/build-rythe-standard-library.lua"
 
-PROJECT_FILENAME = "arbrook_project"
-THIRD_PARTY_FILENAME = "arbrook_third_party" 
+PROJECT_FILENAME = "rythe_project"
+THIRD_PARTY_FILENAME = "rythe_third_party" 
 
 workspace "arbrook"
     location("build/" .. _ACTION)

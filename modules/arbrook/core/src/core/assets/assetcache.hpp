@@ -11,9 +11,9 @@
 #include <rsl/hash>
 #include <rsl/logging>
 
-#include "core/assets/importsettings.hpp"
-#include "core/assets/assethandle.hpp"
-#include "core/assets/assetimporter.hpp"
+#include "../assets/importsettings.hpp"
+#include "../assets/assethandle.hpp"
+#include "../assets/assetimporter.hpp"
 
 namespace fs = std::filesystem;
 namespace rythe::core::assets

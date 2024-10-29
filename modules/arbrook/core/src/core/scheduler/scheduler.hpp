@@ -6,9 +6,9 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 
-#include "core/engine/services/service.hpp"
-#include "core/logging/logging.hpp"
-#include "core/modules/module.hpp"
+#include "../engine/services/service.hpp"
+#include "../logging/logging.hpp"
+#include "../modules/module.hpp"
 
 namespace rythe::core::scheduling
 {

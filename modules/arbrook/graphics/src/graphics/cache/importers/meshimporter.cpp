@@ -1,7 +1,7 @@
-#include "graphics/cache/importers/meshimporter.hpp"
-#include "graphics/cache/materialcache.hpp"
-#include "graphics/data/materialsource.hpp"
-#include "graphics/cache/texturecache.hpp"
+#include "meshimporter.hpp"
+#include "../materialcache.hpp"
+#include "../../data/materialsource.hpp"
+#include "../texturecache.hpp"
 #include <stb/stb_image.h>
 
 namespace fs = std::filesystem;

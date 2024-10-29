@@ -4,7 +4,7 @@
 #include <rsl/containers>
 #include <rsl/primitives>
 
-#include "core/ecs/entity.hpp"
+#include "../ecs/entity.hpp"
 
 namespace rythe::core::ecs
 {

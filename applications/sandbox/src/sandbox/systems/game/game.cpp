@@ -1,4 +1,4 @@
-#include "sandbox/systems/game/game.hpp"
+#include "game.hpp"
 
 namespace fs = std::filesystem;
 namespace ast = rythe::core::assets;

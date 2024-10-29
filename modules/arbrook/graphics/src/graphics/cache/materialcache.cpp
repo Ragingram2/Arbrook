@@ -1,9 +1,9 @@
-#include "graphics/cache/materialcache.hpp"
-#include "graphics/cache/shadercache.hpp"
-#include "graphics/cache/texturecache.hpp"
+#include "../cache/materialcache.hpp"
+#include "../cache/shadercache.hpp"
+#include "../cache/texturecache.hpp"
 
-#include "graphics/cache/importers/shaderimporter.hpp"
-#include "graphics/cache/importers/textureimporter.hpp"
+#include "../cache/importers/shaderimporter.hpp"
+#include "../cache/importers/textureimporter.hpp"
 
 namespace rythe::rendering
 {

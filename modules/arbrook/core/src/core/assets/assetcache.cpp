@@ -1,4 +1,4 @@
-#include "core/assets/assetcache.hpp"
+#include "assetcache.hpp"
 
 namespace rythe::core::assets
 {

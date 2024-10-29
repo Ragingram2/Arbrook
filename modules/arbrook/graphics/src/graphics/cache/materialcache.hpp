@@ -4,9 +4,9 @@
 #include <unordered_map>
 
 #include "core/assets/assethandle.hpp"
-#include "graphics/data/shaderhandle.hpp"
-#include "graphics/data/material.hpp"
-#include "graphics/data/materialsource.hpp"
+#include "../data/shaderhandle.hpp"
+#include "../data/material.hpp"
+#include "../data/materialsource.hpp"
 
 namespace fs = std::filesystem;
 namespace ast = rythe::core::assets;

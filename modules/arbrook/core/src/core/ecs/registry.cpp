@@ -1,4 +1,4 @@
-#include "core/ecs/registry.hpp"
+#include "../ecs/registry.hpp"
 
 namespace rythe::core::ecs
 {

@@ -1,4 +1,4 @@
-#include "core/events/eventbus.hpp"
+#include "eventbus.hpp"
 
 namespace rythe::core::events
 {

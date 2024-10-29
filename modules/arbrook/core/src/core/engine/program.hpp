@@ -6,12 +6,12 @@
 #include <rsl/primitives>
 #include <rsl/utilities>
 
-#include "core/utils/profiler.hpp"
+#include "../utils/profiler.hpp"
 
-#include "core/engine/services/service.hpp"
-#include "core/engine/services/serviceregistry.hpp"
-#include "core/events/eventbus.hpp"
-#include "core/events/defaults/exit_event.hpp"
+#include "../engine/services/service.hpp"
+#include "../engine/services/serviceregistry.hpp"
+#include "../events/eventbus.hpp"
+#include "../events/defaults/exit_event.hpp"
 
 //I should probably change these to work with delegates as well, avoid more pointer indirections
 namespace rythe::core

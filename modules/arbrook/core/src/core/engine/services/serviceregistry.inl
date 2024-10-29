@@ -1,4 +1,4 @@
-#include "core/engine/services/serviceregistry.hpp"
+#include "serviceregistry.hpp"
 #pragma once
 
 namespace rythe::core

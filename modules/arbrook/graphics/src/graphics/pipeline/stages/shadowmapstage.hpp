@@ -7,11 +7,11 @@
 #include "core/events/defaults/component_event.hpp"
 #include "core/components/transform.hpp"
 #include "core/assets/assethandle.hpp"
-#include "graphics/cache/cache.hpp"
-#include "graphics/data/shaderhandle.hpp"
-#include "graphics/components/components.hpp"
-#include "graphics/pipeline/base/graphicsstage.hpp"
-#include "graphics/interface/definitions/definitions.hpp"
+#include "../cache/cache.hpp"
+#include "../data/shaderhandle.hpp"
+#include "../components/components.hpp"
+#include "../pipeline/base/graphicsstage.hpp"
+#include "../interface/definitions/definitions.hpp"
 
 namespace rythe::rendering
 {

@@ -7,8 +7,8 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 
-#include "core/engine/services/service.hpp"
-#include "core/containers/pointer.hpp"
+#include "../services/service.hpp"
+#include "../../containers/pointer.hpp"
 
 namespace rythe::core
 {
@@ -29,4 +29,4 @@ namespace rythe::core
 	};
 }
 
-#include "core/engine/services/serviceregistry.inl"
+#include "../services/serviceregistry.inl"

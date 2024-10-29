@@ -1,4 +1,4 @@
-#include "graphics/pipeline/stages/shadowmapstage.hpp"
+#include "shadowmapstage.hpp"
 
 namespace rythe::rendering
 {

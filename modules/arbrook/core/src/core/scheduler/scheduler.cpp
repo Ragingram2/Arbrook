@@ -1,4 +1,4 @@
-#include "core/scheduler/scheduler.hpp"
+#include "scheduler.hpp"
 
 namespace rythe::core::scheduling
 {

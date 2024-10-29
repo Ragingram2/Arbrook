@@ -5,14 +5,14 @@
 
 #include <rsl/primitives>
 
-#include "core/ecs/entity.hpp"
-#include "core/ecs/entity_data.hpp"
-#include "core/ecs/component.hpp"
-#include "core/ecs/component_family_base.hpp"
-#include "core/ecs/component_family.hpp"
-#include "core/engine/services/service.hpp"
-#include "core/containers/pointer.hpp"
-#include "core/components/transform.hpp"
+#include "../ecs/entity.hpp"
+#include "../ecs/entity_data.hpp"
+#include "../ecs/component.hpp"
+#include "../ecs/component_family_base.hpp"
+#include "../ecs/component_family.hpp"
+#include "../engine/services/service.hpp"
+#include "../containers/pointer.hpp"
+#include "../components/transform.hpp"
 
 namespace rythe::core::ecs
 {
@@ -100,4 +100,4 @@ namespace rythe::core::ecs
 	};
 }
 
-#include "core/ecs/registry.inl"
+#include "../ecs/registry.inl"

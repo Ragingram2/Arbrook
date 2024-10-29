@@ -1,5 +1,5 @@
-#include "graphics/cache/texturecache.hpp"
-#include "graphics/cache/importers/textureimporter.hpp"
+#include "texturecache.hpp"
+#include "../cache/importers/textureimporter.hpp"
 
 namespace rythe::rendering
 {

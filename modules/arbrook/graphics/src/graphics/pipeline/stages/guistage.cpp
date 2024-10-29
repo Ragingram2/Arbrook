@@ -1,4 +1,4 @@
-#include "graphics/pipeline/stages/guistage.hpp"
+#include "guistage.hpp"
 namespace rythe::rendering
 {
 	namespace log = rsl::log;

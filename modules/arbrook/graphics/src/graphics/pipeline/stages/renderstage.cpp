@@ -1,4 +1,4 @@
-#include "graphics/pipeline/stages/renderstage.hpp"
+#include "renderstage.hpp"
 
 namespace ast = rythe::core::assets;
 namespace rythe::rendering

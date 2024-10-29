@@ -1,4 +1,4 @@
-#include "core/events/eventbus.hpp"
+#include "eventbus.hpp"
 #pragma once
 
 namespace rythe::core::events

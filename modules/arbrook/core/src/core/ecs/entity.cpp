@@ -1,6 +1,6 @@
-#include "core/ecs/entity.hpp"
-#include "core/ecs/entity_data.hpp"
-#include "core/ecs/registry.hpp"
+#include "entity.hpp"
+#include "entity_data.hpp"
+#include "registry.hpp"
 namespace rythe::core::ecs
 {
 	entity::operator rsl::id_type() const noexcept

@@ -12,7 +12,7 @@
 #include "graphics/rendering.hpp"
 #include "input/input.hpp"
 
-#include "sandbox/components/camerasettings.hpp"
+#include "../../components/camerasettings.hpp"
 template<typename T> struct is_variant : std::false_type {};
 
 template<typename ...Args>

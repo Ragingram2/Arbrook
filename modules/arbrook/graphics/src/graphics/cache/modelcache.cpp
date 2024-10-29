@@ -1,6 +1,6 @@
-#include "graphics/cache/modelcache.hpp"
-#include "graphics/cache/materialcache.hpp"
-#include "graphics/cache/importers/meshimporter.hpp"
+#include "modelcache.hpp"
+#include "materialcache.hpp"
+#include "importers/meshimporter.hpp"
 
 
 namespace fs = std::filesystem;

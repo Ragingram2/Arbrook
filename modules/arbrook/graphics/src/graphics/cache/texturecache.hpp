@@ -4,10 +4,10 @@
 #include <rsl/logging>
 
 #include "core/assets/assethandle.hpp"
-#include "graphics/data/textureparameters.hpp"
-#include "graphics/data/texturehandle.hpp"
-#include "graphics/data/texturesource.hpp"
-#include "graphics/interface/definitions/texture.hpp"
+#include "../data/textureparameters.hpp"
+#include "../data/texturehandle.hpp"
+#include "../data/texturesource.hpp"
+#include "../interface/definitions/texture.hpp"
 
 
 namespace fs = std::filesystem;

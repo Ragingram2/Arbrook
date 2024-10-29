@@ -8,7 +8,7 @@
 #include <rsl/logging>
 #include <nlohmann/json.hpp>
 
-#include "graphics/data/material.hpp"
+#include "../data/material.hpp"
 
 namespace rythe::rendering
 {

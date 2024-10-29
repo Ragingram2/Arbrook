@@ -11,8 +11,8 @@
 #include "core/utils/profiler.hpp"
 
 #include "core/assets/assets.hpp"
-#include "graphics/data/model.hpp"
-#include "graphics/data/mesh.hpp"
+#include "../data/model.hpp"
+#include "../data/mesh.hpp"
 
 namespace fs = std::filesystem;
 namespace ast = rythe::core::assets;

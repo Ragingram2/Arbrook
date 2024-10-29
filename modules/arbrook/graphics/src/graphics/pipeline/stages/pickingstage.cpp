@@ -1,4 +1,4 @@
-#include "graphics/pipeline/stages/pickingstage.hpp"
+#include "pickingstage.hpp"
 
 namespace ast = rythe::core::assets;
 namespace rythe::rendering

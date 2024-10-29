@@ -3,7 +3,7 @@
 #include <rsl/delegate>
 #include <rsl/hash>
 
-#include "systems/system.hpp"
+#include "../systems/system.hpp"
 
 namespace rythe::core
 {
@@ -35,4 +35,4 @@ namespace rythe::core
 	};
 }
 
-#include "core/modules/module.inl"
+#include "../modules/module.inl"

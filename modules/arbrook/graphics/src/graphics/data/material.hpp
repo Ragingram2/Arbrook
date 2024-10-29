@@ -1,10 +1,10 @@
 #pragma once
 #include <any>
 
-#include "graphics/data/shaderhandle.hpp"
-#include "graphics/data/texturehandle.hpp"
-#include "graphics/interface/definitions/shader.hpp"
-#include "graphics/interface/definitions/texture.hpp"
+#include "../data/shaderhandle.hpp"
+#include "../data/texturehandle.hpp"
+#include "../interface/definitions/shader.hpp"
+#include "../interface/definitions/texture.hpp"
 
 namespace rythe::rendering
 {
