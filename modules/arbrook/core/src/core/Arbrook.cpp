@@ -1,10 +1,10 @@
 #include <iostream>
-#include "core/utils/profiler.hpp"
+#include "utils/profiler.hpp"
 
-#include "core/core.hpp"
-#include "sandbox/modules/testmodule.hpp"
-#include "graphics/modules/rendermodule.hpp"
-#include "input/modules/inputmodule.hpp"
+#include "core.hpp"
+#include "../../../graphics/src/graphics/modules/rendermodule.hpp"
+#include "../../../../../application/sandbox/src/sandbox/modules/testmodule.hpp"
+#include "../../../input/src/input/modules/inputmodule.hpp"
 
 
 using namespace rythe::core;

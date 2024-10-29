@@ -1,4 +1,4 @@
-#include "core/modules/module.hpp"
+#include "module.hpp"
 
 namespace rythe::core
 {

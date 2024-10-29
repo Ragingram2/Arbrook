@@ -156,7 +156,7 @@ PROJECT_FILENAME = "arbrook_project"
 THIRD_PARTY_FILENAME = "arbrook_third_party" 
 
 workspace "arbrook"
-    location (_MAIN_SCRIPT_DIR)
+    location("build/" .. _ACTION)
     configurations { "Debug", "Development", "Release" }
 
 os.chdir(_MAIN_SCRIPT_DIR)

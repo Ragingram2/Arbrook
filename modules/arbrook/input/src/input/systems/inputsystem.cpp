@@ -1,4 +1,4 @@
-#include "input/systems/inputsystem.hpp"
+#include "inputsystem.hpp"
 
 namespace rythe::input
 {

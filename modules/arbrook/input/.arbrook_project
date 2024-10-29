@@ -1,6 +1,7 @@
 local project = {
     dependencies = {
-        "public third_party/gainput",
+        "private arbrook/core",
+        "public third_party/gainput"
     },
     defines = { "ARBROOK_INTERNAL"}
 }

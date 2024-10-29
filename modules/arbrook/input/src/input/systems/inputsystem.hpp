@@ -11,8 +11,8 @@
 
 #include "core/systems/system.hpp"
 #include "core/components/transform.hpp"
-#include "input/map/inputmap.hpp"
-#include "input/events/inputevents.hpp"
+#include "../map/inputmap.hpp"
+#include "../events/inputevents.hpp"
 
 namespace rythe::input
 {

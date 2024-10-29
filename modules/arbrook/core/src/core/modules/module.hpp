@@ -3,7 +3,7 @@
 #include <rsl/delegate>
 #include <rsl/hash>
 
-#include "core/systems/system.hpp"
+#include "systems/system.hpp"
 
 namespace rythe::core
 {

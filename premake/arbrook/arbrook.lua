@@ -1,6 +1,6 @@
 include("_preload.lua")
 
-premake.solution = {
+premake.rythe = {
     Configuration = {
         RELEASE = 1,
         DEVELOPMENT = 2,
@@ -19,37 +19,37 @@ premake.solution = {
     }
 }
 
-local solution = premake.solution
+local rythe = premake.rythe
 
 local projects = dofile("projects.lua")
 
-function solution.configName(config)
+function rythe.configName(config)
     local configNames = { 
-        [solution.Configuration.RELEASE] = "Release",
-        [solution.Configuration.DEVELOPMENT] = "Development",
-        [solution.Configuration.DEBUG] = "Debug"        
+        [rythe.Configuration.RELEASE] = "Release",
+        [rythe.Configuration.DEVELOPMENT] = "Development",
+        [rythe.Configuration.DEBUG] = "Debug"        
     }
 
     return configNames[config]
 end
 
-function solution.targetSuffix(config)
+function rythe.targetSuffix(config)
     local configSuffix = { 
-        [solution.Configuration.RELEASE] = "",
-        [solution.Configuration.DEVELOPMENT] = "-dev",
-        [solution.Configuration.DEBUG] = "-debug"        
+        [rythe.Configuration.RELEASE] = "",
+        [rythe.Configuration.DEVELOPMENT] = "-dev",
+        [rythe.Configuration.DEBUG] = "-d"        
     }
 
     return configSuffix[config]
 end
 
-function solution.configure()
+function rythe.configure()
     filter { "configurations:Debug" }
-        targetsuffix(solution.targetSuffix(solution.Configuration.DEBUG))
+        targetsuffix(rythe.targetSuffix(rythe.Configuration.DEBUG))
     filter { "configurations:Development" }
-        targetsuffix(solution.targetSuffix(solution.Configuration.DEVELOPMENT))
+        targetsuffix(rythe.targetSuffix(rythe.Configuration.DEVELOPMENT))
 
     projects.scan("./")
 end
 
-return solution
+return rythe

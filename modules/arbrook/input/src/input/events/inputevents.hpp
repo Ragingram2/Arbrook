@@ -5,7 +5,7 @@
 #include <rsl/math>
 
 #include "core/events/event.hpp"
-#include "input/map/inputmap.hpp"
+#include "../map/inputmap.hpp"
 
 namespace rythe::core::events
 {

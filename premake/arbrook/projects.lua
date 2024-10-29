@@ -2,11 +2,40 @@ local fs = dofile("filesystem.lua")
 local ctx = dofile("context.lua")
 local utils = dofile("utils.lua")
 
-local solution = premake.solution
-local loadedProjects = solution.loadedProjects
-local buildSettings = solution.buildSettings
+local rythe = premake.rythe
+local loadedProjects = rythe.loadedProjects
+local buildSettings = rythe.buildSettings
 
 local projects = {}
+
+-- ============================================================================================================================================================================================================
+-- =============================================================================== PROJECT STRUCTURE DEFINITION ===============================================================================================
+-- ============================================================================================================================================================================================================
+
+--  Field name                          | Default value                 | Description
+-- ============================================================================================================================================================================================================
+--  init                                | nil                           | Initialization function, this allows you to dynamically change project fields upon project load based on the workspace context
+--  alias                               | <Project name>                | Alias for the project name
+--  namespace                           | <Project name>                | Project namespace, also used for folder structures
+--  types                               | <Based on folder structure>   | Target types this projet uses, valid values: "application", "module", "editor", "library", "header-only", "util", "test"
+--  additional_types                    | [empty]                       | Extra target types to add to the project, can be used if you don't want to override the default project types
+--  dependencies                        | [empty]                       | Project dependency definitions, format: [(optional)<public|private>(default <private>)] [path][(optional):<type>(default <library>)]
+--  fast_up_to_date_check               | true                          | Enable or disable Visual Studio check if project outputs are already up to date (handy to turn off on util projects)
+--  warning_level                       | "High"                        | Compiler warning level to enable, valid values: "Off", "Default", "Extra", "High", "Everything"
+--  warnings_as_errors                  | true                          | Treat warnings as errors
+--  additional_warnings                 | nil                           | List of additional warnings to enable, for Visual Studio this needs to be the warning number instead of the name
+--  exclude_warnings                    | nil                           | List of warnings to explicitly disable, for Visual Studio this needs to be the warning number instead of the name
+--  floating_point_config               | "Default"                     | Floating point configuration for the compiler to use, valid values: "Default", "Fast", "Strict", "None"
+--  vector_extensions                   | nil                           | Which vector extension to enable, see: https://premake.github.io/docs/vectorextensions/
+--  defines                             | [empty]                       | Additional defines on top of the default ones Rythe will add (PROJECT_NAME, PROJECT_FULL_NAME, PROJECT_NAMESPACE)
+--  files                               | ["./**"]                      | File filter patterns to find source files with
+--  exclude_files                       | nil                           | Exclude patterns to exclude source files with
+--  additional_include_dirs             | [empty]                       | Additional include dirs for #include ""
+--  additional_external_include_dirs    | [empty]                       | Additional external include dirs for #include <> on top of the ones Rythe will auto detect from dependencies
+--  pre_build                           | nil                           | Prebuild command
+--  post_build                          | nil                           | Postbuild command
+--  pre_link                            | nil                           | Prelink command
+
 
 local function folderToProjectType(projectFolder)
     if projectFolder == "applications" then
@@ -93,7 +122,7 @@ local function kindName(projectType, config)
     elseif projectType == "editor" then
         return "SharedLib"
     elseif projectType == "application" then
-        if config == solution.Configuration.RELEASE then
+        if config == rythe.Configuration.RELEASE then
             return "WindowedApp"
         else
             return "ConsoleApp"
@@ -140,18 +169,25 @@ local function projectNameSuffix(projectType)
     return ""
 end
 
-local function projectTypeFilesDir(projectType, namespace)
+local function projectTypeFilesDir(location, projectType, namespace)
     if projectType == "test" then
-        return "/tests/"
+        return location .. "/tests/"
     elseif projectType == "editor" then
-        return "/editor/"
+        return location .. "/editor/"
     end
 
-    if namespace == "" or namespace == nil then
-        return "/src/"
+    local namespaceSrcDir = location .. "/src/" .. namespace .. "/"
+
+    if namespace == "" or namespace == nil or os.isdir(namespaceSrcDir) ~= true then
+        local srcDir = location .. "/src/"
+        if os.isdir(srcDir) then
+            return srcDir
+        else
+            return location .. "/"
+        end
     end
 
-    return "/src/" .. namespace .. "/"
+    return namespaceSrcDir
 end
 
 local function isProjectTypeMainType(projectType)
@@ -200,6 +236,18 @@ local function loadProject(projectId, project, projectPath, name, projectType)
 
     if not utils.tableIsEmpty(project.additional_types) then
         project.types = utils.concatTables(project.types, project.additional_types)
+    end
+
+    if project.warning_level == nil then
+        project.warning_level = "High"
+    end
+
+    if project.warnings_as_errors == nil then
+        project.warnings_as_errors = true
+    end
+
+    if project.floating_point_config == nil then
+        project.floating_point_config = "Default"
     end
 
     if utils.tableIsEmpty(project.defines) then
@@ -293,7 +341,7 @@ function projects.load(projectPath)
 end
 
 local function appendConfigSuffix(linkTargets, config)
-    local suffix = solution.targetSuffix(config)
+    local suffix = rythe.targetSuffix(config)
     local copy = {}
     for i, target in ipairs(linkTargets) do
         copy[i] = target .. suffix
@@ -306,8 +354,8 @@ local function setupRelease(projectType, linkTargets)
     filter("configurations:Release")
         defines { "NDEBUG" }
         optimize("Full")
-        kind(kindName(projectType, solution.Configuration.RELEASE))
-        links(appendConfigSuffix(linkTargets, solution.Configuration.RELEASE))
+        kind(kindName(projectType, rythe.Configuration.RELEASE))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.RELEASE))
 end
 
 local function setupDevelopment(projectType, linkTargets)
@@ -316,21 +364,22 @@ local function setupDevelopment(projectType, linkTargets)
         optimize("Debug")
         inlining("Explicit")
         symbols("On")
-        kind(kindName(projectType, solution.Configuration.DEVELOPMENT))
-        links(appendConfigSuffix(linkTargets, solution.Configuration.DEVELOPMENT))
+        kind(kindName(projectType, rythe.Configuration.DEVELOPMENT))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.DEVELOPMENT))
 end
 
 local function setupDebug(projectType, linkTargets)
     filter("configurations:Debug")
         defines { "DEBUG" }
+        optimize("Debug")
         symbols("On")
-        targetsuffix "-d"
-        kind(kindName(projectType, solution.Configuration.DEBUG))
-        links(appendConfigSuffix(linkTargets, solution.Configuration.DEBUG))
+        kind(kindName(projectType, rythe.Configuration.DEBUG))
+        links(appendConfigSuffix(linkTargets, rythe.Configuration.DEBUG))
 end
 
 local function getDepsRecursive(project, projectType)
     local deps = project.dependencies
+    
     if deps == nil then
         deps = {}
     end
@@ -398,6 +447,7 @@ local function getDepsRecursive(project, projectType)
                 if depType == nil then
                     depType = "library"
                 end
+
                 depProject = loadProject(depId, thirdPartyProject, path, thirdPartyProject.name, depType)
             end
         end
@@ -434,20 +484,20 @@ end
 
 function projects.submit(proj)
     local configSetup = { 
-        [solution.Configuration.RELEASE] = setupRelease,
-        [solution.Configuration.DEVELOPMENT] = setupDevelopment,
-        [solution.Configuration.DEBUG] = setupDebug        
+        [rythe.Configuration.RELEASE] = setupRelease,
+        [rythe.Configuration.DEVELOPMENT] = setupDevelopment,
+        [rythe.Configuration.DEBUG] = setupDebug        
     }
 
     for i, projectType in ipairs(proj.types) do
         local fullGroupPath = projectTypeGroupPrefix(projectType) .. proj.group
-        local binDir = "/bin/"
+        local binDir = "build/" .. _ACTION .. "/bin/"
         print("Building " .. proj.name .. ": " .. projectType)
 
         group(fullGroupPath)
-        project(proj.alias)
-            filename(proj.alias)
-            location("/" .. proj.group)
+        project(proj.alias .. projectNameSuffix(projectType))
+            filename(proj.alias .. projectNameSuffix(projectType))
+            location("build/" .. _ACTION .. "/" .. proj.group)
 
             fastuptodate(proj.fast_up_to_date_check)
 
@@ -473,18 +523,20 @@ function projects.submit(proj)
             local libDirs = {}
             local linkTargets = {}
             local externalIncludeDirs = {}
+
+            -- printTable("allDeps", allDeps, "")
             
             if not utils.tableIsEmpty(allDeps) then
                 local depNames = {}
                 for i, dep in ipairs(allDeps) do
                     local assemblyId, scope = getDepAssemblyAndScope(dep)
                     local depProject, depId, depType = findAssembly(assemblyId)
+
                     if depProject ~= nil then
-                        externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. projectTypeFilesDir(depType, "")
+                        externalIncludeDirs[#externalIncludeDirs + 1] = projectTypeFilesDir(depProject.location, depType, "")
                         
-                        if isThirdPartyProject(depId) then
+                        if isThirdPartyProject(depId) and os.isdir(depProject.location .. "/include/") then
                             externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/include/"
-                            externalIncludeDirs[#externalIncludeDirs + 1] = depProject.location .. "/"
                         end
 
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
@@ -532,6 +584,8 @@ function projects.submit(proj)
                 toolset(buildSettings.toolset)
                 language("C++")
                 cppdialect(buildSettings.cppVersion)
+                warnings(proj.warning_level)
+                floatingpoint(proj.floating_point_config)
                 flags {"MultiProcessorCompile","LinkTimeOptimization"}
                 buildoptions {
                     "-Wno-nonportable-include-path",
@@ -542,14 +596,43 @@ function projects.submit(proj)
                     "-Wno-class-conversion",
                     "-Wno-new-returns-null"
                 }
+
+                if proj.additional_warnings ~= nil then
+                    enablewarnings(proj.additional_warnings)
+                end
+
+                if proj.exclude_warnings ~= nil then
+                    disablewarnings(proj.exclude_warnings)
+                end
+
+                local compileFlags = { }
+
+                if proj.warnings_as_errors then
+                    compileFlags[#compileFlags + 1] = "FatalWarnings"
+                end
+
+                flags(compileFlags)
+
+                if proj.vector_extensions ~= nil then
+                    vectorextensions(proj.vector_extensions)
+                end
             end
 
             local filePatterns = {}
+
+            if projectType == "application" then
+                filter { "system:windows" }
+				    files { proj.location .. "/**resources.rc", proj.location .. "/**.ico" }
+		  	    filter {}
+            end
+
+            local projectSrcDir = projectTypeFilesDir(proj.location, projectType, proj.namespace)
+
             for i, pattern in ipairs(proj.files) do
                 if string.find(pattern, "^(%.[/\\])") == nil then
                     filePatterns[#filePatterns + 1] = pattern
                 else
-                    filePatterns[#filePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
+                    filePatterns[#filePatterns + 1] = projectSrcDir .. string.sub(pattern, 3)
                 end
             end
 
@@ -561,7 +644,7 @@ function projects.submit(proj)
 
             filePatterns[#filePatterns + 1] = proj.src
 
-            vpaths({ ["*"] = { proj.location .. projectTypeFilesDir(projectType, proj.namespace), fs.parentPath(proj.src) }})
+            vpaths({ ["*"] = { projectSrcDir, fs.parentPath(proj.src) }})
             files(filePatterns)
 
             if not utils.tableIsEmpty(proj.exclude_files) then
@@ -570,7 +653,7 @@ function projects.submit(proj)
                     if string.find(pattern, "^(%.[/\\])") == nil then
                         excludePatterns[#excludePatterns + 1] = pattern
                     else
-                        excludePatterns[#excludePatterns + 1] = proj.location .. projectTypeFilesDir(projectType, proj.namespace) .. string.sub(pattern, 3)
+                        excludePatterns[#excludePatterns + 1] = projectSrcDir .. string.sub(pattern, 3)
                     end
                 end
 
@@ -580,7 +663,7 @@ function projects.submit(proj)
             if projectType == "util" then
                 kind("Utility")
             else
-                for i, config in pairs(solution.Configuration) do
+                for i, config in pairs(rythe.Configuration) do
                     configSetup[config](projectType, linkTargets)
                 end
             end
@@ -593,9 +676,15 @@ end
 function projects.scan(path)
     local srcDirs = {}
 
-    for i, file in ipairs(os.matchfiles(path .. "**/."..PROJECT_FILENAME)) do        
+    for i, file in ipairs(os.matchfiles(path .. "**/." .. PROJECT_FILENAME)) do        
         srcDirs[#srcDirs + 1] = fs.parentPath(file)
     end
+
+    for i, file in ipairs(os.matchfiles(path.."**/." .. THIRD_PARTY_FILENAME)) do
+        srcDirs[#srcDirs + 1] = fs.parentPath(file)
+    end
+    
+    printTable("srcDirs", srcDirs, "")
 
     for i, dir in ipairs(srcDirs) do
         local project = projects.load(dir)

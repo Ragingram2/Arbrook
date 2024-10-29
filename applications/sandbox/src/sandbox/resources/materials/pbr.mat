@@ -1,0 +1,25 @@
+{
+    "shaderPath":"resources/shaders/pbr.shader",
+    "parameters" : {
+        "Albedo": {
+            "register": 0,
+            "type": "Texture",
+            "value": "resources/textures/copper/copper-albedo.png"
+        },
+        "NormalHeight": {
+            "register": 1,
+            "type" : "Texture",
+            "value": "resources/textures/copper/copper-normalHeight.png"
+        },
+        "MRDAo": {
+            "register": 2,
+            "type": "Texture",
+            "value": "resources/textures/copper/copper-MRDAo.png"
+        },
+        "Emissive": {
+            "register": 3,
+            "type": "Texture",
+            "value": "resources/textures/copper/copper-emissive.png"
+        }
+    }
+}

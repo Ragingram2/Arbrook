@@ -1,0 +1,25 @@
+{
+    "shaderPath":"resources/shaders/lit.shader",
+    "parameters" : {
+        "Albedo": {
+            "register": 0,
+            "type": "Texture",
+            "value": "resources/textures/default/default-albedo.png"
+        },
+        "Roughness": {
+            "register": 1,
+            "type": "Texture",
+            "value": "resources/textures/default/default-roughness.png"
+        },
+        "Normal": {
+            "register": 2,
+            "type": "Texture",
+            "value": "resources/textures/default/default-normal.png"
+        },        
+        "Height": {
+            "register": 3,
+            "type": "Texture",
+            "value": "resources/textures/default/default-height.png"
+        }
+    }
+}

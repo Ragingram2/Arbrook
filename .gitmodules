@@ -1,8 +1,8 @@
-[submodule "application/sandbox"]
-	path = application/sandbox
+[submodule "applications/sandbox"]
+	path = applications/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
-[submodule "modules/arbrook/graphics/third_party/glfw"]
-	path = modules/arbrook/graphics/third_party/glfw
+[submodule "libraries/third_party/glfw"]
+	path = libraries/third_party/glfw
 	url = https://github.com/glfw/glfw.git
 [submodule "modules/arbrook/graphics/third_party/imgui"]
 	path = modules/arbrook/graphics/third_party/imgui
@@ -16,9 +16,9 @@
 [submodule "modules/arbrook/core/third_party/assimp"]
 	path = modules/arbrook/core/third_party/assimp
 	url = https://github.com/assimp/assimp.git
-[submodule "modules/arbrook/core/third_party/Rythe-Standard-Library"]
-	path = modules/arbrook/core/third_party/Rythe-Standard-Library
+[submodule "libraries/rythe/rythe-standard-library"]
+	path = libraries/rythe/rythe-standard-library
 	url = https://github.com/Rythe-Interactive/Rythe-Standard-Library.git
-[submodule "modules/arbrook/core/third_party/tracy"]
-	path = modules/arbrook/core/third_party/tracy
+[submodule "libraries/third_party/tracy"]
+	path = libraries/third_party/tracy
 	url = https://github.com/wolfpld/tracy.git

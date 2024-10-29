@@ -1,0 +1,26 @@
+#define Texture0 register(t0)
+#define TexSampler0 register(s0)
+
+#define Texture1 register(t1)
+#define TexSampler1 register(s1)
+
+#define Texture2 register(t2)
+#define TexSampler2 register(s2)
+
+#define Texture3 register(t3)
+#define TexSampler3 register(s3)
+
+#define Texture4 register(t4)
+#define TexSampler4 register(s4)
+
+#define Texture5 register(t5)
+#define TexSampler5 register(s5)
+
+#define Texture6 register(t6)
+#define TexSampler6 register(s6)
+
+#define Texture7 register(t7)
+#define TexSampler7 register(s7)
+
+#define Texture8 register(t8)
+#define TexSampler8 register(s8)

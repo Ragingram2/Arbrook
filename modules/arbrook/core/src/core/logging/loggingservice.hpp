@@ -1,6 +1,6 @@
 #pragma once
-#include "core/engine/services/service.hpp"
-#include "core/logging/logging.hpp"
+#include "../engine/services/service.hpp"
+#include "../logging/logging.hpp"
 
 namespace rythe::core
 {

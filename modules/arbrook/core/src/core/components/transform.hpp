@@ -1,6 +1,6 @@
 #pragma once
 #include <rsl/math>
-#include "core/components/property.hpp"
+//#include "core/components/property.hpp"
 namespace rythe::core
 {
 	struct transform
