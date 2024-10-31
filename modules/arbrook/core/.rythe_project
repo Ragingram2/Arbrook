@@ -1,4 +1,8 @@
 local project = {
+    additional_include_dirs = {
+        "D:/Repos/Arbrook/modules/arbrook/core/src"
+    },
+    warnings_as_errors = false,
     dependencies = {
         "public rythe/rythe-standard-library",
         "public third_party/glfw",

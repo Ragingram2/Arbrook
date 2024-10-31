@@ -63,9 +63,9 @@ local function find(projectPath)
         group = ""
     end
 
-    local projectFile = projectPath .. "/." .. PROJECT_FILENAME
+    local projectFile = projectPath .. "/.rythe_project"
 
-    local thirdPartyFile = projectPath .. "/." .. THIRD_PARTY_FILENAME
+    local thirdPartyFile = projectPath .. "/.rythe_third_party"
     if not fs.exists(thirdPartyFile) then
         thirdPartyFile = nil
     end
@@ -92,6 +92,7 @@ local function getDepAssemblyAndScope(dependency)
     else
         scope = "private"
     end
+
     return assemblyId, scope
 end
 
@@ -103,6 +104,7 @@ local function findAssembly(assemblyId)
     local projectId = string.match(assemblyId, "^([^:]+)")
     local projectType = string.sub(assemblyId, string.len(projectId) + 2)
     local project = loadedProjects[projectId]
+
     if projectType == "" then        
         if project == nil then
             return nil, projectId, nil
@@ -523,8 +525,6 @@ function projects.submit(proj)
             local libDirs = {}
             local linkTargets = {}
             local externalIncludeDirs = {}
-
-            -- printTable("allDeps", allDeps, "")
             
             if not utils.tableIsEmpty(allDeps) then
                 local depNames = {}
@@ -579,14 +579,14 @@ function projects.submit(proj)
                     externalincludedirs(proj.additional_external_include_dirs)
                 end
 
-                defines(allDefines)
+                defines(allDefines,"TRACY_ENABLE","_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING","_CRT_SECURE_NO_WARNINGS")
+                
                 
                 toolset(buildSettings.toolset)
                 language("C++")
                 cppdialect(buildSettings.cppVersion)
                 warnings(proj.warning_level)
                 floatingpoint(proj.floating_point_config)
-                flags {"MultiProcessorCompile","LinkTimeOptimization"}
                 buildoptions {
                     "-Wno-nonportable-include-path",
                     "-Wno-reorder-init-list",
@@ -611,7 +611,7 @@ function projects.submit(proj)
                     compileFlags[#compileFlags + 1] = "FatalWarnings"
                 end
 
-                flags(compileFlags)
+                flags(compileFlags,"MultiProcessorCompile","LinkTimeOptimization")
 
                 if proj.vector_extensions ~= nil then
                     vectorextensions(proj.vector_extensions)
@@ -676,15 +676,9 @@ end
 function projects.scan(path)
     local srcDirs = {}
 
-    for i, file in ipairs(os.matchfiles(path .. "**/." .. PROJECT_FILENAME)) do        
+    for i, file in ipairs(os.matchfiles(path .. "**/.rythe_project")) do        
         srcDirs[#srcDirs + 1] = fs.parentPath(file)
     end
-
-    for i, file in ipairs(os.matchfiles(path.."**/." .. THIRD_PARTY_FILENAME)) do
-        srcDirs[#srcDirs + 1] = fs.parentPath(file)
-    end
-    
-    printTable("srcDirs", srcDirs, "")
 
     for i, dir in ipairs(srcDirs) do
         local project = projects.load(dir)

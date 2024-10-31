@@ -1,6 +1,6 @@
 #pragma once
 #include <rsl/primitives>
-#include "graphics/interface/config.hpp"
+#include "../config.hpp"
 #include EnumTypes_HPP_PATH
 
 namespace rythe::rendering

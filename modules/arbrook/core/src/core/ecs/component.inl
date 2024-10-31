@@ -1,4 +1,4 @@
-#include "core/ecs/component.hpp"
+#include "component.hpp"
 #pragma once
 
 namespace rythe::core::ecs

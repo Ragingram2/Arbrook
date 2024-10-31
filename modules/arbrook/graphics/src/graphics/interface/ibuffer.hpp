@@ -6,7 +6,7 @@
 
 #include "core/utils/profiler.hpp"
 
-#include "graphics/interface/definitions/enumtypes.hpp"
+#include "../interface/definitions/enumtypes.hpp"
 
 namespace rythe::rendering
 {

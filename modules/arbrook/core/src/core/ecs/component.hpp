@@ -3,9 +3,9 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 
-#include "core/containers/pointer.hpp"
-#include "core/ecs/component_base.hpp"
-#include "core/ecs/entity.hpp"
+#include "../containers/pointer.hpp"
+#include "../ecs/component_base.hpp"
+#include "../ecs/entity.hpp"
 
 namespace rythe::core::ecs
 {
@@ -40,4 +40,4 @@ namespace rythe::core::ecs
     };
 }
 
-#include "core/ecs/component.inl"
+#include "component.inl"

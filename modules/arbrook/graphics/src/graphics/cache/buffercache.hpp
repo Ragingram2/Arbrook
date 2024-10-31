@@ -5,9 +5,9 @@
 
 #include "core/logging/logging.hpp"
 
-#include "graphics/data/bufferhandle.hpp"
-#include "graphics/interface/definitions/buffer.hpp"
-#include "graphics/interface/definitions/enumtypes.hpp"
+#include "../data/bufferhandle.hpp"
+#include "../interface/definitions/buffer.hpp"
+#include "../interface/definitions/enumtypes.hpp"
 
 
 namespace rythe::rendering
