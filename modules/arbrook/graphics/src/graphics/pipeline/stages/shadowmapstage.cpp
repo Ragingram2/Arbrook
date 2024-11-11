@@ -4,6 +4,8 @@ namespace rythe::rendering
 {
 	void shadow_map_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		depthCubeFBO = getFramebuffer("DepthCubeBuffer");
 		depthFBO = getFramebuffer("DepthBuffer");
 		mainFBO = getFramebuffer("MainBuffer");

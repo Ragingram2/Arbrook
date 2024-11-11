@@ -19,6 +19,8 @@ namespace rythe::rendering
 		static std::map<rsl::priority_type, std::unique_ptr<post_processing_effect_base>> ppfxs;
 		virtual void setup(core::transform camTransf, camera& cam) override
 		{
+			(void)camTransf;
+			(void)cam;
 			for (auto& [priority, ppfx] : ppfxs)
 			{
 				if (!ppfx->isInitialized())

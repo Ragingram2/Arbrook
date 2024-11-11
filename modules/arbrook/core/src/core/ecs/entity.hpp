@@ -7,7 +7,7 @@
 #include <rsl/hash>
 #include <rsl/containers>
 
-#include "../containers/pointer.hpp"
+#include "core/containers/pointer.hpp"
 
 namespace rythe::core::ecs
 {

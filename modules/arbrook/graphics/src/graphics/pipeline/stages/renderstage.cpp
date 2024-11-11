@@ -8,6 +8,8 @@ namespace rythe::rendering
 
 	void render_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		depthTexture = getFramebuffer("DepthBuffer")->getAttachment(AttachmentSlot::DEPTH_STENCIL);
 		depthCube = getFramebuffer("DepthCubeBuffer")->getAttachment(AttachmentSlot::DEPTH_STENCIL);
 

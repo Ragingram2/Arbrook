@@ -4,6 +4,8 @@ namespace rythe::rendering
 {
 	void skybox_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		skyboxMat = MaterialCache::loadMaterial("skybox");
 		cubeHandle = ModelCache::getModel("cube");
 		cameraBuffer = BufferCache::getBuffer("CameraBuffer");

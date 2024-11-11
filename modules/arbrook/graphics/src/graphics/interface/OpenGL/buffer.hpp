@@ -71,7 +71,7 @@ namespace rythe::rendering::internal
 		}
 
 		template<typename elementType>
-		void bufferData(elementType* data, int size = 1)
+		void bufferData(elementType* data, unsigned int size = 1u)
 		{
 			ZoneScopedN("[OpenGL Buffer] bufferData()");
 

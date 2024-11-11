@@ -245,7 +245,7 @@ local function loadProject(projectId, project, projectPath, name, projectType)
     end
 
     if project.warnings_as_errors == nil then
-        project.warnings_as_errors = true
+        project.warnings_as_errors = false
     end
 
     if project.floating_point_config == nil then
@@ -493,8 +493,9 @@ function projects.submit(proj)
 
     for i, projectType in ipairs(proj.types) do
         local fullGroupPath = projectTypeGroupPrefix(projectType) .. proj.group
-        local binDir = "build/" .. _ACTION .. "/bin/"
+        local binDir = "bin/"
         print("Building " .. proj.name .. ": " .. projectType)
+        print("Bin Directory: " .. binDir)
 
         group(fullGroupPath)
         project(proj.alias .. projectNameSuffix(projectType))
@@ -525,7 +526,7 @@ function projects.submit(proj)
             local libDirs = {}
             local linkTargets = {}
             local externalIncludeDirs = {}
-            
+            libDirs[#libDirs + 1] = binDir .. "lib/"
             if not utils.tableIsEmpty(allDeps) then
                 local depNames = {}
                 for i, dep in ipairs(allDeps) do
@@ -541,9 +542,9 @@ function projects.submit(proj)
 
                         depNames[#depNames + 1] = depProject.alias .. projectNameSuffix(depType)
                         
-                        allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias) .. "=1"
+                        allDefines[#allDefines + 1] = depProject.group == "" and string.upper(depProject.alias) .. "=1" or string.upper(string.gsub(depProject.group, "[/\\]", "_")) .. "_" .. string.upper(depProject.alias:gsub("%-","_")) .. "=1"
 
-                        libDirs[#libDirs + 1] = binDir .. depProject.group .. "/" .. depProject.name
+                        libDirs[#libDirs + 1] = binDir .. "lib/" .. depProject.name
                         
                         if depType ~= "header-only" then
                             linkTargets[#linkTargets + 1] = depProject.alias .. projectNameSuffix(depType)
@@ -558,7 +559,7 @@ function projects.submit(proj)
             
             architecture(buildSettings.platform)
             
-            local targetDir = binDir .. proj.group .. "/" .. proj.name
+            local targetDir = binDir .. "lib/" .. proj.name
             targetdir(targetDir)
             objdir(binDir .. "obj")
             
@@ -607,6 +608,7 @@ function projects.submit(proj)
 
                 local compileFlags = { }
 
+                print("\t" .. proj.alias .. " FatalWarnings: " .. tostring(proj.warnings_as_errors))
                 if proj.warnings_as_errors then
                     compileFlags[#compileFlags + 1] = "FatalWarnings"
                 end

@@ -5,11 +5,15 @@ namespace rythe::rendering
 {
 	void submit_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		mainFBO = getFramebuffer("MainBuffer");
 	}
 
 	void submit_stage::render(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		mainFBO->unbind();
 		RI->depthTest(false);
 		RI->cullFace(CullMode::NONE);

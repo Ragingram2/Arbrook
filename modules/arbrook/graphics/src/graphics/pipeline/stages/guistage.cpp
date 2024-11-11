@@ -8,6 +8,8 @@ namespace rythe::rendering
 	framebuffer* mainFBO;
 	void gui_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		mainFBO = getFramebuffer("MainBuffer");
 		RI->makeCurrent();
 		auto* ctx = ImGui::CreateContext();

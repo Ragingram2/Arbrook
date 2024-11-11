@@ -1,6 +1,6 @@
 #pragma once
 #include <imgui/backends/imgui_impl_glfw.h>
-#define RenderingAPI = 0
+#define RenderingAPI 0
 
 #ifdef _DEBUG
 #define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;}
@@ -39,17 +39,17 @@
 #endif
 
 #if RenderingAPI == RenderingAPI_VK
-#include <imgui/backends/imgui_impl_vulkan.h>
-#define Texture_HPP_PATH "graphics/interface/Vulkan/texture.hpp"
-#define TextureParams_HPP_PATH "graphics/interface/Vulkan/textureparameters.hpp"
-#define RenderInterface_HPP_PATH "graphics/interface/Vulkan/renderinterface.hpp"
-#define InputLayout_HPP_PATH "graphics/interface/Vulkan/inputlayout.hpp"
-#define Buffer_HPP_PATH "graphics/interface/Vulkan/buffer.hpp"
-#define Shader_HPP_PATH "graphics/interface/Vulkan/shader.hpp"
-#define Window_HPP_PATH "graphics/interface/Vulkan/window.hpp"
-#define EnumTypes_HPP_PATH "graphics/interface/Vulkan/enumtypes.hpp"
-#define ShaderCompiler_HPP_PATH "graphics/interface/Vulkan/shadercompiler.hpp"
-#define Framebuffer_HPP_PATH "graphics/interface/Vulkan/framebuffer.hpp"
+//#include <imgui/backends/imgui_impl_vulkan.h>
+//#define Texture_HPP_PATH "graphics/interface/Vulkan/texture.hpp"
+//#define TextureParams_HPP_PATH "graphics/interface/Vulkan/textureparameters.hpp"
+//#define RenderInterface_HPP_PATH "graphics/interface/Vulkan/renderinterface.hpp"
+//#define InputLayout_HPP_PATH "graphics/interface/Vulkan/inputlayout.hpp"
+//#define Buffer_HPP_PATH "graphics/interface/Vulkan/buffer.hpp"
+//#define Shader_HPP_PATH "graphics/interface/Vulkan/shader.hpp"
+//#define Window_HPP_PATH "graphics/interface/Vulkan/window.hpp"
+//#define EnumTypes_HPP_PATH "graphics/interface/Vulkan/enumtypes.hpp"
+//#define ShaderCompiler_HPP_PATH "graphics/interface/Vulkan/shadercompiler.hpp"
+//#define Framebuffer_HPP_PATH "graphics/interface/Vulkan/framebuffer.hpp"
 #endif
 
 

@@ -9,7 +9,7 @@ namespace rythe::rendering
 	struct pipeline_provider_base
 	{
 		virtual ~pipeline_provider_base() = default;
-		virtual PipelineBase* get(int index) = 0;
+		virtual PipelineBase* get(unsigned long long index) = 0;
 		virtual void shutdown() = 0;
 	};
 
@@ -18,7 +18,7 @@ namespace rythe::rendering
 	{
 		static std::vector<std::unique_ptr<PipelineType>> m_pipelines;
 
-		PipelineBase* get(int index) override
+		PipelineBase* get(unsigned long long index) override
 		{
 			if (index <= m_pipelines.size() - 1)//what is this?
 			{

@@ -7,9 +7,9 @@
 #include <rsl/delegate>
 #include <rsl/primitives>
 
-#include "../engine/services/service.hpp"
-#include "../logging/logging.hpp"
-#include "../events/event.hpp"
+#include "core/engine/services/service.hpp"
+#include "core/logging/logging.hpp"
+#include "core/events/event.hpp"
 
 namespace rythe::core::events
 {

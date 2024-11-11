@@ -30,6 +30,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<material_source> MaterialImporter::load(rsl::id_type id, fs::path filePath, material_source* data, const ast::import_settings<material_source>& settings)
 	{
+		(void)settings;
 		std::ifstream f(filePath);
 
 		nlohmann::json jsonData = nlohmann::json::parse(f);
@@ -39,6 +40,7 @@ namespace rythe::rendering
 	}
 	ast::asset_handle<material_source> MaterialImporter::loadFromMemory(rsl::id_type id, material_source* data, const ast::import_settings<material_source>& settings)
 	{
+		(void)settings;
 		return { id, data };
 	}
 

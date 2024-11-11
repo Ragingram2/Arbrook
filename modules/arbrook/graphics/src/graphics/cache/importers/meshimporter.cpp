@@ -23,6 +23,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<mesh> MeshImporter::load(rsl::id_type id, fs::path filePath, mesh* data, const ast::import_settings<mesh>& settings)
 	{
+		(void)settings;
 		const aiScene* scene = m_importer.ReadFile(filePath.string(), /*aiProcess_GenSmoothNormals |*/ aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType | aiProcess_FlipWindingOrder | aiProcess_PreTransformVertices);
 		if (!scene)
 		{
@@ -60,7 +61,7 @@ namespace rythe::rendering
 			auto matName = i == 0 ? std::format("{}-material", data->name) : std::format("{}{}-material", data->name, i);
 			auto filePath = "resources/shaders/lit.shader";
 			auto shaderName = "lit";
-			auto mat_source = material_source{ .name = matName, .shaderPath = filePath, .shaderName = shaderName };
+			auto mat_source = material_source{ .name = matName,  .shaderName = shaderName, .shaderPath = filePath };
 			auto albedoTextures = initMaterial(scene, material, aiTextureType_DIFFUSE, "default-albedo");
 			for (auto texture : albedoTextures)
 			{
@@ -139,11 +140,14 @@ namespace rythe::rendering
 
 	ast::asset_handle<mesh> MeshImporter::loadFromMemory(rsl::id_type id, mesh* data, const ast::import_settings<mesh>& settings)
 	{
+		(void)settings;
 		return { id, data };
 	}
 
 	void MeshImporter::write(fs::path filePath, mesh* data)
 	{
+		(void)filePath;
+		(void)data;
 		//std::ofstream o(filePath);
 		//nlohmann::json j;
 		//ns::to_json(j, *data);
@@ -157,7 +161,7 @@ namespace rythe::rendering
 		const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 		auto count = _mesh->mNumVertices;
 
-		for (int i = 0; i < count; i++)
+		for (unsigned int i = 0u; i < count; i++)
 		{
 			const aiVector3D& vertex = _mesh->mVertices[i];
 			const aiVector3D& normal = _mesh->mNormals[i];
@@ -174,24 +178,24 @@ namespace rythe::rendering
 		{
 			auto s_colors = _mesh->mColors[0];
 
-			for (int i = 0; i < count; i++)
+			for (unsigned int i = 0u; i < count; i++)
 			{
 				data->colors.push_back(math::vec4(s_colors[i].r, s_colors[i].g, s_colors[i].b, s_colors[i].a));
 			}
 		}
 
 		if (_mesh->HasFaces())
-			for (int i = 0; i < _mesh->mNumFaces; i++)
+			for (unsigned int i = 0u; i < _mesh->mNumFaces; i++)
 			{
 				auto indexCount = _mesh->mFaces[i].mNumIndices;
 				auto s_indices = _mesh->mFaces[i].mIndices;
-				for (int j = 0; j < indexCount; j++)
+				for (unsigned int j = 0u; j < indexCount; j++)
 				{
 					data->indices.push_back(s_indices[j]);
 				}
 			}
 	}
-	std::vector<material_parameter<std::string>*> MeshImporter::initMaterial(const aiScene* scene, aiMaterial* mat, aiTextureType type, const std::string& defaultTexName )
+	std::vector<material_parameter<std::string>*> MeshImporter::initMaterial(const aiScene* scene, aiMaterial* mat, aiTextureType type, const std::string& defaultTexName)
 	{
 		std::vector<material_parameter<std::string>*> textures;
 		auto texCount = mat->GetTextureCount(type);
@@ -211,7 +215,7 @@ namespace rythe::rendering
 					textureData = stbi_load_from_memory(reinterpret_cast<unsigned char*>(texture->pcData), texture->mWidth, &resolution.x, &resolution.y, &channels, 0);
 				else
 					textureData = stbi_load_from_memory(reinterpret_cast<unsigned char*>(texture->pcData), texture->mWidth * texture->mHeight, &resolution.x, &resolution.y, &channels, 0);
-				auto tex_source = texture_source{ .name = textureName, .resolution = resolution,.channels = channels, .data = textureData };
+				auto tex_source = texture_source{ .name = textureName,  .data = textureData, .resolution = resolution,.channels = channels };
 				auto textureAsset = ast::AssetCache<texture_source>::createAssetFromMemory(textureName, tex_source, ast::import_settings<texture_source>{});
 				auto texHandle = TextureCache::createTexture2D(textureName, textureAsset);
 				textures.emplace_back(new material_parameter<std::string>{ .value = texHandle->getName() });

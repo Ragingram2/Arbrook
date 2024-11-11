@@ -10,11 +10,13 @@ namespace rythe::rendering
 		framebuffer* depthFBO;
 		virtual void setup(PipelineBase* pipeline, RenderInterface* RI) override
 		{
+			(void)RI;
 			depthFBO = pipeline->getFramebuffer("DepthBuffer");
 		}
 
 		virtual void render(PipelineBase* pipeline, RenderInterface* RI, core::transform camTransf, camera& cam) override
 		{
+			(void)pipeline;
 			RI->depthTest(true);
 			RI->cullFace(CullMode::BACK);
 			RI->updateDepthStencil();

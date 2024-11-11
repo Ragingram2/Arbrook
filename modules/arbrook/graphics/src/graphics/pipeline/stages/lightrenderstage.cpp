@@ -4,6 +4,8 @@ namespace rythe::rendering
 {
 	void light_render_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		pointLightBuffer = BufferCache::createConstantBuffer<point_light_buffer>("PointLightBuffer", SV_PT_LIGHTS, UsageType::STATICDRAW);
 		directionalLightBuffer = BufferCache::createConstantBuffer<dir_light_buffer>("DirectionalLightBuffer", SV_DIR_LIGHTS, UsageType::STATICDRAW);
 
@@ -13,6 +15,8 @@ namespace rythe::rendering
 
 	void light_render_stage::render(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		ZoneScopedN("[Renderer] [Light Stage] Render");
 		int lightCount = 0;
 		for (auto& ent : m_filter)
@@ -66,10 +70,10 @@ namespace rythe::rendering
 		m_lastIdx = lightInfo.count;
 
 		if (pointLightBuffer)
-			pointLightBuffer->bufferData(&pointLightData, 1);
+			pointLightBuffer->bufferData(&pointLightData, 1u);
 
 		if (directionalLightBuffer)
-			directionalLightBuffer->bufferData(&dirLightData, 1);
+			directionalLightBuffer->bufferData(&dirLightData, 1u);
 	}
 
 	rsl::priority_type light_render_stage::priority() const { return LIGHT_PRIORITY; }

@@ -1,10 +1,10 @@
 #pragma once
 #include <rsl/primitives>
 
-#include "../ecs/registry.hpp"
-#include "../engine/program.hpp"
-#include "../ecs/component_container.hpp"
-#include "../ecs/filter.hpp"
+#include "core/ecs/registry.hpp"
+#include "core/engine/program.hpp"
+#include "core/ecs/component_container.hpp"
+#include "core/ecs/filter.hpp"
 
 namespace rythe::core
 {

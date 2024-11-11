@@ -5,8 +5,8 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 
-#include "../containers/pointer.hpp"
-#include "../ecs/entity.hpp"
+#include "core/containers/pointer.hpp"
+#include "core/ecs/entity.hpp"
 
 namespace rythe::core::ecs
 {

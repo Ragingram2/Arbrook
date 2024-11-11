@@ -37,7 +37,7 @@ namespace rythe::rendering
 		void bind() { m_impl.bind(); }
 		void unbind() { m_impl.unbind(); }
 		template<typename elementType>
-		void bufferData(elementType* data, int size = 1) { m_impl.bufferData(data, size); }
+		void bufferData(elementType* data, unsigned int size = 1u) { m_impl.bufferData(data, size); }
 		void release() { m_impl.release(); }
 
 		std::string getName() { return m_impl.name; }

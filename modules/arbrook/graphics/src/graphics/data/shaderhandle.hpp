@@ -11,7 +11,7 @@ namespace rythe::rendering
 		shader_handle() = default;
 		shader_handle(Ishader<internal::shader>* data) : m_data(data) {}
 		shader_handle(Ishader<internal::shader>& data) : m_data(&data) {}
-		shader_handle(const shader_handle& handle) : m_data(handle.m_data) {}
+		//shader_handle(const shader_handle& handle) : m_data(handle.m_data) {}
 
 		Ishader<internal::shader>* operator->() { return m_data; }
 		operator Ishader<internal::shader>& () const { return *m_data; }

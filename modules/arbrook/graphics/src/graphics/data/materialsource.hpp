@@ -46,7 +46,8 @@ namespace ns
 
 	inline void to_json(json& j, const rythe::rendering::material_parameter<rythe::rendering::uniform>& mp)
 	{
-
+		(void)j;
+		(void)mp;
 	}
 
 	inline void from_json(const json& j, rythe::rendering::material_parameter<rythe::rendering::uniform>* mp)
@@ -97,7 +98,8 @@ namespace ns
 
 	inline void to_json(json& j, const rythe::rendering::material_parameter<std::string>& mp)
 	{
-
+		(void)j;
+		(void)mp;
 	}
 	inline void from_json(const json& j, rythe::rendering::material_parameter<std::string>* mp)
 	{

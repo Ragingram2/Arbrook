@@ -6,11 +6,11 @@
 
 #include "core/ecs/ecs.hpp"
 #include "core/systems/system.hpp"
-#include "../pipeline/base/graphicsstage.hpp"
-#include "../pipeline/base/pipelineprovider.hpp"
-#include "../pipeline/base/pipeline.hpp"
-#include "../pipeline/defaultpipeline.hpp"
-#include "../components/components.hpp"
+#include "graphics/pipeline/base/graphicsstage.hpp"
+#include "graphics/pipeline/base/pipelineprovider.hpp"
+#include "graphics/pipeline/base/pipeline.hpp"
+#include "graphics/pipeline/defaultpipeline.hpp"
+#include "graphics/components/components.hpp"
 
 
 namespace rythe::rendering

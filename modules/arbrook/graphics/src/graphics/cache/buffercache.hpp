@@ -25,7 +25,7 @@ namespace rythe::rendering
 		template<typename elementType>
 		static buffer_handle createBuffer(const std::string& name, BufferType target, UsageType usage, const std::vector<elementType>& data = std::vector<elementType>());
 		template<typename elementType>
-		static buffer_handle createBuffer(const std::string& name, BufferType target, UsageType usage = UsageType::STATICDRAW, elementType* data = nullptr, int size = 1);
+		static buffer_handle createBuffer(const std::string& name, BufferType target, UsageType usage = UsageType::STATICDRAW, elementType* data = nullptr, unsigned int size = 1);
 		static buffer_handle getBuffer(const std::string& name);
 		static void deleteBuffer(const std::string& name);
 		static void resetBuffers();
@@ -57,7 +57,7 @@ namespace rythe::rendering
 	}
 
 	template<typename elementType>
-	inline buffer_handle BufferCache::createBuffer(const std::string& name, BufferType target, UsageType usage, elementType* data, int size)
+	inline buffer_handle BufferCache::createBuffer(const std::string& name, BufferType target, UsageType usage, elementType* data, unsigned int size)
 	{
 		if (m_buffers.contains(name))
 		{

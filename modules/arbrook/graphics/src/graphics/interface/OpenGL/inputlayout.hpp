@@ -31,6 +31,8 @@ namespace rythe::rendering::internal
 
 		void initialize(unsigned int numBuffers, shader_handle shader)
 		{
+			(void)numBuffers;
+			(void)shader;
 			ZoneScopedN("[OpenGL Inputlayout] initialize()");
 			glGenVertexArrays(1, &id);
 		}

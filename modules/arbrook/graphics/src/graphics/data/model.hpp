@@ -28,7 +28,6 @@ namespace rythe::rendering
 		ast::asset_handle<mesh> meshHandle;
 
 		model() = default;
-		model(const model& mod) : name(mod.name), indexBuffer(mod.indexBuffer), vertexBuffer(mod.vertexBuffer), normalBuffer(mod.normalBuffer), uvBuffer(mod.uvBuffer), colorBuffer(mod.colorBuffer), tangentBuffer(mod.tangentBuffer), matrixBuffer(mod.matrixBuffer), meshHandle(mod.meshHandle) { }
 
 		void bind()
 		{

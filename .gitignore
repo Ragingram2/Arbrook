@@ -403,16 +403,5 @@ arbrook/core/src/core/core.vcxproj.filters
 *.vcxproj
 *.sln
 application/sandbox/src/sandbox/resources/meshes/glb/sponza2.glb
-bin/lib/core.lib
-bin/lib/core-d.lib
-bin/lib/graphics.lib
-bin/lib/graphics-d.lib
-bin/lib/input.lib
-bin/lib/input-d.lib
-bin/lib/rendering-d.lib
-bin/lib/assimp-d.lib
-bin/lib/SPIRV-Tools-opt-d.lib
-bin/build/sandbox-d.exe
-bin/lib/rsl-d.lib
-bin/build/sandbox-d.lib
+bin/lib/
 *.rar

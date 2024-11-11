@@ -2,7 +2,7 @@
 #include <rsl/logging>
 
 #include "core/modules/module.hpp"
-#include "../systems/renderer.hpp"
+#include "graphics/systems/renderer.hpp"
 
 namespace rythe::rendering
 {

@@ -11,7 +11,7 @@ namespace rythe::rendering
 		texture_handle() = default;
 		texture_handle(Itexture<internal::texture>* data) : m_data(data) {}
 		texture_handle(Itexture<internal::texture>& data) : m_data(&data) {}
-		texture_handle(const texture_handle& handle) : m_data(handle.m_data) {}
+		//texture_handle(const texture_handle& handle) : m_data(handle.m_data) {}
 
 		Itexture<internal::texture>* operator->() { return m_data; }
 		operator Itexture<internal::texture>& () const { return *m_data; }

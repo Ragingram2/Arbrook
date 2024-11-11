@@ -12,7 +12,7 @@
 #include "graphics/rendering.hpp"
 #include "input/input.hpp"
 
-#include "../../components/camerasettings.hpp"
+#include "components/camerasettings.hpp"
 template<typename T> struct is_variant : std::false_type {};
 
 template<typename ...Args>
@@ -240,6 +240,7 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<gfx::model>(int index, gfx::model& field)
 	{
+		(void)index;
 		createAssetDropDown<gfx::model>(field, gfx::ModelCache::getModels(), &GUISystem::setModel);
 		return true;
 	}
@@ -247,6 +248,7 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<gfx::material>(int index, gfx::material& field)
 	{
+		(void)index;
 		createAssetDropDown<gfx::material>(field, gfx::MaterialCache::getMaterials(), &GUISystem::setMaterial);
 		return true;
 	}
@@ -267,6 +269,8 @@ namespace rythe::game
 		//	}
 		//	ImGui::EndTable();
 		//}
+		(void)index;
+		(void)field;
 		return true;
 	}
 }

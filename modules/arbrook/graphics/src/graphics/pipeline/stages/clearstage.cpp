@@ -5,6 +5,8 @@ namespace rythe::rendering
 {
 	void clear_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		RI->makeCurrent();
 		BufferCache::createConstantBuffer<camera_data>("CameraBuffer", SV_CAMERA, UsageType::STATICDRAW);
 		BufferCache::createConstantBuffer<material_data>("MaterialBuffer", SV_MATERIALS, UsageType::STATICDRAW);
@@ -118,6 +120,8 @@ namespace rythe::rendering
 
 	void clear_stage::render(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		ZoneScopedN("[Renderer] [Clear Stage] Render");
 		mainFBO->bind();
 		auto fboRes = mainFBO->getAttachment(AttachmentSlot::COLOR0)->getImpl().resolution;

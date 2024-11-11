@@ -145,7 +145,7 @@ namespace rythe::rendering::internal
 			}
 		}
 
-		void loadDataArray(unsigned char** textureData, int size)
+		void loadDataArray(unsigned char** textureData, unsigned int size)
 		{
 			ZoneScopedN("[OpenGL Texture] loadData()");
 
@@ -170,12 +170,12 @@ namespace rythe::rendering::internal
 
 			if (texType == GL_TEXTURE_CUBE_MAP)
 			{
-				for (unsigned int i = 0; i < 6; i++)
+				for (unsigned int i = 0u; i < 6; i++)
 					createTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, internalFormat, textureData[i]);
 			}
 			else
 			{
-				for (unsigned int i = 0; i < size; i++)
+				for (unsigned int i = 0u; i < size; i++)
 					createTexture(texType, internalFormat, textureData[i]);
 			}
 
@@ -212,7 +212,7 @@ namespace rythe::rendering::internal
 
 			if (texType == GL_TEXTURE_CUBE_MAP)
 			{
-				for (unsigned int i = 0; i < 6; i++)
+				for (unsigned int i = 0u; i < 6u; i++)
 					createTexture(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, internalFormat, textureData);
 			}
 			else

@@ -165,6 +165,7 @@ namespace rythe::rendering::internal
 		void drawArraysInstanced(PrimitiveType mode, unsigned int vertexCount, unsigned int instanceCount, unsigned int startVertex, unsigned int startInstance)
 		{
 			ZoneScopedN("[OpenGL RenderInterface] drawArraysInstanced()");
+			(void)startInstance;
 			glDrawArraysInstanced(static_cast<GLenum>(mode), startVertex, vertexCount, instanceCount);
 		}
 
@@ -176,13 +177,16 @@ namespace rythe::rendering::internal
 
 		void drawIndexedInstanced(PrimitiveType mode, unsigned int indexCount, unsigned int instanceCount, unsigned int startIndex, unsigned int baseVertex, unsigned int startInstance)
 		{
+			(void)baseVertex;
+			(void)startInstance;
 			ZoneScopedN("[OpenGL RenderInterface] drawIndexedInstanced()");
 			glDrawElementsInstanced(static_cast<GLenum>(mode), indexCount, static_cast<GLenum>(DataType::UINT), reinterpret_cast<void*>(sizeof(unsigned int) * startIndex), instanceCount);
 		}
 
 		void resize(int width, int height)
 		{
-
+			(void)width;
+			(void)height;
 		}
 
 		void flush()
@@ -207,6 +211,7 @@ namespace rythe::rendering::internal
 
 		void setViewport(float numViewPorts = 1, float leftX = 0, float leftY = 0, float width = 0, float height = 0, float minDepth = -1, float maxDepth = -1)
 		{
+			(void)numViewPorts;
 			ZoneScopedN("[OpenGL RenderInterface] setViewport()");
 			if (width <= 0)
 				width = m_windowHandle->getResolution().x;
@@ -343,6 +348,8 @@ namespace rythe::rendering::internal
 
 	inline void RenderInterface::debugCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
+		(void)length;
+		(void)userparam;
 		if (id == 131185) // Filter out annoying Nvidia message of: Buffer you made will use VRAM because you told us that you want it to allocate VRAM.
 			return;
 
@@ -427,6 +434,8 @@ namespace rythe::rendering::internal
 	}
 	inline void RenderInterface::debugCallbackARB(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userparam)
 	{
+		(void)length;
+		(void)userparam;
 		rsl::cstring s;
 		switch (source)
 		{
@@ -498,6 +507,8 @@ namespace rythe::rendering::internal
 	}
 	inline void RenderInterface::debugCallbackAMD(unsigned int id, unsigned int category, unsigned int severity, int length, const char* message, void* userparam)
 	{
+		(void)length;
+		(void)userparam;
 		rsl::cstring c;
 		switch (category)
 		{

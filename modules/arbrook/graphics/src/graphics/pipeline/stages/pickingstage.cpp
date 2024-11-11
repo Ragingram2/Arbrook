@@ -5,6 +5,8 @@ namespace rythe::rendering
 {
 	void picking_stage::setup(core::transform camTransf, camera& cam)
 	{
+		(void)camTransf;
+		(void)cam;
 		mainFBO = getFramebuffer("MainBuffer");
 		pickingFBO = getFramebuffer("PickingBuffer");
 		entData = BufferCache::createConstantBuffer<math::ivec4>("EntityData", 1, UsageType::STATICDRAW);
