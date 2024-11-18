@@ -29,7 +29,7 @@ namespace rythe::rendering
 		return false;
 	}
 
-	ast::asset_handle<texture_source> TextureImporter::load(rsl::id_type id, fs::path filePath, texture_source* data, const ast::import_settings<texture_source>& settings)
+	ast::asset_handle<texture_source> TextureImporter::load(rsl::id_type id, fs::path filePath, texture_source* data, [[maybe_unused]] const ast::import_settings<texture_source>& settings)
 	{
 		auto name = filePath.stem().string();
 #ifndef RenderingAPI_DX11
@@ -43,12 +43,12 @@ namespace rythe::rendering
 		return { id, data };
 	}
 
-	ast::asset_handle<texture_source> TextureImporter::loadFromMemory(rsl::id_type id, texture_source* data, const ast::import_settings<texture_source>& settings)
+	ast::asset_handle<texture_source> TextureImporter::loadFromMemory(rsl::id_type id, texture_source* data, [[maybe_unused]] const ast::import_settings<texture_source>& settings)
 	{
 		return { id, data };
 	}
 
-	void TextureImporter::write(fs::path filePath, texture_source* data)
+	void TextureImporter::write([[maybe_unused]] fs::path filePath, [[maybe_unused]] texture_source* data)
 	{
 		//std::ofstream o(filePath);
 		//nlohmann::json j;
@@ -56,5 +56,5 @@ namespace rythe::rendering
 		//o << std::setw(4) << j << std::endl;
 	}
 
-	void TextureImporter::free(texture_source& asset) { }
+	void TextureImporter::free([[maybe_unused]] texture_source& asset) { }
 }

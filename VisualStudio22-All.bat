@@ -1,2 +1,2 @@
-resources\tools\premake5\premake5 vs2022
+tools\premake5 vs2022
 pause

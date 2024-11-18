@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{97C4947C-83FB-950D-2CE8-7B1018FE110F}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bcon.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-atomic.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-clock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-cmp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-compat.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-context.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-decimal128.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-endian.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-error.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-iter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-json.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-keys.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-macros.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-md5.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-memory.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-oid.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-prelude.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-reader.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-string.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-utf8.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-value.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-version-functions.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-version.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson-writer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\libraries\third_party\bson\include\bson\bson.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\modules\arbrook\core\.rythe_project" />
+  </ItemGroup>
+</Project>

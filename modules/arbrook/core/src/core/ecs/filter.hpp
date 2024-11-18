@@ -16,16 +16,16 @@
 namespace rythe::core::ecs
 {
 
-	template<typename componentType, typename... others>
-	static void bind_events()
-	{
-		//events::EventBus::bind<events::component_creation<componentType>, decltype(filter), &decltype(filter)::addEntity>(&filter);
-		//events::EventBus::bind<events::component_destruction<componentType>, decltype(filter), &decltype(filter)::removeEntity>(&filter);
-		if constexpr (sizeof...(others) != 0)
-		{
-			bind_events<others...>();
-		}
-	}
+	//template<typename componentType, typename... others>
+	//static void bind_events()
+	//{
+	//	//events::EventBus::bind<events::component_creation<componentType>, decltype(filter), &decltype(filter)::addEntity>(&filter);
+	//	//events::EventBus::bind<events::component_destruction<componentType>, decltype(filter), &decltype(filter)::removeEntity>(&filter);
+	//	if constexpr (sizeof...(others) != 0)
+	//	{
+	//		bind_events<others...>();
+	//	}
+	//}
 
 	using entity_set = rsl::hashed_sparse_set<ecs::entity>;
 	template<typename... componentTypes>
@@ -37,18 +37,8 @@ namespace rythe::core::ecs
 		std::tuple<ecs::component_container<componentTypes>...> m_containers;
 		filter()
 		{
-
-			bind_events<componentTypes...>();
-			//types t;
-			//std::apply([=]<typename... T>(T... args)
-			//{
-			//	(
-			//		(
-			//			events::EventBus::bind<events::component_creation<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::addEntity>(*this),
-			//			events::EventBus::bind<events::component_destruction<decltype(args)>, filter<componentTypes...>, &filter<componentTypes...>::removeEntity>(*this)
-			//			)
-			//		, ...);
-			//}, t);
+			(events::EventBus::bind<events::component_creation<componentTypes>, filter<componentTypes...>, &filter<componentTypes...>::addEntity>(*this),...);
+			(events::EventBus::bind<events::component_destruction<componentTypes>, filter<componentTypes...>, &filter<componentTypes...>::removeEntity>(*this), ...);
 		}
 
 	private:

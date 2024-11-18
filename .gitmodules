@@ -22,3 +22,12 @@
 [submodule "libraries/third_party/tracy"]
 	path = libraries/third_party/tracy
 	url = https://github.com/wolfpld/tracy.git
+[submodule "libraries/third_party/reflect-cpp"]
+	path = libraries/third_party/reflect-cpp
+	url = https://github.com/getml/reflect-cpp.git
+[submodule "premake/rythe-build-system"]
+	path = premake/rythe-build-system
+	url = https://github.com/Rythe-Interactive/rythe-build-system.git
+[submodule "modules/arbrook/graphics/third_party/glslang"]
+	path = modules/arbrook/graphics/third_party/glslang
+	url = https://github.com/KhronosGroup/glslang.git

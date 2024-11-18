@@ -1,7 +1,7 @@
 #pragma once
-#include <imgui/imgui.h> 
-#include <imgui/imgui_internal.h>
-#include <imgui/addons/ImGuizmo/ImGuizmo.h>
+#include <imgui.h> 
+#include <imgui_internal.h>
+#include <addons/ImGuizmo/ImGuizmo.h>
 
 #include <rsl/primitives>
 #include <rsl/utilities>

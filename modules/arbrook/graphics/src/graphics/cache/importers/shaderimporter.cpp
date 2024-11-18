@@ -25,7 +25,7 @@ namespace rythe::rendering
 		return false;
 	}
 
-	ast::asset_handle<shader_source> ShaderImporter::load(rsl::id_type id, fs::path filePath, shader_source* data, const ast::import_settings<shader_source>& settings)
+	ast::asset_handle<shader_source> ShaderImporter::load(rsl::id_type id, fs::path filePath, shader_source* data, [[maybe_unused]] const ast::import_settings<shader_source>& settings)
 	{
 		auto name = filePath.stem().string();
 
@@ -34,12 +34,12 @@ namespace rythe::rendering
 		return { id, data };
 	}
 
-	ast::asset_handle<shader_source> ShaderImporter::loadFromMemory(rsl::id_type id, shader_source* data, const ast::import_settings<shader_source>& settings)
+	ast::asset_handle<shader_source> ShaderImporter::loadFromMemory(rsl::id_type id, shader_source* data, [[maybe_unused]] const ast::import_settings<shader_source>& settings)
 	{
 		return { id,data };
 	}
 
-	void ShaderImporter::write(fs::path filePath, shader_source* data)
+	void ShaderImporter::write([[maybe_unused]] fs::path filePath, [[maybe_unused]] shader_source* data)
 	{
 		//std::ofstream o(filePath);
 		//nlohmann::json j;
@@ -47,7 +47,7 @@ namespace rythe::rendering
 		//o << std::setw(4) << j << std::endl;
 	}
 
-	void ShaderImporter::free(shader_source& asset) { }
+	void ShaderImporter::free([[maybe_unused]] shader_source& asset) { }
 
 	shader_source ShaderImporter::loadShader(fs::path filepath)
 	{

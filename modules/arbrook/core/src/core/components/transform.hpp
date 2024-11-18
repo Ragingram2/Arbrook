@@ -1,22 +1,10 @@
 #pragma once
 #include <rsl/math>
-//#include "core/components/property.hpp"
 namespace rythe::core
 {
 	struct transform
 	{
-		//void set_position(math::vec3 val) { m_position = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
-		//void set_scale(math::vec3 val) { m_scale = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
-		//void set_rotation(math::quat val) { m_rotation = val; m_localMatrix = math::compose(m_scale, m_rotation, m_position); }
-
-		//math::vec3 get_position() { return m_position; }
-		//math::vec3 get_scale() { return m_scale; }
-		//math::quat get_rotation() { return m_rotation; }
 	public:
-
-		//Property<transform, math::vec3> position;
-		//Property<transform, math::vec3> scale;
-		//Property<transform, math::quat> rotation;
 
 		math::vec3 position = math::vec3(0.0f);
 		math::vec3 scale = math::vec3(1.0f);
@@ -25,11 +13,6 @@ namespace rythe::core
 		math::vec3 up() { return rotation.up(); }
 		math::vec3 right() { return rotation.right(); }
 		math::vec3 forward() { return rotation.forward(); }
-
-		void set_owner(/*core::ecs::entity ent*/)
-		{
-			//m_owner = ent;
-		}
 
 		math::mat4 from_world()
 		{

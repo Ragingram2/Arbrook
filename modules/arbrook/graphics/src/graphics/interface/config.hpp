@@ -1,5 +1,5 @@
 #pragma once
-#include <imgui/backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_glfw.h>
 #define RenderingAPI 0
 
 #ifdef _DEBUG
@@ -11,7 +11,7 @@
 #define SAFE_RELEASE(p) if(p) { p->Release() (p) = NULL} 
 
 #if RenderingAPI == RenderingAPI_OGL
-#include <imgui/backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_opengl3.h>
 #define Texture_HPP_PATH "graphics/interface/OpenGL/texture.hpp"
 #define TextureParams_HPP_PATH "graphics/interface/OpenGL/textureparameters.hpp"
 #define RenderInterface_HPP_PATH "graphics/interface/OpenGL/renderinterface.hpp"
@@ -25,7 +25,7 @@
 #endif
 
 #if RenderingAPI == RenderingAPI_DX11
-#include <imgui/backends/imgui_impl_dx11.h>
+#include <backends/imgui_impl_dx11.h>
 #define Texture_HPP_PATH "graphics/interface/DirectX/texture.hpp"
 #define TextureParams_HPP_PATH "graphics/interface/DirectX/textureparameters.hpp"
 #define RenderInterface_HPP_PATH "graphics/interface/DirectX/renderinterface.hpp"
@@ -39,7 +39,7 @@
 #endif
 
 #if RenderingAPI == RenderingAPI_VK
-//#include <imgui/backends/imgui_impl_vulkan.h>
+//#include <backends/imgui_impl_vulkan.h>
 //#define Texture_HPP_PATH "graphics/interface/Vulkan/texture.hpp"
 //#define TextureParams_HPP_PATH "graphics/interface/Vulkan/textureparameters.hpp"
 //#define RenderInterface_HPP_PATH "graphics/interface/Vulkan/renderinterface.hpp"

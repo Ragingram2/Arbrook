@@ -105,17 +105,17 @@ namespace rythe::game
 				ImGui::EndChild();
 
 				ImGui::Indent();
-				if (ent.hasComponent<core::transform>())
-					componentEditor<core::transform>(ent);
+				//if (ent.hasComponent<core::transform>())
+				//	componentEditor<core::transform>(ent);
 
-				if (ent.hasComponent<gfx::mesh_renderer>())
-					componentEditor<gfx::mesh_renderer>(ent);
+				//if (ent.hasComponent<gfx::mesh_renderer>())
+				//	componentEditor<gfx::mesh_renderer>(ent);
 
-				if (ent.hasComponent<gfx::light>())
-					componentEditor<gfx::light>(ent);
+				//if (ent.hasComponent<gfx::light>())
+				//	componentEditor<gfx::light>(ent);
 
-				if (ent.hasComponent<examplecomp>())
-					componentEditor<examplecomp>(ent);
+				//if (ent.hasComponent<examplecomp>())
+				//	componentEditor<examplecomp>(ent);
 				ImGui::Unindent();
 
 
