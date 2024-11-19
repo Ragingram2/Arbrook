@@ -12,7 +12,7 @@
 	url = https://github.com/Ragingram2/gainput.git
 [submodule "modules/arbrook/physics/third_party/JoltPhysics"]
 	path = modules/arbrook/physics/third_party/JoltPhysics
-	url = https://github.com/jrouwe/JoltPhysics.git
+	url = https://github.com/Ragingram2/JoltPhysics.git
 [submodule "modules/arbrook/core/third_party/assimp"]
 	path = modules/arbrook/core/third_party/assimp
 	url = https://github.com/assimp/assimp.git
@@ -30,7 +30,7 @@
 	url = https://github.com/Rythe-Interactive/rythe-build-system.git
 [submodule "modules/arbrook/graphics/third_party/glslang"]
 	path = modules/arbrook/graphics/third_party/glslang
-	url = https://github.com/KhronosGroup/glslang.git
+	url = https://github.com/Ragingram2/glslang.git
 [submodule "modules/arbrook/graphics/third_party/SPIRV-Cross"]
 	path = modules/arbrook/graphics/third_party/SPIRV-Cross
 	url = https://github.com/Ragingram2/SPIRV-Cross.git
