@@ -10,13 +10,9 @@ local project = {
         "public third_party/glslang",
         "public third_party/imgui:header-only",
         "public third_party/png:header-only",
-        "public third_party/spirv-cross",
-        "public third_party/spirv-tools",
+        "public third_party/SPIRV-cross",
+        "public third_party/SPIRV-tools",
         "public third_party/stb:header-only"
-    },
-    files = {
-        "./**",
-        "third_party/glslang/SPIRV/**"
     },
     defines = { "ARBROOK_INTERNAL","RenderingAPI_OGL=0","RenderingAPI_DX11=1","RenderingAPI_VK=2","_CRT_SECURE_NO_WARNINGS" }
 }
