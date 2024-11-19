@@ -1,0 +1,29 @@
+local thirdPartyProjects =
+{
+    { 
+        name = "glslang",
+        group = "third_party",
+        files =
+        {
+            "./**.hpp",
+            "./**.cpp",
+            "./**.h",
+            "./**.c",
+            "./SPIRV/**",
+            "./External/spirv-tools/**.h",
+        },
+        exclude_files = 
+        {
+            "./glslang/External/android_test/**",
+            "./glslang/External/examples/**",
+            "./glslang/ExtensionHeaders/**"
+        }
+    },
+    {
+        name = "imgui",
+        group = "third_party",
+        type = "header-only"
+    }
+}
+
+return thirdPartyProjects
