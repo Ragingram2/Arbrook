@@ -405,3 +405,4 @@ arbrook/core/src/core/core.vcxproj.filters
 application/sandbox/src/sandbox/resources/meshes/glb/sponza2.glb
 bin/lib/
 *.rar
+build
