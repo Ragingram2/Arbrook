@@ -1,4 +1,5 @@
 #pragma once
+#if RenderingAPI == RenderingAPI_DX11
 #include <D3D11.h>
 #include <D3Dcommon.h>
 
@@ -230,3 +231,5 @@ namespace rythe::rendering::internal
 		COLOR31 = 32
 	};
 }
+
+#endif

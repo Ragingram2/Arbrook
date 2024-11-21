@@ -1,5 +1,5 @@
-#include "graphics/pipeline/base/pipelineprovider.hpp"
 #pragma once
+#include "graphics/pipeline/base/pipelineprovider.hpp"
 
 namespace rythe::rendering
 {

@@ -1,5 +1,7 @@
 #pragma once
 
+#if RenderingAPI == RenderingAPI_DX11
+
 #include <rsl/logging>
 
 #include "core/utils/profiler.hpp"
@@ -188,3 +190,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

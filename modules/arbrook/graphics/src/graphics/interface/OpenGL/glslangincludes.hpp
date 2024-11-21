@@ -1,8 +1,8 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include <rsl/logging>
 #include <rsl/primitives>
 
-#define ENABLE_HLSL
 #include <glslang/Public/ResourceLimits.h>
 #include <glslang/Include/ShHandle.h>
 #include <glslang/Public/ShaderLang.h>
@@ -156,3 +156,4 @@ namespace rythe::rendering::internal
 	};
 
 }
+#endif

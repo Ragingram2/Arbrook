@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include <vector>
 #include <concepts>
@@ -137,3 +138,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif	

@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include "graphics/interface/OpenGL/oglincludes.hpp"
 
@@ -253,3 +254,4 @@ namespace rythe::rendering::internal
 		COLOR31 = GL_COLOR_ATTACHMENT31
 	};
 }
+#endif

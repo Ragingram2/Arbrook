@@ -1,4 +1,5 @@
 #pragma once
+#if RenderingAPI == RenderingAPI_DX11
 #include <memory>
 
 #include <rsl/primitives>
@@ -113,3 +114,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

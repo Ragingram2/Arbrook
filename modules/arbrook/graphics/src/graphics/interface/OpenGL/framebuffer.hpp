@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include "graphics/interface/OpenGL/oglincludes.hpp"
 #include "graphics/interface/OpenGL/texture.hpp"
@@ -92,3 +93,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

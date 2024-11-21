@@ -1,0 +1,20 @@
+local thirdPartyProjects =
+{
+    { 
+        name = "gainput",
+        group = "third_party",
+        defines = {},
+        warnings_as_errors = false,
+        additional_include_dirs =
+        {
+            "modules/arbrook/input/third_party/gainput/lib/include"
+        },
+        files =
+        {
+            "./lib/include/**",
+            "./lib/source/**"
+        }
+    }
+}
+
+return thirdPartyProjects

@@ -6,4 +6,4 @@
 #undef TRACY_ENABLE
 #endif
 
-#include <tracy/Tracy.hpp>
+#include <public/tracy/Tracy.hpp>

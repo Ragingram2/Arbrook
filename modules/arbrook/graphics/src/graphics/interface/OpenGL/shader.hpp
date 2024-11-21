@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include <string>
 #include <chrono>
@@ -194,3 +195,4 @@ namespace rythe::rendering::internal
 	};
 
 }
+#endif

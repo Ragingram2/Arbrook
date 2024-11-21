@@ -1,16 +1,24 @@
 local project = {
     additional_include_dirs = {
-        "D:/Repos/Arbrook/modules/arbrook/graphics/src"
+        "modules/arbrook/graphics/src",
+        "modules/arbrook/graphics/third_party/imgui",
+        "modules/arbrook/graphics/third_party/imgui/backends",
+        "modules/arbrook/graphics/third_party/imguizmo",
     },
+    warnings_as_errors = false,
     dependencies = {
         "private arbrook/core",
-        "public third_party/DirectX11",
+        "public third_party/glslang",
+        "public third_party/SPIRV-Cross",
+        "public third_party/imgui:header-only",
+        "public third_party/imguizmo:header-only" ,
+        "public third_party/DirectX11:header-only",
         "public third_party/DXC:header-only",
         "public third_party/GL:header-only",
         "public third_party/png:header-only",
         "public third_party/stb:header-only"
     },
-    defines = { "ARBROOK_INTERNAL","RenderingAPI_OGL=0","RenderingAPI_DX11=1","RenderingAPI_VK=2","_CRT_SECURE_NO_WARNINGS" }
+    defines = { "ARBROOK_INTERNAL","RenderingAPI= 0","RenderingAPI_OGL= 0","RenderingAPI_DX11= 1","RenderingAPI_VK= 2","_CRT_SECURE_NO_WARNINGS" }
 }
 
 return project

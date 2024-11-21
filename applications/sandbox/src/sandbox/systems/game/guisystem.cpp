@@ -190,7 +190,7 @@ namespace rythe::game
 
 
 			if (mainTex != 0)
-				ImGui::Image(reinterpret_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image(static_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, 1), ImVec2(1, 0));
 			if (GUI::selected != invalid_id)
 				drawGizmo(camTransf, camera, math::ivec2(imageWidth, imageHeight));
 

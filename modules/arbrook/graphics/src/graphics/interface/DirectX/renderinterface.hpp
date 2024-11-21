@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_DX11
 #pragma once
 #include <string>
 #include <fstream>
@@ -7,9 +8,9 @@
 #include <rsl/logging>
 #include <rsl/math>
 
-#include <GLFW/glfw3.h>
+#include <glfw/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+#include <glfw/glfw3native.h>
 
 #include <DirectXMath.h>
 
@@ -141,8 +142,8 @@ namespace rythe::rendering::internal
 
 				if (SUCCEEDED(dxgiGetDebugInterface(IID_PPV_ARGS(dxgiInfoQueue.GetAddressOf()))))
 				{
-					dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
-					dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
+					//dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_ERROR, true);
+					//dxgiInfoQueue->SetBreakOnSeverity(DXGI_DEBUG_ALL, DXGI_INFO_QUEUE_MESSAGE_SEVERITY_CORRUPTION, true);
 				}
 			}
 #endif
@@ -571,3 +572,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

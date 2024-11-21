@@ -1,4 +1,5 @@
 #pragma once
+#if RenderingAPI == RenderingAPI_DX11
 #include <wrl\client.h>
 #include <D3D11.h>
 #include <D3DX11.h>
@@ -11,9 +12,14 @@
 #include <dxgidebug.h>
 
 
-#pragma comment (lib, "d3d11.lib")
+#ifdef _DEBUG
+#pragma comment (lib, "d3dx11d.lib")
+#pragma comment (lib, "d3dx10d.lib")
+#else
 #pragma comment (lib, "d3dx11.lib")
 #pragma comment (lib, "d3dx10.lib")
+#endif
+#pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "DxErr.lib")
 #pragma comment (lib, "D3DCompiler.lib")
 #pragma comment(lib, "dxcompiler.lib")
@@ -45,3 +51,4 @@ typedef Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> DXShaderResourceView;
 
 
 
+#endif

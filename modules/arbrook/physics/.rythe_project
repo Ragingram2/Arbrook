@@ -1,6 +1,6 @@
 local project = {
     additional_include_dirs = {
-        "D:/Repos/Arbrook/modules/arbrook/physics/src"
+        "modules/arbrook/physics/src"
     },
     warnings_as_errors = false,
     dependencies = {

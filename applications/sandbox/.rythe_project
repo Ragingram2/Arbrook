@@ -1,7 +1,8 @@
 local project = {
     additional_include_dirs = {
-        "D:/Repos/Arbrook/applications/sandbox/src/sandbox"
+        "applications/sandbox/src/sandbox"
     },
+    warnings_as_errors = false,
     dependencies = {
         "arbrook/core",
         "arbrook/graphics",

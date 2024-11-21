@@ -1,14 +1,17 @@
 local project = {
     additional_include_dirs = {
-        "D:/Repos/Arbrook/modules/arbrook/core/src"
+        "modules/arbrook/core/src"
     },
     warnings_as_errors = false,
     dependencies = {
         "public rythe/rythe-standard-library",
+        "public third_party/assimp",
+        "public third_party/tracy",
+        "public third_party/glfw",
         "public third_party/bson:header-only",
         "public third_party/nlohmann:header-only",
         "public third_party/compat:header-only",
-        "public third_party/assimp",
+        "public third_party/reflect-cpp:header-only"
     },
     defines = { "ARBROOK_INTERNAL" }
 }

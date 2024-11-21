@@ -1,4 +1,5 @@
 #pragma once
+#if RenderingAPI == RenderingAPI_DX11
 #include "graphics/interface/DirectX/dx11includes.hpp"
 #include "graphics/interface/DirectX/texture.hpp"
 #include "graphics/interface/DirectX/enumtypes.hpp"
@@ -165,3 +166,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include <filesystem>
 #include <iostream>
@@ -8,6 +9,7 @@
 
 #include "core/utils/profiler.hpp"
 
+#define ENABLE_HLSL
 #include "graphics/data/shadersource.hpp"
 #include "graphics/cache/windowprovider.hpp"
 #include "graphics/interface/config.hpp"
@@ -279,3 +281,4 @@ namespace rythe::rendering::internal
 	inline std::string ShaderCompiler::file;
 	inline shader_source ShaderCompiler::shaderSource;
 }
+#endif

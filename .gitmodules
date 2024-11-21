@@ -1,12 +1,12 @@
 [submodule "applications/sandbox"]
 	path = applications/sandbox
 	url = https://github.com/Ragingram2/Arbrook-Sandbox.git
-[submodule "libraries/third_party/glfw"]
-	path = libraries/third_party/glfw
+[submodule "modules/arbrook/core/third_party/glfw"]
+	path = modules/arbrook/core/third_party/glfw
 	url = https://github.com/glfw/glfw.git
 [submodule "modules/arbrook/graphics/third_party/imgui"]
 	path = modules/arbrook/graphics/third_party/imgui
-	url = https://github.com/Rythe-Interactive/imgui.git
+	url = https://github.com/ocornut/imgui.git
 [submodule "modules/arbrook/input/third_party/gainput"]
 	path = modules/arbrook/input/third_party/gainput
 	url = https://github.com/Ragingram2/gainput.git
@@ -22,8 +22,8 @@
 [submodule "libraries/third_party/tracy"]
 	path = libraries/third_party/tracy
 	url = https://github.com/wolfpld/tracy.git
-[submodule "libraries/third_party/reflect-cpp"]
-	path = libraries/third_party/reflect-cpp
+[submodule "modules/arbrook/core/third_party/reflect-cpp"]
+	path = modules/arbrook/core/third_party/reflect-cpp
 	url = https://github.com/getml/reflect-cpp.git
 [submodule "premake/rythe-build-system"]
 	path = premake/rythe-build-system
@@ -33,7 +33,10 @@
 	url = https://github.com/Ragingram2/glslang.git
 [submodule "modules/arbrook/graphics/third_party/SPIRV-Cross"]
 	path = modules/arbrook/graphics/third_party/SPIRV-Cross
-	url = https://github.com/Ragingram2/SPIRV-Cross.git
+	url = https://github.com/KhronosGroup/SPIRV-Cross.git
 [submodule "modules/arbrook/graphics/third_party/SPIRV-Tools"]
 	path = modules/arbrook/graphics/third_party/SPIRV-Tools
 	url = https://github.com/Ragingram2/SPIRV-Tools.git
+[submodule "modules/arbrook/graphics/third_party/ImGuizmo"]
+	path = modules/arbrook/graphics/third_party/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

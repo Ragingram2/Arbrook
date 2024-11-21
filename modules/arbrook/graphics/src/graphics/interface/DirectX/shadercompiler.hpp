@@ -1,3 +1,4 @@
+#if RenderingAPI == RenderingAPI_DX11
 #pragma once
 #include <string>
 #include <vector>
@@ -107,3 +108,4 @@ namespace rythe::rendering::internal
 	inline const char* ShaderCompiler::m_profiles_c[6] = { "vs_4_0", "ps_4_0", "gs_4_0","hs_4_0", "ds_4_0","cs_4_0" };
 	inline std::vector<std::string> ShaderCompiler::m_profiles(m_profiles_c, end(m_profiles_c));
 }
+#endif

@@ -1,6 +1,5 @@
 #pragma once
 #include <backends/imgui_impl_glfw.h>
-#define RenderingAPI 0
 
 #ifdef _DEBUG
 #define CHECKERROR(hr,text,func) if(FAILED(hr))  { log::error(text); func;}

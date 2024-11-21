@@ -1,4 +1,5 @@
 #pragma once
+#if RenderingAPI == RenderingAPI_DX11
 #include <unordered_map>
 
 #include <rsl/logging>
@@ -162,3 +163,4 @@ namespace rythe::rendering::internal
 		}
 	};
 }
+#endif

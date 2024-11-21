@@ -1,0 +1,20 @@
+local thirdPartyProjects =
+{
+    { 
+        name = "JoltPhysics",
+        alias = "Jolt",
+        group = "third_party",
+        defines = {},
+        warnings_as_errors = false,
+        additional_include_dirs =
+        {
+            "modules/arbrook/physics/third_party/JoltPhysics"
+        },
+        files =
+        {
+            "./Jolt/**"
+        }
+    }
+}
+
+return thirdPartyProjects

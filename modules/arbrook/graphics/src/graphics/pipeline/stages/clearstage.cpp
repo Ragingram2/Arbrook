@@ -20,10 +20,10 @@ namespace rythe::rendering
 			pickingFBO->bind();
 			auto colorHandle = TextureCache::createTexture("picking-color", TextureType::RENDER_TARGET, { 0, nullptr }, math::ivec2(Screen_Width, Screen_Height), texture_parameters
 				{
+					.minFilterMode = rendering::FilterMode::NEAREST,
+					.magFilterMode = rendering::FilterMode::NEAREST,
 					.format = rendering::FormatType::RGBA,
 					.usage = rendering::UsageType::DEFAULT,
-					.minFilterMode = rendering::FilterMode::NEAREST,
-					.magFilterMode = rendering::FilterMode::NEAREST
 				});
 
 			pickingFBO->attach(AttachmentSlot::COLOR0, colorHandle, true, true);
@@ -46,14 +46,14 @@ namespace rythe::rendering
 
 			depthHandle = TextureCache::createTexture("shadowMap-depth", TextureType::DEPTH_STENCIL, { 0, nullptr }, math::ivec2(Shadow_Width, Shadow_Height), texture_parameters
 				{
-					.format = rendering::FormatType::R24_G8,
-					.usage = rendering::UsageType::DEPTH_COMPONENT,
-					.minFilterMode = rendering::FilterMode::NEAREST,
-					.magFilterMode = rendering::FilterMode::NEAREST,
 					.wrapModeS = rendering::WrapMode::CLAMP_TO_BORDER,
 					.wrapModeT = rendering::WrapMode::CLAMP_TO_BORDER,
 					.wrapModeR = rendering::WrapMode::CLAMP_TO_BORDER,
-					.borderColor = math::vec4(1.0f)
+					.minFilterMode = rendering::FilterMode::NEAREST,
+					.magFilterMode = rendering::FilterMode::NEAREST,
+					.borderColor = math::vec4(1.0f),
+					.format = rendering::FormatType::R24_G8,
+					.usage = rendering::UsageType::DEPTH_COMPONENT
 				});
 
 			//adding a color attachment is only required cause dx11 throws a warning otherwise
@@ -69,14 +69,14 @@ namespace rythe::rendering
 
 			depthCubeMap = TextureCache::createCubemap("shadowCube-depth", { 0, nullptr }, math::ivec2(Shadow_Width, Shadow_Height), texture_parameters
 				{
-					.format = rendering::FormatType::R24_G8,
-					.usage = rendering::UsageType::DEPTH_COMPONENT,
-					.minFilterMode = rendering::FilterMode::NEAREST,
-					.magFilterMode = rendering::FilterMode::NEAREST,
 					.wrapModeS = rendering::WrapMode::CLAMP_TO_BORDER,
 					.wrapModeT = rendering::WrapMode::CLAMP_TO_BORDER,
 					.wrapModeR = rendering::WrapMode::CLAMP_TO_BORDER,
-					.borderColor = math::vec4(1.0f)
+					.minFilterMode = rendering::FilterMode::NEAREST,
+					.magFilterMode = rendering::FilterMode::NEAREST,
+					.borderColor = math::vec4(1.0f),
+					.format = rendering::FormatType::R24_G8,
+					.usage = rendering::UsageType::DEPTH_COMPONENT,
 				});
 
 			depthCubeFBO->attach(AttachmentSlot::DEPTH_STENCIL, depthCubeMap, false, false);
@@ -90,19 +90,19 @@ namespace rythe::rendering
 
 			texture_handle colorHandle = TextureCache::createTexture("main-color", TextureType::RENDER_TARGET, { 0, nullptr }, math::ivec2(Screen_Width, Screen_Height), texture_parameters
 				{
-					.usage = rendering::UsageType::DEFAULT,
 					.minFilterMode = rendering::FilterMode::LINEAR,
-					.magFilterMode = rendering::FilterMode::LINEAR
+					.magFilterMode = rendering::FilterMode::LINEAR,
+					.usage = rendering::UsageType::DEFAULT
 				});
 
 			mainDepthHandle = TextureCache::createTexture("main-depth", TextureType::DEPTH_STENCIL, { 0, nullptr }, math::ivec2(Screen_Width, Screen_Height), texture_parameters
 				{
-					.format = rendering::FormatType::R24_G8,
-					.usage = rendering::UsageType::DEPTH_COMPONENT,
+					.wrapModeS = rendering::WrapMode::REPEAT,
+					.wrapModeT = rendering::WrapMode::REPEAT,
 					.minFilterMode = rendering::FilterMode::NEAREST,
 					.magFilterMode = rendering::FilterMode::NEAREST,
-					.wrapModeS = rendering::WrapMode::REPEAT,
-					.wrapModeT = rendering::WrapMode::REPEAT
+					.format = rendering::FormatType::R24_G8,
+					.usage = rendering::UsageType::DEPTH_COMPONENT
 				});
 
 			mainFBO->attach(AttachmentSlot::COLOR0, colorHandle, true, true);

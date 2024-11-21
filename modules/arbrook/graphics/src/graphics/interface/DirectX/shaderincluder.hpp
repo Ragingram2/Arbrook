@@ -1,3 +1,5 @@
+#if RenderingAPI == RenderingAPI_DX11
+#pragma once
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -63,3 +65,5 @@ namespace rythe::rendering::internal
 		return S_OK;
 	}
 }
+
+#endif

@@ -1,10 +1,11 @@
+#if RenderingAPI == RenderingAPI_OGL
 #pragma once
 #include <string>
 
 #define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <glfw/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
-#include <GLFW/glfw3native.h>
+#include <glfw/glfw3native.h>
 
 #include <rsl/logging>
 #include <rsl/math>
@@ -131,3 +132,4 @@ namespace rythe::rendering::internal
 	};
 
 }
+#endif
