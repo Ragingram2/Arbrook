@@ -4,10 +4,16 @@ local thirdPartyProjects =
         name = "glslang",
         group = "third_party",
         defines = {"ENABLE_HLSL"},
+        pre_build = 
+        {
+            "update_glslang_sources.py",
+            "cmake -B build -DCMAKE_INSTALL_PREFIX=\"$(pwd)/install\""
+        },
         warnings_as_errors = false,
         additional_include_dirs =
         {
-            "modules/arbrook/graphics/third_party/glslang"
+            "modules/arbrook/graphics/third_party/glslang",
+            "modules/arbrook/graphics/third_party/glslang/build/include"
         },
         files =
         {
