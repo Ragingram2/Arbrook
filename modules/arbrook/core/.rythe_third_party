@@ -71,12 +71,14 @@ local thirdPartyProjects =
             "modules/arbrook/core/third_party/assimp/contrib/*",
             "modules/arbrook/core/third_party/assimp/contrib/*/source",
             "modules/arbrook/core/third_party/assimp/contrib/*/src",
-            "modules/arbrook/core/third_party/assimp/contrib/*/include"
+            "modules/arbrook/core/third_party/assimp/contrib/*/include",
+            "modules/arbrook/core/third_party/assimp/contrib/unzip"
         },
         files = 
         {
             "./include/**",
-            "./code/**"
+            "./code/**",
+            "./contrib/unzip/*",
         }
     }
 }

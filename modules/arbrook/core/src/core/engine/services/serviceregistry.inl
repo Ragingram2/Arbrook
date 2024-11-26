@@ -1,5 +1,6 @@
-#include "serviceregistry.hpp"
 #pragma once
+#include "core/engine/services/serviceregistry.hpp"
+
 
 namespace rythe::core
 {
@@ -13,7 +14,7 @@ namespace rythe::core
 	template<typename serviceType>
 	void ServiceRegistry::remove_service()
 	{
-		rsl::id_type typeId = rs::typeHash<serviceType>();
+		rsl::id_type typeId = rsl::typeHash<serviceType>();
 		if (m_services.contains(typeId))
 		{
 			m_services.erase(typeId);

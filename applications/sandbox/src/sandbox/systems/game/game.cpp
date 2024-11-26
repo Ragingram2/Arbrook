@@ -7,6 +7,7 @@ namespace rythe::game
 	void Game::setup()
 	{
 		log::info("Initializing Game system");
+		log::info(fs::current_path().string());
 		bindEvent<key_input<inputmap::method::F1>, &Game::reloadShaders>();
 		bindEvent<key_input<inputmap::method::MOUSE_RIGHT>, &Game::toggleMouseCapture>();
 

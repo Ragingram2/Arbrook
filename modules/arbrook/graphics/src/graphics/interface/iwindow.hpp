@@ -21,7 +21,7 @@ namespace rythe::rendering
 		APIType m_impl;
 	public:
 
-		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr) { m_imple.initialize(res, name, window); }
+		void initialize(math::ivec2 res, const std::string& name, GLFWwindow* window = nullptr) { m_impl.initialize(res, name, window); }
 
 		GLFWwindow* getGlfwWindow() {  return m_impl.getGlfwWindow(); }
 

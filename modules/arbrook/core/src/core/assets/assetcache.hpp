@@ -151,7 +151,7 @@ namespace rythe::core::assets
 			else
 			{
 				log::error("This importer does not support files with the given extension {}", filePath.extension());
-				return { 0, nullptr }
+				return { 0, nullptr };
 			}
 
 			if (data == nullptr)

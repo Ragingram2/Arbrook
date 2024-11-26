@@ -15,11 +15,5 @@ namespace rythe::rendering
 		virtual void setup(core::transform camTransf, camera& cam) override;
 		virtual void render(core::transform camTransf, camera& cam) override;
 		virtual rsl::priority_type priority() const override;
-
-		template <class T, void(T::* Func)(core::transform, camera)>
-		static void addRender(T* ptr)
-		{
-			m_onRender.push_back<T, Func>(*ptr);
-		}
 	};
 }
