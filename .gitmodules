@@ -9,7 +9,7 @@
 	url = https://github.com/ocornut/imgui.git
 [submodule "modules/arbrook/input/third_party/gainput"]
 	path = modules/arbrook/input/third_party/gainput
-	url = https://github.com/Ragingram2/gainput.git
+	url = https://github.com/jkuhlmann/gainput.git
 [submodule "modules/arbrook/physics/third_party/JoltPhysics"]
 	path = modules/arbrook/physics/third_party/JoltPhysics
 	url = https://github.com/Ragingram2/JoltPhysics.git
