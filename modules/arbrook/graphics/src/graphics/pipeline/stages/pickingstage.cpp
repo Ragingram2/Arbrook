@@ -26,11 +26,11 @@ namespace rythe::rendering
 		camera_data data[] = { camera_data{.viewPosition = camTransf.position, .projection = cam.projection, .view = cam.view, .model = math::mat4(1.0f)} };
 		for (auto& ent : m_filter)
 		{
-			auto vecId = convertToBase256(ent->id);
+			auto vecId = convertToBase256(ent.data->id);
 			auto& renderer = ent.getComponent<mesh_renderer>();
 			auto& transf = ent.getComponent<core::transform>();
 			model& model = renderer.model;
-			if (!ent->enabled || !renderer.enabled.get() || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
+			if (!ent.data->enabled || !renderer.enabled.get() || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
 
 			ast::asset_handle<mesh> mesh = renderer.model.meshHandle;
 

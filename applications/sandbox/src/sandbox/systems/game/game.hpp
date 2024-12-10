@@ -14,7 +14,7 @@
 #include "graphics/rendering.hpp"
 #include "input/input.hpp"
 
-#include "components/camerasettings.hpp"
+#include "sandbox/components/camerasettings.hpp"
 
 namespace rythe::game
 {

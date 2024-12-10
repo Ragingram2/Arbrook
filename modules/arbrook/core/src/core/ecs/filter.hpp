@@ -12,20 +12,10 @@
 #include "core/ecs/entity.hpp"
 #include "core/ecs/component_container.hpp"
 #include "core/ecs/component_family.hpp"
+#include "core/ecs/registry.hpp"
 
 namespace rythe::core::ecs
 {
-
-	//template<typename componentType, typename... others>
-	//static void bind_events()
-	//{
-	//	//events::EventBus::bind<events::component_creation<componentType>, decltype(filter), &decltype(filter)::addEntity>(&filter);
-	//	//events::EventBus::bind<events::component_destruction<componentType>, decltype(filter), &decltype(filter)::removeEntity>(&filter);
-	//	if constexpr (sizeof...(others) != 0)
-	//	{
-	//		bind_events<others...>();
-	//	}
-	//}
 
 	using entity_set = rsl::hashed_sparse_set<ecs::entity>;
 	template<typename... componentTypes>
@@ -46,17 +36,17 @@ namespace rythe::core::ecs
 		template<typename componentType>
 		static constexpr rsl::id_type generateId()
 		{
-			return rsl::typeHash<componentType>();
+			return rsl::type_id<componentType>();
 		}
 
 		template<typename componentType0, typename componentType1, typename... componentTypeN>
 		static constexpr rsl::id_type generateId()
 		{
-			return rsl::combine_hash(rsl::make_hash<componentType0>(), generateId<componentType1, componentTypeN...>());
+			return rsl::combine_hash(rsl::type_id<componentType0>(), generateId<componentType1, componentTypeN...>());
 		}
 	public:
 		static constexpr rsl::id_type filter_id = generateId<componentTypes...>();
-		static constexpr std::array<rsl::id_type, sizeof...(componentTypes)> composition = { rsl::typeHash<componentTypes>()... };
+		static constexpr std::array<rsl::id_type, sizeof...(componentTypes)> composition = { rsl::type_id<componentTypes>()... };
 
 		entity_set::iterator begin() noexcept;
 		entity_set::iterator end() noexcept;
@@ -197,7 +187,7 @@ namespace rythe::core::ecs
 	{
 		if (!containsEntity(evnt.entId) && contains(ecs::Registry::entityCompositions[evnt.entId]))
 		{
-			m_entities.emplace(entity{ &ecs::Registry::entities[evnt.entId] });
+			m_entities.emplace(ecs::Registry::entities[evnt.entId]);
 		}
 	}
 

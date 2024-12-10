@@ -23,8 +23,9 @@ namespace rythe::core::events
 	{
 	private:
 		inputmap::method m_key = Key;
-		bool m_lastValue;
 		bool m_value;
+		bool m_lastValue;
+
 	public:
 		key_input(bool _value, bool _lastValue) : m_value(_value), m_lastValue(_lastValue) {}
 

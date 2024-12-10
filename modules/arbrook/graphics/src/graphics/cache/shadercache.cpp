@@ -7,7 +7,7 @@ namespace rythe::rendering
 
 	shader_handle ShaderCache::createShader(const std::string& name, ast::asset_handle<shader_source> shaderSource)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_shaders.count(id))
 		{
 			log::warn("This shader name \"{}\" already exists, returning existing handle", name);
@@ -42,31 +42,31 @@ namespace rythe::rendering
 
 	shader_handle ShaderCache::getShader(const std::string& name)
 	{
-		return getShader(rsl::nameHash(name));
+		return getShader(rsl::hash_string(name));
 	}
 
-	shader_handle ShaderCache::getShader(rsl::id_type nameHash)
+	shader_handle ShaderCache::getShader(rsl::id_type hash_string)
 	{
-		if (m_shaders.count(nameHash))
+		if (m_shaders.count(hash_string))
 		{
-			return { m_shaders[nameHash].get() };
+			return { m_shaders[hash_string].get() };
 		}
-		log::error("Shader id \"{}\" does not exist", nameHash);
+		log::error("Shader id \"{}\" does not exist", hash_string);
 		return { nullptr };
 	}
 
 	void ShaderCache::deleteShader(const std::string& name)
 	{
-		deleteShader(rsl::nameHash(name));
+		deleteShader(rsl::hash_string(name));
 	}
 
-	void ShaderCache::deleteShader(rsl::id_type nameHash)
+	void ShaderCache::deleteShader(rsl::id_type hash_string)
 	{
-		if (m_shaders.count(nameHash))
+		if (m_shaders.count(hash_string))
 		{
-			m_shaders[nameHash]->release();
-			m_shaders.erase(nameHash);
-			m_names.erase(nameHash);
+			m_shaders[hash_string]->release();
+			m_shaders.erase(hash_string);
+			m_names.erase(hash_string);
 		}
 	}
 

@@ -5,6 +5,7 @@
 #include <rsl/primitives>
 #include <rsl/utilities>
 #include <rsl/math>
+#include <rsl/type_traits>
 
 #include "core/components/transform.hpp"
 #include "graphics/interface/definitions/definitions.hpp"
@@ -39,12 +40,12 @@ namespace rythe::rendering
 			}
 		}
 
-		bool hasFramebuffer(const std::string& name) const { return hasFramebuffer(rsl::nameHash(name)); }
+		bool hasFramebuffer(const std::string& name) const { return hasFramebuffer(rsl::hash_string(name)); }
 		bool hasFramebuffer(rsl::id_type nameHash) const { return m_framebuffers.count(nameHash); }
 
 		framebuffer* addFramebuffer(const std::string& name)
 		{
-			rsl::id_type id = rsl::nameHash(name);
+			rsl::id_type id = rsl::hash_string(name);
 			if (hasFramebuffer(id))
 			{
 				log::warn("Framebuffer \"{}\" already exists, returning existing framebuffer", name);
@@ -58,7 +59,7 @@ namespace rythe::rendering
 			return fbo;
 		}		
 		framebuffer* getFramebuffer(rsl::id_type nameHash) { if (hasFramebuffer(nameHash)) return m_framebuffers[nameHash].get(); return nullptr; }
-		framebuffer* getFramebuffer(const std::string& name) { return getFramebuffer(rsl::nameHash(name)); }
+		framebuffer* getFramebuffer(const std::string& name) { return getFramebuffer(rsl::hash_string(name)); }
 
 	};
 }

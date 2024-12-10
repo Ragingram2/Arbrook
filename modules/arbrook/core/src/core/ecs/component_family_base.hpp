@@ -6,7 +6,6 @@
 #include <rsl/hash>
 
 #include "core/containers/pointer.hpp"
-#include "core/ecs/entity.hpp"
 
 namespace rythe::core::ecs
 {
@@ -21,10 +20,8 @@ namespace rythe::core::ecs
 
 		virtual void clear() =0;
 
-		virtual pointer<void> createComponent(entity& ent) =0;
 		virtual pointer<void> createComponent(entityId id) =0;
 
-		virtual pointer<void> getComponent(entity& ent) =0;
 		virtual pointer<void> getComponent(entityId id) =0;
 
 		virtual void destroyComponent(entityId id) =0;

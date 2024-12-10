@@ -9,7 +9,7 @@ namespace rythe::rendering
 
 	texture_handle TextureCache::createTexture(const std::string& name, TextureType targetType, ast::asset_handle<texture_source> textureData, math::ivec2 overrideResolution, texture_parameters params)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_textures.count(id))
 		{
 			log::warn("Texture \"{}\" already exists, returning existing handle", name);
@@ -35,7 +35,7 @@ namespace rythe::rendering
 
 	texture_handle TextureCache::createTexture2D(const std::string& name, ast::asset_handle<texture_source> textureData, math::ivec2 overrideResolution, texture_parameters params)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_textures.count(id))
 		{
 			log::warn("Texture \"{}\" already exists, returning existing handle", name);
@@ -79,7 +79,7 @@ namespace rythe::rendering
 
 	texture_handle TextureCache::createCubemap(const std::string& name, ast::asset_handle<texture_source> textureData, math::ivec2 overrideResolution, texture_parameters params)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_textures.count(id))
 		{
 			log::warn("Texture \"{}\" already exists, returning existing handle", name);
@@ -105,14 +105,14 @@ namespace rythe::rendering
 
 	texture_handle TextureCache::getTexture(const std::string& name)
 	{
-		return getTexture(rsl::nameHash(name));
+		return getTexture(rsl::hash_string(name));
 	}
 
-	texture_handle TextureCache::getTexture(rsl::id_type nameHash)
+	texture_handle TextureCache::getTexture(rsl::id_type hash_string)
 	{
-		if (m_textures.count(nameHash))
+		if (m_textures.count(hash_string))
 		{
-			return { m_textures[nameHash].get() };
+			return { m_textures[hash_string].get() };
 		}
 
 		log::error("The texture you tried to retrieve does not exist");
@@ -121,15 +121,15 @@ namespace rythe::rendering
 
 	void TextureCache::deleteTexture(const std::string& name)
 	{
-		deleteTexture(rsl::nameHash(name));
+		deleteTexture(rsl::hash_string(name));
 	}
 
-	void TextureCache::deleteTexture(rsl::id_type nameHash)
+	void TextureCache::deleteTexture(rsl::id_type hash_string)
 	{
-		if (m_textures.count(nameHash))
+		if (m_textures.count(hash_string))
 		{
-			m_textures.erase(nameHash);
-			m_names.erase(nameHash);
+			m_textures.erase(hash_string);
+			m_names.erase(hash_string);
 		}
 	}
 

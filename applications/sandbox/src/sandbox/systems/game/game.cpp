@@ -74,7 +74,7 @@ namespace rythe::game
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
 			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-			transf.rotation = math::toQuat(math::vec3(-90.0f, 0.0f, 0.0f));
+			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f));
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("bog"), .model = gfx::ModelCache::getModel("cube"), .castShadows = true });
 		}
 
@@ -83,7 +83,7 @@ namespace rythe::game
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
 			transf.position = math::vec3(0.0f, 25.f, 0.0f);
-			transf.rotation = math::toQuat(math::vec3(-90.0f, 0.0f, 0.0f));
+			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f));
 			auto& light = ent.addComponent<gfx::light>({ .type = gfx::LightType::DIRECTIONAL });
 			light.asDirectionalLight().color = math::vec4(1.0f);
 			light.asDirectionalLight().intensity = 1.0f;
@@ -105,7 +105,7 @@ namespace rythe::game
 			auto camera = createEntity("Camera");
 			auto& camTransf = camera.addComponent<core::transform>();
 			camTransf.position = math::vec3(0.0f, 10.0f, -10.0f);
-			camTransf.rotation = math::quat(math::lookAt(math::vec3::zero, camTransf.forward(), camTransf.up()));
+			camTransf.rotation = math::quat(math::look_at(math::vec3::zero, camTransf.forward(), camTransf.up()));
 			camera.addComponent<gfx::camera>({ .farZ = 10000.f, .nearZ = 0.1f, .fov = 90.f });
 			camera.addComponent<camera_settings>({ .mode = CameraControlMode::FreeLook, .speed = 10.0f, .sensitivity = .9f });
 		}

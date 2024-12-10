@@ -63,13 +63,13 @@ namespace rythe::rendering
 		{
 			auto ptr = new Type();
 			m_stages.emplace(ptr->priority(), std::unique_ptr<graphics_stage_base>(ptr));
-			m_stageIds.emplace(rsl::typeHash<Type>(), ptr->priority());
+			m_stageIds.emplace(rsl::type_id<Type>(), ptr->priority());
 		}
 
 		template<typename Stage>
 		static Stage* getStage()
 		{
-			auto id = rsl::typeHash<Stage>();
+			auto id = rsl::type_id<Stage>();
 			if (m_stageIds.count(id))
 			{
 				return reinterpret_cast<Stage*>(m_stages[m_stageIds[id]].get());

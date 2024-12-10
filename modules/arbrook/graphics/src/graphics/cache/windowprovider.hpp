@@ -22,7 +22,7 @@ namespace rythe::rendering
 	public:
 		static window_handle setActive(const std::string& windowName)
 		{
-			auto id = rsl::nameHash(windowName);
+			auto id = rsl::hash_string(windowName);
 			if (m_windows.count(id))
 			{
 				return activeWindow = window_handle{ m_windows[id].get() };
@@ -33,7 +33,7 @@ namespace rythe::rendering
 
 		static window_handle addWindow(const std::string& windowName)
 		{
-			auto id = rsl::nameHash(windowName);
+			auto id = rsl::hash_string(windowName);
 			if (m_windows.count(id))
 			{
 				log::warn("A window with the name \"{}\", already exists. returning the existing handle", windowName);
@@ -47,7 +47,7 @@ namespace rythe::rendering
 
 		static window_handle get(const std::string& windowName)
 		{
-			auto id = rsl::nameHash(windowName);
+			auto id = rsl::hash_string(windowName);
 			if (m_windows.count(id))
 			{
 				return { m_windows[id].get() };
@@ -58,7 +58,7 @@ namespace rythe::rendering
 
 		static void destroyWindow(const std::string& windowName)
 		{
-			auto id = rsl::nameHash(windowName);
+			auto id = rsl::hash_string(windowName);
 			if (m_windows.count(id))
 			{
 				if (m_windows.size() < 2)

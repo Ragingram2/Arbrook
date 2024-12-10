@@ -294,8 +294,8 @@ namespace rythe::game
 		if (ImGuizmo::Manipulate(camera.view.data, camera.projection.data, currentGizmoOperation, currentGizmoMode, matrix))
 		{
 			math::vec3 rot;
-			ImGuizmo::DecomposeMatrixToComponents(matrix, transf.position.data, rot.data, transf.scale.data);
-			transf.rotation = math::toQuat(rot);
+			ImGuizmo::DecomposeMatrixToComponents(matrix, transf.position.data.data, rot.data.data, transf.scale.data.data);
+			transf.rotation = math::quat::from_euler(rot);
 		}
 	}
 	void GUISystem::doClick(key_input<inputmap::method::MOUSE_LEFT>& action)

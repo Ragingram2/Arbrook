@@ -1,5 +1,5 @@
-#include "../ecs/registry.hpp"
-
+#include "core/ecs/registry.hpp"
+#include "core/components/transform.hpp"
 namespace rythe::core::ecs
 {
 	using entityId = rsl::id_type;
@@ -10,55 +10,78 @@ namespace rythe::core::ecs
 	std::unordered_map<componentId, std::unique_ptr<component_family_base>> Registry::componentFamilies;
 	std::unordered_map<componentId, std::string> Registry::componentNames;
 
+
+	void Registry::initialize()
+	{
+		log::info("Initializing world entity");
+		auto& [_, ent] = *entities.try_emplace(worldId).first;
+		ent.alive = true;
+		ent.id = worldId;
+		ent.name = "World";
+		entityCompositions.try_emplace(worldId);
+		world = entity{ &ent };
+		world.addComponent<transform>();
+	}
+
+	void Registry::update()
+	{
+
+	}
+
+	void Registry::shutdown()
+	{
+
+	}
+
 	ecs::entity Registry::createEntity()
 	{
 		lastId++;
-		auto& [_, data] = *entities.try_emplace(lastId).first;
-		data.alive = true;
-		data.id = lastId;
-		data.name = std::format("Entity {}", lastId);
-		data.parent = ecs::entity{ world };
+		auto& [_, ent] = *entities.try_emplace(lastId).first;
+		ent.alive = true;
+		ent.id = lastId;
+		ent.name = std::format("Entity {}", lastId);
+		ent.parent = world;
 
-		entityCompositions.try_emplace(ecs::entity{ &data });
-		return ecs::entity{ &data };
+		entityCompositions.try_emplace(entity{ &ent });
+		return entity{ &ent };
 	}
 
 	ecs::entity Registry::createEntity(ecs::entity parent)
 	{
 		lastId++;
-		auto& [_, data] = *entities.try_emplace(lastId).first;
-		data.alive = true;
-		data.id = lastId;
-		data.name = std::format("Entity {}", lastId);
-		data.parent = parent;
+		auto& [_, ent] = *entities.try_emplace(lastId).first;
+		ent.alive = true;
+		ent.id = lastId;
+		ent.name = std::format("Entity {}", lastId);
+		ent.parent = parent;
 
 		if (parent)
-			parent->children.insert(ecs::entity{ &data });
+			parent.data->children.insert(entity{ &ent });
 
-		entityCompositions.try_emplace(ecs::entity{ &data });
-		return ecs::entity{ &data };
+		entityCompositions.try_emplace(entity{ &ent });
+		return entity{ &ent };
 	}
 
 	ecs::entity Registry::createEntity(const std::string& name)
 	{
 		lastId++;
-		auto& [_, data] = *entities.try_emplace(lastId).first;
-		data.alive = true;
-		data.id = lastId;
-		data.name = name;
-		data.parent = ecs::entity{ world };
-		return ecs::entity{ &data };
+		auto& [_, ent] = *entities.try_emplace(lastId).first;
+		ent.alive = true;
+		ent.id = lastId;
+		ent.name = name;
+		ent.parent = world;
+		return entity{ &ent };
 	}
 
 	void Registry::destroyEntity(ecs::entity& ent)
 	{
-		for (auto typeId : entityCompositions[ent->id])
+		for (auto typeId : entityCompositions[ent.data->id])
 		{
 			destroyComponent(ent, typeId);
 		}
 
-		entityCompositions.erase(ent->id);
-		entities.erase(ent->id);
+		entityCompositions.erase(ent.data->id);
+		entities.erase(ent.data->id);
 	}
 
 	void Registry::destroyEntity(rsl::id_type id)
@@ -74,7 +97,7 @@ namespace rythe::core::ecs
 
 	bool Registry::hasComponent(ecs::entity& ent, rsl::id_type compId)
 	{
-		return hasComponent(ent->id, compId);
+		return hasComponent(ent.data->id, compId);
 	}
 
 	bool Registry::hasComponent(rsl::id_type id, rsl::id_type compId)
@@ -89,7 +112,7 @@ namespace rythe::core::ecs
 	void Registry::destroyComponent(ecs::entity& ent, rsl::id_type componentId)
 	{
 		auto family = componentFamilies[componentId].get();
-		family->destroyComponent(ent->id);
+		family->destroyComponent(ent.data->id);
 	}
 
 	void Registry::destroyComponent(rsl::id_type id, rsl::id_type componentId)
@@ -97,9 +120,4 @@ namespace rythe::core::ecs
 		auto family = componentFamilies[componentId].get();
 		family->destroyComponent(id);
 	}
-
-	//component_family_base* Registry::getFamily(rsl::id_type typeId)
-	//{
-	//	return reinterpret_cast<component_family_base*>(m_componentFamilies[typeId].get());
-	//}
 }

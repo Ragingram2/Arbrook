@@ -12,7 +12,7 @@
 #include "graphics/rendering.hpp"
 #include "input/input.hpp"
 
-#include "components/camerasettings.hpp"
+#include "sandbox/components/camerasettings.hpp"
 template<typename T> struct is_variant : std::false_type {};
 
 template<typename ...Args>
@@ -118,7 +118,7 @@ namespace rythe::game
 		inline void componentEditor(core::ecs::entity ent)
 		{
 			Component& comp = ent.getComponent<Component>();
-			const std::string& compName = ecs::Registry::componentNames[rsl::typeHash<Component>()];
+			const std::string& compName = ecs::Registry::componentNames[rsl::type_id<Component>()];
 			ImGui::PushID(std::format("Entity_{}##{}", compName.c_str(), ent->id).c_str());
 			if constexpr (!std::is_same<Component, core::transform>::value)
 			{
@@ -181,7 +181,7 @@ namespace rythe::game
 	}
 
 	template<typename FieldType>
-	inline bool DrawField(int index, FieldType& field)
+	inline bool DrawField([[maybe_unused]] int index, [[maybe_unused]] FieldType& field)
 	{
 		return true;
 	}
@@ -189,27 +189,27 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<math::vec2>(int index, math::vec2& field)
 	{
-		return ImGui::InputFloat2(std::format("##{}", index).c_str(), field.data);
+		return ImGui::InputFloat2(std::format("##{}", index).c_str(), field.data.data);
 	}
 
 	template<>
 	inline bool DrawField<math::vec3>(int index, math::vec3& field)
 	{
-		return ImGui::InputFloat3(std::format("##{}", index).c_str(), field.data);
+		return ImGui::InputFloat3(std::format("##{}", index).c_str(), field.data.data);
 	}
 
 	template<>
 	inline bool DrawField<math::vec4>(int index, math::vec4& field)
 	{
-		return ImGui::InputFloat4(std::format("##{}", index).c_str(), field.data);
+		return ImGui::InputFloat4(std::format("##{}", index).c_str(), field.data.data);
 	}
 
 	template<>
 	inline bool DrawField<math::quat>(int index, math::quat& field)
 	{
-		math::vec3 rot = math::toEuler(field);
-		bool b = ImGui::InputFloat3(std::format("##{}", index).c_str(), rot.data);
-		if (b) field = math::toQuat(rot);
+		math::vec3 rot = field.euler_angles();
+		bool b = ImGui::InputFloat3(std::format("##{}", index).c_str(), rot.data.data);
+		if (b) field = math::quat::from_euler(rot);
 		return b;
 	}
 

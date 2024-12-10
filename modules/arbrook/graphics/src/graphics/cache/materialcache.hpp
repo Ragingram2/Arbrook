@@ -3,6 +3,8 @@
 #include <memory>
 #include <unordered_map>
 
+#include <rsl/meta>
+
 #include "core/assets/assethandle.hpp"
 #include "../data/shaderhandle.hpp"
 #include "../data/material.hpp"

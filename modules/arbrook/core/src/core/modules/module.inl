@@ -6,7 +6,7 @@ namespace rythe::core
 	template<typename systemType>
 	void Module::reportSystem()
 	{
-		auto [iter, elem] = m_systems.emplace(rsl::typeHash<systemType>(), std::make_unique<systemType>());
+		auto [iter, elem] = m_systems.emplace(rsl::type_id<systemType>(), std::make_unique<systemType>());
 		systemType& _system = *static_cast<systemType*>(iter->second.get());
 
 		if constexpr (rsl::has_setup_v<systemType, void()>)

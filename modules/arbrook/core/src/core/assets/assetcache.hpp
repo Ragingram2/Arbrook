@@ -10,6 +10,7 @@
 #include <rsl/utilities>
 #include <rsl/hash>
 #include <rsl/logging>
+#include <rsl/type_traits>
 
 #include "../assets/importsettings.hpp"
 #include "../assets/assethandle.hpp"
@@ -32,7 +33,7 @@ namespace rythe::core::assets
 		template<AssetImporterType<AssetType> Importer>
 		static void registerImporter()
 		{
-			auto id = rsl::typeHash<Importer>();
+			auto id = rsl::type_id<Importer>();
 			if (m_importers.count(id))
 			{
 				log::warn("The importer you tried to register already exists");
@@ -41,7 +42,7 @@ namespace rythe::core::assets
 
 			m_importers.emplace(id, std::make_unique<Importer>());
 		}
-		static asset_handle<AssetType> createAssetFromMemory(const std::string& name, AssetType asset, ImportSettings settings)
+		static asset_handle<AssetType> createAssetFromMemory(const std::string& name, AssetType asset, [[maybe_unused]] ImportSettings settings)
 		{
 			log::info("Loading asset \"{}\" from memory", name);
 			if (m_importers.size() < 1)
@@ -50,7 +51,7 @@ namespace rythe::core::assets
 				return { 0, nullptr };
 			}
 
-			rsl::id_type id = rsl::nameHash(name);
+			rsl::id_type id = rsl::hash_string(name);
 
 			if (m_assets.contains(id))
 			{
@@ -85,7 +86,7 @@ namespace rythe::core::assets
 				return { 0, nullptr };
 			}
 
-			rsl::id_type id = rsl::nameHash(name);
+			rsl::id_type id = rsl::hash_string(name);
 
 			AssetType* data = new AssetType();
 			if (m_assets.contains(id))
@@ -130,8 +131,8 @@ namespace rythe::core::assets
 		template<AssetImporterType<AssetType> Importer>
 		static asset_handle<AssetType> createAsset(const std::string& name, fs::path filePath, ImportSettings settings, bool overrideExisting = false)
 		{
-			rsl::id_type id = rsl::nameHash(name);
-			rsl::id_type importerId = rsl::typeHash<Importer>();
+			rsl::id_type id = rsl::hash_string(name);
+			rsl::id_type importerId = rsl::type_id<Importer>();
 
 			AssetType* data = new AssetType();
 			if (m_assets.contains(id))
@@ -175,16 +176,16 @@ namespace rythe::core::assets
 		}
 		static asset_handle<AssetType> getAsset(const std::string& name)
 		{
-			return getAsset(rsl::nameHash(name));
+			return getAsset(rsl::hash_string(name));
 		}
-		static asset_handle<AssetType> getAsset(rsl::id_type nameHash)
+		static asset_handle<AssetType> getAsset(rsl::id_type hash_string)
 		{
-			if (m_assets.count(nameHash))
+			if (m_assets.count(hash_string))
 			{
-				return { nameHash, m_assets[nameHash].get() };
+				return { hash_string, m_assets[hash_string].get() };
 			}
 
-			log::error("Asset \"{}\" does not exist", m_names[nameHash]);
+			log::error("Asset \"{}\" does not exist", m_names[hash_string]);
 			return { 0, nullptr };
 		}
 		static std::vector<asset_handle<AssetType>> getAssets()
@@ -202,14 +203,14 @@ namespace rythe::core::assets
 		}
 		static void deleteAsset(const std::string& name)
 		{
-			deleteAsset(rsl::nameHash(name));
+			deleteAsset(rsl::hash_string(name));
 		}
-		static void deleteAsset(rsl::id_type nameHash)
+		static void deleteAsset(rsl::id_type hash_string)
 		{
-			if (m_assets.contains(nameHash))
+			if (m_assets.contains(hash_string))
 			{
-				m_assets.erase(nameHash);
-				m_names.erase(nameHash);
+				m_assets.erase(hash_string);
+				m_names.erase(hash_string);
 			}
 		}
 		static void deleteAssets()

@@ -1,6 +1,5 @@
 #pragma once
 #include "core/events/event.hpp"
-#include "core/ecs/entity.hpp"
 
 namespace rythe::core::events
 {
@@ -10,10 +9,6 @@ namespace rythe::core::events
 		rsl::id_type entId;
 
 		component_creation() = default;
-		component_creation(ecs::entity ent)
-		{
-			entId = ent->id;
-		}
 		component_creation(rsl::id_type id) 
 		{
 			entId = id;
@@ -26,10 +21,6 @@ namespace rythe::core::events
 		rsl::id_type entId;
 
 		component_destruction() = default;
-		component_destruction(ecs::entity ent) 
-		{
-			entId = ent->id;
-		}
 		component_destruction(rsl::id_type id)
 		{
 			entId = id;

@@ -19,7 +19,7 @@ namespace rythe::rendering
 			matHandle = MaterialCache::getMaterial("error");
 		}
 
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 
 		if (m_models.contains(id))
 		{
@@ -37,28 +37,28 @@ namespace rythe::rendering
 	ast::asset_handle<model> ModelCache::getModel(const std::string& name)
 	{
 		ZoneScopedN("Get Model(String)");
-		return getModel(rsl::nameHash(name));
+		return getModel(rsl::hash_string(name));
 	}
-	ast::asset_handle<model> ModelCache::getModel(rsl::id_type nameHash)
+	ast::asset_handle<model> ModelCache::getModel(rsl::id_type hash_string)
 	{
-		ZoneScopedN("Get Model(NameHash)");
-		if (m_models.contains(nameHash))
+		ZoneScopedN("Get Model(hash_string)");
+		if (m_models.contains(hash_string))
 		{
-			return { nameHash, m_models[nameHash].get() };
+			return { hash_string, m_models[hash_string].get() };
 		}
-		log::warn("Model {} does not exist", m_names[nameHash]);
+		log::warn("Model {} does not exist", m_names[hash_string]);
 		return { 0, nullptr };
 	}
 	void ModelCache::deleteModel(const std::string& name)
 	{
-		deleteModel(rsl::nameHash(name));
+		deleteModel(rsl::hash_string(name));
 	}
-	void ModelCache::deleteModel(rsl::id_type nameHash)
+	void ModelCache::deleteModel(rsl::id_type hash_string)
 	{
-		if (m_models.contains(nameHash))
+		if (m_models.contains(hash_string))
 		{
-			m_models.erase(nameHash);
-			m_names.erase(nameHash);
+			m_models.erase(hash_string);
+			m_names.erase(hash_string);
 		}
 	}
 	void ModelCache::loadModels(std::vector<ast::asset_handle<mesh>> meshes)

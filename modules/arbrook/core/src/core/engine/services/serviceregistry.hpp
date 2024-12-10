@@ -6,6 +6,7 @@
 
 #include <rsl/primitives>
 #include <rsl/hash>
+#include <rsl/type_traits>
 
 #include "core/engine/services/service.hpp"
 #include "core/containers/pointer.hpp"

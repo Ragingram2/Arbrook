@@ -113,7 +113,7 @@ namespace rythe::rendering
 		for (auto ent : m_filter)
 		{
 			mesh_renderer& renderer = ent.getComponent<mesh_renderer>();
-			if (!ent->enabled || !renderer.enabled.get() || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
+			if (!ent.data->enabled || !renderer.enabled.get() || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
 			initializeModel(renderer);
 		}
 	}

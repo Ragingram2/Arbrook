@@ -58,7 +58,7 @@ namespace rythe::rendering::internal
 
 			glGenTextures(1, &id);
 			glBindTexture(texType, id);
-			glTexParameterfv(texType, GL_TEXTURE_BORDER_COLOR, params.borderColor.data);
+			glTexParameterfv(texType, GL_TEXTURE_BORDER_COLOR, params.borderColor.data.data);
 			setWrapMode(0, static_cast<WrapMode>(params.wrapModeS));
 			setWrapMode(1, static_cast<WrapMode>(params.wrapModeT));
 			setWrapMode(2, static_cast<WrapMode>(params.wrapModeR));

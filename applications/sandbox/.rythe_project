@@ -1,6 +1,6 @@
 local project = {
     additional_include_dirs = {
-        "applications/sandbox/src/sandbox"
+        "applications/sandbox/src"
     },
     warnings_as_errors = false,
     dependencies = {

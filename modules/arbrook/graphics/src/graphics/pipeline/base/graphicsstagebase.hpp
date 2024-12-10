@@ -34,9 +34,9 @@ namespace rythe::rendering
 		}
 
 		framebuffer* addFramebuffer(const std::string& name) { return pipeline->addFramebuffer(name); }
-		framebuffer* getFramebuffer(const std::string& name) { return getFramebuffer(rsl::nameHash(name)); }
+		framebuffer* getFramebuffer(const std::string& name) { return getFramebuffer(rsl::hash_string(name)); }
 		framebuffer* getFramebuffer(rsl::id_type nameHash) { return pipeline->getFramebuffer(nameHash); }
-		bool hasFramebuffer(const std::string& name) const { return hasFramebuffer(rsl::nameHash(name)); }
+		bool hasFramebuffer(const std::string& name) const { return hasFramebuffer(rsl::hash_string(name)); }
 		bool hasFramebuffer(rsl::id_type nameHash) const { return pipeline->hasFramebuffer(nameHash); }
 
 

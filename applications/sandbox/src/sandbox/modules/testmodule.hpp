@@ -1,10 +1,10 @@
 #pragma once
 #include "core/logging/logging.hpp"
 #include "core/modules/module.hpp"
-#include "systems/game/game.hpp"
-#include "systems/game/guisystem.hpp"
-#include "systems/game/examplesystem.hpp"
-#include "systems/game/cameracontrols.hpp"
+#include "sandbox/systems/game/game.hpp"
+#include "sandbox/systems/game/guisystem.hpp"
+#include "sandbox/systems/game/examplesystem.hpp"
+#include "sandbox/systems/game/cameracontrols.hpp"
 
 namespace rythe::core
 {

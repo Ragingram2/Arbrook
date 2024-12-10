@@ -5,6 +5,7 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 #include <rsl/utilities>
+#include <rsl/type_traits>
 
 /**
  * @file event.hpp
@@ -32,7 +33,7 @@ namespace rythe::core::events
     {
         friend class EventBus;
 
-        inline static const rsl::id_type id = rsl::typeHash<Self>();
+        inline static const rsl::id_type id = rsl::type_id<Self>();
 
         virtual ~event() = default;
     private:

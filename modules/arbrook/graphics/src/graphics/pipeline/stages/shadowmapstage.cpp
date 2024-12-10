@@ -31,7 +31,7 @@ namespace rythe::rendering
 		for (auto& ent : m_filter)
 		{
 			auto& renderer = ent.getComponent<mesh_renderer>();
-			if (!ent->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
+			if (!ent.data->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
 			initializeModel(renderer, dirShadowMap);
 		}
 	}
@@ -70,7 +70,7 @@ namespace rythe::rendering
 		for (auto& ent : m_filter)
 		{
 			auto& renderer = ent.getComponent<mesh_renderer>();
-			if (!ent->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
+			if (!ent.data->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
 
 			model& model = renderer.model;
 			ast::asset_handle<mesh> mesh = model.meshHandle;
@@ -116,7 +116,7 @@ namespace rythe::rendering
 			for (auto& ent : m_filter)
 			{
 				auto& renderer = ent.getComponent<mesh_renderer>();
-				if (!ent->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
+				if (!ent.data->enabled || !renderer.enabled.get() || !renderer.castShadows || !renderer.model.meshHandle || !renderer.mainMaterial) continue;
 
 				model& model = renderer.model;
 				ast::asset_handle<mesh> mesh = model.meshHandle;

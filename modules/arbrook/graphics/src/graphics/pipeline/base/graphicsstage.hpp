@@ -2,6 +2,7 @@
 
 #include <rsl/primitives>
 #include <rsl/utilities>
+#include <rsl/meta>
 
 #include "core/systems/system.hpp"
 #include "core/utils/profiler.hpp"

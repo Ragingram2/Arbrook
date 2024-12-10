@@ -2,6 +2,9 @@
 #include <rsl/primitives>
 #include <rsl/delegate>
 #include <rsl/hash>
+#include <rsl/type_util>
+#include <rsl/type_traits>
+#include <rsl/meta>
 
 #include "../systems/system.hpp"
 
@@ -34,5 +37,6 @@ namespace rythe::core
 		void reportSystem();
 	};
 }
+
 
 #include "../modules/module.inl"

@@ -18,7 +18,7 @@ namespace rythe::game
 		camTransf.position += velocity;
 		velocity = math::vec3::zero;
 
-		camTransf.rotation = math::conjugate(math::toQuat(math::lookAt(math::vec3::zero, front, up)));
+		camTransf.rotation = math::inverse(math::quat(math::look_at(math::vec3::zero, front, up)));
 	}
 
 	void CameraControls::move(moveInput& input)
@@ -36,7 +36,7 @@ namespace rythe::game
 		velocity += transf.right() * leftRight;
 		velocity += transf.forward() * forwardBackward;
 		velocity += transf.up() * upDown;
-		if (velocity.length() > 0.00001f)
+		if (math::length(velocity) > 0.00001f)
 			velocity = math::normalize(velocity) * camSettings.speed * core::Time::deltaTime;
 	}
 
@@ -85,9 +85,9 @@ namespace rythe::game
 		pitch = math::clamp(pitch + rotationDelta.y, -89.99f, 89.99);
 		yaw += rotationDelta.x;
 
-		front.x = cos(math::radians(yaw)) * cos(math::radians(pitch));
-		front.y = sin(math::radians(pitch));
-		front.z = sin(math::radians(yaw)) * cos(math::radians(pitch));
+		front.x = cos(math::deg2rad(yaw)) * cos(math::deg2rad(pitch));
+		front.y = sin(math::deg2rad(pitch));
+		front.z = sin(math::deg2rad(yaw)) * cos(math::deg2rad(pitch));
 		front = math::normalize(front);
 		right = math::normalize(math::cross(front, math::vec3::up));
 		up = math::normalize(math::cross(right, front));

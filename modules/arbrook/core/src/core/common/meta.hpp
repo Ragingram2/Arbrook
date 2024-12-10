@@ -3,8 +3,6 @@
 
 namespace rythe::core::common
 {
-
-
 	// Primary template
 	template <typename T, typename U = int>
 	struct has_m_owner : std::false_type { };

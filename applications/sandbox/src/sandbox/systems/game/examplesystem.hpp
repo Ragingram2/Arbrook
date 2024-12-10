@@ -27,10 +27,10 @@ namespace rythe::game
 				comp.pos += comp.speed * core::Time::deltaTime;
 
 				auto& transf = ent.getComponent<core::transform>();
-				transf.position = comp.initPosition + (comp.direction * math::sin(math::radians(comp.pos)) * comp.range);
+				transf.position = comp.initPosition + (comp.direction * math::sin(math::deg2rad(comp.pos)) * comp.range);
 
-				if (comp.axis.length() > 0)
-					transf.rotation = math::toQuat(math::rotate(transf.to_parent(), math::radians(comp.angularSpeed * core::Time::deltaTime), comp.axis));
+				if (math::length(comp.axis) > 0)
+					transf.rotation = math::quat(math::rotate(transf.to_parent(), math::deg2rad(comp.angularSpeed * core::Time::deltaTime), comp.axis));
 			}
 		}
 	};

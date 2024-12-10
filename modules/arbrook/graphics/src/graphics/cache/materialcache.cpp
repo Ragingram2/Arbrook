@@ -12,7 +12,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<material> MaterialCache::loadMaterial(const std::string& name, ast::asset_handle<material_source> source)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_materials.contains(id))
 		{
 			return { id, m_materials[id].get() };
@@ -87,7 +87,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<material> MaterialCache::loadMaterial(const std::string& name, shader_handle shader)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_materials.contains(id))
 		{
 			return { id, m_materials[id].get() };
@@ -103,7 +103,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<material> MaterialCache::loadMaterial(const std::string& name, const std::string& shaderName)
 	{
-		return loadMaterial(name, rsl::nameHash(shaderName));
+		return loadMaterial(name, rsl::hash_string(shaderName));
 	}
 	ast::asset_handle<material> MaterialCache::loadMaterial(const std::string& name, rsl::id_type shaderId)
 	{
@@ -143,7 +143,7 @@ namespace rythe::rendering
 
 	ast::asset_handle<material> MaterialCache::getMaterial(const std::string& name)
 	{
-		rsl::id_type id = rsl::nameHash(name);
+		rsl::id_type id = rsl::hash_string(name);
 		if (m_materials.contains(id))
 		{
 			return { id, m_materials[id].get() };
@@ -154,16 +154,16 @@ namespace rythe::rendering
 
 	void MaterialCache::deleteMaterial(const std::string& name)
 	{
-		deleteMaterial(rsl::nameHash(name));
+		deleteMaterial(rsl::hash_string(name));
 	}
 
-	void MaterialCache::deleteMaterial(rsl::id_type nameHash)
+	void MaterialCache::deleteMaterial(rsl::id_type hash_string)
 	{
-		if (m_materials.contains(nameHash))
+		if (m_materials.contains(hash_string))
 		{
-			ShaderCache::deleteShader(m_materials[nameHash]->getShader()->getName());
-			m_materials.erase(nameHash);
-			m_names.erase(nameHash);
+			ShaderCache::deleteShader(m_materials[hash_string]->getShader()->getName());
+			m_materials.erase(hash_string);
+			m_names.erase(hash_string);
 		}
 	}
 

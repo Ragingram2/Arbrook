@@ -47,8 +47,9 @@ local thirdPartyProjects =
         group = "third_party", 
         pre_build = 
         {
-            "cmake CMakeLists.txt",
-            "cmake --build ."
+            "cd ../../../",
+            "cd modules/arbrook/core/third_party/assimp",
+            "cmake CMakeLists.txt"
         },
         warnings_as_errors = false,
         dependencies = 

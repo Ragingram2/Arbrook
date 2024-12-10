@@ -6,6 +6,8 @@ local thirdPartyProjects =
         defines = {"ENABLE_HLSL"},
         pre_build = 
         {
+            "cd ../../../",
+            "cd modules/arbrook/graphics/third_party/glslang",
             "update_glslang_sources.py",
             "cmake -B build -DCMAKE_INSTALL_PREFIX=\"$(pwd)/install\""
         },

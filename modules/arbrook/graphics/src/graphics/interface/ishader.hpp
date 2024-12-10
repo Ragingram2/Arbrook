@@ -5,10 +5,12 @@
 
 #include "core/assets/assethandle.hpp"
 #include "graphics/interface/definitions/enumtypes.hpp"
+#include "graphics/data/bufferhandle.hpp"
 
 namespace rythe::rendering
 {
-	struct buffer_handle;
+	//struct buffer_handle;
+
 	class ShaderCache;
 	namespace internal
 	{
