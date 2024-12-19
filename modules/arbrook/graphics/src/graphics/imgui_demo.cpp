@@ -1,4 +1,4 @@
-// dear imgui, v1.91.5
+// dear imgui, v1.91.7 WIP
 // (demo code)
 
 // Help:
@@ -320,6 +320,13 @@ static ExampleTreeNode* ExampleTree_CreateNode(const char* name, int uid, Exampl
     return node;
 }
 
+static void ExampleTree_DestroyNode(ExampleTreeNode* node)
+{
+    for (ExampleTreeNode* child_node : node->Childs)
+        ExampleTree_DestroyNode(child_node);
+    IM_DELETE(node);
+}
+
 // Create example tree data
 // (this allocates _many_ more times than most other code in either Dear ImGui or others demo)
 static ExampleTreeNode* ExampleTree_CreateDemoTree()
@@ -355,7 +362,7 @@ static ExampleTreeNode* ExampleTree_CreateDemoTree()
 // [SECTION] Demo Window / ShowDemoWindow()
 //-----------------------------------------------------------------------------
 
-// Data to be shared accross different functions of the demo.
+// Data to be shared across different functions of the demo.
 struct ImGuiDemoWindowData
 {
     // Examples Apps (accessible from the "Examples" menu)
@@ -384,6 +391,8 @@ struct ImGuiDemoWindowData
 
     // Other data
     ExampleTreeNode* DemoTree = NULL;
+
+    ~ImGuiDemoWindowData() { if (DemoTree) ExampleTree_DestroyNode(DemoTree); }
 };
 
 // Demonstrate most Dear ImGui features (this is big function!)
@@ -1881,6 +1890,16 @@ static void ShowDemoWindowWidgets(ImGuiDemoWindowData* demo_data)
             ImGui::TreePop();
         }
 
+        IMGUI_DEMO_MARKER("Widgets/Text Input/Eliding, Alignment");
+        if (ImGui::TreeNode("Eliding, Alignment"))
+        {
+            static char buf1[128] = "/path/to/some/folder/with/long/filename.cpp";
+            static ImGuiInputTextFlags flags = ImGuiInputTextFlags_ElideLeft;
+            ImGui::CheckboxFlags("ImGuiInputTextFlags_ElideLeft", &flags, ImGuiInputTextFlags_ElideLeft);
+            ImGui::InputText("Path", buf1, IM_ARRAYSIZE(buf1), flags);
+            ImGui::TreePop();
+        }
+
         IMGUI_DEMO_MARKER("Widgets/Text Input/Miscellaneous");
         if (ImGui::TreeNode("Miscellaneous"))
         {
@@ -2351,6 +2370,8 @@ static void ShowDemoWindowWidgets(ImGuiDemoWindowData* demo_data)
         ImGui::SameLine(); HelpMarker("Disable rounding underlying value to match precision of the format string (e.g. %.3f values are rounded to those 3 digits).");
         ImGui::CheckboxFlags("ImGuiSliderFlags_NoInput", &flags, ImGuiSliderFlags_NoInput);
         ImGui::SameLine(); HelpMarker("Disable CTRL+Click or Enter key allowing to input text directly into the widget.");
+        ImGui::CheckboxFlags("ImGuiSliderFlags_NoSpeedTweaks", &flags, ImGuiSliderFlags_NoSpeedTweaks);
+        ImGui::SameLine(); HelpMarker("Disable keyboard modifiers altering tweak speed. Useful if you want to alter tweak speed yourself based on your own logic.");
         ImGui::CheckboxFlags("ImGuiSliderFlags_WrapAround", &flags, ImGuiSliderFlags_WrapAround);
         ImGui::SameLine(); HelpMarker("Enable wrapping around from max to min and from min to max (only supported by DragXXX() functions)");
 
@@ -10464,7 +10485,7 @@ struct ExampleAssetsBrowser
         }
 
         ImGuiIO& io = ImGui::GetIO();
-        ImGui::SetNextWindowContentSize(ImVec2(0.0f, LayoutOuterPadding + LayoutLineCount * (LayoutItemSize.x + LayoutItemSpacing)));
+        ImGui::SetNextWindowContentSize(ImVec2(0.0f, LayoutOuterPadding + LayoutLineCount * (LayoutItemSize.y + LayoutItemSpacing)));
         if (ImGui::BeginChild("Assets", ImVec2(0.0f, -ImGui::GetTextLineHeightWithSpacing()), ImGuiChildFlags_Borders, ImGuiWindowFlags_NoMove))
         {
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -10676,6 +10697,8 @@ void ImGui::ShowAboutWindow(bool*) {}
 void ImGui::ShowDemoWindow(bool*) {}
 void ImGui::ShowUserGuide() {}
 void ImGui::ShowStyleEditor(ImGuiStyle*) {}
+bool ImGui::ShowStyleSelector(const char* label) { return false; }
+void ImGui::ShowFontSelector(const char* label) {}
 
 #endif
 
