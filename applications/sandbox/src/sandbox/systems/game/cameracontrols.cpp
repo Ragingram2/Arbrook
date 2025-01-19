@@ -15,10 +15,16 @@ namespace rythe::game
 		ZoneScopedN("Camera Controls");
 		auto& camTransf = camera.getComponent<core::transform>();
 
+		if (!Input::mouseCaptured)
+		{
+			front = camTransf.forward();
+			up = camTransf.up();
+		}
+
 		camTransf.position += velocity;
 		velocity = math::vec3::zero;
 
-		camTransf.rotation = math::inverse(math::quat(math::look_at(math::vec3::zero, front, up)));
+		camTransf.rotation = math::quat(math::look_at(math::vec3::zero, front, up));
 	}
 
 	void CameraControls::move(moveInput& input)

@@ -222,6 +222,9 @@ namespace rythe::core::ecs
 	inline bool Registry::hasComponent(rsl::id_type id)
 	{
 		rsl::id_type typeId = rsl::type_id<componentType>();
+		if (entityCompositions.count(id) == 0)
+			return false;
+
 		auto& vec = entityCompositions.at(id);
 		auto position = std::find(vec.begin(), vec.end(), typeId);
 		if (position != vec.end())

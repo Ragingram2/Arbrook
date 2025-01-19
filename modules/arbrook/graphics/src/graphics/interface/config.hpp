@@ -24,17 +24,17 @@
 #endif
 
 #if RenderingAPI == RenderingAPI_DX11
-#include <backends/imgui_impl_dx11.h>
-#define Texture_HPP_PATH "graphics/interface/DirectX/texture.hpp"
-#define TextureParams_HPP_PATH "graphics/interface/DirectX/textureparameters.hpp"
-#define RenderInterface_HPP_PATH "graphics/interface/DirectX/renderinterface.hpp"
-#define InputLayout_HPP_PATH "graphics/interface/DirectX/inputlayout.hpp"
-#define Buffer_HPP_PATH "graphics/interface/DirectX/buffer.hpp"
-#define Shader_HPP_PATH "graphics/interface/DirectX/shader.hpp"
-#define Window_HPP_PATH "graphics/interface/DirectX/window.hpp"
-#define EnumTypes_HPP_PATH "graphics/interface/DirectX/enumtypes.hpp"
-#define ShaderCompiler_HPP_PATH "graphics/interface/DirectX/shadercompiler.hpp"
-#define Framebuffer_HPP_PATH "graphics/interface/DirectX/framebuffer.hpp"
+//#include <backends/imgui_impl_dx11.h>
+//#define Texture_HPP_PATH "graphics/interface/DirectX/texture.hpp"
+//#define TextureParams_HPP_PATH "graphics/interface/DirectX/textureparameters.hpp"
+//#define RenderInterface_HPP_PATH "graphics/interface/DirectX/renderinterface.hpp"
+//#define InputLayout_HPP_PATH "graphics/interface/DirectX/inputlayout.hpp"
+//#define Buffer_HPP_PATH "graphics/interface/DirectX/buffer.hpp"
+//#define Shader_HPP_PATH "graphics/interface/DirectX/shader.hpp"
+//#define Window_HPP_PATH "graphics/interface/DirectX/window.hpp"
+//#define EnumTypes_HPP_PATH "graphics/interface/DirectX/enumtypes.hpp"
+//#define ShaderCompiler_HPP_PATH "graphics/interface/DirectX/shadercompiler.hpp"
+//#define Framebuffer_HPP_PATH "graphics/interface/DirectX/framebuffer.hpp"
 #endif
 
 #if RenderingAPI == RenderingAPI_VK

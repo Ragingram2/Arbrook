@@ -42,7 +42,7 @@ namespace fragment
 {
 	#pragma warning( disable : 4121)
 	#include "camera_utils.shinc"
-    #define MATERIAL_INPUT
+    //#define MATERIAL_INPUT
 	#include "light_utils.shinc"
 
 	
@@ -57,11 +57,11 @@ namespace fragment
 		float3 tangent : TANGENT;
 	};
 
-	Texture2D DepthMap : Texture0;
-	SamplerState DepthMapSampler : TexSampler0;
+	// Texture2D DepthMap : Texture0;
+	// SamplerState DepthMapSampler : TexSampler0;
 	
-    TextureCube DepthCube : Texture1;
-    SamplerState DepthCubeSampler : TexSampler1;
+    // TextureCube DepthCube : Texture1;
+    // SamplerState DepthCubeSampler : TexSampler1;
 
 	static float3 s = float3(0,0,0);
 

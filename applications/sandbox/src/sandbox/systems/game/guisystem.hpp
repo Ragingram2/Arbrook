@@ -152,9 +152,9 @@ namespace rythe::game
 	};
 
 	template<typename ItemType>
-	inline void createAssetDropDown(ItemType current, std::vector<ast::asset_handle<ItemType>> items, void(*func)(ast::asset_handle<ItemType>))
+	inline void createAssetDropDown(int index, ItemType current, std::vector<ast::asset_handle<ItemType>> items, void(*func)(ast::asset_handle<ItemType>))
 	{
-		if (ImGui::BeginCombo("Dropdown", current.name.c_str()))
+		if (ImGui::BeginCombo(std::format("##{}", index).c_str(), current.name.c_str()))
 		{
 			for (auto item : items)
 			{
@@ -240,16 +240,14 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<gfx::model>(int index, gfx::model& field)
 	{
-		(void)index;
-		createAssetDropDown<gfx::model>(field, gfx::ModelCache::getModels(), &GUISystem::setModel);
+		createAssetDropDown<gfx::model>(index, field, gfx::ModelCache::getModels(), &GUISystem::setModel);
 		return true;
 	}
 
 	template<>
 	inline bool DrawField<gfx::material>(int index, gfx::material& field)
 	{
-		(void)index;
-		createAssetDropDown<gfx::material>(field, gfx::MaterialCache::getMaterials(), &GUISystem::setMaterial);
+		createAssetDropDown<gfx::material>(index,field, gfx::MaterialCache::getMaterials(), &GUISystem::setMaterial);
 		return true;
 	}
 

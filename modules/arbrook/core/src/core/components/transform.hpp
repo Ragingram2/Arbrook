@@ -1,5 +1,6 @@
 #pragma once
 #include <rsl/math>
+#include <rsl/logging>
 namespace rythe::core
 {
 	struct transform
@@ -8,7 +9,7 @@ namespace rythe::core
 
 		math::vec3 position = math::vec3(0.0f);
 		math::vec3 scale = math::vec3(1.0f);
-		math::quat rotation = math::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		math::quat rotation = math::quat::identity;
 
 		math::vec3 up() { return rotation.up(); }
 		math::vec3 right() { return rotation.right(); }
@@ -21,11 +22,6 @@ namespace rythe::core
 
 		math::mat4 to_world()
 		{
-			//if (m_owner && m_owner->parent)
-			//{
-			//	transform parentTransf = m_owner->parent.getComponent<transform>();
-			//	return parentTransf.to_world() * to_parent();
-			//}
 			return to_parent();
 		}
 

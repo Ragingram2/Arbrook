@@ -8,9 +8,36 @@ namespace rythe::game
 	{
 		log::info("Initializing Game system");
 		fs::current_path(fs::current_path().append("../../applications/sandbox/src/sandbox/"));
-		log::info(fs::current_path().string());
 		bindEvent<key_input<inputmap::method::F1>, &Game::reloadShaders>();
 		bindEvent<key_input<inputmap::method::MOUSE_RIGHT>, &Game::toggleMouseCapture>();
+
+		math::mat4 input
+		{
+			4,7,2,3,
+			3,5,1,4,
+			2,6,3,5,
+			1,2,4,6
+		};
+		auto result = math::inverse(input);
+		log::debug("Matrix Input:\n{}", input);
+		log::debug("Calculated Inverse:\n{}", result);
+		log::debug("Composed Identity Matrix:\n{}", input * result);
+
+		math::quat rot_input = { 0.27f , -0.653f,-0.653f,-0.27f };
+		math::mat3 expected
+		{
+			0.0f,0.707f,0.707f,
+			1.0f,0.0f,0.0f,
+			0.0f,0.707f,-0.707f
+		};
+		auto rot_mat = math::mat3(rot_input);
+		log::debug("Quaternion Input:\n{}", rot_input);
+		log::debug("Calculated Matrix:\n{}", rot_mat);
+		log::debug("Expected Matrix:\n{}", expected);
+		math::quat matToQuat(rot_mat);
+		log::debug("Quaternion Output:\n{}", matToQuat);
+		auto eulerAngles = matToQuat.euler_angles();
+		log::debug("Euler angles:\n{}", math::vec3(math::rad2deg(eulerAngles.x), math::rad2deg(eulerAngles.y), math::rad2deg(eulerAngles.z)));
 
 		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
@@ -62,13 +89,13 @@ namespace rythe::game
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = mat, .model = gfx::ModelCache::getModel("cube") ,.castShadows = false });
 		}
 
-		{
-			auto ent = createEntity("Sponza");
-			auto& transf = ent.addComponent<core::transform>();
-			transf.scale = math::vec3::one * 10.0f;
-			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("sponza-material"), .model = gfx::ModelCache::getModel("sponza"), .castShadows = true });
-		}
+		//{
+		//	auto ent = createEntity("Sponza");
+		//	auto& transf = ent.addComponent<core::transform>();
+		//	transf.scale = math::vec3::one * 10.0f;
+		//	transf.position = math::vec3(0.0f, 10.0f, 0.0f);
+		//	ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("sponza-material"), .model = gfx::ModelCache::getModel("sponza"), .castShadows = true });
+		//}
 
 		{
 			auto ent = createEntity("Entity");
@@ -77,6 +104,8 @@ namespace rythe::game
 			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
 			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f));
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("bog"), .model = gfx::ModelCache::getModel("cube"), .castShadows = true });
+			auto child = createEntity("child");
+			ent->children.insert(child);
 		}
 
 		{
@@ -106,7 +135,7 @@ namespace rythe::game
 			auto camera = createEntity("Camera");
 			auto& camTransf = camera.addComponent<core::transform>();
 			camTransf.position = math::vec3(0.0f, 10.0f, -10.0f);
-			camTransf.rotation = math::quat(math::look_at(math::vec3::zero, camTransf.forward(), camTransf.up()));
+			camTransf.rotation = math::quat::identity;/* math::quat(math::look_at(math::vec3::zero, camTransf.forward(), camTransf.up()))*/;
 			camera.addComponent<gfx::camera>({ .farZ = 10000.f, .nearZ = 0.1f, .fov = 90.f });
 			camera.addComponent<camera_settings>({ .mode = CameraControlMode::FreeLook, .speed = 10.0f, .sensitivity = .9f });
 		}

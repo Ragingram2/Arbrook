@@ -99,23 +99,23 @@ namespace rythe::game
 			{
 				auto ent = GUI::selected;
 				ImGui::BeginChild(ent->name.c_str(), ImVec2(ImGui::GetWindowWidth(), 30.0f), true);
-				ImGui::Checkbox("", &ent->enabled);
+				ImGui::Checkbox("##", &ent->enabled);
 				ImGui::SameLine();
 				ImGui::Text(ent->name.c_str());
 				ImGui::EndChild();
 
 				ImGui::Indent();
-				//if (ent.hasComponent<core::transform>())
-				//	componentEditor<core::transform>(ent);
+				if (ent.hasComponent<core::transform>())
+					componentEditor<core::transform>(ent);
 
-				//if (ent.hasComponent<gfx::mesh_renderer>())
-				//	componentEditor<gfx::mesh_renderer>(ent);
+				if (ent.hasComponent<gfx::mesh_renderer>())
+					componentEditor<gfx::mesh_renderer>(ent);
 
-				//if (ent.hasComponent<gfx::light>())
-				//	componentEditor<gfx::light>(ent);
+				if (ent.hasComponent<gfx::light>())
+					componentEditor<gfx::light>(ent);
 
-				//if (ent.hasComponent<examplecomp>())
-				//	componentEditor<examplecomp>(ent);
+				if (ent.hasComponent<examplecomp>())
+					componentEditor<examplecomp>(ent);
 				ImGui::Unindent();
 
 
@@ -225,10 +225,21 @@ namespace rythe::game
 
 			ImGui::PopID();
 
+			if (ImGui::IsItemToggledOpen())
+			{
+				if (ent->children.size() > 0)
+				{
+					ImGui::Indent();
+					drawHeirarchy(ent->children);
+					ImGui::Unindent();
+				}
+			}
+
 			if (ImGui::IsItemClicked())
 			{
 				GUI::selected = ent;
 			}
+
 		}
 	}
 
