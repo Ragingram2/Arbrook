@@ -7,72 +7,82 @@ namespace rythe::game
 		bindEvent<moveInput, &CameraControls::move>();
 		bindEvent<mouse_input, &CameraControls::mouselook>();
 
-		camera = getCameraEntity();
+		for (auto& ent : m_filter)
+		{
+			camera = ent;
+			break;
+		}
 	}
 
 	void CameraControls::update()
 	{
 		ZoneScopedN("Camera Controls");
-		auto& camTransf = camera.getComponent<core::transform>();
+		if (camera == invalid_id) return;
 
-		if (!Input::mouseCaptured)
+		for (auto& ent : m_filter)
 		{
-			front = camTransf.forward();
-			up = camTransf.up();
+			if (!Input::mouseCaptured) continue;
+
+			auto& camTransf = ent.getComponent<core::transform>();
+			camTransf.rotation = math::quat::from_euler(math::vec3(math::deg2rad(pitch), math::deg2rad(yaw), 0.0f));
 		}
-
-		camTransf.position += velocity;
-		velocity = math::vec3::zero;
-
-		camTransf.rotation = math::quat(math::look_at(math::vec3::zero, front, up));
 	}
 
 	void CameraControls::move(moveInput& input)
 	{
-		auto& camSettings = camera.getComponent<camera_settings>();
-		auto& transf = camera.getComponent<core::transform>();
+		if (camera == invalid_id) return;
 
-		//auto leftRight = input.m_values["Left/Right"];
-		//auto forwardBackward = input.m_values["Forward/Backward"];
-		//auto upDown = input.m_values["Up/Down"];
+		for (auto& ent : m_filter)
+		{
+			auto& camSettings = ent.getComponent<camera_settings>();
+			auto& transf = ent.getComponent<core::transform>();
 
-		auto leftRight = input.getValue(0);
-		auto forwardBackward = input.getValue(1);
-		auto upDown = input.getValue(2);
-		velocity += transf.right() * leftRight;
-		velocity += transf.forward() * forwardBackward;
-		velocity += transf.up() * upDown;
-		if (math::length(velocity) > 0.00001f)
-			velocity = math::normalize(velocity) * camSettings.speed * core::Time::deltaTime;
+			auto leftRight = input.getValue(0);
+			auto forwardBackward = input.getValue(1);
+			auto upDown = input.getValue(2);
+			auto velocity = transf.right() * leftRight;
+			velocity += transf.forward() * forwardBackward;
+			velocity += transf.up() * upDown;
+			if (math::length(velocity) > 0.0f)
+			{
+				velocity = math::normalize(velocity) * camSettings.speed * core::Time::deltaTime;
+				transf.position += velocity;
+			}
+		}
 	}
 
 	void CameraControls::mouselook(mouse_input& input)
 	{
+		if (camera == invalid_id) return;
+
 		if (!Input::mouseCaptured) return;
 
-		auto& camSettings = camera.getComponent<camera_settings>();
-		switch (camSettings.mode)
+		for (auto& ent : m_filter)
 		{
-		case CameraControlMode::FreeLook:
-			freeLook(input);
-			break;
-		case CameraControlMode::Orbit:
-			orbit(input);
-			break;
-		default:
-			break;
+			auto& camSettings = ent.getComponent<camera_settings>();
+			switch (camSettings.mode)
+			{
+			case CameraControlMode::FreeLook:
+				freeLook(ent, input);
+				break;
+			case CameraControlMode::Orbit:
+				orbit(ent, input);
+				break;
+			default:
+				break;
+			}
 		}
 
 	}
 
-	void CameraControls::orbit(mouse_input& input)
+	void CameraControls::orbit(core::ecs::entity& ent, mouse_input& input)
 	{
 
 	}
 
-	void CameraControls::freeLook(mouse_input& input)
+	void CameraControls::freeLook(core::ecs::entity& ent, mouse_input& input)
 	{
-		auto& camSettings = camera.getComponent<camera_settings>();
+		auto& camSettings = ent.getComponent<camera_settings>();
 
 		static bool firstMouse = true;
 
@@ -86,16 +96,9 @@ namespace rythe::game
 		mouseDelta = input.positionDelta;
 		lastMousePos = input.lastPosition;
 
-		rotationDelta = -math::vec2(mouseDelta.x, mouseDelta.y) * camSettings.sensitivity;
+		rotationDelta = math::vec2(mouseDelta.x, mouseDelta.y) * camSettings.sensitivity;
 
 		pitch = math::clamp(pitch + rotationDelta.y, -89.99f, 89.99);
 		yaw += rotationDelta.x;
-
-		front.x = cos(math::deg2rad(yaw)) * cos(math::deg2rad(pitch));
-		front.y = sin(math::deg2rad(pitch));
-		front.z = sin(math::deg2rad(yaw)) * cos(math::deg2rad(pitch));
-		front = math::normalize(front);
-		right = math::normalize(math::cross(front, math::vec3::up));
-		up = math::normalize(math::cross(right, front));
 	}
 }

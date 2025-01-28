@@ -116,6 +116,9 @@ namespace rythe::game
 
 				if (ent.hasComponent<examplecomp>())
 					componentEditor<examplecomp>(ent);
+
+				if (ent.hasComponent<gfx::camera>())
+					componentEditor<gfx::camera>(ent);
 				ImGui::Unindent();
 
 
@@ -160,8 +163,8 @@ namespace rythe::game
 			const float height = viewportPanelSize.y;
 			math::vec2 windowPos = math::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
 			gfx::Renderer::RI->setViewport(1, 0, 0, width, height);
-			float imageWidth = width > 1280.f ? width : 1280.f;
-			float imageHeight = height > 720.f ? height : 720.f;
+			float imageWidth = math::min(1280.0f, width); /*width > 1280.f ? width : 1280.f;*/
+			float imageHeight = math::min(720.0f, height);//height > 720.f ? height : 720.f;
 			mainFBO->rescale(imageWidth, imageHeight);
 			pickingFBO->rescale(imageWidth, imageHeight);
 
@@ -190,7 +193,7 @@ namespace rythe::game
 
 
 			if (mainTex != 0)
-				ImGui::Image(static_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, 1), ImVec2(1, 0));
+				ImGui::Image(static_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, -1), ImVec2(-1, 0));
 			if (GUI::selected != invalid_id)
 				drawGizmo(camTransf, camera, math::ivec2(imageWidth, imageHeight));
 
@@ -205,8 +208,6 @@ namespace rythe::game
 	{
 		for (auto ent : heirarchy)
 		{
-			if (ent.hasComponent<gfx::camera>()) continue;
-
 			rsl::uint flags = ImGuiTreeNodeFlags_OpenOnArrow;
 
 			if (ent == GUI::selected)
@@ -306,9 +307,10 @@ namespace rythe::game
 		{
 			math::vec3 rot;
 			ImGuizmo::DecomposeMatrixToComponents(matrix, transf.position.data.data, rot.data.data, transf.scale.data.data);
-			transf.rotation = math::quat::from_euler(rot);
+			transf.rotation = math::quat::from_euler(rot * math::deg2rad<float>());
 		}
 	}
+
 	void GUISystem::doClick(key_input<inputmap::method::MOUSE_LEFT>& action)
 	{
 		if (Input::mouseCaptured) return;

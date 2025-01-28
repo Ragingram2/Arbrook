@@ -16,19 +16,13 @@ namespace rythe::game
 		core::ecs::entity camera;
 
 	private:
-		math::vec3 velocity = math::vec3(0.0f);
-
 		math::vec2 mousePos;
 		math::vec2 lastMousePos;
 		math::vec2 mouseDelta;
 		math::vec2 rotationDelta;
 
-		math::vec3 front;
-		math::vec3 right;
-		math::vec3 up;
-
-		float yaw = -90.0f;
-		float pitch = 90.0f;
+		float yaw = 0;
+		float pitch = 0;
 
 	public:
 		void setup();
@@ -37,17 +31,17 @@ namespace rythe::game
 		void mouselook(mouse_input& input);
 		void move(moveInput& input);
 
-		void orbit(mouse_input& input);
-		void freeLook(mouse_input& input);
+		void orbit(core::ecs::entity& ent, mouse_input& input);
+		void freeLook(core::ecs::entity& ent, mouse_input& input);
 
 		core::ecs::entity& getCameraEntity()
 		{
-			return m_filter[0];
+			return camera;
 		}
 
 		gfx::camera& getCamera()
 		{
-			return m_filter[0].getComponent<gfx::camera>();
+			return camera.getComponent<gfx::camera>();
 		}
 	};
 }

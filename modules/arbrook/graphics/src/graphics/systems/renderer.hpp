@@ -62,12 +62,7 @@ namespace rythe::rendering
 			auto& transf = camEnt.getComponent<core::transform>();
 			auto& cam = camEnt.getComponent<camera>();
 			cam.projection = math::perspective(cam.fov, Screen_Width / Screen_Height, cam.nearZ, cam.farZ);
-			log::debug("From World:");
-			rsl::log::debug("Position: {}", transf.position);
-			rsl::log::debug("Rotation: {}", transf.rotation);
-			rsl::log::debug("Scale: {}", transf.scale);
 			cam.view = transf.from_world();
-			log::debug("\n{}",cam.view);
 			pipeline->render(transf, cam);
 		}
 

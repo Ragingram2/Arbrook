@@ -37,7 +37,7 @@ namespace rythe::game
 
 
 	template<typename T>
-	struct remove_first_type { };
+	struct remove_first_type {};
 
 	template<typename T, typename... Ts>
 	struct remove_first_type<std::tuple<T, Ts...>>
@@ -92,7 +92,7 @@ namespace rythe::game
 			{
 				if constexpr (is_variant_v<memberType>)
 				{
-					std::visit([&member,this](auto arg)
+					std::visit([&member, this](auto arg)
 						{
 							using variantType = std::decay_t<decltype(arg)>;
 							const auto view = rfl::to_view(std::get<variantType>(member));
@@ -125,6 +125,7 @@ namespace rythe::game
 				ImGui::Checkbox("", &comp.enabled.get());
 				ImGui::SameLine();
 			}
+
 			bool open = ImGui::TreeNodeEx(compName.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_NoTreePushOnOpen);
 			if (!ent->enabled)
 				pushDisabledInspector();
@@ -207,9 +208,9 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<math::quat>(int index, math::quat& field)
 	{
-		math::vec3 rot = field.euler_angles();
+		math::vec3 rot = field.euler_angles() * math::rad2deg<float>();
 		bool b = ImGui::InputFloat3(std::format("##{}", index).c_str(), rot.data.data);
-		if (b) field = math::quat::from_euler(rot);
+		if (b) field = math::quat::from_euler(rot * math::deg2rad<float>());
 		return b;
 	}
 
@@ -247,7 +248,7 @@ namespace rythe::game
 	template<>
 	inline bool DrawField<gfx::material>(int index, gfx::material& field)
 	{
-		createAssetDropDown<gfx::material>(index,field, gfx::MaterialCache::getMaterials(), &GUISystem::setMaterial);
+		createAssetDropDown<gfx::material>(index, field, gfx::MaterialCache::getMaterials(), &GUISystem::setMaterial);
 		return true;
 	}
 

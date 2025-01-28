@@ -36,8 +36,8 @@ namespace rythe::game
 		log::debug("Expected Matrix:\n{}", expected);
 		math::quat matToQuat(rot_mat);
 		log::debug("Quaternion Output:\n{}", matToQuat);
-		auto eulerAngles = matToQuat.euler_angles();
-		log::debug("Euler angles:\n{}", math::vec3(math::rad2deg(eulerAngles.x), math::rad2deg(eulerAngles.y), math::rad2deg(eulerAngles.z)));
+		log::debug("Euler angles:\n{}", matToQuat.euler_angles() * math::rad2deg<float>());
+		log::debug("From euler to quat:\n{}", math::quat::from_euler(matToQuat.euler_angles()));
 
 		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
@@ -85,24 +85,24 @@ namespace rythe::game
 			auto ent = createEntity("Floor");
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3(20, .5f, 20);
-			transf.position = math::vec3(0.0f, 0.0f, 0.0f);
+			transf.position = math::vec3::zero;
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = mat, .model = gfx::ModelCache::getModel("cube") ,.castShadows = false });
 		}
 
-		//{
-		//	auto ent = createEntity("Sponza");
-		//	auto& transf = ent.addComponent<core::transform>();
-		//	transf.scale = math::vec3::one * 10.0f;
-		//	transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-		//	ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("sponza-material"), .model = gfx::ModelCache::getModel("sponza"), .castShadows = true });
-		//}
+		{
+			auto ent = createEntity("Sponza");
+			auto& transf = ent.addComponent<core::transform>();
+			transf.scale = math::vec3::one * 10.0f;
+			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
+			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("sponza-material"), .model = gfx::ModelCache::getModel("sponza"), .castShadows = true });
+		}
 
 		{
 			auto ent = createEntity("Entity");
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
 			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f));
+			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f)*math::deg2rad<float>());
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("bog"), .model = gfx::ModelCache::getModel("cube"), .castShadows = true });
 			auto child = createEntity("child");
 			ent->children.insert(child);
@@ -113,7 +113,7 @@ namespace rythe::game
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
 			transf.position = math::vec3(0.0f, 25.f, 0.0f);
-			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f));
+			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f) * math::deg2rad<float>());
 			auto& light = ent.addComponent<gfx::light>({ .type = gfx::LightType::DIRECTIONAL });
 			light.asDirectionalLight().color = math::vec4(1.0f);
 			light.asDirectionalLight().intensity = 1.0f;
@@ -135,8 +135,9 @@ namespace rythe::game
 			auto camera = createEntity("Camera");
 			auto& camTransf = camera.addComponent<core::transform>();
 			camTransf.position = math::vec3(0.0f, 10.0f, -10.0f);
-			camTransf.rotation = math::quat::identity;/* math::quat(math::look_at(math::vec3::zero, camTransf.forward(), camTransf.up()))*/;
-			camera.addComponent<gfx::camera>({ .farZ = 10000.f, .nearZ = 0.1f, .fov = 90.f });
+			camTransf.rotation =  math::quat::look_at(math::vec3::zero, camTransf.forward(), camTransf.up());
+			camTransf.scale = math::vec3(1.0f);
+			camera.addComponent<gfx::camera>({ .farZ = 10000.f, .nearZ = 0.1f, .fov = 80.f });
 			camera.addComponent<camera_settings>({ .mode = CameraControlMode::FreeLook, .speed = 10.0f, .sensitivity = .9f });
 		}
 

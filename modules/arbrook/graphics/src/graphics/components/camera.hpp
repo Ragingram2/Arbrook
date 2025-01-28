@@ -1,5 +1,8 @@
 #pragma once
 #include <rsl/math>
+#include <rfl.hpp>
+#include <rfl/json.hpp>
+#include <rfl/Variant.hpp>
 #include "core/utils/profiler.hpp"
 #include "core/components/transform.hpp"
 #include "core/ecs/component_family.hpp"
@@ -18,7 +21,8 @@ namespace rythe::rendering
 	struct camera
 	{
 	public:
-		framebuffer renderTarget;
+		rfl::Skip<bool> enabled = true;
+		rfl::Skip<framebuffer> renderTarget;
 		math::mat4 projection;
 		math::mat4 view;
 		float nearZ = 1.0f;
