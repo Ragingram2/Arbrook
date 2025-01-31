@@ -20,6 +20,7 @@ struct is_variant<std::variant<Args...>> : std::true_type {};
 
 template<typename T>
 inline constexpr bool is_variant_v = is_variant<T>::value;
+
 namespace rythe::game
 {
 	using namespace rythe::core::events;
@@ -173,6 +174,16 @@ namespace rythe::game
 			}
 			ImGui::EndCombo();
 		}
+	}
+
+	inline void DrawWindow(const char* label, ImGuiWindowFlags flags = 0, std::function<void()> func = nullptr)
+	{
+		bool b = ImGui::Begin(label, 0, flags);
+		if (b)
+		{
+			func();
+		}
+		ImGui::End();
 	}
 
 	inline bool DrawLabel(const char* label)

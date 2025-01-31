@@ -9,7 +9,7 @@ namespace rythe::core
 	public:
 		LoggingService() = default;
 		MOVE_FUNCS(LoggingService)
-		virtual ~LoggingService() = default;
+			virtual ~LoggingService() = default;
 
 		virtual void initialize() override;
 		virtual void update() override;

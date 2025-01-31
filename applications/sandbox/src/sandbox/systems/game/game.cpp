@@ -11,33 +11,6 @@ namespace rythe::game
 		bindEvent<key_input<inputmap::method::F1>, &Game::reloadShaders>();
 		bindEvent<key_input<inputmap::method::MOUSE_RIGHT>, &Game::toggleMouseCapture>();
 
-		math::mat4 input
-		{
-			4,7,2,3,
-			3,5,1,4,
-			2,6,3,5,
-			1,2,4,6
-		};
-		auto result = math::inverse(input);
-		log::debug("Matrix Input:\n{}", input);
-		log::debug("Calculated Inverse:\n{}", result);
-		log::debug("Composed Identity Matrix:\n{}", input * result);
-
-		math::quat rot_input = { 0.27f , -0.653f,-0.653f,-0.27f };
-		math::mat3 expected
-		{
-			0.0f,0.707f,0.707f,
-			1.0f,0.0f,0.0f,
-			0.0f,0.707f,-0.707f
-		};
-		auto rot_mat = math::mat3(rot_input);
-		log::debug("Quaternion Input:\n{}", rot_input);
-		log::debug("Calculated Matrix:\n{}", rot_mat);
-		log::debug("Expected Matrix:\n{}", expected);
-		math::quat matToQuat(rot_mat);
-		log::debug("Quaternion Output:\n{}", matToQuat);
-		log::debug("Euler angles:\n{}", matToQuat.euler_angles() * math::rad2deg<float>());
-		log::debug("From euler to quat:\n{}", math::quat::from_euler(matToQuat.euler_angles()));
 
 		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
@@ -147,7 +120,6 @@ namespace rythe::game
 	void Game::update()
 	{
 		ZoneScopedN("Game Update");
-
 		//auto deltaTime = static_cast<std::chrono::duration<float, std::milli>>(core::Time::deltaTime);
 		//auto status = future.wait_for(deltaTime);
 		//if (status != std::future_status::ready)

@@ -39,169 +39,202 @@ namespace rythe::game
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 
-		ImGui::Begin("Editor", 0, window_flags);
-
-		ImGui::Text(std::format("FPS:{}", ImGui::GetIO().Framerate).c_str());
-
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-
-		//ImGui::ShowDemoWindow();
-		//ImGui::ShowMetricsWindow();
-
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("New"))
+		DrawWindow("Editor", window_flags, [=]()
 			{
-				if (ImGui::MenuItem("Entity"))
+				ImGui::Text(std::format("FPS:{}", ImGui::GetIO().Framerate).c_str());
+
+				static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+
+				//ImGui::ShowDemoWindow();
+				//ImGui::ShowMetricsWindow();
+
+				if (ImGui::BeginMenuBar())
 				{
-					createEmptyEntity();
-				}
-				ImGui::MenuItem("Material");
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-
-		if (ImGui::Begin("Heirarchy"))
-		{
-			ImGui::Separator();
-			ImGui::Indent();
-			drawHeirarchy(m_filter.m_entities);
-			ImGui::Unindent();
-
-
-			if (ImGui::BeginPopupContextWindow())
-			{
-				if (ImGui::MenuItem("New Empty"))
-					createEmptyEntity();
-
-				if (ImGui::MenuItem("New Cube"))
-					createCubeEntity();
-
-				if (ImGui::MenuItem("New Sphere"))
-					createSphereEntity();
-
-				ImGui::EndPopup();
-			}
-
-			ImGui::End();
-		}
-
-		if (ImGui::Begin("Inspector"))
-		{
-			if (GUI::selected == invalid_id)
-			{
-				ImGui::End();
-			}
-			else
-			{
-				auto ent = GUI::selected;
-				ImGui::BeginChild(ent->name.c_str(), ImVec2(ImGui::GetWindowWidth(), 30.0f), true);
-				ImGui::Checkbox("##", &ent->enabled);
-				ImGui::SameLine();
-				ImGui::Text(ent->name.c_str());
-				ImGui::EndChild();
-
-				ImGui::Indent();
-				if (ent.hasComponent<core::transform>())
-					componentEditor<core::transform>(ent);
-
-				if (ent.hasComponent<gfx::mesh_renderer>())
-					componentEditor<gfx::mesh_renderer>(ent);
-
-				if (ent.hasComponent<gfx::light>())
-					componentEditor<gfx::light>(ent);
-
-				if (ent.hasComponent<examplecomp>())
-					componentEditor<examplecomp>(ent);
-
-				if (ent.hasComponent<gfx::camera>())
-					componentEditor<gfx::camera>(ent);
-				ImGui::Unindent();
-
-
-				if (ImGui::BeginPopupContextItem("ComponentList"))
-				{
-					static const char* current = "None";
-					for (auto& [id, comp] : ecs::Registry::componentFamilies)
+					if (ImGui::BeginMenu("New"))
 					{
-						if (ent.hasComponent(id)) continue;
-						const bool is_selected = (ecs::Registry::componentNames[id] == current);
-						if (ImGui::Selectable(ecs::Registry::componentNames[id].c_str(), is_selected))
+						if (ImGui::MenuItem("Entity"))
 						{
-							if (!ent.hasComponent(id))
+							createEmptyEntity();
+						}
+						ImGui::MenuItem("Material");
+						ImGui::EndMenu();
+					}
+					ImGui::EndMenuBar();
+				}
+
+
+				DrawWindow("Heirarchy", 0, [=]()
+					{
+						ImGui::Separator();
+						ImGui::Indent();
+						drawHeirarchy(m_filter.m_entities);
+						ImGui::Unindent();
+
+						if (ImGui::BeginPopupContextWindow())
+						{
+							if (ImGui::MenuItem("New Empty"))
+								createEmptyEntity();
+
+							if (ImGui::MenuItem("New Cube"))
+								createCubeEntity();
+
+							if (ImGui::MenuItem("New Sphere"))
+								createSphereEntity();
+							ImGui::EndPopup();
+						}
+					});
+
+				DrawWindow("Inspector", 0, [=]()
+					{
+						if (GUI::selected == invalid_id)
+						{
+							return;
+						}
+						else
+						{
+							auto ent = GUI::selected;
+							ImGui::BeginChild(ent->name.c_str(), ImVec2(ImGui::GetWindowWidth(), 30.0f), true);
+							ImGui::Checkbox("##", &ent->enabled);
+							ImGui::SameLine();
+							ImGui::Text(ent->name.c_str());
+							ImGui::EndChild();
+
+							ImGui::Indent();
+							if (ent.hasComponent<core::transform>())
+								componentEditor<core::transform>(ent);
+
+							if (ent.hasComponent<gfx::mesh_renderer>())
+								componentEditor<gfx::mesh_renderer>(ent);
+
+							if (ent.hasComponent<gfx::light>())
+								componentEditor<gfx::light>(ent);
+
+							if (ent.hasComponent<examplecomp>())
+								componentEditor<examplecomp>(ent);
+
+							if (ent.hasComponent<gfx::camera>())
+								componentEditor<gfx::camera>(ent);
+							ImGui::Unindent();
+
+
+							if (ImGui::BeginPopupContextItem("ComponentList"))
 							{
-								current = ecs::Registry::componentNames[id].c_str();
-								ent.addComponent(id);
+								static const char* current = "None";
+								for (auto& [id, comp] : ecs::Registry::componentFamilies)
+								{
+									if (ent.hasComponent(id)) continue;
+									const bool is_selected = (ecs::Registry::componentNames[id] == current);
+									if (ImGui::Selectable(ecs::Registry::componentNames[id].c_str(), is_selected))
+									{
+										if (!ent.hasComponent(id))
+										{
+											current = ecs::Registry::componentNames[id].c_str();
+											ent.addComponent(id);
+										}
+									}
+								}
+								ImGui::EndPopup();
+							}
+
+							if (ImGui::Button("Add Component"))
+							{
+								ImGui::OpenPopup("ComponentList");
 							}
 						}
-					}
-					ImGui::EndPopup();
-				}
+					});
 
-				if (ImGui::Button("Add Component"))
-				{
-					ImGui::OpenPopup("ComponentList");
-				}
-				ImGui::End();
-			}
-		}
+				DrawWindow("Console", 0, [=]()
+					{
+						//appConsoleSink->log(spdlog::details::log_msg(spdlog::source_loc{}, "Console Logger", spdlog::level::debug, "Logging"));
+						log::debug("Logging");
+						auto logs = rythe::appConsoleSink.get()->last_raw();//static_cast<std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt>>(log::impl::get().logger->sinks()[1]);
+						int lines = logs.size();
+						//ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
+						//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
+						ImVec2 scrolling_child_size = ImVec2(0, ImGui::GetFrameHeightWithSpacing() * 7 + 30);
+						ImGui::BeginChild("scrolling", scrolling_child_size, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
+						for (int line = 0; line < lines; line++)
+						{
+							//ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
+							//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.7f, 0.7f, 0.7f));
+							//ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.8f, 0.8f, 0.8f));
+							ImGui::Text(logs[line].payload.data());
+							//ImGui::PopStyleColor(3);
+						}
+						//float scroll_x = ImGui::GetScrollX();
+						//float scroll_max_x = ImGui::GetScrollMaxX();
+						ImGui::EndChild();
 
-		if (ImGui::Begin("Asset Browser"))
-		{
-			ImGui::End();
-		}
+						//ImGui::PopStyleVar(2);
+						//float scroll_x_delta = 0.0f;
+						//ImGui::SmallButton("<<");
+						//if (ImGui::IsItemActive())
+						//	scroll_x_delta = -ImGui::GetIO().DeltaTime * 1000.0f;
+						//ImGui::SameLine();
+						//ImGui::Text("Scroll from code"); ImGui::SameLine();
+						//ImGui::SmallButton(">>");
+						//if (ImGui::IsItemActive())
+						//	scroll_x_delta = +ImGui::GetIO().DeltaTime * 1000.0f;
+						//ImGui::SameLine();
+						//ImGui::Text("%.0f/%.0f", scroll_x, scroll_max_x);
+						//if (scroll_x_delta != 0.0f)
+						//{
+						//	// Demonstrate a trick: you can use Begin to set yourself in the context of another window
+						//	// (here we are already out of your child window)
+						//	ImGui::BeginChild("scrolling");
+						//	ImGui::SetScrollX(ImGui::GetScrollX() + scroll_x_delta);
+						//	ImGui::EndChild();
+						//}
+					});
 
-		int flags = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse;
-		if (ImGui::Begin("Scene", 0, flags))
-		{
+				DrawWindow("Asset Browser", 0, [=]() {});
 
-			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-			const float width = viewportPanelSize.x;
-			const float height = viewportPanelSize.y;
-			math::vec2 windowPos = math::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
-			gfx::Renderer::RI->setViewport(1, 0, 0, width, height);
-			float imageWidth = math::min(1280.0f, width); /*width > 1280.f ? width : 1280.f;*/
-			float imageHeight = math::min(720.0f, height);//height > 720.f ? height : 720.f;
-			mainFBO->rescale(imageWidth, imageHeight);
-			pickingFBO->rescale(imageWidth, imageHeight);
+				int flags = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollWithMouse;
+				DrawWindow("Scene", flags, [=]()
+					{
+
+						ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+						const float width = viewportPanelSize.x;
+						const float height = viewportPanelSize.y;
+						math::vec2 windowPos = math::vec2(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y);
+						gfx::Renderer::RI->setViewport(1, 0, 0, width, height);
+						float imageWidth = math::min(1280.0f, width); /*width > 1280.f ? width : 1280.f;*/
+						float imageHeight = math::min(720.0f, height);//height > 720.f ? height : 720.f;
+						mainFBO->rescale(imageWidth, imageHeight);
+						pickingFBO->rescale(imageWidth, imageHeight);
 
 #if RenderingAPI == RenderingAPI_OGL
-			auto mainTex = mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0).m_data->getId();
+						auto mainTex = mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0).m_data->getId();
 #else
-			mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0)->unbind(gfx::TextureSlot::TEXTURE0);
-			auto mainTex = mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0).m_data->getInternalHandle();
+						mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0)->unbind(gfx::TextureSlot::TEXTURE0);
+						auto mainTex = mainFBO->getAttachment(gfx::AttachmentSlot::COLOR0).m_data->getInternalHandle();
 #endif
+						if (!Input::mouseCaptured && m_readPixel && ImGui::IsWindowHovered() && !ImGuizmo::IsOver())
+						{
+							auto color = gfx::Renderer::RI->readPixels(*pickingFBO, math::ivec2(input::Input::mousePos.x, input::Input::mousePos.y) - windowPos, math::ivec2(1, 1));
+							rsl::id_type id = color.x + (color.y * 256) + (color.z * 256 * 256) + (color.w * 256 * 256 * 256);
+							if (id != invalid_id)
+								GUI::selected = ecs::entity{ &ecs::Registry::entities[id] };
+							else
+								GUI::selected = ecs::entity();
 
-			if (!Input::mouseCaptured && m_readPixel && ImGui::IsWindowHovered() && !ImGuizmo::IsOver())
-			{
-				auto color = gfx::Renderer::RI->readPixels(*pickingFBO, math::ivec2(input::Input::mousePos.x, input::Input::mousePos.y) - windowPos, math::ivec2(1, 1));
-				rsl::id_type id = color.x + (color.y * 256) + (color.z * 256 * 256) + (color.w * 256 * 256 * 256);
-				if (id != invalid_id)
-					GUI::selected = ecs::entity{ &ecs::Registry::entities[id] };
-				else
-					GUI::selected = ecs::entity();
+							m_readPixel = false;
+						}
+						else
+						{
+							m_readPixel = false;
+						}
 
-				m_readPixel = false;
-			}
-			else
-			{
-				m_readPixel = false;
-			}
+						if (mainTex != 0)
+							ImGui::Image(static_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, -1), ImVec2(-1, 0));
+						if (GUI::selected != invalid_id)
+							drawGizmo(camTransf, camera, math::ivec2(imageWidth, imageHeight));
+					});
 
-
-			if (mainTex != 0)
-				ImGui::Image(static_cast<ImTextureID>(mainTex), ImVec2(imageWidth, imageHeight), ImVec2(0, -1), ImVec2(-1, 0));
-			if (GUI::selected != invalid_id)
-				drawGizmo(camTransf, camera, math::ivec2(imageWidth, imageHeight));
-
-			ImGui::End();
-		}
-
-		ImGui::End();
-		ImGui::PopStyleVar(3);
+				ImGui::PopStyleVar(3);
+			});
 	}
 
 	void GUISystem::drawHeirarchy(ecs::entity_set heirarchy)
