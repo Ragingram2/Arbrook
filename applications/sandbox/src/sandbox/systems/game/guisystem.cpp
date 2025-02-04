@@ -147,46 +147,20 @@ namespace rythe::game
 
 				DrawWindow("Console", 0, [=]()
 					{
-						//appConsoleSink->log(spdlog::details::log_msg(spdlog::source_loc{}, "Console Logger", spdlog::level::debug, "Logging"));
 						log::debug("Logging");
-						auto logs = rythe::appConsoleSink.get()->last_raw();//static_cast<std::shared_ptr<spdlog::sinks::ringbuffer_sink_mt>>(log::impl::get().logger->sinks()[1]);
+						auto sink = (spdlog::sinks::ringbuffer_sink_mt*)(log::impl::get().logger->sinks()[1].get());
+						auto logs = sink->last_formatted();
 						int lines = logs.size();
-						//ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
-						//ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
+						ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
 						ImVec2 scrolling_child_size = ImVec2(0, ImGui::GetFrameHeightWithSpacing() * 7 + 30);
 						ImGui::BeginChild("scrolling", scrolling_child_size, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
 						for (int line = 0; line < lines; line++)
 						{
-							//ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.6f, 0.6f, 0.6f));
-							//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.7f, 0.7f, 0.7f));
-							//ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.8f, 0.8f, 0.8f));
-							ImGui::Text(logs[line].payload.data());
-							//ImGui::PopStyleColor(3);
+							ImGui::Text(logs[line].c_str());
 						}
-						//float scroll_x = ImGui::GetScrollX();
-						//float scroll_max_x = ImGui::GetScrollMaxX();
 						ImGui::EndChild();
-
-						//ImGui::PopStyleVar(2);
-						//float scroll_x_delta = 0.0f;
-						//ImGui::SmallButton("<<");
-						//if (ImGui::IsItemActive())
-						//	scroll_x_delta = -ImGui::GetIO().DeltaTime * 1000.0f;
-						//ImGui::SameLine();
-						//ImGui::Text("Scroll from code"); ImGui::SameLine();
-						//ImGui::SmallButton(">>");
-						//if (ImGui::IsItemActive())
-						//	scroll_x_delta = +ImGui::GetIO().DeltaTime * 1000.0f;
-						//ImGui::SameLine();
-						//ImGui::Text("%.0f/%.0f", scroll_x, scroll_max_x);
-						//if (scroll_x_delta != 0.0f)
-						//{
-						//	// Demonstrate a trick: you can use Begin to set yourself in the context of another window
-						//	// (here we are already out of your child window)
-						//	ImGui::BeginChild("scrolling");
-						//	ImGui::SetScrollX(ImGui::GetScrollX() + scroll_x_delta);
-						//	ImGui::EndChild();
-						//}
+						ImGui::PopStyleVar(2);
 					});
 
 				DrawWindow("Asset Browser", 0, [=]() {});
