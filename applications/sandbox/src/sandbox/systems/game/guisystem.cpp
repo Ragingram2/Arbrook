@@ -147,20 +147,26 @@ namespace rythe::game
 
 				DrawWindow("Console", 0, [=]()
 					{
-						log::debug("Logging");
 						auto sink = (spdlog::sinks::ringbuffer_sink_mt*)(log::impl::get().logger->sinks()[1].get());
-						auto logs = sink->last_formatted();
+						auto logs = sink->last_raw(128);
 						int lines = logs.size();
+						ImVec2 scrolling_child_size = ImVec2(0, 0);
 						ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3.0f);
-						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.0f, 1.0f));
-						ImVec2 scrolling_child_size = ImVec2(0, ImGui::GetFrameHeightWithSpacing() * 7 + 30);
-						ImGui::BeginChild("scrolling", scrolling_child_size, ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
+						ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 1.0f));
+						ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign, ImVec2(.01f, .05f));
+						ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor(0.6f, 0.6f, 0.6f, 1.0f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor(0.7f, 0.7f, 0.7f, 1.0f));
+						ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor(0.8f, 0.8f, 0.8f, 1.0f));
+						ImGui::BeginChild("scrolling", scrolling_child_size, ImGuiChildFlags_Borders);
 						for (int line = 0; line < lines; line++)
 						{
-							ImGui::Text(logs[line].c_str());
+							auto log = logs[line];
+							auto message = fmt::to_string(log.payload).substr(0, log.payload.size());
+							ImGui::Button(message.c_str(), ImVec2(ImGui::GetWindowSize().x, 20));
 						}
 						ImGui::EndChild();
-						ImGui::PopStyleVar(2);
+						ImGui::PopStyleVar(3);
+						ImGui::PopStyleColor(3);
 					});
 
 				DrawWindow("Asset Browser", 0, [=]() {});
@@ -221,33 +227,28 @@ namespace rythe::game
 				flags |= ImGuiTreeNodeFlags_Selected;
 
 			if (ent->children.size() == 0)
-				flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
+				flags |= ImGuiTreeNodeFlags_Leaf;
 
 			if (!ent->enabled)
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5, 0.5, 0.5, 1.0));
 
-			ImGui::PushID(std::format("Hierarchy##{}", ent->id).c_str());
-			ImGui::TreeNodeEx(ent->name.c_str(), flags);
+			if (ImGui::TreeNodeEx(ent->name.c_str(), flags))
+			{
+				if (ImGui::IsItemClicked())
+				{
+					GUI::selected = ent;
+				}
+
+				//if (ImGui::IsItemToggledOpen())
+				//{
+				//	drawHeirarchy(ent->children);
+				//}
+
+				ImGui::TreePop();
+			}
+
 			if (!ent->enabled)
 				ImGui::PopStyleColor();
-
-			ImGui::PopID();
-
-			if (ImGui::IsItemToggledOpen())
-			{
-				if (ent->children.size() > 0)
-				{
-					ImGui::Indent();
-					drawHeirarchy(ent->children);
-					ImGui::Unindent();
-				}
-			}
-
-			if (ImGui::IsItemClicked())
-			{
-				GUI::selected = ent;
-			}
-
 		}
 	}
 

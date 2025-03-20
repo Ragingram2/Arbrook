@@ -42,7 +42,7 @@ namespace fragment
 {
 	#pragma warning( disable : 4121)
 	#include "camera_utils.shinc"
-    //#define MATERIAL_INPUT
+    #define MATERIAL_INPUT
 	#include "light_utils.shinc"
 
 	
@@ -57,29 +57,29 @@ namespace fragment
 		float3 tangent : TANGENT;
 	};
 
-	// Texture2D DepthMap : Texture0;
-	// SamplerState DepthMapSampler : TexSampler0;
+	Texture2D DepthMap : Texture0;
+	SamplerState DepthMapSampler : TexSampler0;
 	
-    // TextureCube DepthCube : Texture1;
-    // SamplerState DepthCubeSampler : TexSampler1;
+    TextureCube DepthCube : Texture1;
+    SamplerState DepthCubeSampler : TexSampler1;
 
 	static float3 s = float3(0,0,0);
 
 	float4 main(PIn input) : SV_TARGET
 	{
         
-        // float3 tangent = normalize(input.tangent - dot(input.tangent , input.normal) * input.normal);
+        float3 tangent = normalize(input.tangent - dot(input.tangent , input.normal) * input.normal);
 
-        // Material material = ExtractMaterial(input.texCoords, input.normal, tangent);
+        Material material = ExtractMaterial(input.texCoords, input.normal, tangent);
         
-        // if(material.texCoords.x < 0 || material.texCoords.x > 1 || material.texCoords.y < 0 || material.texCoords.y > 1)
-        //     discard;
+        if(material.texCoords.x < 0 || material.texCoords.x > 1 || material.texCoords.y < 0 || material.texCoords.y > 1)
+            discard;
 
-        // float3 worldPos = (input.normal * material.height) + input.position;
+        float3 worldPos = (input.normal * material.height) + input.position;
 
-        // float3 result = GetAllLighting(material, worldPos);
+        float3 result = GetAllLighting(material, worldPos);
 
-		//return float4(result, material.albedo.a);
-        return float4(1,0,0,1);
+		return float4(result, material.albedo.a);
+        //return float4(1,0,0,1);
 	}
 }

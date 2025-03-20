@@ -20,7 +20,10 @@ namespace rythe::core::ecs
 		ent.name = "World";
 		entityCompositions.try_emplace(worldId);
 		world = entity{ &ent };
-		world.addComponent<transform>();
+		auto& transf = world.addComponent<transform>();
+		transf.position = math::vec3(0.0f);
+		transf.rotation = math::quat::identity;
+		transf.scale = math::vec3(1.0f);
 	}
 
 	void Registry::update()
@@ -41,7 +44,7 @@ namespace rythe::core::ecs
 		ent.id = lastId;
 		ent.name = std::format("Entity {}", lastId);
 		ent.parent = world;
-
+		//world->children.emplace(ent);
 		entityCompositions.try_emplace(entity{ &ent });
 		return entity{ &ent };
 	}
@@ -54,9 +57,8 @@ namespace rythe::core::ecs
 		ent.id = lastId;
 		ent.name = std::format("Entity {}", lastId);
 		ent.parent = parent;
-
-		if (parent)
-			parent.data->children.insert(entity{ &ent });
+		//if (parent)
+		//	parent.data->children.insert(entity{&ent});
 
 		entityCompositions.try_emplace(entity{ &ent });
 		return entity{ &ent };
@@ -70,6 +72,7 @@ namespace rythe::core::ecs
 		ent.id = lastId;
 		ent.name = name;
 		ent.parent = world;
+		//world->children.emplace(ent);
 		return entity{ &ent };
 	}
 
@@ -79,7 +82,6 @@ namespace rythe::core::ecs
 		{
 			destroyComponent(ent, typeId);
 		}
-
 		entityCompositions.erase(ent.data->id);
 		entities.erase(ent.data->id);
 	}

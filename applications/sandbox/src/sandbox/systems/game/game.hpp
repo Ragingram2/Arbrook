@@ -13,6 +13,7 @@
 #include "core/core.hpp"
 #include "graphics/rendering.hpp"
 #include "input/input.hpp"
+#include "physics/physics.hpp"
 
 #include "sandbox/components/camerasettings.hpp"
 
@@ -30,12 +31,14 @@ namespace rythe::game
 		ast::asset_handle<gfx::material> mat;
 		ast::asset_handle<gfx::material> lit;
 		ast::asset_handle<gfx::material> colorMat;
-
+		nlohmann::json sceneHierarchy;
 		std::future<void> future;
 
 	public:
 		void setup();
 		void update();
+
+		void serializeScene();
 
 		void reloadShaders(key_input<inputmap::method::F1>& input)
 		{

@@ -5,6 +5,7 @@
 #include "graphics/modules/rendermodule.hpp"
 #include "modules/testmodule.hpp"
 #include "input/modules/inputmodule.hpp"
+#include "physics/modules/physicsmodule.hpp"
 
 
 using namespace rythe::core;
@@ -12,6 +13,7 @@ using namespace rythe::core;
 namespace gfx = rythe::rendering;
 namespace events = rythe::core::events;
 namespace input = rythe::input;
+namespace physics = rythe::physics;
 
 __declspec(dllexport) DWORD NvOptimusEnablement = 0x0000001;
 
@@ -34,6 +36,7 @@ int main()
 	scheduling::Scheduler* scheduler = registry.get_service<scheduling::Scheduler>();
 	scheduler->reportModule<gfx::RenderModule>();
 	scheduler->reportModule<input::InputModule>();
+	//scheduler->reportModule<physics::PhysicsModule>();
 	scheduler->reportModule<TestModule>();
 
 	//Initialize engine

@@ -7,6 +7,9 @@
 #include <rsl/primitives>
 #include <rsl/hash>
 #include <rsl/containers>
+#include <rfl.hpp>
+#include <rfl/json.hpp>
+#include <nlohmann/json.hpp>
 
 #include "core/containers/pointer.hpp"
 
@@ -68,6 +71,33 @@ namespace std
 
 	};
 }
+
+//namespace rfl
+//{
+//	template<>
+//	struct Reflector<rsl::hashed_sparse_set<rythe::core::ecs::entity>>
+//	{
+//		using type = rsl::hashed_sparse_set<rythe::core::ecs::entity>;
+//		using ReflType = std::string;
+//
+//		//static type to(const ReflType& str) noexcept
+//		//{
+//		//	//nlohmann::json entList = str;
+//		//	return std::declval<type>();
+//		//}
+//
+//		static ReflType from(const type& v)
+//		{
+//			nlohmann::json entList;
+//			for (auto ent : v)
+//			{
+//				entList.push_back(rfl::json::write(ent));
+//			}
+//
+//			return entList.dump();
+//		}
+//	};
+//}
 
 namespace rythe::core::ecs
 {

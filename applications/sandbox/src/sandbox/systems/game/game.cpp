@@ -11,7 +11,6 @@ namespace rythe::game
 		bindEvent<key_input<inputmap::method::F1>, &Game::reloadShaders>();
 		bindEvent<key_input<inputmap::method::MOUSE_RIGHT>, &Game::toggleMouseCapture>();
 
-
 		input::InputSystem::registerWindow(gfx::Renderer::RI->getGlfwWindow());
 
 		ast::AssetCache<gfx::texture_source>::registerImporter<gfx::TextureImporter>();
@@ -60,6 +59,8 @@ namespace rythe::game
 			transf.scale = math::vec3(20, .5f, 20);
 			transf.position = math::vec3::zero;
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = mat, .model = gfx::ModelCache::getModel("cube") ,.castShadows = false });
+			ent.addComponent<physics::rigidbody>({ .mass = 1.0f, .motionType = JPH::EMotionType::Static, .activationType = JPH::EActivation::DontActivate });
+			ent.addComponent<physics::collider>({ .bounds = math::vec3(20.0f,0.5f,20.0f) });
 		}
 
 		{
@@ -75,10 +76,12 @@ namespace rythe::game
 			auto& transf = ent.addComponent<core::transform>();
 			transf.scale = math::vec3::one;
 			transf.position = math::vec3(0.0f, 10.0f, 0.0f);
-			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f)*math::deg2rad<float>());
+			transf.rotation = math::quat::from_euler(math::vec3(-90.0f, 0.0f, 0.0f) * math::deg2rad<float>());
 			ent.addComponent<gfx::mesh_renderer>({ .mainMaterial = gfx::MaterialCache::getMaterial("bog"), .model = gfx::ModelCache::getModel("cube"), .castShadows = true });
-			auto child = createEntity("child");
-			ent->children.insert(child);
+			ent.addComponent<physics::rigidbody>({ .mass = 1.0f, .motionType = JPH::EMotionType::Dynamic, .activationType = JPH::EActivation::Activate });
+			ent.addComponent<physics::collider>({.bounds = math::vec3(1.0f,1.0f,1.0f)});
+			//auto child = createEntity("child");
+			//ent->children.insert(child);
 		}
 
 		{
@@ -108,23 +111,31 @@ namespace rythe::game
 			auto camera = createEntity("Camera");
 			auto& camTransf = camera.addComponent<core::transform>();
 			camTransf.position = math::vec3(0.0f, 10.0f, -10.0f);
-			camTransf.rotation =  math::quat::look_at(math::vec3::zero, camTransf.forward(), camTransf.up());
+			camTransf.rotation = math::quat::look_at(math::vec3::zero, camTransf.forward(), camTransf.up());
 			camTransf.scale = math::vec3(1.0f);
 			camera.addComponent<gfx::camera>({ .farZ = 10000.f, .nearZ = 0.1f, .fov = 80.f });
 			camera.addComponent<camera_settings>({ .mode = CameraControlMode::FreeLook, .speed = 10.0f, .sensitivity = .9f });
 		}
 
-		//future = TimerAsync(30s, []() {log::debug("Timer Finished"); });
+		//future = TimerAsync(5s, [=]() { serializeScene(); });
+		//serializeScene();
 	}
 
 	void Game::update()
 	{
 		ZoneScopedN("Game Update");
+
 		//auto deltaTime = static_cast<std::chrono::duration<float, std::milli>>(core::Time::deltaTime);
 		//auto status = future.wait_for(deltaTime);
-		//if (status != std::future_status::ready)
+		//if (status == std::future_status::ready)
 		//{
-		//	log::debug("Processing....");
+		//	log::debug("Done");
 		//}
+	}
+
+	void Game::serializeScene()
+	{
+		//sceneHierarchy.push_back(rfl::json::write(core::ecs::Registry::entities[core::ecs::Registry::worldId]));
+		//log::debug(sceneHierarchy.dump());
 	}
 }

@@ -62,7 +62,8 @@ local thirdPartyProjects =
             "ASSIMP_BUILD_NO_C4D_IMPORTER",
             "ASSIMP_BUILD_NO_IFC_IMPORTER",
             "ASSIMP_BUILD_NO_OPENGEX_IMPORTER",
-            "ASSIMP_BUILD_NO_USD_IMPORTER"
+            "ASSIMP_BUILD_NO_USD_IMPORTER",
+            "ASSIMP_BUILD_NO_VRML_IMPORTER"
         },
         additional_include_dirs = {
             "modules/arbrook/core/third_party/assimp/",
@@ -80,6 +81,23 @@ local thirdPartyProjects =
             "./include/**",
             "./code/**",
             "./contrib/unzip/*",
+        }
+    },
+    {
+        name = "reflect-cpp",
+        group = "third_party", 
+        warnings_as_errors = false,
+        additional_include_dirs = {
+            "modules/arbrook/core/third_party/reflect-cpp/include",
+            "modules/arbrook/core/third_party/reflect-cpp/include/rfl/thirdparty",
+            "modules/arbrook/core/third_party/reflect-cpp/src",
+            "modules/arbrook/core/third_party/reflect-cpp/src/rfl"
+        },
+        files = 
+        {
+            "./reflectcpp.cpp",
+            "./reflectcpp_json.cpp",
+            "./yyjson.c"
         }
     }
 }
