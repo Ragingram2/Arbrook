@@ -65,7 +65,7 @@ namespace rythe::core
 
 		T operator/(const Property& rhs)
 		{
-			return m_data / rhs.data;
+			return m_data / rhs.m_data;
 		}
 
 		T& operator=(const T& newvalue)

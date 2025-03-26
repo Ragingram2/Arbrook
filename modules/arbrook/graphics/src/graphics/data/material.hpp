@@ -13,11 +13,13 @@ namespace rythe::rendering
 		math::vec4 diffuseColor;
 		unsigned int hasAlbedo = 0;
 		unsigned int hasRoughness = 0;
+		unsigned int hasRoughnessMetallic = 0;
 		unsigned int hasNormal = 0;
 		unsigned int hasHeight = 0;
 		unsigned int hasMetallic = 0;
 		unsigned int hasAmbientOcclusion = 0;
 		unsigned int hasEmissive = 0;
+		unsigned int hasMRDAo = 0;
 	};
 
 	enum class ParamType

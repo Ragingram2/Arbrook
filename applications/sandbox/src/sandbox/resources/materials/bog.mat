@@ -1,23 +1,38 @@
 {
-    "shaderPath":"resources/shaders/pbr.shader",
-    "parameters" : {
+    "shaderPath": "resources/shaders/lit.shader",
+    "parameters": {
         "Albedo": {
             "register": 0,
             "type": "Texture",
             "value": "resources/textures/bog/bog-albedo-512.png"
         },
-        "NormalHeight": {
+        "Roughness": {
             "register": 1,
-            "type" : "Texture",
-            "value": "resources/textures/bog/bog-normalHeight-512.png"
+            "type": "Texture",
+            "value": "resources/textures/bog/bog-roughness-512.png"
         },
-        "MRDAo": {
+        "Normal": {
             "register": 2,
             "type": "Texture",
-            "value": "resources/textures/bog/bog-MRDAo-512.png"
+            "value": "resources/textures/bog/bog-normal-512.png"
+        },
+        "Height": {
+            "register": 3,
+            "type": "Texture",
+            "value": "resources/textures/bog/bog-height-512.png"
+        },
+        "Metallic": {
+            "register": 4,
+            "type": "Texture",
+            "value": "resources/textures/bog/bog-metallic-512.png"
+        },
+        "AmbientOcclusion": {
+            "register": 5,
+            "type": "Texture",
+            "value": "resources/textures/bog/bog-ao-512.png"
         },
         "Emissive": {
-            "register": 3,
+            "register": 6,
             "type": "Texture",
             "value": "resources/textures/bog/bog-emissive-512.png"
         }

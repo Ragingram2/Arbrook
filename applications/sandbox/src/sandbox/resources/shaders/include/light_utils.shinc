@@ -55,11 +55,13 @@ cbuffer MaterialBuffer : register(b3)
 	float4 diffuseColor;
 	bool hasAlbedo;
 	bool hasRoughness;
+	bool hasRoughnessMetallic;
 	bool hasNormal;
 	bool hasHeight;
 	bool hasMetallic;
 	bool hasAmbientOcclusion;
 	bool hasEmissive;
+	bool hasMRDAo;
 };
 
 cbuffer LightInfo : register(b4)

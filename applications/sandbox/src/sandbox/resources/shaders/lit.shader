@@ -56,6 +56,7 @@ namespace fragment
 		float4 lightSpaceFragPos : TEXCOORD2;
 		float3 tangent : TANGENT;
 	};
+		
 
 	Texture2D DepthMap : Texture0;
 	SamplerState DepthMapSampler : TexSampler0;
@@ -183,25 +184,25 @@ namespace fragment
         return shadow;
     }
 
-	// float3 CalcDirLight(float3 diffuseColor, float3 specularColor, float3 normal, float metallicValue, float roughnessValue, float3 lightDir, float4 lightFragPos, float3 viewDir)
-	// {
-	// 	DirLight light = u_dirLights[0];
+	float3 CalcDirLight(float3 diffuseColor, float3 specularColor, float3 normal, float metallicValue, float roughnessValue, float3 lightDir, float4 lightFragPos, float3 viewDir)
+	{
+		DirLight light = u_dirLights[0];
 
-	// 	float3 radiance = light.color.rgb*5.0;
-	// 	float3 diffuse = 1.0 - roughnessValue;
+		float3 radiance = light.color.rgb*5.0;
+		float3 diffuse = 1.0 - roughnessValue;
 
-	// 	float3 _specularColor = specularColor;
-	// 	_specularColor = lerp(_specularColor, diffuseColor, metallicValue);
-	// 	diffuse *= 1.0 - metallicValue;
+		float3 _specularColor = specularColor;
+		_specularColor = lerp(_specularColor, diffuseColor, metallicValue);
+		diffuse *= 1.0 - metallicValue;
 
-	// 	float3 halfwayDir = normalize(lightDir + viewDir);
-	// 	float spec = pow(max(dot(normal, halfwayDir),0.0), (1.0 - roughnessValue.r) * 32.0);
-	// 	float3 specular = _specularColor * spec;
+		float3 halfwayDir = normalize(lightDir + viewDir);
+		float spec = pow(max(dot(normal, halfwayDir),0.0), (1.0 - roughnessValue.r) * 32.0);
+		float3 specular = _specularColor * spec;
 
-	// 	float NdotL = max(dot(normal, lightDir), 0.0);
-	// 	float shadow = DirLightShadowCalculation(lightFragPos, normal, lightDir);
-	// 	return ((1.0 - shadow) * diffuse * diffuseColor + specular) * radiance * NdotL;
-	// }
+		float NdotL = max(dot(normal, lightDir), 0.0);
+		float shadow = DirLightShadowCalculation(lightFragPos, normal, lightDir);
+		return ((1.0 - shadow) * diffuse * diffuseColor + specular) * radiance * NdotL;
+	}
 
 	float3 CalcPBRDirLight(float3 diffuseColor, float metallicValue, float roughnessValue, float3 normal, float3 ao, float3 lightDir, float4 lightFragPos, float3 viewDir)
 	{
@@ -227,7 +228,7 @@ namespace fragment
 
 		float3 DiffuseBRDF = kD * diffuseColor/PI;
 		
-		float3 SpecularBRDF = (NDF*G*F) / (4.0 * NdotL * NdotV + 0.0001);
+		float3 SpecularBRDF = (NDF*G*F) / (4.0 * NdotL * NdotV + 0.001);
 		float3 radiance = light.color.rgb * 255.0;
 
 		s = SpecularBRDF;
@@ -292,30 +293,30 @@ namespace fragment
 	}
 
 
-	// float3 CalcPointLight(PointLight light, float3 diffuseColor, float3 specularColor, float3 normal, float metallicValue, float roughnessValue, float3 fragPos, float3 viewDir)
-	// {
-	// 	float attenuation = Attenuation(light.position.xyz, fragPos, light.range, light.intensity);
-	// 	if(attenuation <= 0)
-	// 		return float3(0.0,0.0,0.0);
+	float3 CalcPointLight(PointLight light, float3 diffuseColor, float3 specularColor, float3 normal, float metallicValue, float roughnessValue, float3 fragPos, float3 viewDir)
+	{
+		float attenuation = Attenuation(light.position.xyz, fragPos, light.range, light.intensity);
+		if(attenuation <= 0)
+			return float3(0.0,0.0,0.0);
 
-	// 	float3 lightDir = normalize(light.position.xyz - fragPos);
+		float3 lightDir = normalize(light.position.xyz - fragPos);
 
-	// 	float3 radiance = light.color.rgb * attenuation;
-	// 	float3 diffuse = 1.0 - roughnessValue;
+		float3 radiance = light.color.rgb * attenuation;
+		float3 diffuse = 1.0 - roughnessValue;
 
-	// 	float3 _specularColor = specularColor;
-	// 	_specularColor = lerp(_specularColor, diffuseColor, metallicValue);
-	// 	diffuse *= 1.0 - metallicValue;
+		float3 _specularColor = specularColor;
+		_specularColor = lerp(_specularColor, diffuseColor, metallicValue);
+		diffuse *= 1.0 - metallicValue;
 		
 
-	// 	float3 halfwayDir = normalize(lightDir + viewDir);
-	// 	float spec = pow(max(dot(normal, halfwayDir),0.0), (1.0 - roughnessValue.r) * 32.0);
-	// 	float3 specular = _specularColor * spec;
+		float3 halfwayDir = normalize(lightDir + viewDir);
+		float spec = pow(max(dot(normal, halfwayDir),0.0), (1.0 - roughnessValue.r) * 32.0);
+		float3 specular = _specularColor * spec;
 
-	// 	float NdotL = max(dot(normal, lightDir), 0.0);
-	// 	float shadow = PointLightShadowCalculation(light, fragPos);
-	// 	return ((1.0 - shadow) * diffuse * diffuseColor + specular) * radiance * NdotL;
-	// }
+		float NdotL = max(dot(normal, lightDir), 0.0);
+		float shadow = PointLightShadowCalculation(light, fragPos);
+		return ((1.0 - shadow) * diffuse * diffuseColor + specular) * radiance * NdotL;
+	}
 
 	float4 main(PIn input) : SV_TARGET
 	{
@@ -329,14 +330,28 @@ namespace fragment
 			return albedo;
 		}
 
-		// float3 metallic = hasMetallic ? Metallic.Sample(MetallicSampler, uvs).rrr : float3(0.0,0.0,0.0);
-		// float3 roughness = hasRoughness ? Roughness.Sample(RoughnessSampler, uvs).rrr : float3(0.0,0.0,0.0);
-		// float3 ambientOcclusion  = hasAmbientOcclusion ? AmbientOcclusion.Sample(AmbientOcclusionSampler, uvs).rrr : float3(0.0,0.0,0.0);
+		float3 metallic;
+		float3 roughness;
+		float3 ambientOcclusion;
 
-		float3 ambientOcclusion  = hasMetallic ? Metallic.Sample(MetallicSampler, uvs).rrr : float3(1.0,1.0,1.0);
-		float3 roughness = hasMetallic ? Metallic.Sample(MetallicSampler, uvs).ggg : float3(1.0,0.0,0.0);
-		float3 metallic = hasMetallic ? Metallic.Sample(MetallicSampler, uvs).ggg : float3(1.0,0.0,0.0);
-		s = roughness;
+		if(hasRoughnessMetallic)
+		{
+			metallic = Metallic.Sample(MetallicSampler, uvs).bbb;
+			roughness = Metallic.Sample(MetallicSampler, uvs).ggg; 
+			ambientOcclusion  = AmbientOcclusion.Sample(AmbientOcclusionSampler, uvs).rrr;
+		}
+		else if(hasMRDAo)
+		{
+			metallic = Metallic.Sample(MetallicSampler, uvs).rrr;
+			roughness = Metallic.Sample(MetallicSampler, uvs).ggg;
+			ambientOcclusion = Roughness.Sample(MetallicSampler, uvs).bbb;
+		}
+		else
+		{
+			metallic = Metallic.Sample(MetallicSampler, uvs).rrr;
+			roughness = Roughness.Sample(RoughnessSampler, uvs).rrr;
+			ambientOcclusion = AmbientOcclusion.Sample(AmbientOcclusionSampler, uvs).rrr;
+		}
 
 		float3 tangent = normalize(input.tangent - dot(input.tangent, input.normal) * input.normal);
 		float3 bitangent = cross(input.normal, tangent);
@@ -352,7 +367,7 @@ namespace fragment
 
 		float3 normal = (hasHeight) ? CalcBumpedNormal(TBN, tanNormal) : normalize(input.normal);
 		float3 lightDir = normalize(u_dirLights[0].direction.xyz);
-		float3 result = CalcPBRDirLight(albedo.rgb, metallic.r, roughness.r, input.normal, ambientOcclusion, lightDir, input.lightSpaceFragPos, viewDir);
+		float3 result = CalcPBRDirLight(albedo.rgb, metallic.r, 1-roughness.r, input.normal, ambientOcclusion, lightDir, input.lightSpaceFragPos, viewDir);
 		result += CalcPBRPointLight(albedo.rgb, metallic.r, roughness.r, input.normal, ambientOcclusion, input.fragPos, viewDir);
 
 		return float4(result, 1.0);
