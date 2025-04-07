@@ -1,5 +1,5 @@
 #include "graphics/cache/importers/materialimporter.hpp"
-
+#include <stb/stb_image.h>
 namespace fs = std::filesystem;
 namespace ast = rythe::core::assets;
 

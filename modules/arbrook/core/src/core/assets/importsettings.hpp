@@ -14,7 +14,6 @@
 namespace fs = std::filesystem;
 namespace rythe::core::assets
 {
-	namespace log = rsl::log;
 	template<typename AssetType>
 	struct import_settings { };
 

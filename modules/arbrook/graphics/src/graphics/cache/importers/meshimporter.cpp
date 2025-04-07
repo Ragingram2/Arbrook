@@ -1,7 +1,8 @@
-#include "meshimporter.hpp"
-#include "../materialcache.hpp"
-#include "../../data/materialsource.hpp"
-#include "../texturecache.hpp"
+#include "graphics/cache/importers/meshimporter.hpp"
+#include "graphics/cache/materialcache.hpp"
+#include "graphics/data/materialsource.hpp"
+#include "graphics/cache/texturecache.hpp"
+
 #include <stb/stb_image.h>
 
 namespace fs = std::filesystem;
@@ -62,54 +63,15 @@ namespace rythe::rendering
 			auto filePath = "resources/shaders/lit.shader";
 			auto shaderName = "lit";
 			auto mat_source = material_source{ .name = matName,  .shaderName = shaderName, .shaderPath = filePath };
-			auto albedoTextures = initMaterial(scene, material, aiTextureType_DIFFUSE, "albedo");
-			for (auto texture : albedoTextures)
+			for (aiTextureType type : types)
 			{
-				texture->bufferRegister = 0;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Albedo", texture);
-			}
-			auto roughnessTextures = initMaterial(scene, material, aiTextureType_SPECULAR, "roughness");
-			for (auto texture : roughnessTextures)
-			{
-				texture->bufferRegister = 1;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Roughness", texture);
-			}
-			auto normalTextures = initMaterial(scene, material, aiTextureType_NORMALS, "normal");
-			for (auto texture : normalTextures)
-			{
-				texture->bufferRegister = 2;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Normals", texture);
-			}
-			auto heightTextures = initMaterial(scene, material, aiTextureType_DISPLACEMENT, "height");
-			for (auto texture : heightTextures)
-			{
-				texture->bufferRegister = 3;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Height", texture);
-			}
-			auto metalTextures = initMaterial(scene, material, aiTextureType_GLTF_METALLIC_ROUGHNESS, "metallic");
-			for (auto texture : metalTextures)
-			{
-				texture->bufferRegister = 4;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Metallic", texture);
-			}
-			auto ambientTextures = initMaterial(scene, material, aiTextureType_AMBIENT_OCCLUSION, "ao");
-			for (auto texture : ambientTextures)
-			{
-				texture->bufferRegister = 5;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("AmbientOcclusion", texture);
-			}
-			auto emissiveTextures = initMaterial(scene, material, aiTextureType_EMISSIVE, "emissive");
-			for (auto texture : emissiveTextures)
-			{
-				texture->bufferRegister = 6;
-				texture->type = ParamType::Texture;
-				mat_source.parameters.emplace("Emissive", texture);
+				auto textures = initMaterial(scene, material, type);
+				for (auto texture : textures)
+				{
+					texture->bufferRegister = getBufferRegisterForType(type);
+					texture->type = ParamType::Texture;
+					mat_source.parameters.emplace(getParameterNameForType(type), texture);
+				}
 			}
 
 			auto matAsset = ast::AssetCache<material_source>::createAssetFromMemory(matName, mat_source, ast::import_settings<material_source>{});
@@ -117,14 +79,14 @@ namespace rythe::rendering
 			matHandle->data = material_data
 			{
 				.diffuseColor = math::vec4(1.0,1.0,1.0,1.0),
-				.hasAlbedo = (unsigned int)(albedoTextures.size() > 0),
-				.hasRoughness = (unsigned int)(roughnessTextures.size() > 0),
+				.hasAlbedo =1,
+				.hasRoughness = 1,
 				.hasRoughnessMetallic = 1,
-				.hasNormal = (unsigned int)(normalTextures.size() > 0),
-				.hasHeight = (unsigned int)(heightTextures.size() > 0),
-				.hasMetallic = (unsigned int)(metalTextures.size() > 0),
-				.hasAmbientOcclusion = (unsigned int)(ambientTextures.size() > 0),
-				.hasEmissive = (unsigned int)(emissiveTextures.size() > 0),
+				.hasNormal = 1,
+				.hasHeight =1,
+				.hasMetallic =1,
+				.hasAmbientOcclusion = 1,
+				.hasEmissive =1,
 
 			};
 			matAssets = ast::AssetCache<material_source>::getAssets();
@@ -196,31 +158,75 @@ namespace rythe::rendering
 				}
 			}
 	}
-	std::vector<material_parameter<std::string>*> MeshImporter::initMaterial(const aiScene* scene, aiMaterial* mat, aiTextureType type, const std::string& defaultTexName)
+	std::vector<material_parameter<std::string>*> MeshImporter::initMaterial(const aiScene* scene, aiMaterial* mat, aiTextureType type)
 	{
 		std::vector<material_parameter<std::string>*> textures;
 		auto texCount = mat->GetTextureCount(type);
+
 		for (unsigned int j = 0; j < texCount; j++)
 		{
 			aiString strPath;
 			mat->GetTexture(type, j, &strPath);
-			if ('*' == strPath.data[0])//embedded texture
+
+			if (strPath.length == 0) continue;
+
+			if (strPath.data[0] == '*') // Embedded texture
 			{
-				auto idx = std::stoi(std::format("{}{}", strPath.data[1], strPath.data[2]));
-				auto texture = scene->mTextures[idx];
-				auto textureName = std::format("{}-{}", mat->GetName().C_Str(), texture->mFilename.C_Str());
-				math::ivec2 resolution = math::ivec2(0, 0);
+				int idx = atoi(strPath.data + 1);
+				if (idx >= scene->mNumTextures)
+				{
+					log::error("Invalid embedded texture index: {}", idx);
+					continue;
+				}
+
+				aiTexture* texture = scene->mTextures[idx];
+				std::string textureName = std::format("{}-{}", mat->GetName().C_Str(), texture->mFilename.C_Str());
+				math::uvec2 resolution = { 0, 0 };
 				int channels = 0;
 				unsigned char* textureData = nullptr;
-				if (texture->mHeight == 0)
-					textureData = stbi_load_from_memory(reinterpret_cast<unsigned char*>(texture->pcData), texture->mWidth, &resolution.x, &resolution.y, &channels, 0);
+
+				if (texture->mHeight == 0) 
+				{
+					textureData = stbi_load_from_memory(
+						reinterpret_cast<unsigned char*>(texture->pcData), texture->mWidth,
+						&resolution.x, &resolution.y, &channels, 0);
+				}
 				else
-					textureData = stbi_load_from_memory(reinterpret_cast<unsigned char*>(texture->pcData), texture->mWidth * texture->mHeight, &resolution.x, &resolution.y, &channels, 0);
-				auto tex_source = texture_source{ .name = textureName,  .data = textureData, .resolution = resolution,.channels = channels };
-				auto textureAsset = ast::AssetCache<texture_source>::createAssetFromMemory(textureName, tex_source, ast::import_settings<texture_source>{});
-				auto texHandle = TextureCache::createTexture2D(textureName, textureAsset);
+				{
+					resolution = { texture->mWidth, texture->mHeight };
+					channels = 4; // Assimp stores uncompressed textures in 4-channel format
+					textureData = new unsigned char[resolution.x * resolution.y * channels];
+					memcpy(textureData, texture->pcData, resolution.x * resolution.y * channels);
+				}
+
+				if (textureData)
+				{
+					auto tex_source = texture_source{
+						.name = textureName,
+						.data = textureData,
+						.resolution = resolution,
+						.channels = channels
+					};
+
+					auto textureAsset = ast::AssetCache<texture_source>::createAssetFromMemory(textureName, tex_source, ast::import_settings<texture_source>{});
+					auto texHandle = TextureCache::createTexture2D(textureName, textureAsset);
+					textures.emplace_back(new material_parameter<std::string>{ .value = texHandle->getName() });
+
+					stbi_image_free(textureData);
+				}
+			}
+			else // External texture file
+			{
+				std::string fullPath = strPath.C_Str();
+				if (!fs::exists(fullPath))
+				{
+					log::warn("Texture file not found: {}", fullPath);
+					continue;
+				}
+
+				auto textureAsset = ast::AssetCache<texture_source>::createAsset(strPath.C_Str(), fs::path(fullPath), ast::import_settings<texture_source>{});
+				auto texHandle = TextureCache::createTexture2D(strPath.C_Str(), textureAsset);
 				textures.emplace_back(new material_parameter<std::string>{ .value = texHandle->getName() });
-				stbi_image_free(textureData);
 			}
 		}
 		return textures;

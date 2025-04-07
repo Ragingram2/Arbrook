@@ -8,9 +8,6 @@
 
 #include <rsl/logging>
 
-#include <stb/stb_image.h>
-#define STB_IMAGE_IMPLEMENTATION
-
 #include "core/assets/assets.hpp"
 #include "graphics/data/textureparameters.hpp"
 #include "graphics/data/texturesource.hpp"

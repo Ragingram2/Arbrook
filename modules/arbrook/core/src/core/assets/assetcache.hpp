@@ -17,8 +17,10 @@
 #include "../assets/assetimporter.hpp"
 
 namespace fs = std::filesystem;
+
 namespace rythe::core::assets
 {
+	namespace log = rsl::log;
 	template<typename AssetType>
 	class AssetCache
 	{
